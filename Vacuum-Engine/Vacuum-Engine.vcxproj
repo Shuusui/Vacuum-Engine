@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\HeaderFiles\GlobalDefs.h" />
+    <ClInclude Include="Core\HeaderFiles\Util.h" />
     <ClInclude Include="Core\HeaderFiles\Window.h" />
   </ItemGroup>
   <ItemGroup>

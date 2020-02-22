@@ -41,7 +41,7 @@ namespace Vacuum
 		class CWindow
 		{
 		public:
-			static HWND ConstructWindow(const SWindowClassExInfo& wndClassInfo, const SWindowExInfo& wndInfo, std::string& errorMsg);
+			static HWND ConstructWindow(const SWindowClassExInfo& wndClassInfo, const SWindowExInfo& wndInfo, std::wstring& errorMsg);
 
 		};
 	}

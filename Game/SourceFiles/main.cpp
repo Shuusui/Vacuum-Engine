@@ -2,14 +2,14 @@
 #include "Window.h"
 #include <iostream>
 
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) //TODO: warning
 {
 	using namespace Vacuum::Core;
-	std::string errorMsg;
-	HWND wndHandle = CWindow::ConstructWindow(SWindowClassExInfo(), SWindowExInfo(),errorMsg);
+	std::wstring errorMsg;
+	HWND wndHandle = CWindow::ConstructWindow(SWindowClassExInfo(), SWindowExInfo(), errorMsg);
 	if (!wndHandle)
 	{
-		std::cout << errorMsg;
+		std::wcout << errorMsg;
 	}
 
 	std::cin.get();

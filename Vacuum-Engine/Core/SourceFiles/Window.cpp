@@ -1,11 +1,11 @@
 #include "../HeaderFiles/Window.h"
-#include <sstream>
+#include "../HeaderFiles/Util.h"
 
 namespace Vacuum
 {
 	namespace Core
 	{
-		HWND CWindow::ConstructWindow(const SWindowClassExInfo& wndClassInfo, const SWindowExInfo& wndInfo, std::string& errorMsg)
+		HWND CWindow::ConstructWindow(const SWindowClassExInfo& wndClassInfo, const SWindowExInfo& wndInfo, std::wstring& errorMsg)
 		{
 			WNDCLASSEX wndClass = WNDCLASSEX{
 				sizeof(WNDCLASSEX),				
@@ -21,12 +21,11 @@ namespace Vacuum
 				wndClassInfo.m_lpszClassName,	
 				wndClassInfo.m_hIconSm,			
 			};
-			std::ostringstream stream;
 
 			ATOM atom = RegisterClassEx(&wndClass);
 			if (!atom)
 			{
-				errorMsg = "RegisterClassEx failed with error code: " + std::to_string(GetLastError());
+				errorMsg = GetLastErrorString();
 				return nullptr;
 			}
 
@@ -44,9 +43,10 @@ namespace Vacuum
 				wndInfo.m_hInstance,
 				wndInfo.m_lpParam
 			);
+
 			if (!returnHandle)
 			{
-				errorMsg = "CreateWindowEx failed with error code: " + std::to_string(GetLastError());
+				errorMsg = GetLastErrorString();
 				return nullptr;
 			}
 			return returnHandle;
