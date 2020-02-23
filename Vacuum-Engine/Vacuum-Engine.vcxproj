@@ -11,7 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\HeaderFiles\Console.h" />
     <ClInclude Include="Core\HeaderFiles\GlobalDefs.h" />
+    <ClInclude Include="Core\HeaderFiles\Log.h" />
     <ClInclude Include="Core\HeaderFiles\Util.h" />
     <ClInclude Include="Core\HeaderFiles\Window.h" />
   </ItemGroup>

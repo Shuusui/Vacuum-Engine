@@ -25,6 +25,12 @@
     <ClInclude Include="Core\HeaderFiles\Util.h">
       <Filter>Core\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core\HeaderFiles\Log.h">
+      <Filter>Core\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\HeaderFiles\Console.h">
+      <Filter>Core\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\SourceFiles\Window.cpp">
