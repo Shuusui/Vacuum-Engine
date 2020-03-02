@@ -15,13 +15,13 @@ namespace Vacuum
 
 		CThreadPool::~CThreadPool()
 		{
-	/*		for (std::pair<const std::thread::id, std::thread>& thread : m_threads)
+			for (std::pair<const std::thread::id, std::thread>& thread : m_threads)
 			{
 				if (thread.second.joinable())
 				{
 					thread.second.join();
 				}
-			}*/
+			}
 		}
 	}
 }

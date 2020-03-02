@@ -34,8 +34,10 @@ namespace Vacuum
 			* @return if the handle guid already exists this will return false otherwise true
 			*/
 			static void RegisterHandle(const SGuid& _handleGuid, const HANDLE& _outputHandle);
+
+			static void Log(const std::wstring& _logString);
 		private:
-			CLog();
+			CLog() = default;
 			static CLog* s_logHandle;
 
 			std::unordered_map<SGuid, HANDLE> m_logHandles;

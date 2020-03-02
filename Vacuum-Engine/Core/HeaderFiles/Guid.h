@@ -59,13 +59,12 @@ namespace Vacuum
 				return (A | B | C | D) != 0;
 			}
 
-			static SGuid NewGuid(std::string& _errorStr)
+			static SGuid NewGuid()
 			{
 				SGuid returnGuid;
 				HRESULT result = CoCreateGuid((GUID*)&returnGuid);
 				if (result != S_OK)
 				{
-					_errorStr = std::system_category().message(result);
 					return SGuid();
 				}
 				return returnGuid;
