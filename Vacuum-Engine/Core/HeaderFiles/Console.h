@@ -16,13 +16,13 @@ namespace Vacuum
 		{
 		public:
 
-			static bool AllocateConsole(SConsoleHandles& outHandles)
+			static bool AllocateConsole(SConsoleHandles& _outHandles)
 			{
 				bool success = AllocConsole();
 				
-				outHandles.m_inputHandle = GetStdHandle(STD_INPUT_HANDLE);
-				outHandles.m_outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-				outHandles.m_errorHandle = GetStdHandle(STD_ERROR_HANDLE);
+				_outHandles.m_inputHandle = GetStdHandle(STD_INPUT_HANDLE);
+				_outHandles.m_outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+				_outHandles.m_errorHandle = GetStdHandle(STD_ERROR_HANDLE);
 
 				return success;
 			}

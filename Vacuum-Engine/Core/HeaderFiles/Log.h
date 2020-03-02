@@ -1,6 +1,17 @@
 #pragma once
-#include <Windows.h>
+
+#pragma region Includes
+
+#pragma region Internal Includes
+#include "Guid.h"
+#pragma endregion Internal Includes
+
+#pragma region External Includes
 #include <string>
+#include <unordered_map>
+#pragma endregion External Includes
+
+#pragma endregion Includes
 
 namespace Vacuum
 {
@@ -14,18 +25,20 @@ namespace Vacuum
 			* @param errorMsg If the calll fails this string will get filled
 			* @return if it's successful or not
 			*/
-			static bool Init(std::string& errorMsg);
+			static bool Init(std::string& _errorMsg);
+
 			/*
-			* registeres a new handle with a guid which will get stored to make broadcast over different handles possible
-			* param handleGuid the guid of the handle to call it
-			* param outputHandle the actual outputhandle where the log system will log to
-			* return if the handle guid already exists this will return false otherwise true
+			* registeres a new handle with a guid which will get stored to make broadcasting over different handles possible
+			* @param handleGuid the guid of the handle to call it
+			* @param outputHandle the actual outputhandle where the log system will log to
+			* @return if the handle guid already exists this will return false otherwise true
 			*/
-			static bool RegisterHandle(const GUID& handleGuid, const HANDLE& outputHandle);
+			static void RegisterHandle(const SGuid& _handleGuid, const HANDLE& _outputHandle);
 		private:
 			CLog();
 			static CLog* s_logHandle;
 
+			std::unordered_map<SGuid, HANDLE> m_logHandles;
 		};
 	}
 }
