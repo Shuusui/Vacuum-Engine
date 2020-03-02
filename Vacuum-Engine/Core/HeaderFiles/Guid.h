@@ -92,6 +92,7 @@ namespace Vacuum
 						((_first.C < _second.C) ? true : ((_first.C > _second.C)? false : 
 						((_first.D < _second.D) ? true : ((_first.D > _second.D)? false : false))))))));
 			}
+			
 
 		protected:
 
@@ -99,4 +100,16 @@ namespace Vacuum
 
 		};
 	}
+}
+namespace std
+{
+	template<> struct std::hash<Vacuum::Core::SGuid>
+	{
+		std::size_t operator()(Vacuum::Core::SGuid _guid) const
+		{
+			const uint64* guidPtr = reinterpret_cast<const uint64*>(&_guid);
+			std::hash<uint64> hash;
+			return hash(guidPtr[0]) ^ hash(guidPtr[1]);
+		}
+	};
 }
