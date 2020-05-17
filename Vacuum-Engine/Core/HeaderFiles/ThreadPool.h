@@ -15,7 +15,7 @@ namespace Vacuum
 			CThreadPool(const int32& _threadCount);
 			~CThreadPool();
 		private:
-			std::unordered_map<std::thread::id, std::thread> m_threads;
+			std::unordered_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
 		};
 	}
 }

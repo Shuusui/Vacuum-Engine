@@ -4,7 +4,7 @@
 #include "Guid.h"
 #include "Log.h"
 
-int WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nShowCmd) //TODO: warning
+int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ LPSTR _lpCmdLine,_In_ int _nShowCmd) //TODO: warning
 {
 	using namespace Vacuum::Core;
 
@@ -23,6 +23,7 @@ int WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, in
 	CLog::RegisterHandle(SGuid::NewGuid(), handles.m_outputHandle);
 
 	CLog::Log(TEXT("my first console log to my own console"));
+
 
 	return 0;
 }

@@ -13,6 +13,8 @@
 
 #pragma endregion Includes
 
+#define VE_LOG(LOG, ...) CLog::Log()
+
 namespace Vacuum
 {
 	namespace Core
@@ -20,24 +22,51 @@ namespace Vacuum
 		class CLog
 		{
 		public: 
-			/*
+			/**
 			* Needs to get called to initialize the log in first place
-			* @param errorMsg If the calll fails this string will get filled
+			* @param _errorMsg If the calll fails this string will get filled
 			* @return if it's successful or not
 			*/
 			static bool Init(std::string& _errorMsg);
 
-			/*
+			/**
 			* registeres a new handle with a guid which will get stored to make broadcasting over different handles possible
-			* @param handleGuid the guid of the handle to call it
-			* @param outputHandle the actual outputhandle where the log system will log to
-			* @return if the handle guid already exists this will return false otherwise true
+			* @param _handleGuid The guid of the handle to call it
+			* @param _outputHandle The actual outputhandle where the log system will log to
+			* @return if The handle guid already exists this will return false otherwise true
 			*/
 			static void RegisterHandle(const SGuid& _handleGuid, const HANDLE& _outputHandle);
 
+			/**
+			* Logs to all registered console handles
+			* @param _logString The string to log
+			*/
 			static void Log(const std::wstring& _logString);
+
+			/**
+			* Logs only to the console handles with the right guid
+			* @param _handleGuid The guid of the handle to log to
+			* @param _logString The string to log
+			*/
+			static void Log(const SGuid& _handleGuid, const std::wstring& _logString);
+
+			/**
+			* Log to all registered handles with the guids 
+			* @param _handleGuids The guids of the handles to log to
+			* @param _handleGuidAmount The amount of guids the handles to log to
+			* @param _logString The string to log
+			*/
+			static void Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::wstring& _logString);
 		private:
 			CLog() = default;
+
+			/**
+			* Actually does the log to the handle
+			* @param _handle The handle to log to
+			* @param _logString The string to log
+			*/
+			static void LogToHandle(const HANDLE& _handle, const std::wstring& _logString);
+
 			static CLog* s_logHandle;
 
 			std::unordered_map<SGuid, HANDLE> m_logHandles;

@@ -24,7 +24,7 @@ namespace Vacuum
 				_outHandles.m_outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 				_outHandles.m_errorHandle = GetStdHandle(STD_ERROR_HANDLE);
 
-				return success;
+				return success && _outHandles.m_inputHandle && _outHandles.m_outputHandle && _outHandles.m_errorHandle;
 			}
 		};
 	}

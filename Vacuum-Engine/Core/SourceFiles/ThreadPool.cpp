@@ -6,20 +6,20 @@ namespace Vacuum
 	{
 		CThreadPool::CThreadPool(const int32& _threadCount)
 		{
-			for (int32 i = 0; i < _threadCount; ++i)
+			bool bIsLowerThanHardwareConcurrency = _threadCount < std::thread::hardware_concurrency();
+			for (int32 i = 0; i < bIsLowerThanHardwareConcurrency? _threadCount : std::thread::hardware_concurrency(); ++i)
 			{
-				std::thread newThread = std::thread();
-				//m_threads.insert(std::make_pair(newThread.get_id(), newThread));
+				//m_threads.insert();
 			}
 		}
 
 		CThreadPool::~CThreadPool()
 		{
-			for (std::pair<const std::thread::id, std::thread>& thread : m_threads)
+			for (std::pair<const std::thread::id, std::unique_ptr<std::thread>>& thread : m_threads)
 			{
-				if (thread.second.joinable())
+				if (thread.second->joinable())
 				{
-					thread.second.join();
+					thread.second->join();
 				}
 			}
 		}

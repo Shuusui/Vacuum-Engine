@@ -24,6 +24,11 @@ namespace Vacuum
 		struct SGuid
 		{
 		public:
+			uint32 A;
+			uint32 B;
+			uint32 C;
+			uint32 D;
+
 			SGuid()
 				:A(0)
 				,B(0)
@@ -69,10 +74,6 @@ namespace Vacuum
 				}
 				return returnGuid;
 			}
-			uint32 A;
-			uint32 B;
-			uint32 C;
-			uint32 D;
 
 			friend bool operator==(const SGuid& _first, const SGuid& _second)
 			{
@@ -91,8 +92,6 @@ namespace Vacuum
 						((_first.C < _second.C) ? true : ((_first.C > _second.C)? false : 
 						((_first.D < _second.D) ? true : ((_first.D > _second.D)? false : false))))))));
 			}
-			
-
 		protected:
 
 		private:

@@ -26,29 +26,46 @@ namespace Vacuum
 		{
 			for (const std::pair<SGuid, HANDLE>& handlePair : s_logHandle->m_logHandles)
 			{
-				CONSOLE_SCREEN_BUFFER_INFO screenBuf;
-				GetConsoleScreenBufferInfo(handlePair.second, &screenBuf);
-
-				unsigned bufferSize = screenBuf.dwSize.X * screenBuf.dwSize.Y;
-
-				COORD start; 
-				start.X = 0;
-				start.Y = 0;
-
-				CONSOLE_CURSOR_INFO cursor;
-				cursor.dwSize = 1;
-				cursor.bVisible = FALSE;
-				SetConsoleCursorInfo(handlePair.second, &cursor);
-
-				DWORD garbage = 0;
-
-				for (int32 i = 0; i < _logString.size(); ++i)
-				{
-					FillConsoleOutputCharacter(handlePair.second, _logString[i], 1, start, &garbage);
-					start.X++;
-				}
+				LogToHandle(handlePair.second, _logString);
 			}
 		}
 
+		void CLog::Log(const SGuid& _handleGuid, const std::wstring& _logString)
+		{
+			LogToHandle(s_logHandle->m_logHandles.at(_handleGuid), _logString);
+		}
+
+		void CLog::Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::wstring& _logString)
+		{
+			for (int32 i = 0; i < _handleGuidAmount; ++i)
+			{
+				LogToHandle(s_logHandle->m_logHandles.at(_handleGuids[i]), _logString);
+			}
+		}
+
+		void CLog::LogToHandle(const HANDLE& _handle, const std::wstring& _logString)
+		{
+			CONSOLE_SCREEN_BUFFER_INFO screenBuf;
+			GetConsoleScreenBufferInfo(_handle, &screenBuf);
+
+			unsigned bufferSize = screenBuf.dwSize.X * screenBuf.dwSize.Y;
+
+			COORD start;
+			start.X = 0;
+			start.Y = 0;
+
+			CONSOLE_CURSOR_INFO cursor;
+			cursor.dwSize = 1;
+			cursor.bVisible = FALSE;
+			SetConsoleCursorInfo(_handle, &cursor);
+
+			DWORD garbage = 0;
+
+			for (int32 i = 0; i < _logString.size(); ++i)
+			{
+				FillConsoleOutputCharacter(_handle, _logString[i], 1, start, &garbage);
+				start.X++;
+			}
+		}
 	}
 }
