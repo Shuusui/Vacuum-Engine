@@ -3,6 +3,7 @@
 #include "Console.h"
 #include "Guid.h"
 #include "Log.h"
+#include "Util.h"
 
 int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ LPSTR _lpCmdLine,_In_ int _nShowCmd) //TODO: warning
 {
@@ -17,13 +18,16 @@ int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ 
 	std::string errorMsg;
 	if (!CLog::Init(errorMsg))
 	{
-		std::cout << errorMsg; 
+		std::cout << errorMsg;
+		return -1;
 	}
 
 	CLog::RegisterHandle(SGuid::NewGuid(), handles.m_outputHandle);
 
-	CLog::Log(TEXT("my first console log to my own console"));
+	std::wstring printfLog = Vacuum::Core::Printf(TEXT("Something to log here with number: %i and an additional name: %s"), 42, "Dr.House");
 
+	CLog::Log(TEXT("First console log to "));
+	CLog::Log(printfLog.c_str());
 
 	return 0;
 }

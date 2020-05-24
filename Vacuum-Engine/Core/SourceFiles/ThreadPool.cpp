@@ -6,8 +6,7 @@ namespace Vacuum
 	{
 		CThreadPool::CThreadPool(const int32& _threadCount)
 		{
-			bool bIsLowerThanHardwareConcurrency = _threadCount < std::thread::hardware_concurrency();
-			for (int32 i = 0; i < bIsLowerThanHardwareConcurrency? _threadCount : std::thread::hardware_concurrency(); ++i)
+			for (size_t i = 0; i < std::thread::hardware_concurrency()? _threadCount : std::thread::hardware_concurrency(); ++i)
 			{
 				//m_threads.insert();
 			}

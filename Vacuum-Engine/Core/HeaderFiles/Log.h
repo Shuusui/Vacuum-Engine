@@ -21,16 +21,16 @@ namespace Vacuum
 	{
 		class CLog
 		{
-		public: 
+		public:
 			/**
 			* Needs to get called to initialize the log in first place
-			* @param _errorMsg If the calll fails this string will get filled
+			* @param _errorMsg If the call fails this string will get filled
 			* @return if it's successful or not
 			*/
 			static bool Init(std::string& _errorMsg);
 
 			/**
-			* registeres a new handle with a guid which will get stored to make broadcasting over different handles possible
+			* registers a new handle with a guid which will get stored to make broadcasting over different handles possible
 			* @param _handleGuid The guid of the handle to call it
 			* @param _outputHandle The actual outputhandle where the log system will log to
 			* @return if The handle guid already exists this will return false otherwise true
