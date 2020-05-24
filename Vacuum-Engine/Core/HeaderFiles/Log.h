@@ -30,10 +30,9 @@ namespace Vacuum
 			static bool Init(std::string& _errorMsg);
 
 			/**
-			* registers a new handle with a guid which will get stored to make broadcasting over different handles possible
+			* registers a new handle with a guid which will get stored to make broadcasting over different handles possible. This will overwrite a handle with the same guid if it already exists.
 			* @param _handleGuid The guid of the handle to call it
 			* @param _outputHandle The actual outputhandle where the log system will log to
-			* @return if The handle guid already exists this will return false otherwise true
 			*/
 			static void RegisterHandle(const SGuid& _handleGuid, const HANDLE& _outputHandle);
 

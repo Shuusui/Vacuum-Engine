@@ -11,7 +11,6 @@ int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ 
 
 	SGuid Guid = SGuid::NewGuid();
 
-
 	SConsoleHandles handles = {};
 	CConsole::AllocateConsole(handles);
 
@@ -26,7 +25,7 @@ int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ 
 
 	std::wstring printfLog = Vacuum::Core::Printf(TEXT("Something to log here with number: %i and an additional name: %s"), 42, "Dr.House");
 
-	CLog::Log(TEXT("First console log to "));
+	CLog::Log(TEXT("First console log"));
 	CLog::Log(printfLog.c_str());
 
 	return 0;
