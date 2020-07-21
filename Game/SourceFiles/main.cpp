@@ -6,14 +6,14 @@
 #include "Util.h"
 #include "GlobalMacros.h"
 
-int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ LPSTR _lpCmdLine,_In_ int _nShowCmd) //TODO: warning
+int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ LPSTR _lpCmdLine,_In_ int _nShowCmd)
 {
 	using namespace Vacuum::Core;
 
 	SGuid Guid = SGuid::NewGuid();
 
 	SConsoleHandles handles = {};
-	CConsole::AllocateConsole(handles);
+	AllocateConsole(handles);
 
 	std::string errorMsg;
 	if (!CLog::Init(errorMsg))
@@ -24,13 +24,15 @@ int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ 
 
 	CLog::RegisterHandle(SGuid::NewGuid(), handles.m_outputConInfo);
 
-	std::wstring printfLog = Vacuum::Core::Printf(TEXT("Something to log here with number: %i and an additional name: %s"), 42, "Dr.House");
 	std::wstring printfLog2 = PRINTF("Something to log here with number: %i and an additional name: %s", 13, "Blurensohn");
 
 	CLog::Log(TEXT("First console log"));
-	CLog::Log(printfLog.c_str());
-	CLog::ClearAllLogs();
-	CLog::Log(printfLog2.c_str());
+	for (int i = 0; i < 100; ++i)
+	{
+		CLog::Log(printfLog2.c_str());
+	}
+
+	VE_LOG("this is pretty cool %i", 42);
 
 	return 0;
 }

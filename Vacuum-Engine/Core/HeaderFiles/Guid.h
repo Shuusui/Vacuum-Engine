@@ -51,7 +51,6 @@ namespace Vacuum
 				,C(std::move(_other.C))
 				,D(std::move(_other.D))
 			{
-
 			}
 
 			void Invalidate()

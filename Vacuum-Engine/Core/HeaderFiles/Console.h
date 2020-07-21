@@ -40,20 +40,15 @@ namespace Vacuum
 			SConsoleInfo m_errorConInfo;
 		};
 
-		class CConsole
+		static bool AllocateConsole(SConsoleHandles& _outHandles)
 		{
-		public:
-
-			static bool AllocateConsole(SConsoleHandles& _outHandles)
-			{
-				bool success = AllocConsole();
+			bool success = AllocConsole();
 				
-				_outHandles.m_inputConInfo.m_consoleHandle = GetStdHandle(STD_INPUT_HANDLE);
-				_outHandles.m_outputConInfo.m_consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-				_outHandles.m_errorConInfo.m_consoleHandle = GetStdHandle(STD_ERROR_HANDLE);
+			_outHandles.m_inputConInfo.m_consoleHandle = GetStdHandle(STD_INPUT_HANDLE);
+			_outHandles.m_outputConInfo.m_consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+			_outHandles.m_errorConInfo.m_consoleHandle = GetStdHandle(STD_ERROR_HANDLE);
 
-				return success && _outHandles.m_inputConInfo.m_consoleHandle && _outHandles.m_outputConInfo.m_consoleHandle && _outHandles.m_errorConInfo.m_consoleHandle;
-			}
-		};
+			return success && _outHandles.m_inputConInfo.m_consoleHandle && _outHandles.m_outputConInfo.m_consoleHandle && _outHandles.m_errorConInfo.m_consoleHandle;
+		}
 	}
 }

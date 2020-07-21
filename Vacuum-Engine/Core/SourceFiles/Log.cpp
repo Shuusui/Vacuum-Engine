@@ -90,7 +90,7 @@ namespace Vacuum
 			}
 			_info.m_consolePos.Y++;
 			_info.m_consolePos.X = 0;
-			bool bFlushedSuccessful = FlushConsoleInputBuffer(_info.m_consoleHandle);
+			SetConsoleCursorPosition(_info.m_consoleHandle, _info.m_consolePos);
 		}
 
 		void CLog::ClearLogHandle(SConsoleInfo& _info)

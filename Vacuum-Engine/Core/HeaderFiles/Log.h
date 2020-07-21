@@ -4,6 +4,7 @@
 
 #pragma region Internal Includes
 #include "Guid.h"
+#include "GlobalMacros.h"
 #pragma endregion Internal Includes
 
 #pragma region External Includes
@@ -13,7 +14,7 @@
 
 #pragma endregion Includes
 
-#define VE_LOG(LOG, ...) CLog::Log()
+#define VE_LOG(LOG, ...) CLog::Log(PRINTF(LOG, __VA_ARGS__))
 
 namespace Vacuum
 {
