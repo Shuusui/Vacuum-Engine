@@ -40,6 +40,11 @@ namespace Vacuum
 			SConsoleInfo m_errorConInfo;
 		};
 
+		/**
+		 * Allocates a console for this process and returns the handles to them with some info about it
+		 * @param _outHandles A reference to the Console handles struct with some info in it.
+		 * @return Returns true if everything was sucessful, false otherwise
+		 */
 		static bool AllocateConsole(SConsoleHandles& _outHandles)
 		{
 			bool success = AllocConsole();
