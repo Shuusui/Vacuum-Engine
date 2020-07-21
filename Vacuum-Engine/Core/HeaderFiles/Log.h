@@ -19,6 +19,8 @@ namespace Vacuum
 {
 	namespace Core
 	{
+		struct SConsoleInfo;
+
 		class CLog
 		{
 		public:
@@ -34,20 +36,31 @@ namespace Vacuum
 			* @param _handleGuid The guid of the handle to call it
 			* @param _outputHandle The actual outputhandle where the log system will log to
 			*/
-			static void RegisterHandle(const SGuid& _handleGuid, const HANDLE& _outputHandle);
+			static void RegisterHandle(const SGuid& _handleGuid, const SConsoleInfo& _outputInfo);
 
 			/**
-			* Logs to all registered console handles
-			* @param _logString The string to log
-			*/
+			 * Logs to all registered console handles
+			 * @param _logString The string to log
+			 */
 			static void Log(const std::wstring& _logString);
 
 			/**
-			* Logs only to the console handles with the right guid
-			* @param _handleGuid The guid of the handle to log to
-			* @param _logString The string to log
-			*/
+			 * Clears the screen of all log handles
+			 */
+			static void ClearAllLogs();
+
+			/**
+			 * Logs only to the console handles with the right guid
+			 * @param _handleGuid The guid of the handle to log to
+			 * @param _logString The string to log
+			 */
 			static void Log(const SGuid& _handleGuid, const std::wstring& _logString);
+
+			/**
+			 * Clears the screen of the guid with the handle
+			 * @param _handleGuid The Guid of the handle to clear
+			 */
+			static void ClearLog(const SGuid& _handleGuid);
 
 			/**
 			* Log to all registered handles with the guids 
@@ -56,19 +69,32 @@ namespace Vacuum
 			* @param _logString The string to log
 			*/
 			static void Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::wstring& _logString);
+
+			/**
+			 * Clears the handles with the guids
+			 * @param _handleGuids The guids of the handles to clear
+			 * @param _handleGuidAmount The amount of guids the handles to clear
+			 */
+			static void ClearLog(SGuid* _handleGuids, const size_t& _handleGuidAmount);
 		private:
 			CLog() = default;
 
 			/**
-			* Actually does the log to the handle
-			* @param _handle The handle to log to
-			* @param _logString The string to log
-			*/
-			static void LogToHandle(const HANDLE& _handle, const std::wstring& _logString);
+			 * Actually does the log to the handle
+			 * @param _handle The handle to log to
+			 * @param _logString The string to log
+			 */
+			static void LogToHandle(SConsoleInfo& _info, const std::wstring& _logString);
+
+			/**
+			 * Actually clears the handle
+			 * @param _handle The handle to clear
+			 */
+			static void ClearLogHandle(SConsoleInfo& _info);
 
 			static CLog* s_logHandle;
 
-			std::unordered_map<SGuid, HANDLE> m_logHandles;
+			std::unordered_map<SGuid, SConsoleInfo> m_logInfos;
 		};
 	}
 }

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Core\HeaderFiles\Console.h" />
     <ClInclude Include="Core\HeaderFiles\GlobalDefs.h" />
+    <ClInclude Include="Core\HeaderFiles\GlobalMacros.h" />
     <ClInclude Include="Core\HeaderFiles\Guid.h" />
     <ClInclude Include="Core\HeaderFiles\Log.h" />
     <ClInclude Include="Core\HeaderFiles\ThreadPool.h" />
