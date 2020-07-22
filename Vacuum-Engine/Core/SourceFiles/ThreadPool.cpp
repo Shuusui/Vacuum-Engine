@@ -1,25 +1,34 @@
 #include "../HeaderFiles/ThreadPool.h"
 
+#pragma region Internal Includes 
+#pragma endregion //Internal Includes
+#pragma region External Includes
+#include <functional>
+#pragma endregion //External Includes
+
 namespace Vacuum
 {
 	namespace Core
 	{
-		CThreadPool::CThreadPool(const int32& _threadCount)
+		void CThread::WorkerRun()
 		{
-			for (size_t i = 0; i < std::thread::hardware_concurrency()? _threadCount : std::thread::hardware_concurrency(); ++i)
+			while (true)
 			{
-				//m_threads.insert();
+				if (m_currentJob)
+				{
+					m_currentJob->Execute();
+				}
 			}
 		}
 
-		CThreadPool::~CThreadPool()
+		CThreadPool::CThreadPool(const int32& _threadAmount)
 		{
-			for (std::pair<const std::thread::id, std::unique_ptr<std::thread>>& thread : m_threads)
+			m_threads.reserve(_threadAmount);
+			m_threadAmount = _threadAmount;
+			for (size_t i = 0; i < _threadAmount; ++i)
 			{
-				if (thread.second->joinable())
-				{
-					thread.second->join();
-				}
+				m_threads[i] = std::move(CThread(i, this));
+				m_freeThreadIndices.push(i);
 			}
 		}
 	}
