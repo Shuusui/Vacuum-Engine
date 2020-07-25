@@ -1,5 +1,5 @@
-#include "../HeaderFiles/Log.h"
-#include "../HeaderFiles/Console.h"
+#include "../HeaderFiles/Public/Log.h"
+#include "../HeaderFiles/Public/Console.h"
 
 namespace Vacuum
 {
@@ -91,6 +91,7 @@ namespace Vacuum
 			_info.m_consolePos.Y++;
 			_info.m_consolePos.X = 0;
 			SetConsoleCursorPosition(_info.m_consoleHandle, _info.m_consolePos);
+			OutputDebugString(_logString.c_str());
 		}
 
 		void CLog::ClearLogHandle(SConsoleInfo& _info)

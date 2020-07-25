@@ -11,17 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\HeaderFiles\Console.h" />
-    <ClInclude Include="Core\HeaderFiles\GlobalDefs.h" />
-    <ClInclude Include="Core\HeaderFiles\GlobalMacros.h" />
-    <ClInclude Include="Core\HeaderFiles\Guid.h" />
-    <ClInclude Include="Core\HeaderFiles\Log.h" />
-    <ClInclude Include="Core\HeaderFiles\ThreadPool.h" />
-    <ClInclude Include="Core\HeaderFiles\Util.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Core\SourceFiles\Log.cpp" />
     <ClCompile Include="Core\SourceFiles\ThreadPool.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\HeaderFiles\Private\BaseJob.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\Console.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\GlobalDefs.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\GlobalMacros.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\Guid.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\Log.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\ThreadPool.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\Util.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

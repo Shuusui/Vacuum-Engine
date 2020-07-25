@@ -1,4 +1,4 @@
-#include "../HeaderFiles/ThreadPool.h"
+#include "../HeaderFiles/Public/ThreadPool.h"
 
 #pragma region Internal Includes 
 #pragma endregion //Internal Includes
@@ -14,10 +14,10 @@ namespace Vacuum
 		{
 			while (true)
 			{
-				if (m_currentJob)
-				{
-					m_currentJob->Execute();
-				}
+				m_currentJob =  m_owner->DequeueJob();
+				m_currentJob->Execute();
+				delete m_currentJob;
+				m_currentJob = nullptr;
 			}
 		}
 
@@ -30,6 +30,21 @@ namespace Vacuum
 				m_threads[i] = std::move(CThread(i, this));
 				m_freeThreadIndices.push(i);
 			}
+		}
+
+		void CThreadPool::QueueJob(CBaseJob* _jobToQueue)
+		{
+			m_jobQueue.push(_jobToQueue);
+		}
+
+		CBaseJob* CThreadPool::DequeueJob()
+		{
+			std::unique_lock<std::mutex> uniqueLock(m_queueLock, std::defer_lock);
+			uniqueLock.lock();
+			CBaseJob* returnJob = m_jobQueue.back();
+			m_jobQueue.pop();
+			uniqueLock.unlock();
+			return returnJob;
 		}
 	}
 }
