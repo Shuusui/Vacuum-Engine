@@ -23,7 +23,7 @@ namespace Vacuum
 
 			}
 
-			SConsoleInfo(SConsoleInfo&& _other)
+			SConsoleInfo(SConsoleInfo&& _other) noexcept
 				:m_consolePos(std::move(_other.m_consolePos))
 				,m_consoleHandle(std::move(_other.m_consoleHandle))
 			{

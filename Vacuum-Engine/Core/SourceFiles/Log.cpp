@@ -92,6 +92,7 @@ namespace Vacuum
 			_info.m_consolePos.X = 0;
 			SetConsoleCursorPosition(_info.m_consoleHandle, _info.m_consolePos);
 			OutputDebugString(_logString.c_str());
+			OutputDebugString(TEXT("\n"));
 		}
 
 		void CLog::ClearLogHandle(SConsoleInfo& _info)

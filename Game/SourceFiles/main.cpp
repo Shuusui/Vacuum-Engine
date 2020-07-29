@@ -38,15 +38,17 @@ int32 WinMain(_In_ HINSTANCE _hInstance,_In_opt_  HINSTANCE _hPrevInstance,_In_ 
 	CThreadPool* threadPool = new CThreadPool(std::thread::hardware_concurrency());
 
 	std::mutex* mutex = new std::mutex();
-	auto lambda = [mutex]()->void
-	{
-		mutex->lock();
-		VE_LOG("Just logging stuff");
-		mutex->unlock();
-	};
-	std::packaged_task<void(void)> package(lambda);
+	std::packaged_task<void()> package([mutex]()->void
+			{
+				mutex->lock();
+				VE_LOG("Just logging stuff");
+				mutex->unlock();
+			});
 	threadPool->QueueJob(new CJob<void>(package));
 
+
+
+	delete threadPool;
 
 	return 0;
 }
