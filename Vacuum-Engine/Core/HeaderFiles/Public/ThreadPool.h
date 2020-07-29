@@ -23,11 +23,17 @@ namespace Vacuum
 		class CJob : public CBaseJob
 		{
 		public:
+			/**
+			 * Constructor which takes a task which will get run by Execute()
+			 * @param _task The task which will get called in Execute()
+			 */
 			CJob(std::packaged_task<T()>& _task)
 				:m_task(std::move(_task))
 			{
 			}
-
+			/**
+			 * Override of execute function which will get called of the CThread when the job gets passed to a CThread
+			 */
 			virtual void Execute() override
 			{
 				m_task();

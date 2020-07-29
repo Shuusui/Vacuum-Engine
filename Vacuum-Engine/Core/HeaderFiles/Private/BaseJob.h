@@ -11,10 +11,19 @@ namespace Vacuum
 		class CBaseJob
 		{
 		public:
+			/**
+			 * virtual destructor for inheritance purposes
+			 */
 			virtual ~CBaseJob() {};
+			/**
+			 * pure virtual function which will get called of the thread 
+			 */
 			virtual void Execute() = 0;
 		protected:
-			CBaseJob(){};
+			/**
+			 * Protected default constructor just for inheritance reasons
+			 */
+			CBaseJob() {};
 		private:
 		};
 	}
