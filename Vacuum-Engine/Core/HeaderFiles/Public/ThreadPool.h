@@ -15,6 +15,10 @@ namespace Vacuum
 {
 	namespace Core
 	{
+		/**
+		 * Derived class of CBaseJob which will implement basic implementation of the std::package_task to bind functions to it. 
+		 * Derive from it further to implement more custom and advanced threads with custom execute functions.
+		 */
 		template<typename T>
 		class CJob : public CBaseJob
 		{
@@ -85,6 +89,9 @@ namespace Vacuum
 
 
 		private:
+			/**
+			 * The function which will get called inside the std::thread
+			 */
 			void WorkerRun();
 
 			std::thread m_thread;
@@ -98,13 +105,42 @@ namespace Vacuum
 		class CThreadPool
 		{
 		public:
+			/**
+			 * No default constructor, Threadpool can only get initialized with an amount of threads to create
+			 */
 			CThreadPool() = delete;
+			/**
+			 * The only constructor which will create the amount of screenshots get passed
+			 * @param The amount of threads to create
+			 */
 			CThreadPool(const int32& _threadAmount);
+			/**
+			 * Destructor which will join all threads and delete them
+			 */
 			~CThreadPool();
+			/**
+			 * Queue a new job to the threadpool which will get processed
+			 */
 			void QueueJob(CBaseJob* _jobToQueue);
+			/**
+			 * Function which will get called from the internal thread to dequeue the threadpool
+			 * @return The first job in queue
+			 */
 			CBaseJob* DequeueJob();
+			/**
+			 * Does the threadpool currently has jobs queued? (threadsafe)
+			 * @return If the threadpool has jobs queued or not 
+			 */
 			bool HasQueuedJob();
+			/**
+			 * Function to call to reserve a job of the queue which will decrement the internal queue size before dequeing just for the loop of the thread
+			 * @return If it could get a job reserved 
+			 */
 			bool ReserveJob();
+			/**
+			 * Predicate function for the semaphore to wait
+			 * @return If the threads should get stopped
+			 */
 			bool StopThreads();
 		private:
 			std::vector<CThread*> m_threads;
