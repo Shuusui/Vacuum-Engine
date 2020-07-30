@@ -5,48 +5,46 @@
 #include "Log.h"
 #include "Util.h"
 #include "GlobalMacros.h"
+#include "GlobalDefs.h"
 #include "ThreadPool.h"
+#include "Window.h"
 
-int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ LPSTR _lpCmdLine, _In_ int _nShowCmd)
+
+
+int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ LPSTR _lpCmdLine, _In_ int32 _nShowCmd)
 {
 	using namespace Vacuum::Core;
 
-	SGuid Guid = SGuid::NewGuid();
-
 	SConsoleHandles handles = {};
-	AllocateConsole(handles);
-
-	std::string errorMsg;
-	if (!CLog::Init(errorMsg))
+	if (!AllocateConsole(handles))
 	{
-		std::cout << errorMsg;
+		CLog::LogDebugString(TEXT("Failed to Allocate console handles"));
 		return -1;
 	}
 
-	CLog::RegisterHandle(SGuid::NewGuid(), handles.m_outputConInfo);
-
-	std::wstring printfLog2 = PRINTF("Something to log here with number: %i and an additional name: %s", 13, "Blurensohn");
-
-	CLog::Log(TEXT("First console log"));
-	for (int i = 0; i < 100; ++i)
+	std::wstring errorMsg = {};
+	if (!CLog::Init(errorMsg))
 	{
-		CLog::Log(printfLog2.c_str());
+		CLog::LogDebugString(errorMsg);
+		return -1;
 	}
 
-	VE_LOG("this is pretty cool %i", 42);
-
+	SGuid handlesGuid = SGuid::NewGuid();
+	CLog::RegisterHandle(handlesGuid, handles.m_outputConInfo);
 	CThreadPool* threadPool = new CThreadPool(std::thread::hardware_concurrency());
 
-	std::mutex* mutex = new std::mutex();
-	std::packaged_task<void()> package([mutex]()->void
-		{
-			mutex->lock();
-			VE_LOG("Just logging stuff");
-			mutex->unlock();
-		});
-	threadPool->QueueJob(new CJob<void>(package));
-
-
+	CWindow* newWindow = new CWindow(std::move(SWindowInfo()));
+	if (!newWindow->Create(errorMsg))
+	{
+		VE_LOG(errorMsg);
+		return -1;
+	}
+	newWindow->ShwoAndUpdate(_nShowCmd);
+	while (true)
+	{
+		MSG msg = {};
+		newWindow->RunWindow(msg);
+	}
 
 	delete threadPool;
 

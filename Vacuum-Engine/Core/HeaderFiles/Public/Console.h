@@ -55,5 +55,23 @@ namespace Vacuum
 
 			return success && _outHandles.m_inputConInfo.m_consoleHandle && _outHandles.m_outputConInfo.m_consoleHandle && _outHandles.m_errorConInfo.m_consoleHandle;
 		}
+
+		static bool DeallocateConsole(SConsoleHandles& _handles)
+		{
+			FreeConsole();
+
+			if (!CloseHandle(_handles.m_inputConInfo.m_consoleHandle))
+			{
+
+			}
+			if (!CloseHandle(_handles.m_outputConInfo.m_consoleHandle))
+			{
+
+			}
+			if (!CloseHandle(_handles.m_errorConInfo.m_consoleHandle))
+			{
+
+			}
+		}
 	}
 }

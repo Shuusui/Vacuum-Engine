@@ -71,7 +71,7 @@ namespace Vacuum
 		CBaseJob* CThreadPool::DequeueJob()
 		{
 			const std::lock_guard<std::mutex> lock(m_queueLock);
-			CBaseJob* returnJob = m_jobQueue.back();
+			CBaseJob* returnJob = m_jobQueue.front();
 			m_jobQueue.pop();
 			return returnJob;
 		}

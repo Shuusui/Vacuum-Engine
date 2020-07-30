@@ -7,11 +7,11 @@ namespace Vacuum
 	{
 		CLog* CLog::s_logHandle = nullptr;
 
-		bool CLog::Init(std::string& _errorMsg)
+		bool CLog::Init(std::wstring& _errorMsg)
 		{
 			if (s_logHandle)
 			{
-				_errorMsg = "Log handle is already initialized";
+				_errorMsg = TEXT("Log handle is already initialized");
 				return false;
 			}
 			s_logHandle = new CLog();
@@ -20,49 +20,69 @@ namespace Vacuum
 
 		void CLog::RegisterHandle(const SGuid& _handleGuid, const SConsoleInfo& _outputInfo)
 		{
+			s_logHandle->m_logMutex.lock();
 			s_logHandle->m_logInfos.insert(std::make_pair(_handleGuid, _outputInfo));
+			s_logHandle->m_logMutex.unlock();
 		}
 
 		void CLog::Log(const std::wstring& _logString)
 		{
+			s_logHandle->m_logMutex.lock();
 			for (std::pair<const SGuid, SConsoleInfo>& handlePair : s_logHandle->m_logInfos)
 			{
 				LogToHandle(handlePair.second, _logString);
 			}
+			s_logHandle->m_logMutex.unlock();
 		}
 
 		void CLog::ClearAllLogs()
 		{
+			s_logHandle->m_logMutex.lock();
 			for (std::pair<const SGuid, SConsoleInfo>& handlePair : s_logHandle->m_logInfos)
 			{
 				ClearLogHandle(handlePair.second);
 			}
+			s_logHandle->m_logMutex.unlock();
 		}
 
 		void CLog::Log(const SGuid& _handleGuid, const std::wstring& _logString)
 		{
+			s_logHandle->m_logMutex.lock();
 			LogToHandle(s_logHandle->m_logInfos.at(_handleGuid), _logString);
+			s_logHandle->m_logMutex.unlock();
 		}
 
 		void CLog::ClearLog(const SGuid& _handleGuid)
 		{
+			s_logHandle->m_logMutex.lock();
 			ClearLogHandle(s_logHandle->m_logInfos.at(_handleGuid));
+			s_logHandle->m_logMutex.unlock();
 		}
 
 		void CLog::Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::wstring& _logString)
 		{
+			s_logHandle->m_logMutex.lock();
 			for (int32 i = 0; i < _handleGuidAmount; ++i)
 			{
 				LogToHandle(s_logHandle->m_logInfos.at(_handleGuids[i]), _logString);
 			}
+			s_logHandle->m_logMutex.unlock();
+		}
+
+		void CLog::LogDebugString(const std::wstring& _logString)
+		{
+			OutputDebugString(_logString.c_str());
+			OutputDebugString(TEXT("\n"));
 		}
 
 		void CLog::ClearLog(SGuid* _handleGuids, const size_t& _handleGuidAmount)
 		{
+			s_logHandle->m_logMutex.lock();
 			for (int32 i = 0; i < _handleGuidAmount; ++i)
 			{
 				ClearLogHandle(s_logHandle->m_logInfos.at(_handleGuids[i]));
 			}
+			s_logHandle->m_logMutex.unlock();
 		}
 
 		void CLog::LogToHandle(SConsoleInfo& _info, const std::wstring& _logString)

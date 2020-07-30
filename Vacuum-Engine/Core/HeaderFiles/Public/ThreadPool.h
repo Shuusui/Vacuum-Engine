@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\Private\BaseJob.h"
+#include "Log.h"
 #include "GlobalDefs.h"
 #include <thread>
 #include <vector>
@@ -19,27 +20,29 @@ namespace Vacuum
 		 * Derived class of CBaseJob which will implement basic implementation of the std::package_task to bind functions to it. 
 		 * Derive from it further to implement more custom and advanced threads with custom execute functions.
 		 */
-		template<typename T>
 		class CJob : public CBaseJob
 		{
 		public:
 			/**
-			 * Constructor which takes a task which will get run by Execute()
-			 * @param _task The task which will get called in Execute()
+			 * Default constructor
 			 */
-			CJob(std::packaged_task<T()>& _task)
-				:m_task(std::move(_task))
+			CJob()
 			{
-			}
+
+			};
+
 			/**
 			 * Override of execute function which will get called of the CThread when the job gets passed to a CThread
 			 */
 			virtual void Execute() override
 			{
-				m_task();
+				VE_LOG(TEXT("Just a log"));
+			}
+
+			virtual ~CJob() override
+			{
 			}
 		private:
-			std::packaged_task<T()> m_task;
 		};
 
 		class CThread
@@ -48,7 +51,7 @@ namespace Vacuum
 			/**
 			 * Deleted cause it's unnecessary and maybe gets accidentally called
 			 */
-			CThread() = default;
+			CThread() = delete;
 
 			/**
 			 * The only constructor needed to construct the object
@@ -90,6 +93,11 @@ namespace Vacuum
 				if (m_thread.joinable())
 				{
 					m_thread.join();
+				}
+				if (m_currentJob)
+				{
+					delete m_currentJob;
+					m_currentJob = nullptr;
 				}
 			}
 

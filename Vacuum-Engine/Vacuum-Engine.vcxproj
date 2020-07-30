@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\HeaderFiles\Public\Window.cpp" />
     <ClCompile Include="Core\SourceFiles\Log.cpp" />
     <ClCompile Include="Core\SourceFiles\ThreadPool.cpp" />
   </ItemGroup>
@@ -21,8 +22,10 @@
     <ClInclude Include="Core\HeaderFiles\Public\GlobalMacros.h" />
     <ClInclude Include="Core\HeaderFiles\Public\Guid.h" />
     <ClInclude Include="Core\HeaderFiles\Public\Log.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\NOQueue.h" />
     <ClInclude Include="Core\HeaderFiles\Public\ThreadPool.h" />
     <ClInclude Include="Core\HeaderFiles\Public\Util.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -63,6 +66,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(SolutionDir)intermediate\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

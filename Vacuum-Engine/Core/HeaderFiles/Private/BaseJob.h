@@ -12,18 +12,17 @@ namespace Vacuum
 		{
 		public:
 			/**
+			 * Protected default constructor just for inheritance reasons
+			 */
+			CBaseJob() = default;
+			/**
 			 * virtual destructor for inheritance purposes
 			 */
-			virtual ~CBaseJob() {};
+			virtual ~CBaseJob() = default;
 			/**
 			 * pure virtual function which will get called of the thread 
 			 */
 			virtual void Execute() = 0;
-		protected:
-			/**
-			 * Protected default constructor just for inheritance reasons
-			 */
-			CBaseJob() {};
 		private:
 		};
 	}

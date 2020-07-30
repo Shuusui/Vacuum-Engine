@@ -5,22 +5,32 @@
 #pragma region Internal Includes
 #include "Guid.h"
 #include "GlobalMacros.h"
+#include "Util.h"
 #pragma endregion Internal Includes
 
 #pragma region External Includes
 #include <string>
 #include <unordered_map>
+#include <mutex>
 #pragma endregion External Includes
 
 #pragma endregion Includes
 
-#define VE_LOG(LOG, ...) CLog::Log(PRINTF(LOG, __VA_ARGS__))
+#define VE_LOG(LOG) CLog::Log(LOG)
+#define VE_LOG_F(LOG, ...) CLog::Log(PRINTF(LOG, __VA_ARGS__))
 
 namespace Vacuum
 {
 	namespace Core
 	{
 		struct SConsoleInfo;
+
+		struct SLogInfo
+		{
+			std::wstring& m_string;
+			SGuid* m_handleGuids;
+			size_t m_handleAmount;
+		};
 
 		class CLog
 		{
@@ -30,7 +40,7 @@ namespace Vacuum
 			* @param _errorMsg If the call fails this string will get filled
 			* @return if it's successful or not
 			*/
-			static bool Init(std::string& _errorMsg);
+			static bool Init(std::wstring& _errorMsg);
 
 			/**
 			* registers a new handle with a guid which will get stored to make broadcasting over different handles possible. This will overwrite a handle with the same guid if it already exists.
@@ -72,6 +82,12 @@ namespace Vacuum
 			static void Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::wstring& _logString);
 
 			/**
+			 * Just logs a debug string to the output window of VS
+			 * @param _logString The string to log
+			 */
+			static void LogDebugString(const std::wstring& _logString);
+
+			/**
 			 * Clears the handles with the guids
 			 * @param _handleGuids The guids of the handles to clear
 			 * @param _handleGuidAmount The amount of guids the handles to clear
@@ -96,6 +112,8 @@ namespace Vacuum
 			static CLog* s_logHandle;
 
 			std::unordered_map<SGuid, SConsoleInfo> m_logInfos;
+
+			std::mutex m_logMutex;
 		};
 	}
 }
