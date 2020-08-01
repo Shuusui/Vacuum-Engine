@@ -2,6 +2,7 @@
 #include <string>
 #include "GlobalDefs.h"
 #include "SharedStructs.h"
+#include <filesystem>
 
 namespace Vacuum
 {
@@ -18,5 +19,8 @@ namespace Vacuum
 		
 		static CApp* s_app;
 		SWindowDimParams m_mainWindowDim;
+		std::filesystem::path m_rootDir;
+		std::filesystem::path m_configDir;
+		std::filesystem::path m_appConfigPath;
 	};
 }
