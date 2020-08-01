@@ -11,18 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\HeaderFiles\Public\Window.cpp" />
+    <ClCompile Include="Core\SourceFiles\App.cpp" />
     <ClCompile Include="Core\SourceFiles\Log.cpp" />
     <ClCompile Include="Core\SourceFiles\ThreadPool.cpp" />
+    <ClCompile Include="Core\SourceFiles\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\HeaderFiles\Private\BaseJob.h" />
+    <ClInclude Include="Core\HeaderFiles\Private\json.hpp" />
+    <ClInclude Include="Core\HeaderFiles\Public\App.h" />
     <ClInclude Include="Core\HeaderFiles\Public\Console.h" />
     <ClInclude Include="Core\HeaderFiles\Public\GlobalDefs.h" />
     <ClInclude Include="Core\HeaderFiles\Public\GlobalMacros.h" />
     <ClInclude Include="Core\HeaderFiles\Public\Guid.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\Json.h" />
     <ClInclude Include="Core\HeaderFiles\Public\Log.h" />
     <ClInclude Include="Core\HeaderFiles\Public\NOQueue.h" />
+    <ClInclude Include="Core\HeaderFiles\Public\SharedStructs.h" />
     <ClInclude Include="Core\HeaderFiles\Public\ThreadPool.h" />
     <ClInclude Include="Core\HeaderFiles\Public\Util.h" />
     <ClInclude Include="Core\HeaderFiles\Public\Window.h" />
@@ -75,6 +80,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -28,7 +28,12 @@
     <ClCompile Include="Core\SourceFiles\ThreadPool.cpp">
       <Filter>Core\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\HeaderFiles\Public\Window.cpp" />
+    <ClCompile Include="Core\SourceFiles\Window.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\SourceFiles\App.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\HeaderFiles\Public\Console.h">
@@ -59,6 +64,18 @@
       <Filter>Core\Header Files\Public</Filter>
     </ClInclude>
     <ClInclude Include="Core\HeaderFiles\Public\Window.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\HeaderFiles\Private\json.hpp">
+      <Filter>Core\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\HeaderFiles\Public\App.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\HeaderFiles\Public\Json.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\HeaderFiles\Public\SharedStructs.h">
       <Filter>Core\Header Files\Public</Filter>
     </ClInclude>
   </ItemGroup>

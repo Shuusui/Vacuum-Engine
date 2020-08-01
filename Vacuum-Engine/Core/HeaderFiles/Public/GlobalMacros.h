@@ -1,3 +1,3 @@
 #pragma once
 
-#define PRINTF(VALUE, ...) Vacuum::Core::Printf(TEXT(VALUE), __VA_ARGS__)
+#define PRINTF(VALUE, ...) Vacuum::Printf(TEXT(VALUE), __VA_ARGS__)
