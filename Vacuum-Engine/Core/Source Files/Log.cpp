@@ -1,5 +1,5 @@
-#include "../HeaderFiles/Public/Log.h"
-#include "../HeaderFiles/Public/Console.h"
+#include "../Header Files/Public/Log.h"
+#include "../Header Files/Public/Console.h"
 
 namespace Vacuum
 {

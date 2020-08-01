@@ -1,8 +1,8 @@
-#include "..\HeaderFiles\Public\App.h"
+#include "..\Header Files\Public\App.h"
 
 #pragma region Internal Includes 
-#include "..\HeaderFiles\Public\Json.h"
-#include "..\HeaderFiles\Public\Window.h"
+#include "..\Header Files\Public\Json.h"
+#include "..\Header Files\Public\Window.h"
 #pragma endregion //Internal Includes
 
 #pragma region External Includes

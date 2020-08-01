@@ -1,8 +1,8 @@
-#include "..\HeaderFiles\Public\Window.h"
+#include "..\Header Files\Public\Window.h"
 
 #pragma region Internal Includes 
-#include "..\HeaderFiles\Public\Log.h"
-#include "..\HeaderFiles\Public\Util.h"
+#include "..\Header Files\Public\Log.h"
+#include "..\Header Files\Public\Util.h"
 #pragma endregion //Internal Includes
 #pragma region External Includes
 #pragma endregion //External Includes

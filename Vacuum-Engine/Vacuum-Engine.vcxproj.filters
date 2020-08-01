@@ -8,11 +8,11 @@
     <Filter Include="Core">
       <UniqueIdentifier>{a7b5eef4-9dd7-42b5-99d4-5e353db2cea3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{b5005124-2501-4f65-ad42-46ac5fade7ea}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Core\Header Files">
       <UniqueIdentifier>{6b1aa45a-0cb7-452b-97f6-85a3b36e8272}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core\Source Files">
-      <UniqueIdentifier>{f0e8474a-efcd-45ee-9e4f-7b4a20dfc435}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core\Header Files\Public">
       <UniqueIdentifier>{4886eeb3-269d-4a19-9439-9b22883c7635}</UniqueIdentifier>
@@ -20,63 +20,72 @@
     <Filter Include="Core\Header Files\Private">
       <UniqueIdentifier>{bf90d36b-4fa0-4786-88ba-fb560026c483}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Source Files">
+      <UniqueIdentifier>{f0e8474a-efcd-45ee-9e4f-7b4a20dfc435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Header Files">
+      <UniqueIdentifier>{5a6421ab-3607-43f7-aaae-ef7e1122ce1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Source Files">
+      <UniqueIdentifier>{08a06847-422c-404d-9742-d2618ead9665}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\SourceFiles\Log.cpp">
-      <Filter>Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\SourceFiles\ThreadPool.cpp">
-      <Filter>Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\SourceFiles\Window.cpp">
-      <Filter>Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\SourceFiles\App.cpp">
-      <Filter>Core\Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="Core\Header Files\Private\BaseJob.h">
+      <Filter>Core\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Private\json.hpp">
+      <Filter>Core\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\App.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Console.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\GlobalDefs.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\GlobalMacros.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Guid.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Json.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Log.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\NOQueue.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\SharedStructs.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\ThreadPool.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Util.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Window.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\HeaderFiles\Public\Console.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\GlobalDefs.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\GlobalMacros.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\Guid.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\Log.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\ThreadPool.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\Util.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Private\BaseJob.h">
-      <Filter>Core\Header Files\Private</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\NOQueue.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\Window.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Private\json.hpp">
-      <Filter>Core\Header Files\Private</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\App.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\Json.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\HeaderFiles\Public\SharedStructs.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
+    <ClCompile Include="Core\Source Files\App.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Source Files\Log.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Source Files\ThreadPool.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Source Files\Window.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
