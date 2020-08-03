@@ -26,6 +26,7 @@ namespace Vacuum
 	}
 
 	CThreadPool::CThreadPool(const int32& _threadAmount)
+		:m_stopThreads(false)
 	{
 		m_threads = std::vector<CThread*>(_threadAmount);
 		m_threadAmount = _threadAmount;

@@ -117,6 +117,8 @@ namespace Vacuum
 
 		void UpdateWindowSize(const int32& _width, const int32& _height);
 
+		HWND GetHwnd() const;
+
 		SWindowDimParams GetCurrentDim() const;
 
 	private:

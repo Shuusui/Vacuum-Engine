@@ -8,8 +8,9 @@
 #include "GlobalDefs.h"
 #include "ThreadPool.h"
 #include "Window.h"
-#include "App.h"
+#include "AppManager.h"
 #include "SharedStructs.h"
+#include "RendererManager.h"
 
 int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ LPSTR _lpCmdLine, _In_ int32 _nShowCmd)
 {
@@ -20,20 +21,19 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 		CLog::LogDebugString(TEXT("Failed to Allocate console handles"));
 		return -1;
 	}
-
 	std::wstring errorMsg = {};
 	if (!CLog::Init(errorMsg))
 	{
 		CLog::LogDebugString(errorMsg);
 		return -1;
 	}
+	CLog::RegisterHandle(handles.m_handlesGuid, handles.m_outputConInfo);
 
-	CApp::InitApp();
 
-	CApp* appHandle = CApp::GetAppHandle();
+	CAppManager::InitApp();
 
-	SGuid handlesGuid = SGuid::NewGuid();
-	CLog::RegisterHandle(handlesGuid, handles.m_outputConInfo);
+	CAppManager* appMgrHandle = CAppManager::GetAppHandle();
+
 	CThreadPool* threadPool = new CThreadPool(std::thread::hardware_concurrency());
 
 	SWindowInfo windowInfo = {};
@@ -47,7 +47,8 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	windowInfo.m_creationParams.m_parentWindow = nullptr;
 	windowInfo.m_creationParams.m_menu = nullptr;
 	windowInfo.m_creationParams.m_lpParam = nullptr;
-	windowInfo.m_dimParams = appHandle->GetInitWindowDimParams();
+	windowInfo.m_dimParams = appMgrHandle->GetInitWindowDimParams();
+
 
 	CMainWindow::InitWindow(windowInfo);
 	if (!CMainWindow::Create(errorMsg))
@@ -55,14 +56,19 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 		VE_LOG(errorMsg);
 		return -1;
 	}
+
 	CMainWindow::ShowAndUpdate(_nShowCmd);
+
+	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().m_width, (uint32)appMgrHandle->GetInitWindowDimParams().m_height, CMainWindow::GetWindowHandle()->GetHwnd()});
+	CRendererManager::OnInit();
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{
 		CMainWindow::RunWindow(msg);
 	}
 
-	CApp::Destroy();
+	CRendererManager::Destroy();
+	CAppManager::Destroy();
 
 	delete threadPool;
 

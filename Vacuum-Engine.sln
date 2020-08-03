@@ -5,15 +5,14 @@ VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vacuum-Engine", "Vacuum-Engine\Vacuum-Engine.vcxproj", "{99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{A940890B-0AEF-4835-B469-0F6ED1E41D8C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2} = {99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vacuum-Editor", "Vacuum-Editor\Vacuum-Editor.vcxproj", "{3A57E2E9-E1E2-4F83-AD7B-4FC30C778629}"
 	ProjectSection(ProjectDependencies) = postProject
 		{99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2} = {99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2}
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{5E08ED98-F956-4F75-9295-06BB363F8134}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectName", "ProjectName", "{912521B3-75E6-4625-BB70-5E93DBCDD815}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +28,6 @@ Global
 		{99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2}.Release|x64.ActiveCfg = Release|x64
 		{99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2}.Release|x64.Build.0 = Release|x64
 		{99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2}.Release|x86.ActiveCfg = Release|x64
-		{A940890B-0AEF-4835-B469-0F6ED1E41D8C}.Debug|x64.ActiveCfg = Debug|x64
-		{A940890B-0AEF-4835-B469-0F6ED1E41D8C}.Debug|x64.Build.0 = Debug|x64
-		{A940890B-0AEF-4835-B469-0F6ED1E41D8C}.Debug|x86.ActiveCfg = Debug|x64
-		{A940890B-0AEF-4835-B469-0F6ED1E41D8C}.Release|x64.ActiveCfg = Release|x64
-		{A940890B-0AEF-4835-B469-0F6ED1E41D8C}.Release|x64.Build.0 = Release|x64
-		{A940890B-0AEF-4835-B469-0F6ED1E41D8C}.Release|x86.ActiveCfg = Release|x64
 		{3A57E2E9-E1E2-4F83-AD7B-4FC30C778629}.Debug|x64.ActiveCfg = Debug|x64
 		{3A57E2E9-E1E2-4F83-AD7B-4FC30C778629}.Debug|x64.Build.0 = Debug|x64
 		{3A57E2E9-E1E2-4F83-AD7B-4FC30C778629}.Debug|x86.ActiveCfg = Debug|Win32
@@ -46,6 +39,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{912521B3-75E6-4625-BB70-5E93DBCDD815} = {5E08ED98-F956-4F75-9295-06BB363F8134}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11B6CDA6-84C4-487C-9EC4-7B4C759D3781}

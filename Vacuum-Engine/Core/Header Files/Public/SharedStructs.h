@@ -1,9 +1,18 @@
 #pragma once
 #include "GlobalDefs.h"
 #include <utility>
+#include "SharedEnums.h"
 
 namespace Vacuum
 {
+	struct SRendererCreationInfo
+	{
+		ERenderAPIs m_renderApi;
+		uint32 m_width;
+		uint32 m_height;
+		void* m_wndHandle;
+	};
+
 	struct SWindowDimParams
 	{
 		SWindowDimParams() = default;

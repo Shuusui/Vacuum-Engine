@@ -134,6 +134,11 @@ namespace Vacuum
 		m_windowInfo.m_dimParams.m_height = _height;
 	}
 
+	HWND CMainWindow::GetHwnd() const
+	{
+		return m_wndHandle;
+	}
+
 	SWindowDimParams CMainWindow::GetCurrentDim() const 
 	{
 		return m_windowInfo.m_dimParams;

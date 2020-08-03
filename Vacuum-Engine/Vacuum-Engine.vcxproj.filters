@@ -29,6 +29,51 @@
     <Filter Include="Rendering\Source Files">
       <UniqueIdentifier>{08a06847-422c-404d-9742-d2618ead9665}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Header Files\Public">
+      <UniqueIdentifier>{0d646b00-a1f9-4a7d-baa2-2853536cd5be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Header Files\Private">
+      <UniqueIdentifier>{ea3b6013-0a37-469b-9c16-2f24127b73c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{a303d3b2-2910-40ee-a2f6-f6404478e32f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\DDSTextureLoader">
+      <UniqueIdentifier>{6d2b6ea9-a2f6-41ee-96d9-a45c6947c869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\DirectXMesh">
+      <UniqueIdentifier>{8974b935-a20d-4086-8867-8745a615ecc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\DirectXTex">
+      <UniqueIdentifier>{bf2c4f57-b013-4ff3-a6aa-d32a10528069}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Extensions">
+      <UniqueIdentifier>{f71f905d-17c8-4252-aaed-8f2ff9d26825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Inc">
+      <UniqueIdentifier>{cca76ce3-6f7f-4a0e-814b-e98f27631ee8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\SHMath">
+      <UniqueIdentifier>{407afa5f-67b0-4e44-bdf6-d392ba49b636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Stereo3D">
+      <UniqueIdentifier>{2189c321-181c-4c02-a182-76c955abd394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\ScreenGrab">
+      <UniqueIdentifier>{79195fdc-77ee-4f0e-8e93-2203d62cb1f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Utilities">
+      <UniqueIdentifier>{522ab00c-3aab-4ca7-8f73-155ccb252656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\WICTextureLoader">
+      <UniqueIdentifier>{85947fa8-3b34-4d08-95fe-104dbb0ac4d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\XDSP">
+      <UniqueIdentifier>{aa78086e-55d9-42f1-9a8a-42fc710870e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Helper">
+      <UniqueIdentifier>{584cbaf7-87fd-4d61-8831-6652a83271fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Header Files\Private\BaseJob.h">
@@ -36,9 +81,6 @@
     </ClInclude>
     <ClInclude Include="Core\Header Files\Private\json.hpp">
       <Filter>Core\Header Files\Private</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Header Files\Public\App.h">
-      <Filter>Core\Header Files\Public</Filter>
     </ClInclude>
     <ClInclude Include="Core\Header Files\Public\Console.h">
       <Filter>Core\Header Files\Public</Filter>
@@ -73,11 +115,113 @@
     <ClInclude Include="Core\Header Files\Public\Window.h">
       <Filter>Core\Header Files\Public</Filter>
     </ClInclude>
+    <ClInclude Include="Rendering\Header Files\Private\DX12Renderer.h">
+      <Filter>Rendering\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Header Files\Public\RendererManager.h">
+      <Filter>Rendering\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\SharedEnums.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Header Files\Private\IRenderer.h">
+      <Filter>Rendering\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\AppManager.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Inc\DirectXCollision.h">
+      <Filter>DirectX\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Inc\DirectXColors.h">
+      <Filter>DirectX\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Inc\DirectXMath.h">
+      <Filter>DirectX\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Inc\DirectXPackedVector.h">
+      <Filter>DirectX\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DDSTextureLoader\DDSTextureLoader12.h">
+      <Filter>DirectX\DDSTextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DirectXMesh\DirectXMesh.h">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DirectXMesh\DirectXMeshP.h">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DirectXMesh\scoped.h">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DirectXTex\DirectXTexP.h">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DirectXTex\BC.h">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DirectXTex\DDS.h">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\DirectXTex\DirectXTex.h">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Extensions\DirectXMathAVX.h">
+      <Filter>DirectX\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Extensions\DirectXMathAVX2.h">
+      <Filter>DirectX\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Extensions\DirectXMathBE.h">
+      <Filter>DirectX\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Extensions\DirectXMathF16C.h">
+      <Filter>DirectX\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Extensions\DirectXMathFMA3.h">
+      <Filter>DirectX\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Extensions\DirectXMathFMA4.h">
+      <Filter>DirectX\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Extensions\DirectXMathSSE3.h">
+      <Filter>DirectX\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Extensions\DirectXMathSSE4.h">
+      <Filter>DirectX\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\ScreenGrab\ScreenGrab12.h">
+      <Filter>DirectX\ScreenGrab</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\SHMath\DirectXSH.h">
+      <Filter>DirectX\SHMath</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Stereo3D\Stereo3DMatrixHelper.h">
+      <Filter>DirectX\Stereo3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\Utilities\WaveFrontReader.h">
+      <Filter>DirectX\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\WICTextureLoader\WICTextureLoader12.h">
+      <Filter>DirectX\WICTextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX\XDSP\XDSP.h">
+      <Filter>DirectX\XDSP</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Header Files\Private\d3dx12.h">
+      <Filter>DirectX\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Header Files\Private\DXHelper.h">
+      <Filter>DirectX\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\ProjectManager.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Private\Project.h">
+      <Filter>Core\Header Files\Private</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Source Files\App.cpp">
-      <Filter>Core\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Source Files\Log.cpp">
       <Filter>Core\Source Files</Filter>
     </ClCompile>
@@ -87,5 +231,157 @@
     <ClCompile Include="Core\Source Files\Window.cpp">
       <Filter>Core\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Rendering\Source Files\DX12Renderer.cpp">
+      <Filter>Rendering\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Source Files\RendererManager.cpp">
+      <Filter>Rendering\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Source Files\AppManager.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DDSTextureLoader\DDSTextureLoader12.cpp">
+      <Filter>DirectX\DDSTextureLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshAdjacency.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshClean.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshGSAdjacency.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshletGenerator.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshNormals.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshOptimize.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshOptimizeLRU.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshOptimizeTVC.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshRemap.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshTangentFrame.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshUtil.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshValidate.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshVBReader.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshVBWriter.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXMesh\DirectXMeshWeldVertices.cpp">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexCompress.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexConvert.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexD3D11.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexD3D12.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexDDS.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexFlipRotate.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexHDR.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexImage.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexMipmaps.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexMisc.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexNormalMaps.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexPMAlpha.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\DirectXTexResize.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\BC.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\BC4BC5.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\DirectXTex\BC6HBC7.cpp">
+      <Filter>DirectX\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\ScreenGrab\ScreenGrab12.cpp">
+      <Filter>DirectX\ScreenGrab</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\SHMath\DirectXSH.cpp">
+      <Filter>DirectX\SHMath</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\SHMath\DirectXSHD3D12.cpp">
+      <Filter>DirectX\SHMath</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\Stereo3D\Stereo3DMatrixHelper.cpp">
+      <Filter>DirectX\Stereo3D</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX\WICTextureLoader\WICTextureLoader12.cpp">
+      <Filter>DirectX\WICTextureLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Source Files\ProjectManager.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Source Files\Project.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirectX\Inc\DirectXCollision.inl">
+      <Filter>DirectX\Inc</Filter>
+    </None>
+    <None Include="DirectX\Inc\DirectXMathConvert.inl">
+      <Filter>DirectX\Inc</Filter>
+    </None>
+    <None Include="DirectX\Inc\DirectXMathMatrix.inl">
+      <Filter>DirectX\Inc</Filter>
+    </None>
+    <None Include="DirectX\Inc\DirectXMathMisc.inl">
+      <Filter>DirectX\Inc</Filter>
+    </None>
+    <None Include="DirectX\Inc\DirectXMathVector.inl">
+      <Filter>DirectX\Inc</Filter>
+    </None>
+    <None Include="DirectX\Inc\DirectXPackedVector.inl">
+      <Filter>DirectX\Inc</Filter>
+    </None>
+    <None Include="DirectX\DirectXMesh\DirectXMesh.inl">
+      <Filter>DirectX\DirectXMesh</Filter>
+    </None>
+    <None Include="DirectX\DirectXTex\DirectXTex.inl">
+      <Filter>DirectX\DirectXTex</Filter>
+    </None>
   </ItemGroup>
 </Project>

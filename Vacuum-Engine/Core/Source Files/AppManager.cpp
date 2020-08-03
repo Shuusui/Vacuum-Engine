@@ -1,8 +1,9 @@
-#include "..\Header Files\Public\App.h"
+#include "..\Header Files\Public\AppManager.h"
 
 #pragma region Internal Includes 
-#include "..\Header Files\Public\Json.h"
-#include "..\Header Files\Public\Window.h"
+#include "Json.h"
+#include "Window.h"
+#include "Log.h"
 #pragma endregion //Internal Includes
 
 #pragma region External Includes
@@ -11,26 +12,27 @@
 #pragma endregion //External Includes
 
 
-Vacuum::CApp* Vacuum::CApp::s_app = nullptr;
+Vacuum::CAppManager* Vacuum::CAppManager::s_app = nullptr;
 
 
-void Vacuum::CApp::InitApp()
+void Vacuum::CAppManager::InitApp()
 {
 	if (!s_app)
 	{
-		s_app = new CApp();
+		s_app = new CAppManager();
 	}
+	VE_LOG(TEXT("Initialize app"));
 	std::filesystem::path currentPath = std::filesystem::current_path();
 	std::wstring::size_type pos = std::wstring(currentPath.c_str()).find_last_of(L"\\/");
-	s_app->m_rootDir = std::wstring(currentPath).substr(0, pos);
-	std::filesystem::current_path(s_app->m_rootDir);
-	s_app->m_configDir = s_app->m_rootDir.append(L"Config");
-	if (!std::filesystem::exists(s_app->m_configDir))
+	s_app->m_appPaths.m_rootDir = std::wstring(currentPath).substr(0, pos);
+	std::filesystem::current_path(s_app->m_appPaths.m_rootDir);
+	s_app->m_appPaths.m_configDir = s_app->m_appPaths.m_rootDir / L"Config";
+	if (!std::filesystem::exists(s_app->m_appPaths.m_configDir))
 	{
-		std::filesystem::create_directory(s_app->m_configDir);
+		VE_LOG(TEXT("Creating config directory"));
+		std::filesystem::create_directory(s_app->m_appPaths.m_configDir);
 	}
-	s_app->m_appConfigPath = s_app->m_configDir;
-	s_app->m_appConfigPath.append(L"app.config");
+	s_app->m_appConfigPath = s_app->m_appPaths.m_configDir / L"app.config";
 	if (std::filesystem::exists(s_app->m_appConfigPath))
 	{
 		Json json = {};
@@ -50,7 +52,7 @@ void Vacuum::CApp::InitApp()
 	}
 }
 
-void Vacuum::CApp::Destroy()
+void Vacuum::CAppManager::Destroy()
 {
 	CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
 	if (mainWindow)
@@ -58,9 +60,9 @@ void Vacuum::CApp::Destroy()
 		s_app->m_mainWindowDim = mainWindow->GetCurrentDim();
 	}
 
-	if (!std::filesystem::exists(s_app->m_configDir))
+	if (!std::filesystem::exists(s_app->m_appPaths.m_configDir))
 	{
-		std::filesystem::create_directory(s_app->m_configDir);
+		std::filesystem::create_directory(s_app->m_appPaths.m_configDir);
 	}
 	Json json = {};
 	json["height"] = s_app->m_mainWindowDim.m_height;
@@ -71,17 +73,22 @@ void Vacuum::CApp::Destroy()
 	appConfig << json.dump();
 }
 
-Vacuum::CApp* Vacuum::CApp::GetAppHandle()
+Vacuum::CAppManager* Vacuum::CAppManager::GetAppHandle()
 {
 	return s_app;
 }
 
-Vacuum::SWindowDimParams Vacuum::CApp::GetInitWindowDimParams() const
+Vacuum::SWindowDimParams Vacuum::CAppManager::GetInitWindowDimParams()
 {
-	return m_mainWindowDim;
+	return s_app->m_mainWindowDim;
 }
 
-Vacuum::CApp::CApp()
+Vacuum::SAppPaths Vacuum::CAppManager::GetAppPaths()
+{
+	return s_app->m_appPaths;
+}
+
+Vacuum::CAppManager::CAppManager()
 	:m_mainWindowDim(SWindowDimParams())
 {
 }

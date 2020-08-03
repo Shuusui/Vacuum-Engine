@@ -10,6 +10,7 @@
 #pragma region External Includes
 #include <Windows.h>
 #include <system_error>
+#include <sstream>
 #pragma endregion External Includes
 
 #pragma endregion Includes
@@ -61,6 +62,19 @@ namespace Vacuum
 			return (A | B | C | D) != 0;
 		}
 
+		std::wstring ToString() const 
+		{
+			std::wstringstream stream;
+			stream << std::hex << A;
+			stream << "-";
+			stream << std::hex << B;
+			stream << "-";
+			stream << std::hex << C;
+			stream << "-";
+			stream << std::hex << D;
+			return stream.str();
+		}
+
 		static SGuid NewGuid()
 		{
 			SGuid returnGuid;
@@ -70,6 +84,22 @@ namespace Vacuum
 				return SGuid();
 			}
 			return returnGuid;
+		}
+
+		void operator=(const SGuid& _other)
+		{
+			A = _other.A;
+			B = _other.B;
+			C = _other.C;
+			D = _other.D;
+		}
+
+		void operator=(SGuid&& _other) noexcept
+		{
+			A = std::move(_other.A);
+			B = std::move(_other.B);
+			C = std::move(_other.C);
+			D = std::move(_other.D);
 		}
 
 		friend bool operator==(const SGuid& _first, const SGuid& _second)

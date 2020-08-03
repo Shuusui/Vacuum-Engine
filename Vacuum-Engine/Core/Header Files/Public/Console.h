@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include "Guid.h"
 
 namespace Vacuum
 {
@@ -36,6 +37,7 @@ namespace Vacuum
 		SConsoleInfo m_inputConInfo;
 		SConsoleInfo m_outputConInfo;
 		SConsoleInfo m_errorConInfo;
+		SGuid m_handlesGuid;
 	};
 
 	/**
@@ -50,7 +52,8 @@ namespace Vacuum
 		_outHandles.m_inputConInfo.m_consoleHandle = GetStdHandle(STD_INPUT_HANDLE);
 		_outHandles.m_outputConInfo.m_consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		_outHandles.m_errorConInfo.m_consoleHandle = GetStdHandle(STD_ERROR_HANDLE);
-
+		_outHandles.m_handlesGuid = SGuid::NewGuid();
+		std::wstring s = _outHandles.m_handlesGuid.ToString();
 		return success && _outHandles.m_inputConInfo.m_consoleHandle && _outHandles.m_outputConInfo.m_consoleHandle && _outHandles.m_errorConInfo.m_consoleHandle;
 	}
 
