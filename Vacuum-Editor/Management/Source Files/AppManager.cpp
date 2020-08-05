@@ -53,6 +53,8 @@ void Vacuum::CAppManager::InitApp()
 		s_app->m_mainWindowDim.m_leftTopCornerX = 0;
 		s_app->m_mainWindowDim.m_leftTopCornerY = 0;
 	}
+
+	s_app->LoadProject();
 }
 
 void Vacuum::CAppManager::Destroy()
@@ -91,7 +93,18 @@ Vacuum::SAppPaths Vacuum::CAppManager::GetAppPaths()
 	return s_app->m_appPaths;
 }
 
+void Vacuum::CAppManager::LoadProject()
+{
+	for (const std::filesystem::path& project : std::filesystem::directory_iterator(m_appPaths.m_projectsDir))
+	{
+		m_currentProject = new CProject(project);
+	}
+}
+
 Vacuum::CAppManager::CAppManager()
 	:m_mainWindowDim(SWindowDimParams())
+	,m_appPaths(SAppPaths())
+	,m_appConfigPath(std::filesystem::path())
+	,m_currentProject(nullptr)
 {
 }

@@ -4,17 +4,23 @@
 #include "SharedStructs.h"
 #include "GlobalDefs.h"
 #include "Guid.h"
+#include "Project.h"
 
 
 namespace Vacuum
 {
 	struct SAppPaths
 	{
+		SAppPaths()
+			:m_rootDir(std::filesystem::path())
+			,m_configDir(std::filesystem::path())
+			,m_projectsDir(std::filesystem::path())
+		{
+
+		}
 		std::filesystem::path m_rootDir;
 		std::filesystem::path m_configDir;
 		std::filesystem::path m_projectsDir;
-		std::pair<SGuid, std::filesystem::path> m_currentProject;
-		std::unordered_map<SGuid, std::filesystem::path> m_recentProjects;
 	};
 
 	class CAppManager
@@ -26,6 +32,8 @@ namespace Vacuum
 
 		static SWindowDimParams GetInitWindowDimParams();
 		static SAppPaths GetAppPaths();
+
+		void LoadProject();
 	private:
 		CAppManager();
 		
@@ -33,5 +41,6 @@ namespace Vacuum
 		SWindowDimParams m_mainWindowDim;
 		SAppPaths m_appPaths;
 		std::filesystem::path m_appConfigPath;
+		CProject* m_currentProject;
 	};
 }
