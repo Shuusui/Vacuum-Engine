@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "Guid.h"
+#include "Log.h"
 
 namespace Vacuum
 {
@@ -43,7 +44,7 @@ namespace Vacuum
 	/**
 		* Allocates a console for this process and returns the handles to them with some info about it
 		* @param _outHandles A reference to the Console handles struct with some info in it.
-		* @return Returns true if everything was sucessful, false otherwise
+		* @return Returns true if everything was successful, false otherwise
 		*/
 	static bool AllocateConsole(SConsoleHandles& _outHandles)
 	{
@@ -53,7 +54,6 @@ namespace Vacuum
 		_outHandles.m_outputConInfo.m_consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		_outHandles.m_errorConInfo.m_consoleHandle = GetStdHandle(STD_ERROR_HANDLE);
 		_outHandles.m_handlesGuid = SGuid::NewGuid();
-		std::wstring s = _outHandles.m_handlesGuid.ToString();
 		return success && _outHandles.m_inputConInfo.m_consoleHandle && _outHandles.m_outputConInfo.m_consoleHandle && _outHandles.m_errorConInfo.m_consoleHandle;
 	}
 
@@ -63,15 +63,15 @@ namespace Vacuum
 
 		if (!CloseHandle(_handles.m_inputConInfo.m_consoleHandle))
 		{
-
+			CLog::LogDebugString(TEXT("Failed to close input console handle"));
 		}
 		if (!CloseHandle(_handles.m_outputConInfo.m_consoleHandle))
 		{
-
+			CLog::LogDebugString(TEXT("Failed to close output console handle"));
 		}
 		if (!CloseHandle(_handles.m_errorConInfo.m_consoleHandle))
 		{
-
+			CLog::LogDebugString(TEXT("Failed to close error console handle"));
 		}
 	}
 }

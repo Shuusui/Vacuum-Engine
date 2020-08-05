@@ -1,4 +1,4 @@
-#include "..\Header Files\Private\Project.h"
+#include "..\Header Files\Project.h"
 
 Vacuum::CProject::CProject(const std::filesystem::path& _projectPath)
 	:m_guid(SGuid::NewGuid())

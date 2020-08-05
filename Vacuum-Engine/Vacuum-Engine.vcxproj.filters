@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{a7b5eef4-9dd7-42b5-99d4-5e353db2cea3}</UniqueIdentifier>
     </Filter>
@@ -127,9 +123,6 @@
     <ClInclude Include="Rendering\Header Files\Private\IRenderer.h">
       <Filter>Rendering\Header Files\Private</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Header Files\Public\AppManager.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
     <ClInclude Include="DirectX\Inc\DirectXCollision.h">
       <Filter>DirectX\Inc</Filter>
     </ClInclude>
@@ -214,12 +207,6 @@
     <ClInclude Include="Rendering\Header Files\Private\DXHelper.h">
       <Filter>DirectX\Helper</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Header Files\Public\ProjectManager.h">
-      <Filter>Core\Header Files\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Header Files\Private\Project.h">
-      <Filter>Core\Header Files\Private</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Source Files\Log.cpp">
@@ -236,9 +223,6 @@
     </ClCompile>
     <ClCompile Include="Rendering\Source Files\RendererManager.cpp">
       <Filter>Rendering\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Source Files\AppManager.cpp">
-      <Filter>Core\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DirectX\DDSTextureLoader\DDSTextureLoader12.cpp">
       <Filter>DirectX\DDSTextureLoader</Filter>
@@ -350,12 +334,6 @@
     </ClCompile>
     <ClCompile Include="DirectX\WICTextureLoader\WICTextureLoader12.cpp">
       <Filter>DirectX\WICTextureLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Source Files\ProjectManager.cpp">
-      <Filter>Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Source Files\Project.cpp">
-      <Filter>Core\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

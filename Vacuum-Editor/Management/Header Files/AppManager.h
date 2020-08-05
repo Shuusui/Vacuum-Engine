@@ -1,8 +1,10 @@
-#pragma once
 #include <string>
-#include "GlobalDefs.h"
-#include "SharedStructs.h"
 #include <filesystem>
+#include <unordered_map>
+#include "SharedStructs.h"
+#include "GlobalDefs.h"
+#include "Guid.h"
+
 
 namespace Vacuum
 {
@@ -10,6 +12,9 @@ namespace Vacuum
 	{
 		std::filesystem::path m_rootDir;
 		std::filesystem::path m_configDir;
+		std::filesystem::path m_projectsDir;
+		std::pair<SGuid, std::filesystem::path> m_currentProject;
+		std::unordered_map<SGuid, std::filesystem::path> m_recentProjects;
 	};
 
 	class CAppManager

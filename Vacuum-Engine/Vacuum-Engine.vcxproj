@@ -13,8 +13,6 @@
   <ItemGroup>
     <ClInclude Include="Core\Header Files\Private\BaseJob.h" />
     <ClInclude Include="Core\Header Files\Private\json.hpp" />
-    <ClInclude Include="Core\Header Files\Private\Project.h" />
-    <ClInclude Include="Core\Header Files\Public\AppManager.h" />
     <ClInclude Include="Core\Header Files\Public\Console.h" />
     <ClInclude Include="Core\Header Files\Public\GlobalDefs.h" />
     <ClInclude Include="Core\Header Files\Public\GlobalMacros.h" />
@@ -22,7 +20,6 @@
     <ClInclude Include="Core\Header Files\Public\Json.h" />
     <ClInclude Include="Core\Header Files\Public\Log.h" />
     <ClInclude Include="Core\Header Files\Public\NOQueue.h" />
-    <ClInclude Include="Core\Header Files\Public\ProjectManager.h" />
     <ClInclude Include="Core\Header Files\Public\SharedEnums.h" />
     <ClInclude Include="Core\Header Files\Public\SharedStructs.h" />
     <ClInclude Include="Core\Header Files\Public\ThreadPool.h" />
@@ -61,10 +58,7 @@
     <ClInclude Include="Rendering\Header Files\Public\RendererManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Source Files\AppManager.cpp" />
     <ClCompile Include="Core\Source Files\Log.cpp" />
-    <ClCompile Include="Core\Source Files\Project.cpp" />
-    <ClCompile Include="Core\Source Files\ProjectManager.cpp" />
     <ClCompile Include="Core\Source Files\ThreadPool.cpp" />
     <ClCompile Include="Core\Source Files\Window.cpp" />
     <ClCompile Include="DirectX\DDSTextureLoader\DDSTextureLoader12.cpp" />

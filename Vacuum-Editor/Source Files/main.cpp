@@ -49,7 +49,6 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	windowInfo.m_creationParams.m_lpParam = nullptr;
 	windowInfo.m_dimParams = appMgrHandle->GetInitWindowDimParams();
 
-
 	CMainWindow::InitWindow(windowInfo);
 	if (!CMainWindow::Create(errorMsg))
 	{

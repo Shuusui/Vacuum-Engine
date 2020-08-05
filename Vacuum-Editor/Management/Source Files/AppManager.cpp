@@ -1,4 +1,4 @@
-#include "..\Header Files\Public\AppManager.h"
+#include "..\Header Files\AppManager.h"
 
 #pragma region Internal Includes 
 #include "Json.h"
@@ -32,7 +32,10 @@ void Vacuum::CAppManager::InitApp()
 		VE_LOG(TEXT("Creating config directory"));
 		std::filesystem::create_directory(s_app->m_appPaths.m_configDir);
 	}
+
+	s_app->m_appPaths.m_projectsDir = s_app->m_appPaths.m_rootDir / L"Projects";
 	s_app->m_appConfigPath = s_app->m_appPaths.m_configDir / L"app.config";
+
 	if (std::filesystem::exists(s_app->m_appConfigPath))
 	{
 		Json json = {};
