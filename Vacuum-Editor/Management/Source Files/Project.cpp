@@ -17,4 +17,9 @@ Vacuum::CProject::CProject(const std::filesystem::path& _projectPath)
 	projectConfig >> json;
 	m_name = json["name"].get<std::wstring>();
 	m_guid = json["guid"].get<std::wstring>();
+
+	for (const std::filesystem::path& shader : std::filesystem::directory_iterator(m_currentShaderDir))
+	{
+		m_shaderPaths.push_back(shader);
+	}
 }

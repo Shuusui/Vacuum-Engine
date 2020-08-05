@@ -34,6 +34,10 @@ namespace Vacuum
 		static SAppPaths GetAppPaths();
 
 		void LoadProject();
+		CProject* GetCurrentProject() const 
+		{
+			return m_currentProject;
+		}
 	private:
 		CAppManager();
 		

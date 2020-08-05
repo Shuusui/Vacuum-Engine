@@ -2,6 +2,8 @@
 #include "..\Private\IRenderer.h"
 #include "..\Private\DX12Renderer.h"
 #include "SharedStructs.h"
+#include <filesystem>
+#include <vector>
 
 namespace Vacuum
 {
@@ -9,7 +11,8 @@ namespace Vacuum
 	{
 	public:
 		static void Create(const SRendererCreationInfo& _info);
-		static void OnInit();
+		static void OnInit(const std::vector<std::filesystem::path>& _shaderPaths);
+		static void OnRender();
 		static void Destroy();
 		
 	private:

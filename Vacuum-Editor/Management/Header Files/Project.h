@@ -8,6 +8,10 @@ namespace Vacuum
 	{
 	public:
 		CProject(const std::filesystem::path& _projectPath);
+		std::vector<std::filesystem::path> GetShaderPaths() const 
+		{
+			return m_shaderPaths;
+		}
 	private:
 		SGuid m_guid;
 		std::wstring m_name;
@@ -16,5 +20,6 @@ namespace Vacuum
 		std::filesystem::path m_currentContentDir;
 		std::filesystem::path m_currentShaderDir;
 		std::filesystem::path m_projectConfigPath;
+		std::vector<std::filesystem::path> m_shaderPaths;
 	};
 }

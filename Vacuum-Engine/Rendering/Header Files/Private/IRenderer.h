@@ -1,5 +1,7 @@
 #pragma once
 #include "GlobalDefs.h"
+#include <filesystem>
+#include <vector>
 
 namespace Vacuum
 {
@@ -21,9 +23,14 @@ namespace Vacuum
 		virtual void OnUpdate() = 0;
 		virtual void OnRender() = 0;
 		virtual void OnDestroy() = 0;
+		void SetShaderPaths(const std::vector<std::filesystem::path>& _shaderPaths)
+		{
+			m_shaderPaths = _shaderPaths;
+		}
 	protected:
 		uint32 m_width;
 		uint32 m_height;
 		void* m_wndHandle;
+		std::vector<std::filesystem::path> m_shaderPaths;
 	};
 }

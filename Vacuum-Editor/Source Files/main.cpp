@@ -27,8 +27,8 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 		CLog::LogDebugString(errorMsg);
 		return -1;
 	}
-	CLog::RegisterHandle(handles.m_handlesGuid, handles.m_outputConInfo);
 
+	CLog::RegisterHandle(handles.m_handlesGuid, handles.m_outputConInfo);
 
 	CAppManager::InitApp();
 
@@ -59,11 +59,12 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	CMainWindow::ShowAndUpdate(_nShowCmd);
 
 	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().m_width, (uint32)appMgrHandle->GetInitWindowDimParams().m_height, CMainWindow::GetWindowHandle()->GetHwnd()});
-	CRendererManager::OnInit();
+	CRendererManager::OnInit(appMgrHandle->GetCurrentProject()->GetShaderPaths());
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{
 		CMainWindow::RunWindow(msg);
+		CRendererManager::OnRender();
 	}
 
 	CRendererManager::Destroy();
