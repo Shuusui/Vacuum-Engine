@@ -11,6 +11,7 @@ Vacuum::CProject::CProject(const std::filesystem::path& _projectPath)
 	m_projectConfigPath = m_configsDir / "project.config";
 	m_currentShaderDir = m_currentContentDir.append("Content");
 	m_currentShaderDir.append("Shaders");
+	m_modelDir = m_currentContentDir / "Models";
 
 	std::ifstream projectConfig(m_projectConfigPath);
 	Json json = {};
@@ -18,8 +19,20 @@ Vacuum::CProject::CProject(const std::filesystem::path& _projectPath)
 	m_name = json["name"].get<std::wstring>();
 	m_guid = json["guid"].get<std::wstring>();
 
-	for (const std::filesystem::path& shader : std::filesystem::directory_iterator(m_currentShaderDir))
+	for (const std::filesystem::path& shader : std::filesystem::recursive_directory_iterator(m_currentShaderDir))
 	{
+		if (std::filesystem::is_directory(shader) || shader.extension() != ".hlsl")
+		{
+			continue;
+		}
 		m_shaderPaths.push_back(shader);
+	}
+	for (const std::filesystem::path& model : std::filesystem::recursive_directory_iterator(m_modelDir))
+	{
+		if (std::filesystem::is_directory(model) || model.extension() != ".obj")
+		{
+			continue;
+		}
+		m_modelPaths.push_back(model);
 	}
 }

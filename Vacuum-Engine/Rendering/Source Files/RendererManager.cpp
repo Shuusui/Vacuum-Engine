@@ -32,4 +32,3 @@ void Vacuum::CRendererManager::Destroy()
 	delete s_rendererManager;
 	s_rendererManager = nullptr;
 }
-

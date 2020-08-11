@@ -3,13 +3,13 @@
 #pragma region Internal Includes 
 #include "..\Header Files\Public\Log.h"
 #include "..\Header Files\Public\Util.h"
+#include "RendererManager.h"
 #pragma endregion //Internal Includes
 #pragma region External Includes
 #pragma endregion //External Includes
 
 namespace Vacuum
 {
-
 	CMainWindow* CMainWindow::s_mainWindow = nullptr;
 
 	LRESULT CALLBACK WindowProc(
@@ -18,33 +18,69 @@ namespace Vacuum
 		WPARAM _wParam,
 		LPARAM _lParam)
 	{
+		CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
 		switch (_msg)
 		{
 		case WM_DESTROY:
+			if(mainWindow)
+			{
+				for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_DESTROY))
+				{
+					func();
+				}
+			}
 			PostQuitMessage(0);
 			return 0;
 		case WM_WINDOWPOSCHANGED:
 		{
-			CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
 			if (mainWindow)
 			{
+				for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_WINDOWPOSCHANGED))
+				{
+					func();
+				}
 				RECT rect = {};
-				GetWindowRect(_hwnd, &rect);
+				if (!GetWindowRect(_hwnd, &rect))
+				{
+					return -1;
+				}
 				mainWindow->UpdateWindowPos(rect.left, rect.top);
 			}
 		}
 			return 0;
 		case WM_EXITSIZEMOVE:
 		{
-			CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
 			if (mainWindow)
 			{
+				for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_EXITSIZEMOVE))
+				{
+					func();
+				}
 				RECT rect = {};
-				GetWindowRect(_hwnd, &rect);
+				if (!GetWindowRect(_hwnd, &rect))
+				{
+					return -1;
+				}
 				mainWindow->UpdateWindowSize(rect.right - rect.left, rect.bottom - rect.top);
 			}
 			return 0;
 		}
+		case WM_SETCURSOR:
+			if (mainWindow)
+			{
+				for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_SETCURSOR))
+				{
+					func();
+				}
+			}
+			return 0;
+		case WM_PAINT:
+			for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_PAINT))
+			{
+				func();
+			}
+			//CRendererManager::OnRender();
+			break;
 		}
 		return DefWindowProc(_hwnd, _msg, _wParam, _lParam);
 	}
@@ -108,13 +144,15 @@ namespace Vacuum
 		UpdateWindow(s_mainWindow->m_wndHandle);
 	}
 
-	void CMainWindow::RunWindow(MSG& _msg)
+	bool CMainWindow::RunWindow(MSG& _msg)
 	{
 		if (PeekMessage(&_msg, nullptr, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&_msg);
 			DispatchMessage(&_msg);
+			return true;
 		}
+		return false;
 	}
 
 	CMainWindow* CMainWindow::GetWindowHandle()
@@ -132,6 +170,16 @@ namespace Vacuum
 	{
 		m_windowInfo.m_dimParams.m_width = _width;
 		m_windowInfo.m_dimParams.m_height = _height;
+	}
+
+	void CMainWindow::RegisterCallbackforWMEvents(const uint32& _wmEvent, const std::function<void()>& _func)
+	{
+		m_wmEventMap[_wmEvent].push_back(_func);
+	}
+
+	std::vector<std::function<void()>>& CMainWindow::GetWMFunctions(uint32 _wmEvent) const
+	{
+		return s_mainWindow->m_wmEventMap[_wmEvent];
 	}
 
 	HWND CMainWindow::GetHwnd() const

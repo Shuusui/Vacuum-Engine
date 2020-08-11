@@ -70,11 +70,8 @@ namespace Vacuum
 				case 'u':
 					strAddFunc(std::to_wstring(va_arg(args, uint32)), i);
 					break;
-				case 'w':
-					strAddFunc(va_arg(args, const wchar_t*), i);
-					break;
 				case 's':
-					strAddFunc(ToWString(va_arg(args, const char*)), i);
+					strAddFunc(va_arg(args, const wchar_t*), i);
 					break;
 				}
 			}

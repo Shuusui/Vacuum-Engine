@@ -14,6 +14,30 @@
     <Filter Include="Management\Source Files">
       <UniqueIdentifier>{4e715bb9-1b0a-4f7f-8c4e-11b9e714dcdc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{ea042b8e-f374-4be4-87f1-a03762bc8ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Header Files">
+      <UniqueIdentifier>{973802ce-ed8e-4935-95c6-74f0b158a051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Source Files">
+      <UniqueIdentifier>{1e886b04-ed6e-45f3-be1b-a01fb6ad42ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Header Files\Public">
+      <UniqueIdentifier>{0aef3cb2-b656-4122-9427-beb1b1024ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Header Files\Private">
+      <UniqueIdentifier>{f52cff61-e6e2-41ec-aacd-79f966ae803f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{59aaed8e-9d75-48d3-9b52-76512f856309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Header Files">
+      <UniqueIdentifier>{eb74b5c7-5994-41b1-826d-292606d8dab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Source Files">
+      <UniqueIdentifier>{be9437db-eb40-4dd1-a83c-62a05ec0a25e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\main.cpp">
@@ -25,6 +49,18 @@
     <ClCompile Include="Management\Source Files\Project.cpp">
       <Filter>Management\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\Source Files\imgui.cpp">
+      <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\Source Files\imgui_widgets.cpp">
+      <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\Source Files\imgui_draw.cpp">
+      <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Source Files\GUI.cpp">
+      <Filter>GUI\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Management\Header Files\AppManager.h">
@@ -32,6 +68,27 @@
     </ClInclude>
     <ClInclude Include="Management\Header Files\Project.h">
       <Filter>Management\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imconfig.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imgui_internal.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imstb_textedit.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imstb_rectpack.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imstb_truetype.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Public\imgui.h">
+      <Filter>ImGui\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Header Files\GUI.h">
+      <Filter>GUI\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

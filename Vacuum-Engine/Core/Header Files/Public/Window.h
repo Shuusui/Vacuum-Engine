@@ -8,6 +8,9 @@
 #include <Windows.h>
 #include <utility>
 #include <string>
+#include <functional>
+#include <unordered_map>
+#include <vector>
 #pragma endregion //External Includes
 
 
@@ -109,13 +112,17 @@ namespace Vacuum
 
 		static void ShowAndUpdate(const int32& _nCmdShow);
 
-		static void RunWindow(MSG& _msg);
+		static bool RunWindow(MSG& _msg);
 
 		static CMainWindow* GetWindowHandle();
 
 		void UpdateWindowPos(const int32& _x, const int32& _y);
 
 		void UpdateWindowSize(const int32& _width, const int32& _height);
+
+		void RegisterCallbackforWMEvents(const uint32& _wmEvent, const std::function<void()>& _func);
+
+		std::vector<std::function<void()>>& GetWMFunctions(uint32 _wmEvent) const;
 
 		HWND GetHwnd() const;
 
@@ -126,10 +133,18 @@ namespace Vacuum
 			:m_windowInfo(_windowInfo)
 			,m_wndHandle(nullptr)
 		{
+			m_wmEventMap = {
+				{WM_EXITSIZEMOVE, {}}, 
+				{WM_DESTROY, {}},
+				{WM_WINDOWPOSCHANGED, {}},
+				{WM_EXITSIZEMOVE, {}},
+				{WM_PAINT, {}}
+			};
 		}
 
 		SWindowInfo m_windowInfo;
 		HWND m_wndHandle;
 		static CMainWindow* s_mainWindow;
+		std::unordered_map<uint32, std::vector<std::function<void()>>> m_wmEventMap;
 	};
 }

@@ -11,20 +11,30 @@
 #include "AppManager.h"
 #include "SharedStructs.h"
 #include "RendererManager.h"
+#include "imgui.h"
+#include "GUI.h"
+#include "Timer.h"
 
 int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ LPSTR _lpCmdLine, _In_ int32 _nShowCmd)
 {
 	using namespace Vacuum;
+
+	CTimer::Create();
+
 	SConsoleHandles handles = {};
 	if (!AllocateConsole(handles))
 	{
-		CLog::LogDebugString(TEXT("Failed to Allocate console handles"));
+#if defined(_DEBUG)
+		VE_DEBUG_LOG(TEXT("Failed to Allocate console handles"));
+#endif
 		return -1;
 	}
 	std::wstring errorMsg = {};
 	if (!CLog::Init(errorMsg))
 	{
-		CLog::LogDebugString(errorMsg);
+#if defined(_DEBUG)
+		VE_DEBUG_LOG(errorMsg);
+#endif
 		return -1;
 	}
 
@@ -56,15 +66,27 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 		return -1;
 	}
 
-	CMainWindow::ShowAndUpdate(_nShowCmd);
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	CGUI::Init(CMainWindow::GetWindowHandle()->GetHwnd());
 
 	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().m_width, (uint32)appMgrHandle->GetInitWindowDimParams().m_height, CMainWindow::GetWindowHandle()->GetHwnd()});
 	CRendererManager::OnInit(appMgrHandle->GetCurrentProject()->GetShaderPaths());
+
+	ImGui::StyleColorsDark();
+
+
+	CMainWindow::ShowAndUpdate(_nShowCmd);
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{
-		CMainWindow::RunWindow(msg);
-		CRendererManager::OnRender();
+		CTimer::Update();
+		if (CMainWindow::RunWindow(msg))
+		{
+			continue;
+		}
+		CGUI::NewFrame();
 	}
 
 	CRendererManager::Destroy();

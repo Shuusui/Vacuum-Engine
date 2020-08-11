@@ -19,11 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GUI\Source Files\GUI.cpp" />
+    <ClCompile Include="ImGui\Source Files\imgui.cpp" />
+    <ClCompile Include="ImGui\Source Files\imgui_draw.cpp" />
+    <ClCompile Include="ImGui\Source Files\imgui_widgets.cpp" />
     <ClCompile Include="Management\Source Files\AppManager.cpp" />
     <ClCompile Include="Management\Source Files\Project.cpp" />
     <ClCompile Include="Source Files\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GUI\Header Files\GUI.h" />
+    <ClInclude Include="ImGui\Header Files\Private\imconfig.h" />
+    <ClInclude Include="ImGui\Header Files\Private\imgui_internal.h" />
+    <ClInclude Include="ImGui\Header Files\Private\imstb_rectpack.h" />
+    <ClInclude Include="ImGui\Header Files\Private\imstb_textedit.h" />
+    <ClInclude Include="ImGui\Header Files\Private\imstb_truetype.h" />
+    <ClInclude Include="ImGui\Header Files\Public\imgui.h" />
     <ClInclude Include="Management\Header Files\AppManager.h" />
     <ClInclude Include="Management\Header Files\Project.h" />
   </ItemGroup>
@@ -105,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Editor\Management\Header Files\;$(SolutionDir)Vacuum-Engine\Core\Header Files\Public; $(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Editor\GUI\Header Files\;$(SolutionDir)Vacuum-Editor\ImGui\Header Files\Public\;$(SolutionDir)Vacuum-Editor\Management\Header Files\;$(SolutionDir)Vacuum-Engine\Core\Header Files\Public; $(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -140,7 +151,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Editor\Management\Header Files\;$(SolutionDir)Vacuum-Engine\Core\Header Files\Public; $(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Editor\GUI\Header Files\;$(SolutionDir)Vacuum-Editor\ImGui\Header Files\Public\;$(SolutionDir)Vacuum-Editor\Management\Header Files\;$(SolutionDir)Vacuum-Engine\Core\Header Files\Public; $(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

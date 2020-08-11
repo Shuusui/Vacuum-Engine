@@ -70,6 +70,33 @@
     <Filter Include="DirectX\Helper">
       <UniqueIdentifier>{584cbaf7-87fd-4d61-8831-6652a83271fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\ECS">
+      <UniqueIdentifier>{45c7a4c3-f645-4537-90bf-c74582bab961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Header Files">
+      <UniqueIdentifier>{286f0631-4663-4787-b970-057802838d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Source Files">
+      <UniqueIdentifier>{d0b1eab1-c735-4901-b41c-6df076f735da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Entities">
+      <UniqueIdentifier>{ea54ee33-87a5-4d88-a52e-d5e4f32b592d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Entities\Header Files">
+      <UniqueIdentifier>{fe05dffd-97bd-4f4e-8e7e-5ff05baacba2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Entities\Source Files">
+      <UniqueIdentifier>{226c9ac0-b435-4600-8275-3f1a9bf464cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Components">
+      <UniqueIdentifier>{b9238ec6-be76-4c64-b2a2-f504d77b22fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Components\Header Files">
+      <UniqueIdentifier>{837f407f-a376-4dd7-bc8e-bec63a78328d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Components\Source Files">
+      <UniqueIdentifier>{e4f3e465-8983-4b04-ae6d-73804afabb04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Header Files\Private\BaseJob.h">
@@ -207,6 +234,24 @@
     <ClInclude Include="Rendering\Header Files\Private\DXHelper.h">
       <Filter>DirectX\Helper</Filter>
     </ClInclude>
+    <ClInclude Include="Core\ECS\Header Files\BaseObject.h">
+      <Filter>Core\ECS\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Entities\Header Files\BaseEntity.h">
+      <Filter>Core\ECS\Entities\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Components\Header Files\BaseComponent.h">
+      <Filter>Core\ECS\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Header Files\Scene.h">
+      <Filter>Core\ECS\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Header Files\ComponentManager.h">
+      <Filter>Core\ECS\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Timer.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Source Files\Log.cpp">
@@ -334,6 +379,24 @@
     </ClCompile>
     <ClCompile Include="DirectX\WICTextureLoader\WICTextureLoader12.cpp">
       <Filter>DirectX\WICTextureLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Source Files\BaseObject.cpp">
+      <Filter>Core\ECS\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Entities\Source Files\BaseEntity.cpp">
+      <Filter>Core\ECS\Entities\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Components\Source Files\BaseComponent.cpp">
+      <Filter>Core\ECS\Components\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Source Files\Scene.cpp">
+      <Filter>Core\ECS\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Source Files\ComponentManager.cpp">
+      <Filter>Core\ECS\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Source Files\Timer.cpp">
+      <Filter>Core\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

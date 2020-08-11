@@ -2,6 +2,7 @@
 #include "GlobalDefs.h"
 #include <filesystem>
 #include <vector>
+#include <d3d12.h>
 
 namespace Vacuum
 {

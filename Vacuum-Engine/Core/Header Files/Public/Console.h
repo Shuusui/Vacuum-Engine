@@ -63,15 +63,21 @@ namespace Vacuum
 
 		if (!CloseHandle(_handles.m_inputConInfo.m_consoleHandle))
 		{
-			CLog::LogDebugString(TEXT("Failed to close input console handle"));
+#if defined(_DEBUG)
+			VE_DEBUG_LOG(TEXT("Failed to close input console handle"));
+#endif
 		}
 		if (!CloseHandle(_handles.m_outputConInfo.m_consoleHandle))
 		{
-			CLog::LogDebugString(TEXT("Failed to close output console handle"));
+#if defined(_DEBUG)
+			VE_DEBUG_LOG(TEXT("Failed to close output console handle"));
+#endif
 		}
 		if (!CloseHandle(_handles.m_errorConInfo.m_consoleHandle))
 		{
-			CLog::LogDebugString(TEXT("Failed to close error console handle"));
+#if defined(_DEBUG)
+			VE_DEBUG_LOG(TEXT("Failed to close error console handle"));
+#endif
 		}
 	}
 }

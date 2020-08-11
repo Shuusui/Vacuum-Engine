@@ -11,6 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\ECS\Components\Header Files\BaseComponent.h" />
+    <ClInclude Include="Core\ECS\Entities\Header Files\BaseEntity.h" />
+    <ClInclude Include="Core\ECS\Header Files\BaseObject.h" />
+    <ClInclude Include="Core\ECS\Header Files\ComponentManager.h" />
+    <ClInclude Include="Core\ECS\Header Files\Scene.h" />
     <ClInclude Include="Core\Header Files\Private\BaseJob.h" />
     <ClInclude Include="Core\Header Files\Private\json.hpp" />
     <ClInclude Include="Core\Header Files\Public\Console.h" />
@@ -23,6 +28,7 @@
     <ClInclude Include="Core\Header Files\Public\SharedEnums.h" />
     <ClInclude Include="Core\Header Files\Public\SharedStructs.h" />
     <ClInclude Include="Core\Header Files\Public\ThreadPool.h" />
+    <ClInclude Include="Core\Header Files\Public\Timer.h" />
     <ClInclude Include="Core\Header Files\Public\Util.h" />
     <ClInclude Include="Core\Header Files\Public\Window.h" />
     <ClInclude Include="DirectX\DDSTextureLoader\DDSTextureLoader12.h" />
@@ -58,8 +64,14 @@
     <ClInclude Include="Rendering\Header Files\Public\RendererManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ECS\Components\Source Files\BaseComponent.cpp" />
+    <ClCompile Include="Core\ECS\Entities\Source Files\BaseEntity.cpp" />
+    <ClCompile Include="Core\ECS\Source Files\BaseObject.cpp" />
+    <ClCompile Include="Core\ECS\Source Files\ComponentManager.cpp" />
+    <ClCompile Include="Core\ECS\Source Files\Scene.cpp" />
     <ClCompile Include="Core\Source Files\Log.cpp" />
     <ClCompile Include="Core\Source Files\ThreadPool.cpp" />
+    <ClCompile Include="Core\Source Files\Timer.cpp" />
     <ClCompile Include="Core\Source Files\Window.cpp" />
     <ClCompile Include="DirectX\DDSTextureLoader\DDSTextureLoader12.cpp" />
     <ClCompile Include="DirectX\DirectXMesh\DirectXMeshAdjacency.cpp" />

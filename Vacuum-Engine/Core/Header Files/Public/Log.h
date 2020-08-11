@@ -18,6 +18,8 @@
 
 #define VE_LOG(LOG) CLog::Log(LOG)
 #define VE_LOG_F(LOG, ...) CLog::Log(PRINTF(LOG, __VA_ARGS__))
+#define VE_DEBUG_LOG(LOG) CLog::LogDebugString(LOG)
+#define VE_DEBUG_LOG_F(LOG, ...) CLOg::LogDebugString(PRINTF(LOG, __VA_ARGS__))
 
 namespace Vacuum
 {
@@ -79,11 +81,13 @@ namespace Vacuum
 		*/
 		static void Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::wstring& _logString);
 
+#if defined(_DEBUG)
 		/**
 			* Just logs a debug string to the output window of VS
 			* @param _logString The string to log
 			*/
 		static void LogDebugString(const std::wstring& _logString);
+#endif
 
 		/**
 			* Clears the handles with the guids
