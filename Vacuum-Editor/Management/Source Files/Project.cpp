@@ -8,15 +8,15 @@ Vacuum::CProject::CProject(const std::filesystem::path& _projectPath)
 	m_currentProjectDir = _projectPath;
 	m_currentContentDir = _projectPath;
 	m_configsDir = _projectPath / "Configs";
-	m_projectConfigPath = m_configsDir / "project.config";
+	m_projectFile = _projectPath / ".project";
 	m_currentShaderDir = m_currentContentDir.append("Content");
 	m_currentShaderDir.append("Shaders");
 	m_modelDir = m_currentContentDir / "Models";
 
-	std::ifstream projectConfig(m_projectConfigPath);
+	std::ifstream projectFile(m_projectFile);
 	Json json = {};
-	projectConfig >> json;
-	m_name = json["name"].get<std::wstring>();
+	projectFile >> json;
+	m_name = json["name"].get<std::string>();
 	m_guid = json["guid"].get<std::wstring>();
 
 	for (const std::filesystem::path& shader : std::filesystem::recursive_directory_iterator(m_currentShaderDir))

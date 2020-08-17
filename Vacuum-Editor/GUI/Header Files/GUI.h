@@ -24,14 +24,21 @@ namespace Vacuum
 		static int32 OnChar(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
 		static int32 OnMouseWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
 		static int32 OnMouseHWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static void Destroy();
+
+		void CreateAppMenuBar();
+		void DestroyAppMenuBar();
 
 		void UpdateMousePos();
 		bool UpdateMouseCursor();
+
+		void RenderGUIElements();
 
 	private: 
 		CGUI(HWND _hwnd)
 			:m_hwnd(_hwnd)
 			,m_lastMouseCursor(ImGuiMouseCursor_COUNT)
+			,m_appMenuBar(nullptr)
 		{
 		}
 
@@ -39,5 +46,6 @@ namespace Vacuum
 
 		HWND m_hwnd;
 		ImGuiMouseCursor m_lastMouseCursor;
+		class CAppMenuBar* m_appMenuBar;
 	};
 }

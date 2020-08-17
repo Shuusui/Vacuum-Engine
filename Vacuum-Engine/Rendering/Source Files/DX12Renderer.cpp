@@ -231,8 +231,36 @@ void Vacuum::DX12Renderer::OnRender()
 
 void Vacuum::DX12Renderer::OnDestroy()
 {
-	WaitForLastSubmittedFrame();
 	InvalidateObjects();
+
+	delete[] m_frameResources;
+	m_frameResources = nullptr;
+	m_device = nullptr;
+	m_frameIndex = UINT_MAX;
+
+	CleanupRenderTarget();
+	SafeRelease(m_swapChain);
+	if(m_swapChainWaitableObject) CloseHandle(m_swapChainWaitableObject);
+	for (uint32 i = 0; i < s_frameCount; ++i)
+	{
+		SafeRelease(m_frameContext[i].CommandAllocator);
+	}
+	SafeRelease(m_commandQueue);
+	SafeRelease(m_commandList);
+	SafeRelease(m_srvDescHeap);
+	SafeRelease(m_rtvHeap);
+	SafeRelease(m_fence);
+	if(m_fenceEvent) CloseHandle(m_fenceEvent); m_fenceEvent = nullptr;
+	SafeRelease(m_device);
+
+#ifdef DX12_ENABLE_DEBUG_LAYER
+	IDXGIDebug1* debug = nullptr;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug))))
+	{
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_SUMMARY);
+		debug->Release();
+	}
+#endif
 }
 
 void Vacuum::DX12Renderer::LoadPipeline()

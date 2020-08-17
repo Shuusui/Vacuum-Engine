@@ -57,12 +57,12 @@ namespace Vacuum
 			* @param _owner The owner of this thread. In this case the CThreadPool object
 			*/
 		CThread(const int32& _threadIndex, class CThreadPool* _owner, std::condition_variable& _semaphore, std::atomic_bool& _stopThread)
-			:m_thread(std::bind(&CThread::WorkerRun, this))
-			,m_threadIndex(_threadIndex)
+			:m_threadIndex(_threadIndex)
 			,m_owner(_owner)
 			,m_currentJob(nullptr)
 			,m_semaphore(_semaphore)
 			,m_stopThread(_stopThread)
+			,m_thread(std::bind(&CThread::WorkerRun, this))
 		{
 		}
 
@@ -71,12 +71,12 @@ namespace Vacuum
 			* @param _other The object which should get moved into this
 			*/
 		CThread(CThread&& _other) noexcept
-			:m_thread(std::move(_other.m_thread))
-			,m_threadIndex(std::move(_other.m_threadIndex))
+			:m_threadIndex(std::move(_other.m_threadIndex))
 			,m_owner(std::move(_other.m_owner))
 			,m_currentJob(std::move(_other.m_currentJob))
 			,m_semaphore(_other.m_semaphore)
 			,m_stopThread(_other.m_stopThread)
+			,m_thread(std::move(_other.m_thread))
 		{
 			_other.m_threadIndex = -1;
 			_other.m_owner = nullptr;
@@ -106,12 +106,12 @@ namespace Vacuum
 			*/
 		void WorkerRun();
 
-		std::thread m_thread;
 		int32 m_threadIndex;
 		class CThreadPool* m_owner;
 		CBaseJob* m_currentJob;
 		std::condition_variable& m_semaphore;
 		std::atomic_bool& m_stopThread;
+		std::thread m_thread;
 	};
 
 	class CThreadPool

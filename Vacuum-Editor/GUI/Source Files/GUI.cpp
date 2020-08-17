@@ -1,6 +1,7 @@
 #include "..\Header Files\GUI.h"
 #include "Window.h"
 #include "Timer.h"
+#include "..\Header Files\AppGUI\AppMenuBar.h"
 
 Vacuum::CGUI* Vacuum::CGUI::s_gui = nullptr;
 
@@ -99,6 +100,7 @@ void Vacuum::CGUI::NewFrame()
 	}
 
 	ImGui::NewFrame();
+	s_gui->RenderGUIElements();
 }
 
 void Vacuum::CGUI::Render()
@@ -207,6 +209,16 @@ int32 Vacuum::CGUI::OnMouseHWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARA
 	return 0;
 }
 
+void Vacuum::CGUI::Destroy()
+{
+	ImGui::DestroyContext();
+	if (s_gui)
+	{
+		delete s_gui;
+		s_gui = nullptr;
+	}
+}
+
 void Vacuum::CGUI::UpdateMousePos()
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -263,4 +275,27 @@ bool Vacuum::CGUI::UpdateMouseCursor()
 		SetCursor(LoadCursor(nullptr, win32Cursor));
 	}
 	return true;
+}
+
+void Vacuum::CGUI::RenderGUIElements()
+{
+	m_appMenuBar->OnRender();
+}
+
+void Vacuum::CGUI::CreateAppMenuBar()
+{
+	if (m_appMenuBar)
+	{
+		return;
+	}
+	m_appMenuBar = new CAppMenuBar();
+}
+
+void Vacuum::CGUI::DestroyAppMenuBar()
+{
+	if (m_appMenuBar)
+	{
+		delete m_appMenuBar;
+		m_appMenuBar = nullptr;
+	}
 }

@@ -25,7 +25,6 @@ namespace Vacuum
 		{
 		case WM_SIZE:
 		{
-			VE_DEBUG_LOG_F(TEXT("Message: %u"), _msg);
 			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SIZE))
 			{
 				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
@@ -34,31 +33,8 @@ namespace Vacuum
 					returnValue = tempReturn;
 				}
 			}
-			break;
+			return returnValue;
 		}
-		//case WM_WINDOWPOSCHANGED:
-		//{
-		//	VE_DEBUG_LOG_F(TEXT("Message: %u"), _msg);
-		//	if (mainWindow)
-		//	{
-		//		for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_WINDOWPOSCHANGED))
-		//		{
-		//			int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
-		//			if (tempReturn != 0)
-		//			{
-		//				returnValue = tempReturn;
-		//			}
-		//		}
-		//		return returnValue;
-		//		RECT rect = {};
-		//		if (!GetWindowRect(_hwnd, &rect))
-		//		{
-		//			return -1;
-		//		}
-		//		mainWindow->UpdateWindowPos(rect.left, rect.top);
-		//	}
-		//	break;
-		//}
 		case WM_EXITSIZEMOVE:
 		{
 			if (mainWindow)
@@ -69,6 +45,7 @@ namespace Vacuum
 					return -1;
 				}
 				mainWindow->UpdateWindowSize(rect.right - rect.left, rect.bottom - rect.top);
+				mainWindow->UpdateWindowPos(rect.left, rect.top);
 				for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_EXITSIZEMOVE))
 				{
 					int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);

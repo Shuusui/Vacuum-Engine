@@ -68,20 +68,18 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
 	CGUI::Init(CMainWindow::GetWindowHandle()->GetHwnd());
 
 	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().Width, (uint32)appMgrHandle->GetInitWindowDimParams().Height, CMainWindow::GetWindowHandle()->GetHwnd()});
 
 	CMainWindow::ShowAndUpdate(_nShowCmd);
 
-	CRendererManager::OnInit(appMgrHandle->GetCurrentProject()->GetShaderPaths());
+	//CRendererManager::OnInit(appMgrHandle->GetCurrentProject()->GetShaderPaths());
 
 	ImGui::StyleColorsDark();
 
-
+	//bool bShowDemoWindow = false;
 	MSG msg = {};
-	bool b = true;
 	while (msg.message != WM_QUIT)
 	{
 		CTimer::Update();
@@ -90,11 +88,8 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 			continue;
 		}
 		CGUI::NewFrame();
-
-		if (b)
-		{
-			ImGui::ShowDemoWindow(&b);
-		}
+		/*if (bShowDemoWindow)
+			ImGui::ShowDemoWindow(&bShowDemoWindow);*/
 
 		CRendererManager::PrepareRendering();
 		CGUI::Render();
@@ -102,6 +97,7 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	}
 
 	CRendererManager::Destroy();
+	CGUI::Destroy();
 	CAppManager::Destroy();
 
 	delete threadPool;

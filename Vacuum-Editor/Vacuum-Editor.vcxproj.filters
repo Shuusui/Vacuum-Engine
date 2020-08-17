@@ -38,6 +38,12 @@
     <Filter Include="GUI\Source Files">
       <UniqueIdentifier>{be9437db-eb40-4dd1-a83c-62a05ec0a25e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI\Header Files\AppGUI">
+      <UniqueIdentifier>{51b4b46b-7c4f-4194-9ab3-e6dfd846b118}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Source Files\AppGUI">
+      <UniqueIdentifier>{164c08ca-b901-428c-b848-ec0dbc968db0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\main.cpp">
@@ -63,6 +69,9 @@
     </ClCompile>
     <ClCompile Include="ImGui\Source Files\imgui_demo.cpp">
       <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Source Files\AppGUI\AppMenuBar.cpp">
+      <Filter>GUI\Source Files\AppGUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="GUI\Header Files\GUI.h">
       <Filter>GUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Header Files\AppGUI\AppMenuBar.h">
+      <Filter>GUI\Header Files\AppGUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

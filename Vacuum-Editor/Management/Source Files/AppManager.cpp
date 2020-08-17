@@ -21,7 +21,9 @@ void Vacuum::CAppManager::InitApp()
 	{
 		s_app = new CAppManager();
 	}
+
 	VE_LOG(TEXT("Initialize app"));
+
 	std::filesystem::path currentPath = std::filesystem::current_path();
 	std::wstring::size_type pos = std::wstring(currentPath.c_str()).find_last_of(L"\\/");
 	s_app->m_appPaths.RootDir = std::wstring(currentPath).substr(0, pos);
@@ -36,6 +38,7 @@ void Vacuum::CAppManager::InitApp()
 	s_app->m_appPaths.ProjectsDir = s_app->m_appPaths.RootDir / L"Projects";
 	s_app->m_appConfigPath = s_app->m_appPaths.ConfigDir / L"app.config";
 
+	SGuid projectGuid = {};
 	if (std::filesystem::exists(s_app->m_appConfigPath))
 	{
 		Json json = {};
@@ -45,6 +48,7 @@ void Vacuum::CAppManager::InitApp()
 		s_app->m_mainWindowDim.Width = json["width"].get<int64>();
 		s_app->m_mainWindowDim.LeftTopCornerX = json["x"].get<int32>();
 		s_app->m_mainWindowDim.LeftTopCornerY = json["y"].get<int32>();
+		projectGuid = json["current_project_guid"].get<std::wstring>();
 	}
 	else
 	{
@@ -53,8 +57,11 @@ void Vacuum::CAppManager::InitApp()
 		s_app->m_mainWindowDim.LeftTopCornerX = 0;
 		s_app->m_mainWindowDim.LeftTopCornerY = 0;
 	}
-
-	s_app->LoadProject();
+	s_app->LoadProjects();
+	if (projectGuid.IsValid())
+	{
+		s_app->LoadRecentProject(projectGuid);
+	}
 }
 
 void Vacuum::CAppManager::Destroy()
@@ -74,8 +81,15 @@ void Vacuum::CAppManager::Destroy()
 	json["width"] = s_app->m_mainWindowDim.Width;
 	json["x"] = s_app->m_mainWindowDim.LeftTopCornerX;
 	json["y"] = s_app->m_mainWindowDim.LeftTopCornerY;
+	json["current_project_guid"] = s_app->m_currentProject ? s_app->m_currentProject->GetGuid().ToString() : SGuid().ToString();
 	std::ofstream appConfig(s_app->m_appConfigPath, std::ios::trunc);
 	appConfig << json.dump();
+
+	if (s_app)
+	{
+		delete s_app;
+		s_app = nullptr;
+	}
 }
 
 Vacuum::CAppManager* Vacuum::CAppManager::GetAppHandle()
@@ -93,11 +107,29 @@ Vacuum::SAppPaths Vacuum::CAppManager::GetAppPaths()
 	return s_app->m_appPaths;
 }
 
-void Vacuum::CAppManager::LoadProject()
+void Vacuum::CAppManager::LoadProject(CProject* _project)
 {
-	for (const std::filesystem::path& project : std::filesystem::directory_iterator(m_appPaths.ProjectsDir))
+	m_currentProject = _project;
+}
+
+void Vacuum::CAppManager::LoadRecentProject(const SGuid& _projectGuid)
+{
+	for (CProject* project : m_projects)
 	{
-		m_currentProject = new CProject(project);
+		if (project->GetGuid() == _projectGuid)
+		{
+			m_currentProject = project;
+			break;
+		}
+	}
+}
+
+void Vacuum::CAppManager::LoadProjects()
+{
+	for (const std::filesystem::path& projectPath : std::filesystem::directory_iterator(m_appPaths.ProjectsDir))
+	{
+		CProject* project = new CProject(projectPath);
+		m_projects.push_back(project);
 	}
 }
 

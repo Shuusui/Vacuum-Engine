@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GUI\Source Files\AppGUI\AppMenuBar.cpp" />
     <ClCompile Include="GUI\Source Files\GUI.cpp" />
     <ClCompile Include="ImGui\Source Files\imgui.cpp" />
     <ClCompile Include="ImGui\Source Files\imgui_demo.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="Source Files\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GUI\Header Files\AppGUI\AppMenuBar.h" />
     <ClInclude Include="GUI\Header Files\GUI.h" />
     <ClInclude Include="ImGui\Header Files\Private\imconfig.h" />
     <ClInclude Include="ImGui\Header Files\Private\imgui_internal.h" />
