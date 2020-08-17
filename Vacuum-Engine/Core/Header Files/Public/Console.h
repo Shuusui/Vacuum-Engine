@@ -7,38 +7,38 @@ namespace Vacuum
 {
 	struct SConsoleInfo
 	{
-		COORD m_consolePos;
-		HANDLE m_consoleHandle;
+		COORD ConsolePos;
+		HANDLE ConsoleHandle;
 
 		SConsoleInfo()
-			:m_consolePos({0,0})
-			,m_consoleHandle(nullptr)
+			:ConsolePos({0,0})
+			,ConsoleHandle(nullptr)
 		{
 		}
 
 		SConsoleInfo(const SConsoleInfo& _other)
-			:m_consolePos(_other.m_consolePos)
-			,m_consoleHandle(_other.m_consoleHandle)
+			:ConsolePos(_other.ConsolePos)
+			,ConsoleHandle(_other.ConsoleHandle)
 		{
 
 		}
 
 		SConsoleInfo(SConsoleInfo&& _other) noexcept
-			:m_consolePos(std::move(_other.m_consolePos))
-			,m_consoleHandle(std::move(_other.m_consoleHandle))
+			:ConsolePos(std::move(_other.ConsolePos))
+			,ConsoleHandle(std::move(_other.ConsoleHandle))
 		{
-			_other.m_consoleHandle = nullptr;
-			_other.m_consolePos = {};
+			_other.ConsoleHandle = nullptr;
+			_other.ConsolePos = {};
 		}
 
 	};
 
 	struct SConsoleHandles
 	{
-		SConsoleInfo m_inputConInfo;
-		SConsoleInfo m_outputConInfo;
-		SConsoleInfo m_errorConInfo;
-		SGuid m_handlesGuid;
+		SConsoleInfo InputConInfo;
+		SConsoleInfo OutputConInfo;
+		SConsoleInfo ErrorConInfo;
+		SGuid HandlesGuid;
 	};
 
 	/**
@@ -50,33 +50,33 @@ namespace Vacuum
 	{
 		bool success = AllocConsole();
 				
-		_outHandles.m_inputConInfo.m_consoleHandle = GetStdHandle(STD_INPUT_HANDLE);
-		_outHandles.m_outputConInfo.m_consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-		_outHandles.m_errorConInfo.m_consoleHandle = GetStdHandle(STD_ERROR_HANDLE);
-		_outHandles.m_handlesGuid = SGuid::NewGuid();
-		return success && _outHandles.m_inputConInfo.m_consoleHandle && _outHandles.m_outputConInfo.m_consoleHandle && _outHandles.m_errorConInfo.m_consoleHandle;
+		_outHandles.InputConInfo.ConsoleHandle = GetStdHandle(STD_INPUT_HANDLE);
+		_outHandles.OutputConInfo.ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+		_outHandles.ErrorConInfo.ConsoleHandle = GetStdHandle(STD_ERROR_HANDLE);
+		_outHandles.HandlesGuid = SGuid::NewGuid();
+		return success && _outHandles.InputConInfo.ConsoleHandle && _outHandles.OutputConInfo.ConsoleHandle && _outHandles.ErrorConInfo.ConsoleHandle;
 	}
 
 	static bool DeallocateConsole(SConsoleHandles& _handles)
 	{
 		FreeConsole();
 
-		if (!CloseHandle(_handles.m_inputConInfo.m_consoleHandle))
+		if (!CloseHandle(_handles.InputConInfo.ConsoleHandle))
 		{
 #if defined(_DEBUG)
-			VE_DEBUG_LOG(TEXT("Failed to close input console handle"));
+			VE_DEBUG_LOG("Failed to close input console handle");
 #endif
 		}
-		if (!CloseHandle(_handles.m_outputConInfo.m_consoleHandle))
+		if (!CloseHandle(_handles.OutputConInfo.ConsoleHandle))
 		{
 #if defined(_DEBUG)
-			VE_DEBUG_LOG(TEXT("Failed to close output console handle"));
+			VE_DEBUG_LOG("Failed to close output console handle");
 #endif
 		}
-		if (!CloseHandle(_handles.m_errorConInfo.m_consoleHandle))
+		if (!CloseHandle(_handles.ErrorConInfo.ConsoleHandle))
 		{
 #if defined(_DEBUG)
-			VE_DEBUG_LOG(TEXT("Failed to close error console handle"));
+			VE_DEBUG_LOG("Failed to close error console handle");
 #endif
 		}
 	}

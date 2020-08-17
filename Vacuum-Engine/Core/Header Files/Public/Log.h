@@ -16,10 +16,12 @@
 
 #pragma endregion Includes
 
-#define VE_LOG(LOG) CLog::Log(LOG)
-#define VE_LOG_F(LOG, ...) CLog::Log(PRINTF(LOG, __VA_ARGS__))
-#define VE_DEBUG_LOG(LOG) CLog::LogDebugString(LOG)
-#define VE_DEBUG_LOG_F(LOG, ...) CLOg::LogDebugString(PRINTF(LOG, __VA_ARGS__))
+#define LOGFORMAT(LOG) Vacuum::Printf(TEXT("%s[%i] | %s"), __WFUNCTION__, __LINE__, LOG)
+
+#define VE_LOG(LOG) CLog::Log(LOGFORMAT(LOG))
+#define VE_LOG_F(LOG, ...) CLog::Log(Vacuum::Printf(LOGFORMAT(LOG), __VA_ARGS__))
+#define VE_DEBUG_LOG(LOG) CLog::LogDebugString(LOGFORMAT(LOG))
+#define VE_DEBUG_LOG_F(LOG, ...) CLog::LogDebugString(Vacuum::Printf(LOGFORMAT(LOG), __VA_ARGS__))
 
 namespace Vacuum
 {
@@ -27,9 +29,9 @@ namespace Vacuum
 
 	struct SLogInfo
 	{
-		std::wstring& m_string;
-		SGuid* m_handleGuids;
-		size_t m_handleAmount;
+		std::wstring& String;
+		SGuid* HandleGuids;
+		size_t HandleAmount;
 	};
 
 	class CLog

@@ -21,26 +21,26 @@ namespace Vacuum
 		SWindowClassParams() = default;
 
 		SWindowClassParams(const SWindowClassParams& _other)
-			:m_style(_other.m_style)
-			,m_hInstance(_other.m_hInstance)
-			,m_className(_other.m_className)
-			,m_backgroundColor(_other.m_backgroundColor)
+			:Style(_other.Style)
+			,HInstance(_other.HInstance)
+			,ClassName(_other.ClassName)
+			,BackgroundColor(_other.BackgroundColor)
 		{
 		}
 
 		SWindowClassParams(SWindowClassParams&& _other) noexcept
-			:m_style(std::move(_other.m_style))
-			, m_hInstance(_other.m_hInstance)
-			, m_className(std::move(_other.m_className))
-			, m_backgroundColor(std::move(_other.m_backgroundColor))
+			:Style(std::move(_other.Style))
+			, HInstance(_other.HInstance)
+			, ClassName(std::move(_other.ClassName))
+			, BackgroundColor(std::move(_other.BackgroundColor))
 		{
-			_other.m_hInstance = nullptr;
+			_other.HInstance = nullptr;
 		}
 
-		UINT m_style;
-		HINSTANCE m_hInstance;
-		LPCWSTR m_className;
-		HBRUSH m_backgroundColor;
+		UINT Style;
+		HINSTANCE HInstance;
+		LPCWSTR ClassName;
+		HBRUSH BackgroundColor;
 
 
 	};
@@ -50,34 +50,34 @@ namespace Vacuum
 		SWindowCreationParams() = default;
 
 		SWindowCreationParams(const SWindowCreationParams& _other)
-			:m_dwExStyle(_other.m_dwExStyle)
-			,m_dwStyle(_other.m_dwStyle)
-			,m_windowName(_other.m_windowName)
-			,m_parentWindow(_other.m_parentWindow)
-			,m_menu(_other.m_menu)
-			,m_lpParam(_other.m_lpParam)
+			:DwExStyle(_other.DwExStyle)
+			,DwStyle(_other.DwStyle)
+			,WindowName(_other.WindowName)
+			,ParentWindow(_other.ParentWindow)
+			,Menu(_other.Menu)
+			,LpParam(_other.LpParam)
 		{
 		}
 
 		SWindowCreationParams(SWindowCreationParams&& _other) noexcept
-			:m_dwExStyle(std::move(_other.m_dwExStyle))
-			, m_dwStyle(std::move(_other.m_dwStyle))
-			, m_windowName(std::move(_other.m_windowName))
-			, m_parentWindow(std::move(_other.m_parentWindow))
-			, m_menu(std::move(_other.m_menu))
-			, m_lpParam(std::move(_other.m_lpParam))
+			:DwExStyle(std::move(_other.DwExStyle))
+			, DwStyle(std::move(_other.DwStyle))
+			, WindowName(std::move(_other.WindowName))
+			, ParentWindow(std::move(_other.ParentWindow))
+			, Menu(std::move(_other.Menu))
+			, LpParam(std::move(_other.LpParam))
 		{
-			_other.m_parentWindow = nullptr;
-			_other.m_menu = nullptr;
-			_other.m_lpParam = nullptr;
+			_other.ParentWindow = nullptr;
+			_other.Menu = nullptr;
+			_other.LpParam = nullptr;
 		}
 
-		DWORD m_dwExStyle;
-		DWORD m_dwStyle;
-		LPCWSTR m_windowName;
-		HWND m_parentWindow;
-		HMENU m_menu;
-		LPVOID m_lpParam;
+		DWORD DwExStyle;
+		DWORD DwStyle;
+		LPCWSTR WindowName;
+		HWND ParentWindow;
+		HMENU Menu;
+		LPVOID LpParam;
 	};
 
 	struct SWindowInfo
@@ -85,22 +85,22 @@ namespace Vacuum
 		SWindowInfo() = default;
 
 		SWindowInfo(const SWindowInfo& _other)
-			:m_classParams(_other.m_classParams)
-			,m_dimParams(_other.m_dimParams)
-			,m_creationParams(_other.m_creationParams)
+			:ClassParams(_other.ClassParams)
+			,DimParams(_other.DimParams)
+			,CreationParams(_other.CreationParams)
 		{
 		}
 
 		SWindowInfo(SWindowInfo&& _other) noexcept
-			:m_classParams(std::move(_other.m_classParams))
-			,m_dimParams(std::move(_other.m_dimParams))
-			,m_creationParams(std::move(_other.m_creationParams))
+			:ClassParams(std::move(_other.ClassParams))
+			,DimParams(std::move(_other.DimParams))
+			,CreationParams(std::move(_other.CreationParams))
 		{
 		}
 
-		SWindowClassParams m_classParams;
-		SWindowDimParams m_dimParams;
-		SWindowCreationParams m_creationParams;
+		SWindowClassParams ClassParams;
+		SWindowDimParams DimParams;
+		SWindowCreationParams CreationParams;
 	};
 
 	class CMainWindow
@@ -120,9 +120,9 @@ namespace Vacuum
 
 		void UpdateWindowSize(const int32& _width, const int32& _height);
 
-		void RegisterCallbackforWMEvents(const uint32& _wmEvent, const std::function<void()>& _func);
+		void RegisterCallbackForWMEvents(const uint32& _wmEvent, const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& _func);
 
-		std::vector<std::function<void()>>& GetWMFunctions(uint32 _wmEvent) const;
+		std::vector<std::function<int32(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)>>& GetWMFunctions(uint32 _wmEvent) const;
 
 		HWND GetHwnd() const;
 
@@ -135,16 +135,24 @@ namespace Vacuum
 		{
 			m_wmEventMap = {
 				{WM_EXITSIZEMOVE, {}}, 
+				{WM_LBUTTONDOWN, {}},
+				{WM_RBUTTONDOWN, {}},
+				{WM_LBUTTONUP, {}},
+				{WM_RBUTTONUP, {}},
+				{WM_SETCURSOR, {}},
 				{WM_DESTROY, {}},
 				{WM_WINDOWPOSCHANGED, {}},
-				{WM_EXITSIZEMOVE, {}},
-				{WM_PAINT, {}}
+				{WM_PAINT, {}},
+				{WM_SIZE, {}},
+				{WM_KEYDOWN, {}},
+				{WM_KEYUP, {}},
+				{WM_CHAR,{}}
 			};
 		}
 
 		SWindowInfo m_windowInfo;
 		HWND m_wndHandle;
 		static CMainWindow* s_mainWindow;
-		std::unordered_map<uint32, std::vector<std::function<void()>>> m_wmEventMap;
+		std::unordered_map<uint32, std::vector<std::function<int32(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)>>> m_wmEventMap;
 	};
 }

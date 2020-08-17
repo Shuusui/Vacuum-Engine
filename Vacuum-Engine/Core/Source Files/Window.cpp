@@ -19,68 +19,336 @@ namespace Vacuum
 		LPARAM _lParam)
 	{
 		CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
+		int32 returnValue = 0;
+		
 		switch (_msg)
 		{
-		case WM_DESTROY:
-			if(mainWindow)
-			{
-				for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_DESTROY))
-				{
-					func();
-				}
-			}
-			PostQuitMessage(0);
-			return 0;
-		case WM_WINDOWPOSCHANGED:
+		case WM_SIZE:
 		{
-			if (mainWindow)
+			VE_DEBUG_LOG_F(TEXT("Message: %u"), _msg);
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SIZE))
 			{
-				for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_WINDOWPOSCHANGED))
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
 				{
-					func();
+					returnValue = tempReturn;
 				}
-				RECT rect = {};
-				if (!GetWindowRect(_hwnd, &rect))
-				{
-					return -1;
-				}
-				mainWindow->UpdateWindowPos(rect.left, rect.top);
 			}
+			break;
 		}
-			return 0;
+		//case WM_WINDOWPOSCHANGED:
+		//{
+		//	VE_DEBUG_LOG_F(TEXT("Message: %u"), _msg);
+		//	if (mainWindow)
+		//	{
+		//		for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_WINDOWPOSCHANGED))
+		//		{
+		//			int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+		//			if (tempReturn != 0)
+		//			{
+		//				returnValue = tempReturn;
+		//			}
+		//		}
+		//		return returnValue;
+		//		RECT rect = {};
+		//		if (!GetWindowRect(_hwnd, &rect))
+		//		{
+		//			return -1;
+		//		}
+		//		mainWindow->UpdateWindowPos(rect.left, rect.top);
+		//	}
+		//	break;
+		//}
 		case WM_EXITSIZEMOVE:
 		{
 			if (mainWindow)
 			{
-				for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_EXITSIZEMOVE))
-				{
-					func();
-				}
 				RECT rect = {};
 				if (!GetWindowRect(_hwnd, &rect))
 				{
 					return -1;
 				}
 				mainWindow->UpdateWindowSize(rect.right - rect.left, rect.bottom - rect.top);
-			}
-			return 0;
-		}
-		case WM_SETCURSOR:
-			if (mainWindow)
-			{
-				for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_SETCURSOR))
+				for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_EXITSIZEMOVE))
 				{
-					func();
+					int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+					if (tempReturn != 0)
+					{
+						returnValue = tempReturn;
+					}
 				}
 			}
-			return 0;
-		case WM_PAINT:
-			for (const std::function<void()>& func : mainWindow->GetWMFunctions(WM_PAINT))
+			return returnValue;
+		}
+		case WM_SETCURSOR:
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SETCURSOR))
 			{
-				func();
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
 			}
-			//CRendererManager::OnRender();
+			return returnValue;
+		case WM_PAINT:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_PAINT))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
 			break;
+		}
+		case WM_LBUTTONDOWN:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONDOWN))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_LBUTTONDBLCLK:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONDBLCLK))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_RBUTTONDOWN:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONDOWN))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_RBUTTONDBLCLK:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONDBLCLK))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_MBUTTONDOWN: 
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONDOWN))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_MBUTTONDBLCLK:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONDBLCLK))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_XBUTTONDOWN:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONDOWN))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_XBUTTONDBLCLK:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONDBLCLK))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_LBUTTONUP:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONUP))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_RBUTTONUP:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONUP))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_MBUTTONUP:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONUP))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_XBUTTONUP:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONUP))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_MOUSEWHEEL:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MOUSEWHEEL))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_MOUSEHWHEEL:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MOUSEHWHEEL))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_KEYDOWN))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SYSKEYDOWN))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_KEYUP))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SYSKEYUP))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_CHAR:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_CHAR))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_DEVICECHANGE:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_DEVICECHANGE))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			return returnValue;
+		}
+		case WM_DESTROY:
+		{
+			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_DESTROY))
+			{
+				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				if (tempReturn != 0)
+				{
+					returnValue = tempReturn;
+				}
+			}
+			PostQuitMessage(0);
+			return returnValue;
+		}
 		}
 		return DefWindowProc(_hwnd, _msg, _wParam, _lParam);
 	}
@@ -98,37 +366,38 @@ namespace Vacuum
 	{
 		WNDCLASSEX wndClass = {};
 		wndClass.cbSize = sizeof(WNDCLASSEX);
-		wndClass.style = s_mainWindow->m_windowInfo.m_classParams.m_style;
-		wndClass.hInstance = s_mainWindow->m_windowInfo.m_classParams.m_hInstance;
-		wndClass.lpszClassName = s_mainWindow->m_windowInfo.m_classParams.m_className;
-		wndClass.hbrBackground = s_mainWindow->m_windowInfo.m_classParams.m_backgroundColor;
+		wndClass.style = s_mainWindow->m_windowInfo.ClassParams.Style;
+		wndClass.hInstance = s_mainWindow->m_windowInfo.ClassParams.HInstance;
+		wndClass.lpszClassName = s_mainWindow->m_windowInfo.ClassParams.ClassName;
+		wndClass.hbrBackground = s_mainWindow->m_windowInfo.ClassParams.BackgroundColor;
 		wndClass.lpfnWndProc = WindowProc;
+
 		RECT rect = {};
-		rect.right = (LONG)s_mainWindow->m_windowInfo.m_dimParams.m_width;
-		rect.bottom = (LONG)s_mainWindow->m_windowInfo.m_dimParams.m_height;
-		if (!AdjustWindowRectEx(&rect, s_mainWindow->m_windowInfo.m_classParams.m_style, false, NULL))
+		rect.right = (LONG)s_mainWindow->m_windowInfo.DimParams.Width;
+		rect.bottom = (LONG)s_mainWindow->m_windowInfo.DimParams.Height;
+		if (!AdjustWindowRectEx(&rect, s_mainWindow->m_windowInfo.ClassParams.Style, false, NULL))
 		{
-			_errorMsg = PRINTF("Couldn't adjust window rect of window with classname %w", s_mainWindow->m_windowInfo.m_classParams.m_className);
+			_errorMsg = PRINTF("Couldn't adjust window rect of window with classname %s", s_mainWindow->m_windowInfo.ClassParams.ClassName);
 			return false;
 		}
 		if (!RegisterClassEx(&wndClass))
 		{
-			_errorMsg = PRINTF("Couldn't register wnd class with error: %w", GetLastErrorString().c_str());
+			_errorMsg = PRINTF("Couldn't register wnd class with error: %s", GetLastErrorString().c_str());
 			return false;
 		}
 		s_mainWindow->m_wndHandle = CreateWindowEx(
-			s_mainWindow->m_windowInfo.m_creationParams.m_dwExStyle,
-			s_mainWindow->m_windowInfo.m_classParams.m_className,
-			s_mainWindow->m_windowInfo.m_creationParams.m_windowName,
-			s_mainWindow->m_windowInfo.m_creationParams.m_dwStyle,
-			s_mainWindow->m_windowInfo.m_dimParams.m_leftTopCornerX,
-			s_mainWindow->m_windowInfo.m_dimParams.m_leftTopCornerY,
+			s_mainWindow->m_windowInfo.CreationParams.DwExStyle,
+			s_mainWindow->m_windowInfo.ClassParams.ClassName,
+			s_mainWindow->m_windowInfo.CreationParams.WindowName,
+			s_mainWindow->m_windowInfo.CreationParams.DwStyle,
+			s_mainWindow->m_windowInfo.DimParams.LeftTopCornerX,
+			s_mainWindow->m_windowInfo.DimParams.LeftTopCornerY,
 			rect.right - rect.left,
 			rect.bottom - rect.top,
-			s_mainWindow->m_windowInfo.m_creationParams.m_parentWindow,
-			s_mainWindow->m_windowInfo.m_creationParams.m_menu,
-			s_mainWindow->m_windowInfo.m_classParams.m_hInstance,
-			s_mainWindow->m_windowInfo.m_creationParams.m_lpParam
+			s_mainWindow->m_windowInfo.CreationParams.ParentWindow,
+			s_mainWindow->m_windowInfo.CreationParams.Menu,
+			s_mainWindow->m_windowInfo.ClassParams.HInstance,
+			s_mainWindow->m_windowInfo.CreationParams.LpParam
 		);
 		if (!s_mainWindow->m_wndHandle)
 		{
@@ -162,22 +431,22 @@ namespace Vacuum
 
 	void CMainWindow::UpdateWindowPos(const int32& _x, const int32& _y)
 	{
-		m_windowInfo.m_dimParams.m_leftTopCornerX = _x;
-		m_windowInfo.m_dimParams.m_leftTopCornerY = _y;
+		m_windowInfo.DimParams.LeftTopCornerX = _x;
+		m_windowInfo.DimParams.LeftTopCornerY = _y;
 	}
 
 	void CMainWindow::UpdateWindowSize(const int32& _width, const int32& _height)
 	{
-		m_windowInfo.m_dimParams.m_width = _width;
-		m_windowInfo.m_dimParams.m_height = _height;
+		m_windowInfo.DimParams.Width = _width;
+		m_windowInfo.DimParams.Height = _height;
 	}
 
-	void CMainWindow::RegisterCallbackforWMEvents(const uint32& _wmEvent, const std::function<void()>& _func)
+	void CMainWindow::RegisterCallbackForWMEvents(const uint32& _wmEvent, const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& _func)
 	{
 		m_wmEventMap[_wmEvent].push_back(_func);
 	}
 
-	std::vector<std::function<void()>>& CMainWindow::GetWMFunctions(uint32 _wmEvent) const
+	std::vector<std::function<int32(HWND, uint32, WPARAM, LPARAM)>>& CMainWindow::GetWMFunctions(uint32 _wmEvent) const
 	{
 		return s_mainWindow->m_wmEventMap[_wmEvent];
 	}
@@ -189,6 +458,6 @@ namespace Vacuum
 
 	SWindowDimParams CMainWindow::GetCurrentDim() const 
 	{
-		return m_windowInfo.m_dimParams;
+		return m_windowInfo.DimParams;
 	}
 }

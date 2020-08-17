@@ -61,6 +61,9 @@
     <ClCompile Include="GUI\Source Files\GUI.cpp">
       <Filter>GUI\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\Source Files\imgui_demo.cpp">
+      <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Management\Header Files\AppManager.h">

@@ -85,45 +85,45 @@ namespace Vacuum
 
 	void CLog::LogToHandle(SConsoleInfo& _info, const std::wstring& _logString)
 	{
-		if (!_info.m_consoleHandle)
+		if (!_info.ConsoleHandle)
 		{
 			return;
 		}
 		CONSOLE_SCREEN_BUFFER_INFO screenBuf;
-		GetConsoleScreenBufferInfo(_info.m_consoleHandle, &screenBuf);
+		GetConsoleScreenBufferInfo(_info.ConsoleHandle, &screenBuf);
 
 		unsigned bufferSize = screenBuf.dwSize.X * screenBuf.dwSize.Y;
 
 		CONSOLE_CURSOR_INFO cursor;
 		cursor.dwSize = 1;
 		cursor.bVisible = FALSE;
-		SetConsoleCursorInfo(_info.m_consoleHandle, &cursor);
+		SetConsoleCursorInfo(_info.ConsoleHandle, &cursor);
 
 		DWORD garbage = 0;
 
 		for (int32 i = 0; i < _logString.size(); ++i)
 		{
-			FillConsoleOutputCharacter(_info.m_consoleHandle, _logString[i], 1, _info.m_consolePos, &garbage);
-			_info.m_consolePos.X++;
+			FillConsoleOutputCharacter(_info.ConsoleHandle, _logString[i], 1, _info.ConsolePos, &garbage);
+			_info.ConsolePos.X++;
 		}
-		_info.m_consolePos.Y++;
-		_info.m_consolePos.X = 0;
-		SetConsoleCursorPosition(_info.m_consoleHandle, _info.m_consolePos);
+		_info.ConsolePos.Y++;
+		_info.ConsolePos.X = 0;
+		SetConsoleCursorPosition(_info.ConsoleHandle, _info.ConsolePos);
 		OutputDebugString(_logString.c_str());
 		OutputDebugString(TEXT("\n"));
 	}
 
 	void CLog::ClearLogHandle(SConsoleInfo& _info)
 	{
-		if (!_info.m_consoleHandle)
+		if (!_info.ConsoleHandle)
 		{
 			return;
 		}
 		CONSOLE_SCREEN_BUFFER_INFO screenBuf;
-		GetConsoleScreenBufferInfo(_info.m_consoleHandle, &screenBuf);
+		GetConsoleScreenBufferInfo(_info.ConsoleHandle, &screenBuf);
 		DWORD dwConSize = screenBuf.dwSize.X * screenBuf.dwSize.Y;
 		DWORD garbage = 0;
-		FillConsoleOutputCharacter(_info.m_consoleHandle, (TCHAR)' ', dwConSize, { 0,0 }, &garbage);
-		_info.m_consolePos = {0,0};
+		FillConsoleOutputCharacter(_info.ConsoleHandle, (TCHAR)' ', dwConSize, { 0,0 }, &garbage);
+		_info.ConsolePos = {0,0};
 	}
 }

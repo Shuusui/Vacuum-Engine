@@ -46,27 +46,37 @@ bool Vacuum::CGUI::Init(HWND _hwnd)
 
 	
 	CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
-	auto lambda = [mainWindow]()->void {
+	auto updateDisplaySize = [mainWindow](HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)->int32 {
 		if (!mainWindow)
 		{
-			return;
+			return 0;
 		}
 
 		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize.x = static_cast<float>(mainWindow->GetCurrentDim().m_width);
-		io.DisplaySize.y = static_cast<float>(mainWindow->GetCurrentDim().m_height);
+		io.DisplaySize.x = static_cast<float>(mainWindow->GetCurrentDim().Width);
+		io.DisplaySize.y = static_cast<float>(mainWindow->GetCurrentDim().Height);
+		return 0;
 	};
 
-	lambda();
+	updateDisplaySize(nullptr, 0, 0, 0);
 
-	mainWindow->RegisterCallbackforWMEvents(WM_EXITSIZEMOVE, lambda);
+	mainWindow->RegisterCallbackForWMEvents(WM_EXITSIZEMOVE, updateDisplaySize);
+	mainWindow->RegisterCallbackForWMEvents(WM_LBUTTONDOWN, &Vacuum::CGUI::OnLButtonDown);
+	mainWindow->RegisterCallbackForWMEvents(WM_RBUTTONDOWN, &Vacuum::CGUI::OnRButtonDown);
+	mainWindow->RegisterCallbackForWMEvents(WM_LBUTTONUP, &Vacuum::CGUI::OnLButtonUp);
+	mainWindow->RegisterCallbackForWMEvents(WM_RBUTTONUP, &Vacuum::CGUI::OnRButtonUp);
+	mainWindow->RegisterCallbackForWMEvents(WM_SETCURSOR, &Vacuum::CGUI::OnSetCursor);
+	mainWindow->RegisterCallbackForWMEvents(WM_KEYDOWN, &Vacuum::CGUI::OnKeyDown);
+	mainWindow->RegisterCallbackForWMEvents(WM_KEYUP, &Vacuum::CGUI::OnKeyUp);
+	mainWindow->RegisterCallbackForWMEvents(WM_CHAR, &Vacuum::CGUI::OnChar);
+	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEWHEEL, &Vacuum::CGUI::OnMouseWheel);
+	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEHWHEEL, &Vacuum::CGUI::OnMouseHWheel);
 
 	return true;
 }
 
 void Vacuum::CGUI::NewFrame()
 {
-	ImGui::NewFrame();
 
 	ImGuiIO& io = ImGui::GetIO();
 
@@ -79,16 +89,157 @@ void Vacuum::CGUI::NewFrame()
 	io.KeyAlt = (GetKeyState(VK_MENU) & 0x8000) != 0;
 	io.KeySuper = false;
 
+	s_gui->UpdateMousePos();
+
+	ImGuiMouseCursor mouseCursor = io.MouseDrawCursor ? ImGuiMouseCursor_None : ImGui::GetMouseCursor();
+	if (s_gui->m_lastMouseCursor != mouseCursor)
+	{
+		s_gui->m_lastMouseCursor = mouseCursor;
+		s_gui->UpdateMouseCursor();
+	}
+
+	ImGui::NewFrame();
+}
+
+void Vacuum::CGUI::Render()
+{
 	ImGui::Render();
 }
 
-void Vacuum::CGUI::UpdateMouseCursor()
+void Vacuum::CGUI::SetCaptureIfNotSet(HWND _hwnd)
+{
+	if (!ImGui::IsAnyMouseDown() && GetCapture() == nullptr)
+	{
+		SetCapture(_hwnd);
+	}
+}
+
+void Vacuum::CGUI::ReleaseCaptureIfSet(HWND _hwnd)
+{
+	if (!ImGui::IsAnyMouseDown() && GetCapture() == _hwnd)
+	{
+		ReleaseCapture();
+	}
+}
+
+int32 Vacuum::CGUI::OnLButtonDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	SetCaptureIfNotSet(_hwnd);
+	io.MouseDown[0] = true;
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnRButtonDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	SetCaptureIfNotSet(_hwnd);
+	io.MouseDown[1] = true;
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnLButtonUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.MouseDown[0] = false;
+	ReleaseCaptureIfSet(_hwnd);
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnRButtonUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.MouseDown[1] = false;
+	ReleaseCaptureIfSet(_hwnd);
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnSetCursor(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	if (LOWORD(_lParam) == HTCLIENT && s_gui->UpdateMouseCursor())
+	{
+		return 1;
+	}
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnKeyDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	if (_wParam < 256)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[_wParam] = 1;
+	}
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnKeyUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	if (_wParam < 256)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.KeysDown[_wParam] = 1;
+	}
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnChar(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	if (_wParam > 0 && _wParam < 0x10000)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.AddInputCharacterUTF16((uint16)_wParam);
+	}
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnMouseWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.MouseWheel += (float)GET_WHEEL_DELTA_WPARAM(_wParam) / (float)WHEEL_DELTA;
+	return 0;
+}
+
+int32 Vacuum::CGUI::OnMouseHWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.MouseWheelH += (float)GET_WHEEL_DELTA_WPARAM(_wParam) / (float)WHEEL_DELTA;
+	return 0;
+}
+
+void Vacuum::CGUI::UpdateMousePos()
+{
+	ImGuiIO& io = ImGui::GetIO();
+
+	if (io.WantSetMousePos)
+	{
+		POINT pos = {(int32)io.MousePos.x, (int32)io.MousePos.y};
+		ClientToScreen(m_hwnd, &pos);
+		SetCursorPos(pos.x, pos.y);
+	}
+
+	io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+	POINT pos; 
+	if (HWND activeWindow = ::GetForegroundWindow())
+	{
+		if (activeWindow == m_hwnd || IsChild(activeWindow, m_hwnd))
+		{
+			if (GetCursorPos(&pos) && ScreenToClient(m_hwnd, &pos))
+			{
+				io.MousePos = ImVec2((float)pos.x, (float)pos.y);
+			}
+		}
+	}
+}
+
+bool Vacuum::CGUI::UpdateMouseCursor()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange)
 	{
-		return;
+		return false;
 	}
+
 	ImGuiMouseCursor imGuiCursor = ImGui::GetMouseCursor();
 	if (imGuiCursor == ImGuiMouseCursor_None || io.MouseDrawCursor)
 	{
@@ -111,4 +262,5 @@ void Vacuum::CGUI::UpdateMouseCursor()
 		}
 		SetCursor(LoadCursor(nullptr, win32Cursor));
 	}
+	return true;
 }

@@ -799,12 +799,14 @@ enum ImGuiDataTypePrivate_
     ImGuiDataType_ID
 };
 
+#pragma warning (disable : 26495)
 // Stacked color modifier, backup of modified data so we can restore it
 struct ImGuiColorMod
 {
     ImGuiCol    Col;
     ImVec4      BackupValue;
 };
+#pragma warning (default : 26495)
 
 // Stacked style modifier, backup of modified data so we can restore it. Data type inferred from the variable.
 struct ImGuiStyleMod

@@ -24,34 +24,34 @@ void Vacuum::CAppManager::InitApp()
 	VE_LOG(TEXT("Initialize app"));
 	std::filesystem::path currentPath = std::filesystem::current_path();
 	std::wstring::size_type pos = std::wstring(currentPath.c_str()).find_last_of(L"\\/");
-	s_app->m_appPaths.m_rootDir = std::wstring(currentPath).substr(0, pos);
-	std::filesystem::current_path(s_app->m_appPaths.m_rootDir);
-	s_app->m_appPaths.m_configDir = s_app->m_appPaths.m_rootDir / L"Config";
-	if (!std::filesystem::exists(s_app->m_appPaths.m_configDir))
+	s_app->m_appPaths.RootDir = std::wstring(currentPath).substr(0, pos);
+	std::filesystem::current_path(s_app->m_appPaths.RootDir);
+	s_app->m_appPaths.ConfigDir = s_app->m_appPaths.RootDir / L"Config";
+	if (!std::filesystem::exists(s_app->m_appPaths.ConfigDir))
 	{
 		VE_LOG(TEXT("Creating config directory"));
-		std::filesystem::create_directory(s_app->m_appPaths.m_configDir);
+		std::filesystem::create_directory(s_app->m_appPaths.ConfigDir);
 	}
 
-	s_app->m_appPaths.m_projectsDir = s_app->m_appPaths.m_rootDir / L"Projects";
-	s_app->m_appConfigPath = s_app->m_appPaths.m_configDir / L"app.config";
+	s_app->m_appPaths.ProjectsDir = s_app->m_appPaths.RootDir / L"Projects";
+	s_app->m_appConfigPath = s_app->m_appPaths.ConfigDir / L"app.config";
 
 	if (std::filesystem::exists(s_app->m_appConfigPath))
 	{
 		Json json = {};
 		std::ifstream appConfig(s_app->m_appConfigPath);
 		appConfig >> json;
-		s_app->m_mainWindowDim.m_height = json["height"].get<int64>();
-		s_app->m_mainWindowDim.m_width = json["width"].get<int64>();
-		s_app->m_mainWindowDim.m_leftTopCornerX = json["x"].get<int32>();
-		s_app->m_mainWindowDim.m_leftTopCornerY = json["y"].get<int32>();
+		s_app->m_mainWindowDim.Height = json["height"].get<int64>();
+		s_app->m_mainWindowDim.Width = json["width"].get<int64>();
+		s_app->m_mainWindowDim.LeftTopCornerX = json["x"].get<int32>();
+		s_app->m_mainWindowDim.LeftTopCornerY = json["y"].get<int32>();
 	}
 	else
 	{
-		s_app->m_mainWindowDim.m_height = 720;
-		s_app->m_mainWindowDim.m_width = 1280;
-		s_app->m_mainWindowDim.m_leftTopCornerX = 0;
-		s_app->m_mainWindowDim.m_leftTopCornerY = 0;
+		s_app->m_mainWindowDim.Height = 720;
+		s_app->m_mainWindowDim.Width = 1280;
+		s_app->m_mainWindowDim.LeftTopCornerX = 0;
+		s_app->m_mainWindowDim.LeftTopCornerY = 0;
 	}
 
 	s_app->LoadProject();
@@ -65,15 +65,15 @@ void Vacuum::CAppManager::Destroy()
 		s_app->m_mainWindowDim = mainWindow->GetCurrentDim();
 	}
 
-	if (!std::filesystem::exists(s_app->m_appPaths.m_configDir))
+	if (!std::filesystem::exists(s_app->m_appPaths.ConfigDir))
 	{
-		std::filesystem::create_directory(s_app->m_appPaths.m_configDir);
+		std::filesystem::create_directory(s_app->m_appPaths.ConfigDir);
 	}
 	Json json = {};
-	json["height"] = s_app->m_mainWindowDim.m_height;
-	json["width"] = s_app->m_mainWindowDim.m_width;
-	json["x"] = s_app->m_mainWindowDim.m_leftTopCornerX;
-	json["y"] = s_app->m_mainWindowDim.m_leftTopCornerY;
+	json["height"] = s_app->m_mainWindowDim.Height;
+	json["width"] = s_app->m_mainWindowDim.Width;
+	json["x"] = s_app->m_mainWindowDim.LeftTopCornerX;
+	json["y"] = s_app->m_mainWindowDim.LeftTopCornerY;
 	std::ofstream appConfig(s_app->m_appConfigPath, std::ios::trunc);
 	appConfig << json.dump();
 }
@@ -95,7 +95,7 @@ Vacuum::SAppPaths Vacuum::CAppManager::GetAppPaths()
 
 void Vacuum::CAppManager::LoadProject()
 {
-	for (const std::filesystem::path& project : std::filesystem::directory_iterator(m_appPaths.m_projectsDir))
+	for (const std::filesystem::path& project : std::filesystem::directory_iterator(m_appPaths.ProjectsDir))
 	{
 		m_currentProject = new CProject(project);
 	}

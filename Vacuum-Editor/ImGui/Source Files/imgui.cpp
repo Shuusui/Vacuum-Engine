@@ -707,8 +707,9 @@ CODE
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
+#pragma warning (disable : 26812)
 #include "..\Header Files\Private\imgui_internal.h"
-
+#pragma warning (default: 26812)
 // System includes
 #include <ctype.h>      // toupper
 #include <stdio.h>      // vsnprintf, sscanf, printf
@@ -783,6 +784,9 @@ CODE
 #pragma GCC diagnostic ignored "-Wstrict-overflow"          // warning: assuming signed overflow does not occur when assuming that (X - c) > X is always false
 #pragma GCC diagnostic ignored "-Wclass-memaccess"          // [__GNUC__ >= 8] warning: 'memset/memcpy' clearing/writing an object of type 'xxxx' with no trivial copy-assignment; use assignment or value-initialization instead
 #endif
+
+#pragma warning (disable : 26812)
+#pragma warning (disable : 26451)
 
 // Debug options
 #define IMGUI_DEBUG_NAV_SCORING     0   // Display navigation scoring preview when hovering items. Display last moving direction matches when holding CTRL
@@ -4318,8 +4322,10 @@ static void FindHoveredWindow()
 
         if (hovered_window == NULL)
             hovered_window = window;
+#pragma warning(disable : 28182)
         if (hovered_window_ignoring_moving_window == NULL && (!g.MovingWindow || window->RootWindow != g.MovingWindow->RootWindow))
             hovered_window_ignoring_moving_window = window;
+#pragma warning(default : 28182)
         if (hovered_window && hovered_window_ignoring_moving_window)
             break;
     }
@@ -10655,6 +10661,9 @@ void ImGui::ShowMetricsWindow(bool* p_open)
             }
         }
     }
+
+#pragma warning (default : 26812)
+#pragma warning (default : 26451)
 
 #ifdef IMGUI_HAS_TABLE
     // Overlay: Display Tables Rectangles

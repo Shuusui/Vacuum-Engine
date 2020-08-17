@@ -7,10 +7,10 @@ namespace Vacuum
 {
 	struct SRendererCreationInfo
 	{
-		ERenderAPIs m_renderApi;
-		uint32 m_width;
-		uint32 m_height;
-		void* m_wndHandle;
+		ERenderAPIs RenderApi;
+		uint32 Width;
+		uint32 Height;
+		void* WndHandle;
 	};
 
 	struct SWindowDimParams
@@ -18,32 +18,32 @@ namespace Vacuum
 		SWindowDimParams() = default;
 
 		SWindowDimParams(const SWindowDimParams& _other)
-			:m_width(_other.m_width)
-			, m_height(_other.m_height)
-			, m_leftTopCornerX(_other.m_leftTopCornerX)
-			, m_leftTopCornerY(_other.m_leftTopCornerY)
+			:Width(_other.Width)
+			, Height(_other.Height)
+			, LeftTopCornerX(_other.LeftTopCornerX)
+			, LeftTopCornerY(_other.LeftTopCornerY)
 		{
 		}
 
 		SWindowDimParams(SWindowDimParams&& _other) noexcept
-			:m_width(std::move(_other.m_width))
-			, m_height(std::move(_other.m_height))
-			, m_leftTopCornerX(std::move(_other.m_leftTopCornerX))
-			, m_leftTopCornerY(std::move(_other.m_leftTopCornerY))
+			:Width(std::move(_other.Width))
+			, Height(std::move(_other.Height))
+			, LeftTopCornerX(std::move(_other.LeftTopCornerX))
+			, LeftTopCornerY(std::move(_other.LeftTopCornerY))
 		{
 		}
 
 		void operator=(const SWindowDimParams& _other)
 		{
-			m_width = _other.m_width;
-			m_height = _other.m_height;
-			m_leftTopCornerX = _other.m_leftTopCornerX;
-			m_leftTopCornerY = _other.m_leftTopCornerY;
+			Width = _other.Width;
+			Height = _other.Height;
+			LeftTopCornerX = _other.LeftTopCornerX;
+			LeftTopCornerY = _other.LeftTopCornerY;
 		}
 
-		int64 m_width;
-		int64 m_height;
-		int32 m_leftTopCornerX;
-		int32 m_leftTopCornerY;
+		int64 Width;
+		int64 Height;
+		int32 LeftTopCornerX;
+		int32 LeftTopCornerY;
 	};
 }

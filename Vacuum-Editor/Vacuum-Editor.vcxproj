@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="GUI\Source Files\GUI.cpp" />
     <ClCompile Include="ImGui\Source Files\imgui.cpp" />
+    <ClCompile Include="ImGui\Source Files\imgui_demo.cpp" />
     <ClCompile Include="ImGui\Source Files\imgui_draw.cpp" />
     <ClCompile Include="ImGui\Source Files\imgui_widgets.cpp" />
     <ClCompile Include="Management\Source Files\AppManager.cpp" />

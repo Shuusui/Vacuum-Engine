@@ -20,8 +20,10 @@ namespace Vacuum
 
 		virtual ~IRenderer() = default;
 
+		virtual void OnCreate() = 0;
 		virtual void OnInit() = 0;
 		virtual void OnUpdate() = 0;
+		virtual void PrepareRendering() = 0;
 		virtual void OnRender() = 0;
 		virtual void OnDestroy() = 0;
 		void SetShaderPaths(const std::vector<std::filesystem::path>& _shaderPaths)

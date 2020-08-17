@@ -1645,6 +1645,7 @@ struct ImGuiInputTextCallbackData
     bool                HasSelection() const { return SelectionStart != SelectionEnd; }
 };
 
+#pragma warning (disable : 26495)
 // Resizing callback data to apply custom constraint. As enabled by SetNextWindowSizeConstraints(). Callback is called during the next Begin().
 // NB: For basic min/max size constraint on each axis you don't need to use the callback! The SetNextWindowSizeConstraints() parameters are enough.
 struct ImGuiSizeCallbackData
@@ -1654,6 +1655,7 @@ struct ImGuiSizeCallbackData
     ImVec2  CurrentSize;    // Read-only.   Current window size.
     ImVec2  DesiredSize;    // Read-write.  Desired size, based on user's mouse position. Write to this field to restrain resizing.
 };
+#pragma warning (default : 26495)
 
 // Data payload for Drag and Drop operations: AcceptDragDropPayload(), GetDragDropPayload()
 struct ImGuiPayload
@@ -1794,12 +1796,14 @@ struct ImGuiStorage
     // [Internal]
     struct ImGuiStoragePair
     {
+#pragma warning (disable : 26495)
         ImGuiID key;
         union { int val_i; float val_f; void* val_p; };
         ImGuiStoragePair(ImGuiID _key, int _val_i)      { key = _key; val_i = _val_i; }
         ImGuiStoragePair(ImGuiID _key, float _val_f)    { key = _key; val_f = _val_f; }
         ImGuiStoragePair(ImGuiID _key, void* _val_p)    { key = _key; val_p = _val_p; }
     };
+#pragma warning (default : 26495)
 
     ImVector<ImGuiStoragePair>      Data;
 

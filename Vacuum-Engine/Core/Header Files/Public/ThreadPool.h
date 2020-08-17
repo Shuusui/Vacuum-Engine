@@ -34,7 +34,7 @@ namespace Vacuum
 			*/
 		virtual void Execute() override
 		{
-			VE_LOG(TEXT("Just a log"));
+			VE_LOG("Just a log");
 		}
 
 		virtual ~CJob() override

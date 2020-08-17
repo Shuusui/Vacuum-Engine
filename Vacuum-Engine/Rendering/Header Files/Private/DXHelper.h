@@ -14,6 +14,8 @@
 #include <winerror.h>
 #include <Windows.h>
 #include <d3d12.h>
+#include "Log.h"
+#include "Util.h"
 
 // Note that while ComPtr is used to manage the lifetime of resources on the CPU,
 // it has no understanding of the lifetime of resources on the GPU. Apps must account
@@ -39,13 +41,22 @@ private:
 
 #define SAFE_RELEASE(p) if (p) (p)->Release()
 
-inline void ThrowIfFailed(HRESULT hr)
-{
-    if (FAILED(hr))
-    {
-        throw HrException(hr);
-    }
-}
+
+#define THROW_IF_FAILED(hr) \
+    if (FAILED(hr)) \
+    {\
+        VE_LOG(ToWString(HrToString(hr).c_str()));\
+        throw HrException(hr);\
+    }\
+
+//inline void ThrowIfFailed(HRESULT hr)
+//{
+//    if (FAILED(hr))
+//    {
+//        Vacuum::CLog::Log(Vacuum::ToWString(HrToString(hr).c_str()));
+//        throw HrException(hr);
+//    }
+//}
 
 inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 {

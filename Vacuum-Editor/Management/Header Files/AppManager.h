@@ -12,15 +12,15 @@ namespace Vacuum
 	struct SAppPaths
 	{
 		SAppPaths()
-			:m_rootDir(std::filesystem::path())
-			,m_configDir(std::filesystem::path())
-			,m_projectsDir(std::filesystem::path())
+			:RootDir(std::filesystem::path())
+			,ConfigDir(std::filesystem::path())
+			,ProjectsDir(std::filesystem::path())
 		{
 
 		}
-		std::filesystem::path m_rootDir;
-		std::filesystem::path m_configDir;
-		std::filesystem::path m_projectsDir;
+		std::filesystem::path RootDir;
+		std::filesystem::path ConfigDir;
+		std::filesystem::path ProjectsDir;
 	};
 
 	class CAppManager

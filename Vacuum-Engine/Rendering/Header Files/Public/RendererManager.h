@@ -13,6 +13,7 @@ namespace Vacuum
 	public:
 		static void Create(const SRendererCreationInfo& _info);
 		static void OnInit(const std::vector<std::filesystem::path>& _shaderPaths);
+		static void PrepareRendering();
 		static void OnRender();
 		static void Destroy();
 		
@@ -20,10 +21,11 @@ namespace Vacuum
 		CRendererManager(const SRendererCreationInfo& _info)
 			:m_renderer(nullptr)
 		{
-			switch (_info.m_renderApi)
+			switch (_info.RenderApi)
 			{
 			case ERenderAPIs::DX12:
-				m_renderer = new DX12Renderer(_info.m_width, _info.m_height, (HWND)_info.m_wndHandle);
+				m_renderer = new DX12Renderer(_info.Width, _info.Height, (HWND)_info.WndHandle);
+				m_renderer->OnCreate();
 				break;
 			}
 		}

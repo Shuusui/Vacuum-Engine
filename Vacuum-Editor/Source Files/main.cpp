@@ -38,7 +38,7 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 		return -1;
 	}
 
-	CLog::RegisterHandle(handles.m_handlesGuid, handles.m_outputConInfo);
+	CLog::RegisterHandle(handles.HandlesGuid, handles.OutputConInfo);
 
 	CAppManager::InitApp();
 
@@ -47,17 +47,17 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	CThreadPool* threadPool = new CThreadPool(std::thread::hardware_concurrency());
 
 	SWindowInfo windowInfo = {};
-	windowInfo.m_classParams.m_className = TEXT("Vacuum Engine window");
-	windowInfo.m_classParams.m_hInstance = _hInstance;
-	windowInfo.m_classParams.m_backgroundColor = CreateSolidBrush(RGB(1,1,1));
-	windowInfo.m_classParams.m_style = CS_HREDRAW | CS_VREDRAW;
-	windowInfo.m_creationParams.m_dwExStyle = NULL;
-	windowInfo.m_creationParams.m_dwStyle = WS_OVERLAPPEDWINDOW;
-	windowInfo.m_creationParams.m_windowName = TEXT("Vacuum-Engine");
-	windowInfo.m_creationParams.m_parentWindow = nullptr;
-	windowInfo.m_creationParams.m_menu = nullptr;
-	windowInfo.m_creationParams.m_lpParam = nullptr;
-	windowInfo.m_dimParams = appMgrHandle->GetInitWindowDimParams();
+	windowInfo.ClassParams.ClassName = TEXT("Vacuum Engine window");
+	windowInfo.ClassParams.HInstance = _hInstance;
+	windowInfo.ClassParams.BackgroundColor = CreateSolidBrush(RGB(1,1,1));
+	windowInfo.ClassParams.Style = CS_HREDRAW | CS_VREDRAW;
+	windowInfo.CreationParams.DwExStyle = NULL;
+	windowInfo.CreationParams.DwStyle = WS_OVERLAPPEDWINDOW;
+	windowInfo.CreationParams.WindowName = TEXT("Vacuum-Engine");
+	windowInfo.CreationParams.ParentWindow = nullptr;
+	windowInfo.CreationParams.Menu = nullptr;
+	windowInfo.CreationParams.LpParam = nullptr;
+	windowInfo.DimParams = appMgrHandle->GetInitWindowDimParams();
 
 	CMainWindow::InitWindow(windowInfo);
 	if (!CMainWindow::Create(errorMsg))
@@ -71,14 +71,17 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	ImGuiIO& io = ImGui::GetIO();
 	CGUI::Init(CMainWindow::GetWindowHandle()->GetHwnd());
 
-	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().m_width, (uint32)appMgrHandle->GetInitWindowDimParams().m_height, CMainWindow::GetWindowHandle()->GetHwnd()});
+	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().Width, (uint32)appMgrHandle->GetInitWindowDimParams().Height, CMainWindow::GetWindowHandle()->GetHwnd()});
+
+	CMainWindow::ShowAndUpdate(_nShowCmd);
+
 	CRendererManager::OnInit(appMgrHandle->GetCurrentProject()->GetShaderPaths());
 
 	ImGui::StyleColorsDark();
 
 
-	CMainWindow::ShowAndUpdate(_nShowCmd);
 	MSG msg = {};
+	bool b = true;
 	while (msg.message != WM_QUIT)
 	{
 		CTimer::Update();
@@ -87,6 +90,15 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 			continue;
 		}
 		CGUI::NewFrame();
+
+		if (b)
+		{
+			ImGui::ShowDemoWindow(&b);
+		}
+
+		CRendererManager::PrepareRendering();
+		CGUI::Render();
+		CRendererManager::OnRender();
 	}
 
 	CRendererManager::Destroy();

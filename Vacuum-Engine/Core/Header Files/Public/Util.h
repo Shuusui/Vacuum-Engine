@@ -58,10 +58,6 @@ namespace Vacuum
 				{
 				case 'i':
 				case 'd':
-				{
-					std::wstring w = std::to_wstring(va_arg(args, int32));
-					int32 i = va_arg(args, int32);
-				}
 					strAddFunc(std::to_wstring(va_arg(args, int32)), i);
 					break;
 				case 'f':
