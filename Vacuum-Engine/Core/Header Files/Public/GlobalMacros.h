@@ -1,7 +1,7 @@
 #pragma once
 //#include <string>
 
-#define PRINTF(VALUE, ...) Vacuum::Printf(TEXT(VALUE), __VA_ARGS__)
+#define PRINTF(VALUE, ...) Vacuum::Printf(VALUE, __VA_ARGS__)
 //size_t bufSize = snprintf(nullptr, 0, TEXT(VALUE), __VA_ARGS__)\
 //wchar_t* buf = nullptr;\
 //swprintf_s(buf, bufSize, TEXT(VALUE), __VA_ARGS__) \

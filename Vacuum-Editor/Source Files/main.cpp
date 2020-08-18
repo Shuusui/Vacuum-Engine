@@ -21,15 +21,7 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 
 	CTimer::Create();
 
-	SConsoleHandles handles = {};
-	if (!AllocateConsole(handles))
-	{
-#if defined(_DEBUG)
-		VE_DEBUG_LOG(TEXT("Failed to Allocate console handles"));
-#endif
-		return -1;
-	}
-	std::wstring errorMsg = {};
+	std::string errorMsg = {};
 	if (!CLog::Init(errorMsg))
 	{
 #if defined(_DEBUG)
@@ -37,8 +29,6 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 #endif
 		return -1;
 	}
-
-	CLog::RegisterHandle(handles.HandlesGuid, handles.OutputConInfo);
 
 	CAppManager::InitApp();
 

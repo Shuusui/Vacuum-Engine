@@ -29,6 +29,9 @@ namespace Vacuum
 		void CreateAppMenuBar();
 		void DestroyAppMenuBar();
 
+		void CreateProjectGUI();
+		void DestroyProjectGUI();
+
 		void UpdateMousePos();
 		bool UpdateMouseCursor();
 
@@ -39,6 +42,7 @@ namespace Vacuum
 			:m_hwnd(_hwnd)
 			,m_lastMouseCursor(ImGuiMouseCursor_COUNT)
 			,m_appMenuBar(nullptr)
+			,m_projectGUI(nullptr)
 		{
 		}
 
@@ -47,5 +51,6 @@ namespace Vacuum
 		HWND m_hwnd;
 		ImGuiMouseCursor m_lastMouseCursor;
 		class CAppMenuBar* m_appMenuBar;
+		class CProjectGUI* m_projectGUI;
 	};
 }

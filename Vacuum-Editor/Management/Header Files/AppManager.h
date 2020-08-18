@@ -6,6 +6,7 @@
 #include "GlobalDefs.h"
 #include "Guid.h"
 #include "Project.h"
+#include <functional>
 
 
 namespace Vacuum
@@ -45,6 +46,16 @@ namespace Vacuum
 		{
 			return m_currentProject;
 		}
+
+		size_t RegisterOnLoadProjectCallback(const std::function<void(CProject*, CProject*)>& _onLoadCallback)
+		{
+			m_registeredOnLoadProjectCallbacks.push_back(_onLoadCallback);
+			return m_registeredOnLoadProjectCallbacks.size() - 1;
+		}
+		void RemoveOnLoadProjectCallback(const size_t& _callbackIndex)
+		{
+			m_registeredOnLoadProjectCallbacks.erase(m_registeredOnLoadProjectCallbacks.begin() + _callbackIndex);
+		}
 	private:
 		CAppManager();
 		void LoadRecentProject(const SGuid& _projectGuid);
@@ -56,5 +67,6 @@ namespace Vacuum
 		std::filesystem::path m_appConfigPath;
 		CProject* m_currentProject;
 		std::vector<CProject*> m_projects;
+		std::vector<std::function<void(CProject*, CProject*)>> m_registeredOnLoadProjectCallbacks;
 	};
 }

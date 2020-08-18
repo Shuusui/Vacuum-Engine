@@ -16,7 +16,7 @@
 
 #pragma endregion Includes
 
-#define LOGFORMAT(LOG) Vacuum::Printf(TEXT("%s[%i] | %s"), __WFUNCTION__, __LINE__, LOG)
+#define LOGFORMAT(LOG) Vacuum::Printf("%s[%i] | %s", __FUNCTION__, __LINE__, LOG)
 
 #define VE_LOG(LOG) CLog::Log(LOGFORMAT(LOG))
 #define VE_LOG_F(LOG, ...) CLog::Log(Vacuum::Printf(LOGFORMAT(LOG), __VA_ARGS__))
@@ -29,9 +29,14 @@ namespace Vacuum
 
 	struct SLogInfo
 	{
-		std::wstring& String;
+		std::string& String;
 		SGuid* HandleGuids;
 		size_t HandleAmount;
+	};
+
+	struct SColor
+	{
+		float Color[4];
 	};
 
 	class CLog
@@ -42,7 +47,7 @@ namespace Vacuum
 		* @param _errorMsg If the call fails this string will get filled
 		* @return if it's successful or not
 		*/
-		static bool Init(std::wstring& _errorMsg);
+		static bool Init(std::string& _errorMsg);
 
 		/**
 		* registers a new handle with a guid which will get stored to make broadcasting over different handles possible. This will overwrite a handle with the same guid if it already exists.
@@ -51,11 +56,17 @@ namespace Vacuum
 		*/
 		static void RegisterHandle(const SGuid& _handleGuid, const SConsoleInfo& _outputInfo);
 
+		static void RegisterBuffer(const SGuid& _bufGuid, std::vector<std::pair<SColor, std::string>>* buf);
+
+		static void RemoveBuffer(const SGuid& _bufGuid);
+
+		static bool IsBufRegistered(const SGuid& _bufGuid);
+
 		/**
 			* Logs to all registered console handles
 			* @param _logString The string to log
 			*/
-		static void Log(const std::wstring& _logString);
+		static void Log(const std::string& _logString);
 
 		/**
 			* Clears the screen of all log handles
@@ -67,7 +78,7 @@ namespace Vacuum
 			* @param _handleGuid The guid of the handle to log to
 			* @param _logString The string to log
 			*/
-		static void Log(const SGuid& _handleGuid, const std::wstring& _logString);
+		static void Log(const SGuid& _handleGuid, const std::string& _logString);
 
 		/**
 			* Clears the screen of the guid with the handle
@@ -81,14 +92,14 @@ namespace Vacuum
 		* @param _handleGuidAmount The amount of guids the handles to log to
 		* @param _logString The string to log
 		*/
-		static void Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::wstring& _logString);
+		static void Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::string& _logString);
 
 #if defined(_DEBUG)
 		/**
 			* Just logs a debug string to the output window of VS
 			* @param _logString The string to log
 			*/
-		static void LogDebugString(const std::wstring& _logString);
+		static void LogDebugString(const std::string& _logString);
 #endif
 
 		/**
@@ -105,7 +116,7 @@ namespace Vacuum
 			* @param _handle The handle to log to
 			* @param _logString The string to log
 			*/
-		static void LogToHandle(SConsoleInfo& _info, const std::wstring& _logString);
+		static void LogToHandle(SConsoleInfo& _info, const std::string& _logString);
 
 		/**
 			* Actually clears the handle
@@ -116,6 +127,7 @@ namespace Vacuum
 		static CLog* s_logHandle;
 
 		std::unordered_map<SGuid, SConsoleInfo> m_logInfos;
+		std::unordered_map<SGuid, std::vector<std::pair<SColor, std::string>>*> m_logBuffer;
 
 		std::mutex m_logMutex;
 	};

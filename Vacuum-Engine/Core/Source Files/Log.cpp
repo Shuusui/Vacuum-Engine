@@ -5,11 +5,11 @@ namespace Vacuum
 {
 	CLog* CLog::s_logHandle = nullptr;
 
-	bool CLog::Init(std::wstring& _errorMsg)
+	bool CLog::Init(std::string& _errorMsg)
 	{
 		if (s_logHandle)
 		{
-			_errorMsg = TEXT("Log handle is already initialized");
+			_errorMsg = "Log handle is already initialized";
 			return false;
 		}
 		s_logHandle = new CLog();
@@ -23,13 +23,35 @@ namespace Vacuum
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::Log(const std::wstring& _logString)
+	void CLog::RegisterBuffer(const SGuid& _bufGuid, std::vector<std::pair<SColor, std::string>>* buf)
+	{
+		s_logHandle->m_logBuffer.insert(std::make_pair(_bufGuid, buf));
+	}
+
+	void CLog::RemoveBuffer(const SGuid& _bufGuid)
+	{
+		s_logHandle->m_logBuffer.erase(_bufGuid);
+	}
+
+	bool CLog::IsBufRegistered(const SGuid& _bufGuid)
+	{
+		return s_logHandle->m_logBuffer.find(_bufGuid) == s_logHandle->m_logBuffer.end();
+	}
+
+	void CLog::Log(const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
 		for (std::pair<const SGuid, SConsoleInfo>& handlePair : s_logHandle->m_logInfos)
 		{
 			LogToHandle(handlePair.second, _logString);
 		}
+
+		for (const std::pair<SGuid, std::vector<std::pair<SColor, std::string>>*>& bufPair : s_logHandle->m_logBuffer)
+		{
+			SColor color = { 1.0f, 0.4f, 0.8f, 1.0f };
+			bufPair.second->push_back(std::make_pair(color, _logString));
+		}
+
 		s_logHandle->m_logMutex.unlock();
 	}
 
@@ -43,7 +65,7 @@ namespace Vacuum
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::Log(const SGuid& _handleGuid, const std::wstring& _logString)
+	void CLog::Log(const SGuid& _handleGuid, const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
 		LogToHandle(s_logHandle->m_logInfos.at(_handleGuid), _logString);
@@ -57,7 +79,7 @@ namespace Vacuum
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::wstring& _logString)
+	void CLog::Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
 		for (int32 i = 0; i < _handleGuidAmount; ++i)
@@ -67,10 +89,10 @@ namespace Vacuum
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::LogDebugString(const std::wstring& _logString)
+	void CLog::LogDebugString(const std::string& _logString)
 	{
-		OutputDebugString(_logString.c_str());
-		OutputDebugString(TEXT("\n"));
+		OutputDebugStringA(_logString.c_str());
+		OutputDebugStringA("\n");
 	}
 
 	void CLog::ClearLog(SGuid* _handleGuids, const size_t& _handleGuidAmount)
@@ -83,7 +105,7 @@ namespace Vacuum
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::LogToHandle(SConsoleInfo& _info, const std::wstring& _logString)
+	void CLog::LogToHandle(SConsoleInfo& _info, const std::string& _logString)
 	{
 		if (!_info.ConsoleHandle)
 		{
@@ -103,14 +125,14 @@ namespace Vacuum
 
 		for (int32 i = 0; i < _logString.size(); ++i)
 		{
-			FillConsoleOutputCharacter(_info.ConsoleHandle, _logString[i], 1, _info.ConsolePos, &garbage);
+			FillConsoleOutputCharacterA(_info.ConsoleHandle, _logString[i], 1, _info.ConsolePos, &garbage);
 			_info.ConsolePos.X++;
 		}
 		_info.ConsolePos.Y++;
 		_info.ConsolePos.X = 0;
 		SetConsoleCursorPosition(_info.ConsoleHandle, _info.ConsolePos);
-		OutputDebugString(_logString.c_str());
-		OutputDebugString(TEXT("\n"));
+		OutputDebugStringA(_logString.c_str());
+		OutputDebugStringA("\n");
 	}
 
 	void CLog::ClearLogHandle(SConsoleInfo& _info)

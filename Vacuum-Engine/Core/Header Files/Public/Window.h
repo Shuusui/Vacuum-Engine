@@ -108,7 +108,7 @@ namespace Vacuum
 	public:
 		static void InitWindow(const SWindowInfo& _windowInfo);
 
-		static bool Create(std::wstring& _errorMsg);
+		static bool Create(std::string& _errorMsg);
 
 		static void ShowAndUpdate(const int32& _nCmdShow);
 

@@ -339,7 +339,7 @@ namespace Vacuum
 		s_mainWindow = new CMainWindow(_windowInfo);
 	}
 
-	bool CMainWindow::Create(std::wstring& _errorMsg)
+	bool CMainWindow::Create(std::string& _errorMsg)
 	{
 		WNDCLASSEX wndClass = {};
 		wndClass.cbSize = sizeof(WNDCLASSEX);
@@ -354,12 +354,12 @@ namespace Vacuum
 		rect.bottom = (LONG)s_mainWindow->m_windowInfo.DimParams.Height;
 		if (!AdjustWindowRectEx(&rect, s_mainWindow->m_windowInfo.ClassParams.Style, false, NULL))
 		{
-			_errorMsg = PRINTF("Couldn't adjust window rect of window with classname %s", s_mainWindow->m_windowInfo.ClassParams.ClassName);
+			_errorMsg = PRINTF("Couldn't adjust window rect of window with classname %w", s_mainWindow->m_windowInfo.ClassParams.ClassName);
 			return false;
 		}
 		if (!RegisterClassEx(&wndClass))
 		{
-			_errorMsg = PRINTF("Couldn't register wnd class with error: %s", GetLastErrorString().c_str());
+			_errorMsg = PRINTF("Couldn't register wnd class with error: %w", GetLastErrorString().c_str());
 			return false;
 		}
 		s_mainWindow->m_wndHandle = CreateWindowEx(

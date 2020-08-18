@@ -9,5 +9,6 @@ namespace Vacuum
 		~CAppMenuBar();
 		void OnRender();
 	private:
+		class CLogWindow* m_logWindow;
 	};
 }

@@ -50,7 +50,7 @@ namespace Vacuum
 			,C(0)
 			,D(0)
 		{
-			if (_guidStr.find(L"0000"))
+			if (!_guidStr.find(L"0000"))
 			{
 				return;
 			}

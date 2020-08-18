@@ -1,7 +1,8 @@
 #include "..\Header Files\GUI.h"
 #include "Window.h"
 #include "Timer.h"
-#include "..\Header Files\AppGUI\AppMenuBar.h"
+#include "..\AppGUI\Header Files\AppMenuBar.h"
+#include "..\ProjectGUI\Header Files\ProjectGUI.h"
 
 Vacuum::CGUI* Vacuum::CGUI::s_gui = nullptr;
 
@@ -72,6 +73,9 @@ bool Vacuum::CGUI::Init(HWND _hwnd)
 	mainWindow->RegisterCallbackForWMEvents(WM_CHAR, &Vacuum::CGUI::OnChar);
 	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEWHEEL, &Vacuum::CGUI::OnMouseWheel);
 	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEHWHEEL, &Vacuum::CGUI::OnMouseHWheel);
+
+	s_gui->m_appMenuBar = new CAppMenuBar();
+	s_gui->m_projectGUI = new CProjectGUI();
 
 	return true;
 }
@@ -280,6 +284,7 @@ bool Vacuum::CGUI::UpdateMouseCursor()
 void Vacuum::CGUI::RenderGUIElements()
 {
 	m_appMenuBar->OnRender();
+	m_projectGUI->OnRender();
 }
 
 void Vacuum::CGUI::CreateAppMenuBar()
@@ -297,5 +302,23 @@ void Vacuum::CGUI::DestroyAppMenuBar()
 	{
 		delete m_appMenuBar;
 		m_appMenuBar = nullptr;
+	}
+}
+
+void Vacuum::CGUI::CreateProjectGUI()
+{
+	if (m_projectGUI)
+	{
+		return;
+	}
+	m_projectGUI = new CProjectGUI();
+}
+
+void Vacuum::CGUI::DestroyProjectGUI()
+{
+	if (m_projectGUI)
+	{
+		delete m_projectGUI;
+		m_projectGUI = nullptr;
 	}
 }

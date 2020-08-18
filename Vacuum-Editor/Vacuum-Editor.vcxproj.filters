@@ -38,11 +38,23 @@
     <Filter Include="GUI\Source Files">
       <UniqueIdentifier>{be9437db-eb40-4dd1-a83c-62a05ec0a25e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GUI\Header Files\AppGUI">
-      <UniqueIdentifier>{51b4b46b-7c4f-4194-9ab3-e6dfd846b118}</UniqueIdentifier>
+    <Filter Include="GUI\AppGUI">
+      <UniqueIdentifier>{ed628af4-f369-41d6-8610-4c2767bd7f4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GUI\Source Files\AppGUI">
-      <UniqueIdentifier>{164c08ca-b901-428c-b848-ec0dbc968db0}</UniqueIdentifier>
+    <Filter Include="GUI\AppGUI\Header Files">
+      <UniqueIdentifier>{4a5b1458-df41-4881-aca2-d6b95fc8b9c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\AppGUI\Source Files">
+      <UniqueIdentifier>{cc3f1b54-f148-40c9-a24f-68100642bbfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ProjectGUI">
+      <UniqueIdentifier>{a00e5fd9-59b3-4b53-b482-1fde10601e96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ProjectGUI\Header Files">
+      <UniqueIdentifier>{5033e321-57c3-4aea-9691-d6983947096a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ProjectGUI\Source Files">
+      <UniqueIdentifier>{04a11a80-feac-4076-8d0f-7ea4076d3b9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,8 +82,14 @@
     <ClCompile Include="ImGui\Source Files\imgui_demo.cpp">
       <Filter>ImGui\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Source Files\AppGUI\AppMenuBar.cpp">
-      <Filter>GUI\Source Files\AppGUI</Filter>
+    <ClCompile Include="GUI\AppGUI\Source Files\AppMenuBar.cpp">
+      <Filter>GUI\AppGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\ProjectGUI\Source Files\ProjectGUI.cpp">
+      <Filter>GUI\ProjectGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\AppGUI\Source Files\LogWindow.cpp">
+      <Filter>GUI\AppGUI\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -102,8 +120,14 @@
     <ClInclude Include="GUI\Header Files\GUI.h">
       <Filter>GUI\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Header Files\AppGUI\AppMenuBar.h">
-      <Filter>GUI\Header Files\AppGUI</Filter>
+    <ClInclude Include="GUI\AppGUI\Header Files\AppMenuBar.h">
+      <Filter>GUI\AppGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\ProjectGUI\Header Files\ProjectGUI.h">
+      <Filter>GUI\ProjectGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\AppGUI\Header Files\LogWindow.h">
+      <Filter>GUI\AppGUI\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

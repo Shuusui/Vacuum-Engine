@@ -45,7 +45,7 @@ private:
 #define THROW_IF_FAILED(hr) \
     if (FAILED(hr)) \
     {\
-        VE_LOG(ToWString(HrToString(hr).c_str()));\
+        VE_LOG(HrToString(hr).c_str());\
         throw HrException(hr);\
     }\
 

@@ -12,13 +12,12 @@ namespace Vacuum
 		* @param str The string which should get formatted to a wchar_t*
 		* @return The formatted wchar_t* if it was successful or nullptr
 		*/
-	static wchar_t* ToWString(const char* _str)
+	static const char* ToString(const wchar_t* _wStr)
 	{
-		size_t size = strlen(_str) + 1;
-		wchar_t* returnStr = new wchar_t[size];
-		size_t outSize; 
-		mbstowcs_s(&outSize, returnStr, size, _str, size-1);
-		return returnStr;
+		size_t outSize = wcslen(_wStr) + 1;
+		char* outStr = new char[outSize];
+		wcstombs_s(nullptr, outStr, outSize, _wStr, outSize - 1);
+		return outStr;
 	}
 
 	/**
@@ -27,9 +26,9 @@ namespace Vacuum
 		* @param ... The variadic params which should get inserted in the string
 		* @return The formatted string
 		*/
-	static std::wstring Printf(std::wstring _string, ...)
+	static std::string Printf(std::string _string, ...)
 	{
-		auto strAddFunc = [&_string](const std::wstring& _tempStr, size_t& _index)->void
+		auto strAddFunc = [&_string](const std::string& _tempStr, size_t& _index)->void
 		{
 			if (_string.max_size() < _string.size() + _tempStr.size())
 			{
@@ -58,16 +57,19 @@ namespace Vacuum
 				{
 				case 'i':
 				case 'd':
-					strAddFunc(std::to_wstring(va_arg(args, int32)), i);
+					strAddFunc(std::to_string(va_arg(args, int32)), i);
 					break;
 				case 'f':
-					strAddFunc(std::to_wstring(va_arg(args, float)), i);
+					strAddFunc(std::to_string(va_arg(args, float)), i);
 					break;
 				case 'u':
-					strAddFunc(std::to_wstring(va_arg(args, uint32)), i);
+					strAddFunc(std::to_string(va_arg(args, uint32)), i);
+					break;
+				case 'w':
+					strAddFunc(ToString(va_arg(args, const wchar_t*)), i);
 					break;
 				case 's':
-					strAddFunc(va_arg(args, const wchar_t*), i);
+					strAddFunc(va_arg(args, const char*), i);
 					break;
 				}
 			}
