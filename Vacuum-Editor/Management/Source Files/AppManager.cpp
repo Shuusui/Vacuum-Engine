@@ -116,7 +116,7 @@ void Vacuum::CAppManager::LoadProject(CProject* _project)
 	CProject* oldProject = m_currentProject;
 	if (oldProject)
 	{
-		VE_LOG_F(TEXT("Unload project: %s"), oldProject->GetName().c_str());
+		VE_LOG_F("Unload project: %s", oldProject->GetName().c_str());
 	}
 	m_currentProject = _project;
 	for (const std::function<void(CProject*, CProject*)>& func : m_registeredOnLoadProjectCallbacks)
@@ -124,7 +124,7 @@ void Vacuum::CAppManager::LoadProject(CProject* _project)
 		func(oldProject, _project);
 	}
 
-	VE_LOG_F(TEXT("Load project: %s"), _project->GetName().c_str());
+	VE_LOG_F("Load project: %s", _project->GetName().c_str());
 }
 
 void Vacuum::CAppManager::LoadRecentProject(const SGuid& _projectGuid)
@@ -133,7 +133,7 @@ void Vacuum::CAppManager::LoadRecentProject(const SGuid& _projectGuid)
 	{
 		if (project->GetGuid() == _projectGuid)
 		{
-			VE_LOG_F(TEXT("Load most recent project: %s"), project->GetName().c_str());
+			VE_LOG_F("Load most recent project: %s", project->GetName().c_str());
 			LoadProject(project);
 			break;
 		}
@@ -146,7 +146,7 @@ void Vacuum::CAppManager::LoadProjects()
 	{
 		CProject* project = new CProject(projectPath);
 		m_projects.push_back(project);
-		VE_LOG_F(TEXT("Found project: %s"), project->GetName().c_str());
+		VE_LOG_F("Found project: %s", project->GetName().c_str());
 	}
 }
 

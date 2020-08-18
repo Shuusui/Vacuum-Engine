@@ -3,6 +3,10 @@
 #include "Timer.h"
 #include "..\AppGUI\Header Files\AppMenuBar.h"
 #include "..\ProjectGUI\Header Files\ProjectGUI.h"
+#include "AppManager.h"
+#include <fstream>
+#include "Json.h"
+#include "Log.h"
 
 Vacuum::CGUI* Vacuum::CGUI::s_gui = nullptr;
 
@@ -73,6 +77,8 @@ bool Vacuum::CGUI::Init(HWND _hwnd)
 	mainWindow->RegisterCallbackForWMEvents(WM_CHAR, &Vacuum::CGUI::OnChar);
 	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEWHEEL, &Vacuum::CGUI::OnMouseWheel);
 	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEHWHEEL, &Vacuum::CGUI::OnMouseHWheel);
+
+	s_gui->LoadGUIIniFile();
 
 	s_gui->m_appMenuBar = new CAppMenuBar();
 	s_gui->m_projectGUI = new CProjectGUI();
@@ -184,7 +190,7 @@ int32 Vacuum::CGUI::OnKeyUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lPa
 	if (_wParam < 256)
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		io.KeysDown[_wParam] = 1;
+		io.KeysDown[_wParam] = 0;
 	}
 	return 0;
 }
@@ -221,6 +227,33 @@ void Vacuum::CGUI::Destroy()
 		delete s_gui;
 		s_gui = nullptr;
 	}
+}
+
+Vacuum::SGUIInfo Vacuum::CGUI::GetGUIInfo()
+{
+	if (!s_gui)
+	{
+		return {};
+	}
+	return s_gui->m_guiInfo;
+}
+
+void Vacuum::CGUI::SetOpenLog(const bool& bConsoleOpen)
+{
+	s_gui->m_guiInfo.bOpenConsole = bConsoleOpen;
+}
+
+Vacuum::CGUI::~CGUI()
+{
+	if (!std::filesystem::exists(m_guiIniPath))
+	{
+		std::filesystem::create_directories(m_guiIniPath);
+	}
+
+	std::ofstream appGuiIniFile(m_guiIniFilePath, std::ios::trunc);
+	Json json;
+	json["open_console"] = m_guiInfo.bOpenConsole;
+	appGuiIniFile << json.dump();
 }
 
 void Vacuum::CGUI::UpdateMousePos()
@@ -285,6 +318,22 @@ void Vacuum::CGUI::RenderGUIElements()
 {
 	m_appMenuBar->OnRender();
 	m_projectGUI->OnRender();
+}
+
+void Vacuum::CGUI::LoadGUIIniFile()
+{
+	SAppPaths appPaths = CAppManager::GetAppPaths();
+	m_guiIniPath =  appPaths.ConfigDir / "GUI";
+	m_guiIniFilePath = m_guiIniPath / "appgui.ini";
+	if (!std::filesystem::exists(m_guiIniFilePath))
+	{
+		return;
+	}
+
+	std::ifstream appGuiIniFile(m_guiIniFilePath);
+	Json json;
+	appGuiIniFile >> json;
+	m_guiInfo.bOpenConsole = json["open_console"].get<bool>();
 }
 
 void Vacuum::CGUI::CreateAppMenuBar()

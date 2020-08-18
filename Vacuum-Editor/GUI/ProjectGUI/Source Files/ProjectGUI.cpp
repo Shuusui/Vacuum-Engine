@@ -4,6 +4,7 @@
 
 Vacuum::CProjectGUI::CProjectGUI()
 	:m_currentProject(nullptr)
+	,m_setProjectFuncIndex(0)
 {
 	CAppManager* appManager = CAppManager::GetAppHandle();
 	if (!appManager)

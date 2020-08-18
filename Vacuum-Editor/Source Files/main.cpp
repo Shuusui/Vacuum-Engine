@@ -64,11 +64,8 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 
 	CMainWindow::ShowAndUpdate(_nShowCmd);
 
-	//CRendererManager::OnInit(appMgrHandle->GetCurrentProject()->GetShaderPaths());
-
 	ImGui::StyleColorsDark();
 
-	//bool bShowDemoWindow = false;
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{
@@ -78,8 +75,6 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 			continue;
 		}
 		CGUI::NewFrame();
-		/*if (bShowDemoWindow)
-			ImGui::ShowDemoWindow(&bShowDemoWindow);*/
 
 		CRendererManager::PrepareRendering();
 		CGUI::Render();

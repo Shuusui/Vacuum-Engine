@@ -79,7 +79,7 @@ void Vacuum::DX12Renderer::PrepareRendering()
 	m_barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
 	m_barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
-	const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
+	const float clearColor[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	THROW_IF_FAILED(m_commandList->Reset(frameCtx->CommandAllocator, nullptr));
 	m_commandList->ResourceBarrier(1, &m_barrier);
 	m_commandList->ClearRenderTargetView(m_renderTargetDescs[backBufferIndex], clearColor, 0, nullptr);

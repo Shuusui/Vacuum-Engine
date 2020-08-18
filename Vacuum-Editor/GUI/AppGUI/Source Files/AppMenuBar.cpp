@@ -2,10 +2,15 @@
 #include "..\Header Files\LogWindow.h"
 #include "imgui.h"
 #include "AppManager.h"
+#include "GUI.h"
 
 Vacuum::CAppMenuBar::CAppMenuBar()
+	:m_logWindow(nullptr)
 {
-
+	if (CGUI::GetGUIInfo().bOpenConsole)
+	{
+		m_logWindow = new CLogWindow();
+	}
 }
 
 Vacuum::CAppMenuBar::~CAppMenuBar()
@@ -36,23 +41,11 @@ void Vacuum::CAppMenuBar::OnRender()
 		}
 		if (ImGui::MenuItem("LogWindow", "CTRL+L"))
 		{
-			m_logWindow = new CLogWindow();
-			CAppManager* appManager = CAppManager::GetAppHandle();
-			SWindowDimParams wndDim = appManager->GetInitWindowDimParams();
-			int32 width = wndDim.Width - 40;
-			int32 height = wndDim.Height *.15f;
-			int32 x = 10;
-			int32 y = wndDim.Height * .8f;
-			ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
-		}
-		else
-		{
-			if (m_logWindow)
+			if (!m_logWindow)
 			{
-				delete m_logWindow;
-				m_logWindow = nullptr;
+				m_logWindow = new CLogWindow();
 			}
+			CGUI::SetOpenLog(!CGUI::GetGUIInfo().bOpenConsole);
 		}
 		ImGui::EndMenu();
 	}
