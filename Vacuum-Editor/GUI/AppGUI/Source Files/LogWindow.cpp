@@ -36,7 +36,8 @@ void Vacuum::CLogWindow::OnRender()
 	int32 y = wndDim.Height * .8f;
 	ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin("Log", &CGUI::GetLogOpen()))
+
+	if (!ImGui::Begin("Log", &CGUI::GetGUIInfo().bOpenConsole))
 	{ 
 		if (CLog::IsBufRegistered(m_guid))
 		{
@@ -49,7 +50,7 @@ void Vacuum::CLogWindow::OnRender()
 
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 	{
-		if (ImGui::IsItemHovered())
+		if (ImGui::IsWindowHovered())
 		{
 			m_bStopScroll = !m_bStopScroll;
 		}

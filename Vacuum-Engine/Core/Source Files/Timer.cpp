@@ -28,7 +28,7 @@ int64 Vacuum::CTimer::GetTime()
 	{
 		return -1;
 	}
-	return s_timer->m_ticksPerSecond;
+	return s_timer->m_time;
 }
 
 float Vacuum::CTimer::GetDeltaSeconds()
@@ -42,9 +42,6 @@ float Vacuum::CTimer::GetDeltaSeconds()
 
 void Vacuum::CTimer::Update()
 {
-	int64 currentTime;
-	QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
-	s_timer->m_deltaSeconds = (float)(currentTime - CTimer::GetTime()) / CTimer::GetTicksPerSecond();
 }
 
 bool Vacuum::CTimer::Init()

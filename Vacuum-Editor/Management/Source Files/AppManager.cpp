@@ -150,6 +150,19 @@ void Vacuum::CAppManager::LoadProjects()
 	}
 }
 
+Vacuum::CAppManager::~CAppManager()
+{
+	for (CProject* project : m_projects)
+	{
+		if (!project)
+		{
+			continue;
+		}
+		delete project;
+		project = nullptr;
+	}
+}
+
 Vacuum::CAppManager::CAppManager()
 	:m_mainWindowDim(SWindowDimParams())
 	,m_appPaths(SAppPaths())

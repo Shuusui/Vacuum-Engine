@@ -4,19 +4,21 @@
 
 namespace Vacuum
 {
+	struct SProjectPaths
+	{
+		std::filesystem::path ConfigDir;
+		std::filesystem::path ProjectDir;
+		std::filesystem::path ContentDir;
+		std::filesystem::path ShaderDir;
+		std::filesystem::path ModelsDir;
+		std::filesystem::path ProjectFilePath;
+	};
+
 	class CProject
 	{
 	public:
 		CProject(const std::filesystem::path& _projectPath);
-		std::vector<std::filesystem::path> GetShaderPaths() const
-		{
-			return m_shaderPaths;
-		}
-
-		std::vector<std::filesystem::path> GetModelPaths() const
-		{
-			return m_modelPaths;
-		}
+		~CProject();
 
 		SGuid GetGuid() const 
 		{
@@ -28,16 +30,15 @@ namespace Vacuum
 			return m_name;
 		}
 
+		SProjectPaths GetProjectPaths() const 
+		{
+			return m_projectPaths;
+		}
+
 	private:
 		SGuid m_guid;
+		SGuid m_mostRecentSceneGuid;
 		std::string m_name;
-		std::filesystem::path m_configsDir;
-		std::filesystem::path m_currentProjectDir;
-		std::filesystem::path m_currentContentDir;
-		std::filesystem::path m_currentShaderDir;
-		std::filesystem::path m_modelDir;
-		std::filesystem::path m_projectFile;
-		std::vector<std::filesystem::path> m_shaderPaths;
-		std::vector<std::filesystem::path> m_modelPaths;
+		SProjectPaths m_projectPaths;
 	};
 }

@@ -10,6 +10,8 @@ namespace Vacuum
 	struct SGUIInfo
 	{
 		bool bOpenConsole;
+		bool bOpenContentBrowser;
+		bool bOpenEditorFPS;
 	};
 
 	class CGUI
@@ -19,11 +21,21 @@ namespace Vacuum
 		static void NewFrame();
 		static void Render();
 		static void Destroy();
-		static SGUIInfo GetGUIInfo();
-		static void SetOpenLog(const bool& bConsoleOpen);
-		static bool& GetLogOpen()
+		static SGUIInfo& GetGUIInfo();
+
+		static void SetOpenLog(const bool& bConsoleOpen)
 		{
-			return s_gui->m_guiInfo.bOpenConsole;
+			s_gui->m_guiInfo.bOpenConsole = bConsoleOpen;
+		}
+
+		static void SetOpenContentBrowser(const bool& bContentBrowserOpen)
+		{
+			s_gui->m_guiInfo.bOpenContentBrowser = bContentBrowserOpen;
+		}
+
+		static void SetOpenEditorFPS(const bool& bOpenEditorFPS)
+		{
+			s_gui->m_guiInfo.bOpenEditorFPS = bOpenEditorFPS;
 		}
 
 		~CGUI();

@@ -1,5 +1,6 @@
 #pragma once
-
+#include <vector>
+#include "..\Entities\Header Files\BaseEntity.h"
 
 namespace Vacuum
 {
@@ -9,6 +10,6 @@ namespace Vacuum
 		CScene();
 		~CScene();
 	private:
-
+		std::vector<CBaseEntity*> m_entities;
 	};
 }

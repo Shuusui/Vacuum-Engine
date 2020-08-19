@@ -56,6 +56,8 @@ namespace Vacuum
 		{
 			m_registeredOnLoadProjectCallbacks.erase(m_registeredOnLoadProjectCallbacks.begin() + _callbackIndex);
 		}
+
+		~CAppManager();
 	private:
 		CAppManager();
 		void LoadRecentProject(const SGuid& _projectGuid);

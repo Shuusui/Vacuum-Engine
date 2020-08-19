@@ -91,6 +91,12 @@
     <ClCompile Include="GUI\AppGUI\Source Files\LogWindow.cpp">
       <Filter>GUI\AppGUI\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\ProjectGUI\Source Files\ContentBrowser.cpp">
+      <Filter>GUI\ProjectGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\AppGUI\Source Files\EditorFPS.cpp">
+      <Filter>GUI\AppGUI\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Management\Header Files\AppManager.h">
@@ -127,6 +133,12 @@
       <Filter>GUI\ProjectGUI\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\AppGUI\Header Files\LogWindow.h">
+      <Filter>GUI\AppGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\ProjectGUI\Header Files\ContentBrowser.h">
+      <Filter>GUI\ProjectGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\AppGUI\Header Files\EditorFPS.h">
       <Filter>GUI\AppGUI\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

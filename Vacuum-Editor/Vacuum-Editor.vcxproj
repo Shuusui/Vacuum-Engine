@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI\AppGUI\Source Files\AppMenuBar.cpp" />
+    <ClCompile Include="GUI\AppGUI\Source Files\EditorFPS.cpp" />
     <ClCompile Include="GUI\AppGUI\Source Files\LogWindow.cpp" />
+    <ClCompile Include="GUI\ProjectGUI\Source Files\ContentBrowser.cpp" />
     <ClCompile Include="GUI\ProjectGUI\Source Files\ProjectGUI.cpp" />
     <ClCompile Include="GUI\Source Files\GUI.cpp" />
     <ClCompile Include="ImGui\Source Files\imgui.cpp" />
@@ -33,8 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI\AppGUI\Header Files\AppMenuBar.h" />
+    <ClInclude Include="GUI\AppGUI\Header Files\EditorFPS.h" />
     <ClInclude Include="GUI\AppGUI\Header Files\LogWindow.h" />
     <ClInclude Include="GUI\Header Files\GUI.h" />
+    <ClInclude Include="GUI\ProjectGUI\Header Files\ContentBrowser.h" />
     <ClInclude Include="GUI\ProjectGUI\Header Files\ProjectGUI.h" />
     <ClInclude Include="ImGui\Header Files\Private\imconfig.h" />
     <ClInclude Include="ImGui\Header Files\Private\imgui_internal.h" />

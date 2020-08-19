@@ -2,37 +2,36 @@
 
 #include <fstream>
 #include "Json.h"
+#include <string>
 
 Vacuum::CProject::CProject(const std::filesystem::path& _projectPath)
+	:m_guid(SGuid())
+	,m_mostRecentSceneGuid(SGuid())
+	,m_name(std::string())
+	,m_projectPaths(SProjectPaths())
 {
-	m_currentProjectDir = _projectPath;
-	m_currentContentDir = _projectPath;
-	m_configsDir = _projectPath / "Configs";
-	m_projectFile = _projectPath / ".project";
-	m_currentShaderDir = m_currentContentDir.append("Content");
-	m_currentShaderDir.append("Shaders");
-	m_modelDir = m_currentContentDir / "Models";
+	m_projectPaths.ProjectDir = _projectPath;
+	m_projectPaths.ContentDir = _projectPath;
+	m_projectPaths.ConfigDir = _projectPath / "Configs";
+	m_projectPaths.ProjectFilePath = _projectPath / ".project";
+	m_projectPaths.ContentDir = _projectPath / "Content";
+	m_projectPaths.ShaderDir = m_projectPaths.ContentDir / "Shaders";
+	m_projectPaths.ModelsDir = m_projectPaths.ContentDir / "Models";
 
-	std::ifstream projectFile(m_projectFile);
+	std::ifstream projectFile(m_projectPaths.ProjectFilePath);
 	Json json = {};
 	projectFile >> json;
 	m_name = json["name"].get<std::string>();
 	m_guid = json["guid"].get<std::wstring>();
+}
 
-	for (const std::filesystem::path& shader : std::filesystem::recursive_directory_iterator(m_currentShaderDir))
-	{
-		if (std::filesystem::is_directory(shader) || shader.extension() != ".hlsl")
-		{
-			continue;
-		}
-		m_shaderPaths.push_back(shader);
-	}
-	for (const std::filesystem::path& model : std::filesystem::recursive_directory_iterator(m_modelDir))
-	{
-		if (std::filesystem::is_directory(model) || model.extension() != ".obj")
-		{
-			continue;
-		}
-		m_modelPaths.push_back(model);
-	}
+Vacuum::CProject::~CProject()
+{
+	Json json = {};
+	json["name"] = m_name;
+	json["guid"] = m_guid.ToString();
+	json["most_recent_scene_guid"] = m_mostRecentSceneGuid.ToString();
+
+	std::ofstream projectFile(m_projectPaths.ProjectFilePath, std::ios::trunc);
+	projectFile << json.dump();
 }

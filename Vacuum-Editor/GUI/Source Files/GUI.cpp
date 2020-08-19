@@ -93,7 +93,9 @@ void Vacuum::CGUI::NewFrame()
 
 	IM_ASSERT(io.Fonts->IsBuilt() && "Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().");
 
-	io.DeltaTime = CTimer::GetDeltaSeconds();
+	INT64 current_time;
+	::QueryPerformanceCounter((LARGE_INTEGER*)&current_time);
+	io.DeltaTime = (float)(current_time - CTimer::GetTime()) / CTimer::GetDeltaSeconds();
 
 	io.KeyCtrl = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
 	io.KeyShift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
@@ -229,18 +231,9 @@ void Vacuum::CGUI::Destroy()
 	}
 }
 
-Vacuum::SGUIInfo Vacuum::CGUI::GetGUIInfo()
+Vacuum::SGUIInfo& Vacuum::CGUI::GetGUIInfo()
 {
-	if (!s_gui)
-	{
-		return {};
-	}
 	return s_gui->m_guiInfo;
-}
-
-void Vacuum::CGUI::SetOpenLog(const bool& bConsoleOpen)
-{
-	s_gui->m_guiInfo.bOpenConsole = bConsoleOpen;
 }
 
 Vacuum::CGUI::~CGUI()
@@ -253,6 +246,8 @@ Vacuum::CGUI::~CGUI()
 	std::ofstream appGuiIniFile(m_guiIniFilePath, std::ios::trunc);
 	Json json;
 	json["open_console"] = m_guiInfo.bOpenConsole;
+	json["open_content_browser"] = m_guiInfo.bOpenContentBrowser;
+	json["open_editor_fps"] = m_guiInfo.bOpenEditorFPS;
 	appGuiIniFile << json.dump();
 }
 
@@ -334,6 +329,8 @@ void Vacuum::CGUI::LoadGUIIniFile()
 	Json json;
 	appGuiIniFile >> json;
 	m_guiInfo.bOpenConsole = json["open_console"].get<bool>();
+	m_guiInfo.bOpenContentBrowser = json["open_content_browser"].get<bool>();
+	m_guiInfo.bOpenEditorFPS = json["open_editor_fps"].get<bool>();
 }
 
 void Vacuum::CGUI::CreateAppMenuBar()
