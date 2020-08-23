@@ -30,10 +30,10 @@ void Vacuum::CLogWindow::OnRender()
 
 	CAppManager* appManager = CAppManager::GetAppHandle();
 	SWindowDimParams wndDim = appManager->GetInitWindowDimParams();
-	int32 width = wndDim.Width - 40;
-	int32 height = wndDim.Height * .15f;
-	int32 x = 10;
-	int32 y = wndDim.Height * .8f;
+	float width = (float)wndDim.Width - 40;
+	float height = (float)wndDim.Height * .15f;
+	float x = 10.0f;
+	float y = (float)wndDim.Height * .8f;
 	ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
 
@@ -66,7 +66,7 @@ void Vacuum::CLogWindow::OnRender()
 		ImGui::TextColored(ImVec4(bufInformation.first.Color[0], bufInformation.first.Color[1], bufInformation.first.Color[2], bufInformation.first.Color[3]), bufInformation.second.c_str());
 		if (bScroll)
 		{
-			ImGui::SetScrollHereY(1.0f);
+			ImGui::SetScrollHereY();
 		}
 	}
 	ImGui::End();

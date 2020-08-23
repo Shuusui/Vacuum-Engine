@@ -11,10 +11,11 @@ namespace Vacuum
 	public:
 		IRenderer() = delete;
 
-		IRenderer(const uint32& _width, const uint32& _height, void* _wndHandle)
+		IRenderer(const uint32& _width, const uint32& _height, void* _wndHandle, bool& _bVSync)
 			:m_width(_width)
 			,m_height(_height)
 			,m_wndHandle(_wndHandle)
+			,m_bVSync(_bVSync)
 		{
 		}
 
@@ -26,6 +27,7 @@ namespace Vacuum
 		virtual void PrepareRendering() = 0;
 		virtual void OnRender() = 0;
 		virtual void OnDestroy() = 0;
+
 		void SetShaderPaths(const std::vector<std::filesystem::path>& _shaderPaths)
 		{
 			m_shaderPaths = _shaderPaths;
@@ -35,5 +37,6 @@ namespace Vacuum
 		uint32 m_height;
 		void* m_wndHandle;
 		std::vector<std::filesystem::path> m_shaderPaths;
+		bool& m_bVSync;
 	};
 }

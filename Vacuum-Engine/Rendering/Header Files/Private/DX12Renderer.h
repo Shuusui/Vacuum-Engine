@@ -39,8 +39,8 @@ namespace Vacuum
 		static const uint32 s_frameCount = 3;
 
 	public:
-		DX12Renderer(const uint32& _width, const uint32& _height, const HWND& _hwnd)
-			:IRenderer(_width, _height, _hwnd)
+		DX12Renderer(const uint32& _width, const uint32& _height, const HWND& _hwnd, bool& _bVSync)
+			:IRenderer(_width, _height, _hwnd, _bVSync)
 			,m_hwnd(HWND(_hwnd))
 			,m_swapChainWaitableObject(nullptr)
 			,m_device(nullptr)

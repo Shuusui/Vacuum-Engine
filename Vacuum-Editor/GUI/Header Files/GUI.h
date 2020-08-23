@@ -70,7 +70,6 @@ namespace Vacuum
 			:m_hwnd(_hwnd)
 			,m_lastMouseCursor(ImGuiMouseCursor_COUNT)
 			,m_appMenuBar(nullptr)
-			,m_projectGUI(nullptr)
 			,m_guiInfo({})
 		{
 
@@ -81,7 +80,6 @@ namespace Vacuum
 		HWND m_hwnd;
 		ImGuiMouseCursor m_lastMouseCursor;
 		class CAppMenuBar* m_appMenuBar;
-		class CProjectGUI* m_projectGUI;
 		std::filesystem::path m_guiIniFilePath;
 		std::filesystem::path m_guiIniPath;
 		SGUIInfo m_guiInfo;

@@ -10,6 +10,7 @@ namespace Vacuum
 		ERenderAPIs RenderApi;
 		uint32 Width;
 		uint32 Height;
+		bool bVSync;
 		void* WndHandle;
 	};
 

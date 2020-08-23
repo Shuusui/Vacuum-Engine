@@ -52,6 +52,9 @@ namespace Vacuum
 			bufPair.second->push_back(std::make_pair(color, _logString));
 		}
 
+		OutputDebugStringA(_logString.c_str());
+		OutputDebugStringA("\n");
+
 		s_logHandle->m_logMutex.unlock();
 	}
 

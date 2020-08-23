@@ -4,6 +4,7 @@
 #include "Json.h"
 #include "Window.h"
 #include "Log.h"
+#include "RendererManager.h"
 #pragma endregion //Internal Includes
 
 #pragma region External Includes
@@ -14,6 +15,12 @@
 
 Vacuum::CAppManager* Vacuum::CAppManager::s_app = nullptr;
 
+const char* JSONHEIGHT = "height";
+const char* JSONWIDTH = "width";
+const char* JSONX = "x";
+const char* JSONY = "y";
+const char* JSONCURRPROJGUID = "current_project_guid";
+const char* JSONVSYNC = "vsync";
 
 void Vacuum::CAppManager::InitApp()
 {
@@ -44,11 +51,30 @@ void Vacuum::CAppManager::InitApp()
 		Json json = {};
 		std::ifstream appConfig(s_app->m_appConfigPath);
 		appConfig >> json;
-		s_app->m_mainWindowDim.Height = json["height"].get<int64>();
-		s_app->m_mainWindowDim.Width = json["width"].get<int64>();
-		s_app->m_mainWindowDim.LeftTopCornerX = json["x"].get<int32>();
-		s_app->m_mainWindowDim.LeftTopCornerY = json["y"].get<int32>();
-		projectGuid = json["current_project_guid"].get<std::wstring>();
+		if (json.contains(JSONHEIGHT))
+		{
+			s_app->m_mainWindowDim.Height = json[JSONHEIGHT].get<int64>();
+		}
+		if (json.contains(JSONWIDTH))
+		{
+			s_app->m_mainWindowDim.Width = json[JSONWIDTH].get<int64>();
+		}
+		if (json.contains(JSONX))
+		{
+			s_app->m_mainWindowDim.LeftTopCornerX = json[JSONX].get<int32>();
+		}
+		if (json.contains(JSONY))
+		{
+			s_app->m_mainWindowDim.LeftTopCornerY = json[JSONY].get<int32>();
+		}
+		if (json.contains(JSONVSYNC))
+		{
+			s_app->m_bLastVSyncState = json[JSONVSYNC].get<bool>();
+		}
+		if (json.contains(JSONCURRPROJGUID))
+		{
+			projectGuid = json[JSONCURRPROJGUID].get<std::wstring>();
+		}
 	}
 	else
 	{
@@ -76,12 +102,18 @@ void Vacuum::CAppManager::Destroy()
 	{
 		std::filesystem::create_directory(s_app->m_appPaths.ConfigDir);
 	}
-	Json json = {};
-	json["height"] = s_app->m_mainWindowDim.Height;
-	json["width"] = s_app->m_mainWindowDim.Width;
-	json["x"] = s_app->m_mainWindowDim.LeftTopCornerX;
-	json["y"] = s_app->m_mainWindowDim.LeftTopCornerY;
-	json["current_project_guid"] = s_app->m_currentProject ? s_app->m_currentProject->GetGuid().ToString() : SGuid().ToString();
+
+	SWindowDimParams wndDim = s_app->m_mainWindowDim;
+	Json json = 
+	{
+		{JSONHEIGHT, wndDim.Height}, 
+		{JSONWIDTH, wndDim.Width},
+		{JSONX, wndDim.LeftTopCornerX}, 
+		{JSONY, wndDim.LeftTopCornerY},
+		{JSONCURRPROJGUID, s_app->m_currentProject ? s_app->m_currentProject->GetGuid().ToString() : SGuid().ToString()},
+		{JSONVSYNC, s_app->m_bLastVSyncState}
+	};
+
 	std::ofstream appConfig(s_app->m_appConfigPath, std::ios::trunc);
 	appConfig << json.dump();
 
@@ -168,5 +200,6 @@ Vacuum::CAppManager::CAppManager()
 	,m_appPaths(SAppPaths())
 	,m_appConfigPath(std::filesystem::path())
 	,m_currentProject(nullptr)
+	,m_bLastVSyncState(false)
 {
 }

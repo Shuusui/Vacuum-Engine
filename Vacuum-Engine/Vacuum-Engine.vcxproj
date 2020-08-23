@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\ECS\Components\Header Files\BaseComponent.h" />
+    <ClInclude Include="Core\ECS\Components\Header Files\Components.h" />
     <ClInclude Include="Core\ECS\Entities\Header Files\BaseEntity.h" />
+    <ClInclude Include="Core\ECS\Entt\Header Files\entt.hpp" />
     <ClInclude Include="Core\ECS\Header Files\BaseObject.h" />
-    <ClInclude Include="Core\ECS\Header Files\ComponentManager.h" />
+    <ClInclude Include="Core\ECS\Header Files\ECSManager.h" />
+    <ClInclude Include="Core\ECS\Header Files\EntityManager.h" />
     <ClInclude Include="Core\ECS\Header Files\Scene.h" />
     <ClInclude Include="Core\Header Files\Private\BaseJob.h" />
     <ClInclude Include="Core\Header Files\Private\json.hpp" />
@@ -64,10 +66,10 @@
     <ClInclude Include="Rendering\Header Files\Public\RendererManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\ECS\Components\Source Files\BaseComponent.cpp" />
     <ClCompile Include="Core\ECS\Entities\Source Files\BaseEntity.cpp" />
     <ClCompile Include="Core\ECS\Source Files\BaseObject.cpp" />
-    <ClCompile Include="Core\ECS\Source Files\ComponentManager.cpp" />
+    <ClCompile Include="Core\ECS\Source Files\ECSManager.cpp" />
+    <ClCompile Include="Core\ECS\Source Files\EntityManager.cpp" />
     <ClCompile Include="Core\ECS\Source Files\Scene.cpp" />
     <ClCompile Include="Core\Source Files\Log.cpp" />
     <ClCompile Include="Core\Source Files\ThreadPool.cpp" />
@@ -172,7 +174,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Engine\Core\Header Files\Public;$(SolutionDir)Vacuum-Engine\Rendering\Header Files\Private;$(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;$(SolutionDir)Vacuum-Engine\DirectX;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Engine\Core; $(SolutionDir)Vacuum-Engine\Core\Header Files\Public;$(SolutionDir)Vacuum-Engine\Rendering\Header Files\Private;$(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;$(SolutionDir)Vacuum-Engine\DirectX;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

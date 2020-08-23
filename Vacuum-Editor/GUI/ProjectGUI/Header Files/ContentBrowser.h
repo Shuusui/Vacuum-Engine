@@ -1,44 +1,33 @@
 #pragma once
 #include <filesystem>
-#include <set>
+#include <unordered_map>
 #include "Guid.h"
 
 namespace Vacuum
 {
-	struct SShaderInfo
-	{
-		SShaderInfo(const std::filesystem::path& _shaderPath)
-			:ShaderPath(_shaderPath)
-			,bIsSelected(false)
-		{
-
-		}
-
-		std::filesystem::path ShaderPath;
-		bool bIsSelected;
-
-		bool operator==(const std::filesystem::path& _other) const
-		{
-			return ShaderPath == _other;
-		}
-
-		bool operator!=(const std::filesystem::path& _other) const 
-		{
-			return ShaderPath != _other;
-		}
-	};
+	class CProject;
 
 	class CContentBrowser
 	{
 	public:
-		CContentBrowser(const std::filesystem::path& _contentDir);
+		CContentBrowser(CProject* _project);
 		void OnRender();
-	private:
-		std::filesystem::path m_contentDir;
-		std::filesystem::path m_shaderDir;
-		std::filesystem::path m_modelsDir;
-		std::filesystem::path m_scenesDir;
 
-		std::vector<SShaderInfo> m_shaders;
+	private:
+		void DisplayContextMenu();
+		void ManageShaderPaths();
+		void ManageModelPaths();
+		void ManageScenePaths();
+		void ShowEntities();
+		void RenderComponents();
+
+		void CheckPaths();
+		void InitSceneTreeNode();
+
+		CProject* m_project;
+		bool m_bDelKeyPressedThisFrame;
+		bool m_bRefresh;
+		std::unordered_map<class CScene*, bool> m_scenes;
+		std::unordered_map<class CBaseEntity*, bool> m_entities;
 	};
 }

@@ -23,6 +23,7 @@
     <ClCompile Include="GUI\AppGUI\Source Files\EditorFPS.cpp" />
     <ClCompile Include="GUI\AppGUI\Source Files\LogWindow.cpp" />
     <ClCompile Include="GUI\ProjectGUI\Source Files\ContentBrowser.cpp" />
+    <ClCompile Include="GUI\ProjectGUI\Source Files\EntityEditor.cpp" />
     <ClCompile Include="GUI\ProjectGUI\Source Files\ProjectGUI.cpp" />
     <ClCompile Include="GUI\Source Files\GUI.cpp" />
     <ClCompile Include="ImGui\Source Files\imgui.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="ImGui\Source Files\imgui_widgets.cpp" />
     <ClCompile Include="Management\Source Files\AppManager.cpp" />
     <ClCompile Include="Management\Source Files\Project.cpp" />
+    <ClCompile Include="Management\Source Files\SavingSystem.cpp" />
     <ClCompile Include="Source Files\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +41,7 @@
     <ClInclude Include="GUI\AppGUI\Header Files\LogWindow.h" />
     <ClInclude Include="GUI\Header Files\GUI.h" />
     <ClInclude Include="GUI\ProjectGUI\Header Files\ContentBrowser.h" />
+    <ClInclude Include="GUI\ProjectGUI\Header Files\EntityEditor.h" />
     <ClInclude Include="GUI\ProjectGUI\Header Files\ProjectGUI.h" />
     <ClInclude Include="ImGui\Header Files\Private\imconfig.h" />
     <ClInclude Include="ImGui\Header Files\Private\imgui_internal.h" />
@@ -48,6 +51,7 @@
     <ClInclude Include="ImGui\Header Files\Public\imgui.h" />
     <ClInclude Include="Management\Header Files\AppManager.h" />
     <ClInclude Include="Management\Header Files\Project.h" />
+    <ClInclude Include="Management\Header Files\SavingSystem.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -127,7 +131,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Editor\GUI\Header Files\;$(SolutionDir)Vacuum-Editor\ImGui\Header Files\Public\;$(SolutionDir)Vacuum-Editor\Management\Header Files\;$(SolutionDir)Vacuum-Engine\Core\Header Files\Public; $(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Engine\Core\;$(SolutionDir)Vacuum-Editor\GUI\Header Files\;$(SolutionDir)Vacuum-Editor\ImGui\Header Files\Public\;$(SolutionDir)Vacuum-Editor\Management\Header Files\;$(SolutionDir)Vacuum-Engine\Core\Header Files\Public; $(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -162,7 +166,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Editor\GUI\Header Files\;$(SolutionDir)Vacuum-Editor\ImGui\Header Files\Public\;$(SolutionDir)Vacuum-Editor\Management\Header Files\;$(SolutionDir)Vacuum-Engine\Core\Header Files\Public; $(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Engine\Core\;$(SolutionDir)Vacuum-Editor\GUI\Header Files\;$(SolutionDir)Vacuum-Editor\ImGui\Header Files\Public\;$(SolutionDir)Vacuum-Editor\Management\Header Files\;$(SolutionDir)Vacuum-Engine\Core\Header Files\Public; $(SolutionDir)Vacuum-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

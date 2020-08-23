@@ -35,6 +35,24 @@ namespace Vacuum
 		static SWindowDimParams GetInitWindowDimParams();
 		static SAppPaths GetAppPaths();
 
+		static void SetLastVSyncState(const bool& bVSyncState)
+		{
+			if (!s_app)
+			{
+				return;
+			}
+			s_app->m_bLastVSyncState = bVSyncState;
+		}
+		static bool GetLastVSyncState()
+		{
+
+			if (!s_app)
+			{
+				return false;
+			}
+			return s_app->m_bLastVSyncState;
+		}
+
 		void LoadProject(CProject* _project);
 
 		std::vector<CProject*> GetProjects() const 
@@ -70,5 +88,6 @@ namespace Vacuum
 		CProject* m_currentProject;
 		std::vector<CProject*> m_projects;
 		std::vector<std::function<void(CProject*, CProject*)>> m_registeredOnLoadProjectCallbacks;
+		bool m_bLastVSyncState;
 	};
 }

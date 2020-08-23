@@ -97,6 +97,12 @@
     <Filter Include="Core\ECS\Components\Source Files">
       <UniqueIdentifier>{e4f3e465-8983-4b04-ae6d-73804afabb04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\ECS\Entt">
+      <UniqueIdentifier>{0faacd6c-2ee3-413e-a37d-272a4392be36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Entt\Header Files">
+      <UniqueIdentifier>{f2fe1b07-44fc-4264-89fb-c207c2402a8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Header Files\Private\BaseJob.h">
@@ -240,17 +246,23 @@
     <ClInclude Include="Core\ECS\Entities\Header Files\BaseEntity.h">
       <Filter>Core\ECS\Entities\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\ECS\Components\Header Files\BaseComponent.h">
-      <Filter>Core\ECS\Components\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\ECS\Header Files\Scene.h">
-      <Filter>Core\ECS\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\ECS\Header Files\ComponentManager.h">
       <Filter>Core\ECS\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Header Files\Public\Timer.h">
       <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Header Files\ECSManager.h">
+      <Filter>Core\ECS\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Entt\Header Files\entt.hpp">
+      <Filter>Core\ECS\Entt\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Components\Header Files\Components.h">
+      <Filter>Core\ECS\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Header Files\EntityManager.h">
+      <Filter>Core\ECS\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -386,17 +398,17 @@
     <ClCompile Include="Core\ECS\Entities\Source Files\BaseEntity.cpp">
       <Filter>Core\ECS\Entities\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\ECS\Components\Source Files\BaseComponent.cpp">
-      <Filter>Core\ECS\Components\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\ECS\Source Files\Scene.cpp">
-      <Filter>Core\ECS\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\ECS\Source Files\ComponentManager.cpp">
       <Filter>Core\ECS\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Source Files\Timer.cpp">
       <Filter>Core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Source Files\ECSManager.cpp">
+      <Filter>Core\ECS\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Source Files\EntityManager.cpp">
+      <Filter>Core\ECS\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

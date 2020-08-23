@@ -3,6 +3,7 @@
 #include "GUI.h"
 #include "imgui.h"
 #include "Timer.h"
+#include "RendererManager.h"
 
 Vacuum::CEditorFPS::CEditorFPS()
 {
@@ -21,15 +22,20 @@ void Vacuum::CEditorFPS::OnRender()
 
 	CAppManager* appManager = CAppManager::GetAppHandle();
 	SWindowDimParams wndDim = appManager->GetInitWindowDimParams();
-	int32 x = wndDim.Width - 200;
-	int32 y = wndDim.Height * .1f;
-	ImGui::SetNextWindowSize(ImVec2(160, 80), ImGuiCond_FirstUseEver);
+	float x = (float)wndDim.Width - 200;
+	float y = (float)wndDim.Height * .1f;
+	ImGui::SetNextWindowSize(ImVec2(160.0f, 80.0f), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
 
 	if (!ImGui::Begin("Editor FPS", &CGUI::GetGUIInfo().bOpenEditorFPS))
 	{
-		return; 
+		ImGui::End();
+		return;
 	}
+
+	ImGui::Checkbox("VSync", &CRendererManager::GetVSync());
+
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", CTimer::GetDeltaSeconds(), ImGui::GetIO().Framerate);
 
 
 	ImGui::End();

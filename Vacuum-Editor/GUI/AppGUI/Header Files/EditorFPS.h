@@ -10,5 +10,6 @@ namespace Vacuum
 		~CEditorFPS();
 		void OnRender();
 	private:
+
 	};
 }

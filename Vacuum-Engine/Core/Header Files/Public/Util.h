@@ -34,8 +34,24 @@ namespace Vacuum
 			{
 				_string.reserve(_string.size() + _tempStr.size());
 			}
+
+			if (_tempStr.size() == 0)
+			{
+				_string.erase(_string.begin() + _index);
+				_string.erase(_string.begin() + _index + 1);
+				return;
+			}
+
+			if (_tempStr.size() == 1)
+			{
+				_string[_index] = _tempStr[0];
+				_string.erase(_string.begin() + _index + 1);
+				return;
+			}
+
 			for (size_t i = 0; i < _tempStr.size(); ++i)
 			{
+				
 				if (i < 2)
 				{
 					_string[_index+i] = _tempStr[i];

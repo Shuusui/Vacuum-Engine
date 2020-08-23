@@ -81,7 +81,7 @@ bool Vacuum::CGUI::Init(HWND _hwnd)
 	s_gui->LoadGUIIniFile();
 
 	s_gui->m_appMenuBar = new CAppMenuBar();
-	s_gui->m_projectGUI = new CProjectGUI();
+	CProjectGUI::OnCreate();
 
 	return true;
 }
@@ -93,9 +93,7 @@ void Vacuum::CGUI::NewFrame()
 
 	IM_ASSERT(io.Fonts->IsBuilt() && "Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().");
 
-	INT64 current_time;
-	::QueryPerformanceCounter((LARGE_INTEGER*)&current_time);
-	io.DeltaTime = (float)(current_time - CTimer::GetTime()) / CTimer::GetDeltaSeconds();
+	io.DeltaTime = CTimer::GetDeltaSeconds();
 
 	io.KeyCtrl = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
 	io.KeyShift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
@@ -112,6 +110,7 @@ void Vacuum::CGUI::NewFrame()
 	}
 
 	ImGui::NewFrame();
+
 	s_gui->RenderGUIElements();
 }
 
@@ -312,7 +311,7 @@ bool Vacuum::CGUI::UpdateMouseCursor()
 void Vacuum::CGUI::RenderGUIElements()
 {
 	m_appMenuBar->OnRender();
-	m_projectGUI->OnRender();
+	CProjectGUI::GetProjectGUIHandle()->OnRender();
 }
 
 void Vacuum::CGUI::LoadGUIIniFile()
@@ -353,18 +352,10 @@ void Vacuum::CGUI::DestroyAppMenuBar()
 
 void Vacuum::CGUI::CreateProjectGUI()
 {
-	if (m_projectGUI)
-	{
-		return;
-	}
-	m_projectGUI = new CProjectGUI();
+	CProjectGUI::OnCreate();
 }
 
 void Vacuum::CGUI::DestroyProjectGUI()
 {
-	if (m_projectGUI)
-	{
-		delete m_projectGUI;
-		m_projectGUI = nullptr;
-	}
+	CProjectGUI::OnDestroy();
 }

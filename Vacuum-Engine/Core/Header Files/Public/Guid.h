@@ -50,7 +50,7 @@ namespace Vacuum
 			,C(0)
 			,D(0)
 		{
-			if (!_guidStr.find(L"0000"))
+			if (_guidStr.empty())
 			{
 				return;
 			}
@@ -144,6 +144,10 @@ namespace Vacuum
 
 		std::wstring ToString(const EGuidFormats& _format = EGuidFormats::Digits) const 
 		{
+			if (!IsValid())
+			{
+				return std::wstring();
+			}
 			uint16 bFirst = B >> 16;
 			uint16 bSecond = 0;
 			bSecond |= B;

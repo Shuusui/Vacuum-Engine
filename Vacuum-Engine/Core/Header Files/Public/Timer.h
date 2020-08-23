@@ -11,7 +11,10 @@ namespace Vacuum
 		static int64 GetTicksPerSecond();
 		static int64 GetTime();
 		static float GetDeltaSeconds();
-		static void Update();
+		static void OnUpdate();
+		CTimer();
+		~CTimer();
+		void Update();
 		bool Init();
 	private:
 		static CTimer* s_timer;

@@ -219,7 +219,7 @@ void Vacuum::DX12Renderer::OnRender()
 
 	ID3D12GraphicsCommandList* graphCommandList = m_commandList;
 	m_commandQueue->ExecuteCommandLists(1, (ID3D12CommandList* const*)&graphCommandList);
-	m_swapChain->Present(1, 0);
+	m_swapChain->Present(m_bVSync, 0);
 
 	uint64 fenceValue = m_fenceValue +1;
 	m_commandQueue->Signal(m_fence, fenceValue);

@@ -9,11 +9,13 @@
 #include "ThreadPool.h"
 #include "Window.h"
 #include "AppManager.h"
+#include "SavingSystem.h"
 #include "SharedStructs.h"
 #include "RendererManager.h"
 #include "imgui.h"
 #include "GUI.h"
 #include "Timer.h"
+#include "ECS\Header Files\ECSManager.h"
 
 int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ LPSTR _lpCmdLine, _In_ int32 _nShowCmd)
 {
@@ -29,6 +31,10 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 #endif
 		return -1;
 	}
+
+	CECSManager::CreateECS();
+
+	CSavingSystem::OnCreate();
 
 	CAppManager::InitApp();
 
@@ -60,7 +66,7 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	ImGui::CreateContext();
 	CGUI::Init(CMainWindow::GetWindowHandle()->GetHwnd());
 
-	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().Width, (uint32)appMgrHandle->GetInitWindowDimParams().Height, CMainWindow::GetWindowHandle()->GetHwnd()});
+	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().Width, (uint32)appMgrHandle->GetInitWindowDimParams().Height, appMgrHandle->GetLastVSyncState(), CMainWindow::GetWindowHandle()->GetHwnd()});
 
 	CMainWindow::ShowAndUpdate(_nShowCmd);
 
@@ -69,18 +75,18 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{
-		CTimer::Update();
 		if (CMainWindow::RunWindow(msg))
 		{
 			continue;
 		}
+		CTimer::OnUpdate();
 		CGUI::NewFrame();
 
 		CRendererManager::PrepareRendering();
 		CGUI::Render();
 		CRendererManager::OnRender();
 	}
-
+	CAppManager::SetLastVSyncState(CRendererManager::GetVSync());
 	CRendererManager::Destroy();
 	CGUI::Destroy();
 	CAppManager::Destroy();

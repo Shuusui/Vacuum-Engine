@@ -5,15 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Management">
-      <UniqueIdentifier>{24cd046c-cd95-4607-a7ff-213ef659bd2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Management\Header Files">
-      <UniqueIdentifier>{1d2dd6ca-8f0b-4c89-8f98-9463eecfb8a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Management\Source Files">
-      <UniqueIdentifier>{4e715bb9-1b0a-4f7f-8c4e-11b9e714dcdc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ImGui">
       <UniqueIdentifier>{ea042b8e-f374-4be4-87f1-a03762bc8ded}</UniqueIdentifier>
     </Filter>
@@ -56,16 +47,19 @@
     <Filter Include="GUI\ProjectGUI\Source Files">
       <UniqueIdentifier>{04a11a80-feac-4076-8d0f-7ea4076d3b9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Management">
+      <UniqueIdentifier>{15a0385f-2bc0-4653-8d3e-be4eb18fef1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Management\Header Files">
+      <UniqueIdentifier>{aacc27da-9384-4162-9d19-1ce0e14f41f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Management\Source Files">
+      <UniqueIdentifier>{b7d1c312-38f1-4975-92d0-e85823e9ec67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Management\Source Files\AppManager.cpp">
-      <Filter>Management\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Management\Source Files\Project.cpp">
-      <Filter>Management\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\Source Files\imgui.cpp">
       <Filter>ImGui\Source Files</Filter>
@@ -97,14 +91,20 @@
     <ClCompile Include="GUI\AppGUI\Source Files\EditorFPS.cpp">
       <Filter>GUI\AppGUI\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Management\Source Files\AppManager.cpp">
+      <Filter>Management\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Management\Source Files\Project.cpp">
+      <Filter>Management\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Management\Source Files\SavingSystem.cpp">
+      <Filter>Management\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\ProjectGUI\Source Files\EntityEditor.cpp">
+      <Filter>GUI\ProjectGUI\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Management\Header Files\AppManager.h">
-      <Filter>Management\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Management\Header Files\Project.h">
-      <Filter>Management\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ImGui\Header Files\Private\imconfig.h">
       <Filter>ImGui\Header Files\Private</Filter>
     </ClInclude>
@@ -140,6 +140,18 @@
     </ClInclude>
     <ClInclude Include="GUI\AppGUI\Header Files\EditorFPS.h">
       <Filter>GUI\AppGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management\Header Files\AppManager.h">
+      <Filter>Management\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management\Header Files\Project.h">
+      <Filter>Management\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management\Header Files\SavingSystem.h">
+      <Filter>Management\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\ProjectGUI\Header Files\EntityEditor.h">
+      <Filter>GUI\ProjectGUI\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
