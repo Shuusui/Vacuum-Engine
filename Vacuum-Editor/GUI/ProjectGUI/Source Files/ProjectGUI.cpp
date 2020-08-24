@@ -46,10 +46,7 @@ Vacuum::CProjectGUI::CProjectGUI()
 	m_currentProject = currentProject;
 	m_savingSystem = CSavingSystem::GetHandle();
 
-	if (CGUI::GetGUIInfo().bOpenContentBrowser)
-	{
-		m_contentBrowser = new CContentBrowser(CAppManager::GetAppHandle()->GetCurrentProject());
-	}
+	m_contentBrowser = new CContentBrowser(CAppManager::GetAppHandle()->GetCurrentProject());
 
 	m_entityEditor = CEntityEditor::OnCreate();
 }

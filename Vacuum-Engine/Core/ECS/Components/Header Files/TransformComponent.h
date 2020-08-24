@@ -180,3 +180,19 @@ namespace Vacuum
 		DirectX::XMFLOAT3 m_scale;
 	};
 }
+
+#undef JSONPOSX
+#undef JSONPOSY
+#undef JSONPOSZ
+ 
+#undef JSONROTPITCH 
+#undef JSONROTYAW 
+#undef JSONROTROLL 
+ 
+#undef JSONSCALEX 
+#undef JSONSCALEY 
+#undef JSONSCALEZ 
+ 
+#undef JSONPOS 
+#undef JSONROT 
+#undef JSONSCALE 

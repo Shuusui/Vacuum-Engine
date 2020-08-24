@@ -1,6 +1,8 @@
 #include "..\Header Files\ContentBrowser.h"
 #include "..\Header Files\ProjectGUI.h"
 #include "..\Header Files\EntityEditor.h"
+
+#include "MeshManager.h"
 #include "imgui.h"
 #include "GUI.h"
 #include "AppManager.h"
@@ -8,6 +10,7 @@
 
 Vacuum::CContentBrowser::CContentBrowser(CProject* _project)
 	:m_project(_project)
+	,m_meshManager(nullptr)
 	,m_bDelKeyPressedThisFrame(false)
 	,m_bRefresh(false)
 	,m_scenes({})
@@ -19,6 +22,7 @@ Vacuum::CContentBrowser::CContentBrowser(CProject* _project)
 	}
 
 	CheckPaths();
+	m_meshManager = CMeshManager::GetHandle();
 }
 
 void Vacuum::CContentBrowser::OnRender()
@@ -67,6 +71,7 @@ void Vacuum::CContentBrowser::OnRender()
 	if (!m_project)
 	{
 		m_project = currentProject;
+		m_meshManager = CMeshManager::GetHandle();
 	}
 
 	if (currentProject != m_project)
@@ -176,7 +181,7 @@ void Vacuum::CContentBrowser::ManageModelPaths()
 		return;
 	}
 
-	std::unordered_map<std::string, SModelInfo> models = m_project->GetModels();
+	std::unordered_map<std::string, SModel> models = m_meshManager->GetMeshes();
 
 	for (const std::filesystem::path& modelPath : std::filesystem::directory_iterator(m_project->GetProjectPaths().ModelsDir))
 	{
@@ -189,16 +194,16 @@ void Vacuum::CContentBrowser::ManageModelPaths()
 		{
 			continue;
 		}
-		m_project->RegisterModel(modelPath);
+		m_meshManager->RegisterModel(modelPath);
 	}
 
-	for (const std::pair<std::string, SModelInfo>& model : models)
+	for (const std::pair<std::filesystem::path, SModel>& model : models)
 	{
-		ImGui::Selectable(model.second.ModelName.c_str());
+		ImGui::Selectable(model.second.Name.c_str());
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
-			ImGui::Text("Path: %s", model.first.c_str());
+			ImGui::Text("Path: %s", model.first.string().c_str());
 			ImGui::EndTooltip();
 		}
 	}

@@ -1,5 +1,5 @@
 #include "..\Header Files\MeshManager.h"
-#include "Json.h"
+#include "Utilities\WaveFrontReader.h"
 #include <fstream>
 
 #define JSONMESHMAP "mesh_map"
@@ -38,7 +38,7 @@ void Vacuum::CMeshManager::Load()
 		Json meshMapJson = json[JSONMESHMAP].get<Json>();
 		for (auto& [key, value] : meshMapJson.items())
 		{
-			m_meshes.insert(std::make_pair(key, value.get<std::string>()));
+			m_meshes.insert(std::make_pair(key, value));
 		}
 	}
 
@@ -49,8 +49,7 @@ void Vacuum::CMeshManager::Load()
 		{
 			continue;
 		}
-
-		m_meshes.insert(std::make_pair(SGuid::NewGuid(), meshPath));
+		m_meshes.insert(std::make_pair(meshPath.string(), SModel(meshPath.filename().string())));
 	}
 }
 
@@ -60,7 +59,7 @@ void Vacuum::CMeshManager::Save()
 	Json meshMapJson = {}; 
 	for (const auto& [key, value] : m_meshes)
 	{
-		meshMapJson[key.ToString()] = value.string();
+		meshMapJson[key] = value.ToJson();
 	}
 	json[JSONMESHMAP] = meshMapJson;
 

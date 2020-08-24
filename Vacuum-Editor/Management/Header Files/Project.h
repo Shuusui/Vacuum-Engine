@@ -41,24 +41,6 @@ namespace Vacuum
 		}
 	};
 
-	struct SModelInfo
-	{
-		SModelInfo(const std::filesystem::path& _filePath)
-			:ModelName(_filePath.filename().string())
-		{
-
-		}
-
-		std::string ModelName;
-
-		Json ToJson() const
-		{
-			return Json{
-				{"name", ModelName}
-			};
-		}
-	};
-
 	class CProject
 	{
 	public:
@@ -93,21 +75,6 @@ namespace Vacuum
 		std::unordered_map<std::string, SShaderInfo> GetShaders() const
 		{
 			return m_shaders;
-		}
-
-		void RegisterModel(const std::filesystem::path& _modelPath)
-		{
-			m_models.insert(std::make_pair(_modelPath.string(), SModelInfo(_modelPath)));
-		}
-
-		void RemoveModel(const std::filesystem::path& _modelPath)
-		{
-			m_models.erase(_modelPath.string());
-		}
-
-		std::unordered_map<std::string, SModelInfo> GetModels() const 
-		{
-			return m_models;
 		}
 
 		std::unordered_set<CScene*> GetScenes() const 
@@ -166,6 +133,5 @@ namespace Vacuum
 		std::string m_name;
 		SProjectPaths m_projectPaths;
 		std::unordered_map<std::string, SShaderInfo> m_shaders;
-		std::unordered_map<std::string, SModelInfo> m_models;
 	};
 }
