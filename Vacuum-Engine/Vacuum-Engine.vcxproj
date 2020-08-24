@@ -11,7 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\ECS\Components\Header Files\Components.h" />
+    <ClInclude Include="Core\ECS\Components\Header Files\BaseComponent.h" />
+    <ClInclude Include="Core\ECS\Components\Header Files\CameraComponent.h" />
+    <ClInclude Include="Core\ECS\Components\Header Files\MeshComponent.h" />
+    <ClInclude Include="Core\ECS\Components\Header Files\TransformComponent.h" />
     <ClInclude Include="Core\ECS\Entities\Header Files\BaseEntity.h" />
     <ClInclude Include="Core\ECS\Entt\Header Files\entt.hpp" />
     <ClInclude Include="Core\ECS\Header Files\BaseObject.h" />

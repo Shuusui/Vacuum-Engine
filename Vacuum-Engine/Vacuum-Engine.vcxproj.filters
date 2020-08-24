@@ -258,11 +258,20 @@
     <ClInclude Include="Core\ECS\Entt\Header Files\entt.hpp">
       <Filter>Core\ECS\Entt\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\ECS\Components\Header Files\Components.h">
-      <Filter>Core\ECS\Components\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\ECS\Header Files\EntityManager.h">
       <Filter>Core\ECS\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Components\Header Files\BaseComponent.h">
+      <Filter>Core\ECS\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Components\Header Files\TransformComponent.h">
+      <Filter>Core\ECS\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Components\Header Files\MeshComponent.h">
+      <Filter>Core\ECS\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Components\Header Files\CameraComponent.h">
+      <Filter>Core\ECS\Components\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,7 +20,7 @@ void Vacuum::CScene::LoadData()
 	objectFile >> json;
 
 	m_objectName = json[JSONSCENENAME].get<std::string>();
-	m_guid = json[JSONSCENEGUID].get<std::wstring>();
+	m_guid = json[JSONSCENEGUID].get<std::string>();
 }
 
 void Vacuum::CScene::OnSave()

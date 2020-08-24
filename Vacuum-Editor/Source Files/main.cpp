@@ -23,6 +23,9 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 
 	CTimer::Create();
 
+	SGuid guid = SGuid::NewGuid();
+	std::string guidStr = guid.ToString();
+
 	std::string errorMsg = {};
 	if (!CLog::Init(errorMsg))
 	{

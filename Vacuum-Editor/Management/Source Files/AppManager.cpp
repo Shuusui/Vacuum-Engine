@@ -73,7 +73,7 @@ void Vacuum::CAppManager::InitApp()
 		}
 		if (json.contains(JSONCURRPROJGUID))
 		{
-			projectGuid = json[JSONCURRPROJGUID].get<std::wstring>();
+			projectGuid = json[JSONCURRPROJGUID].get<std::string>();
 		}
 	}
 	else

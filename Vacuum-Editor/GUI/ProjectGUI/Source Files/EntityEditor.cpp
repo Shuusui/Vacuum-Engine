@@ -3,7 +3,7 @@
 #include <string>
 #include "ECS\Entities\Header Files\BaseEntity.h"
 #include "ECS\Header Files\ECSManager.h"
-#include "ECS\Components\Header Files\Components.h"
+#include "ECS\Components\Header Files\TransformComponent.h"
 #include "SavingSystem.h"
 
 Vacuum::CEntityEditor* Vacuum::CEntityEditor::s_entityEditor = nullptr;
@@ -81,8 +81,35 @@ void Vacuum::CEntityEditor::OnRender()
 		ImGui::Text("Details: ");
 		if (selected == ESelected::Transform)
 		{
-			CTransformComponent transform = registry.get<CTransformComponent>(entity);
-			ImGui::Text("Transform: ");
+			CTransformComponent& transform = registry.get<CTransformComponent>(entity);
+
+			bool bShouldSave = false;
+
+			float pos[3] = {transform.GetPos().x, transform.GetPos().y, transform.GetPos().z};
+			if (ImGui::InputFloat3("Position", pos, 4))
+			{
+				transform.SetPos({ pos[0], pos[1], pos[2] });
+				bShouldSave = true;
+			}
+
+			float rot[3] = { transform.GetRot().x, transform.GetRot().y, transform.GetRot().z };
+			if (ImGui::InputFloat3("Rotation", rot, 4))
+			{
+				transform.SetRot({rot[0], rot[1], rot[2]});
+				bShouldSave = true;
+			}
+
+			float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
+			if (ImGui::InputFloat3("Scale", scale, 4))
+			{
+				transform.SetScale({ scale[0], scale[1], scale[2] });
+				bShouldSave = true;
+			}
+
+			if (bShouldSave)
+			{
+				CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+			}
 		}
 		ImGui::EndChild();
 	}

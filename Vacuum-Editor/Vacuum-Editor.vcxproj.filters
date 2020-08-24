@@ -103,6 +103,9 @@
     <ClCompile Include="GUI\ProjectGUI\Source Files\EntityEditor.cpp">
       <Filter>GUI\ProjectGUI\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Management\Source Files\MeshManager.cpp">
+      <Filter>Management\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImGui\Header Files\Private\imconfig.h">
@@ -152,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="GUI\ProjectGUI\Header Files\EntityEditor.h">
       <Filter>GUI\ProjectGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management\Header Files\MeshManager.h">
+      <Filter>Management\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

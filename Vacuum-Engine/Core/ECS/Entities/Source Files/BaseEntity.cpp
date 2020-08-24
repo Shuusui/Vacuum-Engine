@@ -1,7 +1,7 @@
 #include "..\Header Files\BaseEntity.h"
 #include "ECS\Header Files\ECSManager.h"
 #include "ECS\Header Files\EntityManager.h"
-#include "ECS\Components\Header Files\Components.h"
+#include "ECS\Components\Header Files\TransformComponent.h"
 #include "Json.h"
 #include <fstream>
 
@@ -61,7 +61,7 @@ void Vacuum::CBaseEntity::LoadData()
 	objectFile >> json;
 
 	m_objectName = json[JSONENTITYNAME].get<std::string>();
-	m_guid = json[JSONENTITYGUID].get<std::wstring>();
+	m_guid = json[JSONENTITYGUID].get<std::string>();
 	entt::registry& registry = CECSManager::GetRegistry();
 	if (json.contains(JSONTRANSFORM))
 	{

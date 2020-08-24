@@ -31,6 +31,7 @@
     <ClCompile Include="ImGui\Source Files\imgui_draw.cpp" />
     <ClCompile Include="ImGui\Source Files\imgui_widgets.cpp" />
     <ClCompile Include="Management\Source Files\AppManager.cpp" />
+    <ClCompile Include="Management\Source Files\MeshManager.cpp" />
     <ClCompile Include="Management\Source Files\Project.cpp" />
     <ClCompile Include="Management\Source Files\SavingSystem.cpp" />
     <ClCompile Include="Source Files\main.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="ImGui\Header Files\Private\imstb_truetype.h" />
     <ClInclude Include="ImGui\Header Files\Public\imgui.h" />
     <ClInclude Include="Management\Header Files\AppManager.h" />
+    <ClInclude Include="Management\Header Files\MeshManager.h" />
     <ClInclude Include="Management\Header Files\Project.h" />
     <ClInclude Include="Management\Header Files\SavingSystem.h" />
   </ItemGroup>

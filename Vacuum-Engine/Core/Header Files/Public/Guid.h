@@ -44,7 +44,7 @@ namespace Vacuum
 		{
 		}
 
-		SGuid(const std::wstring& _guidStr, const EGuidFormats& _format = EGuidFormats::Digits)
+		SGuid(const std::string& _guidStr, const EGuidFormats& _format = EGuidFormats::Digits)
 			:A(0)
 			,B(0)
 			,C(0)
@@ -54,17 +54,17 @@ namespace Vacuum
 			{
 				return;
 			}
-			std::wstringstream stream;
+			std::stringstream stream;
 			uint16 bFirst = 0;
 			uint16 bSecond = 0;
 			uint16 cFirst = 0;
 			uint16 cSecond = 0;
-			std::wstring aSubStr = {};
-			std::wstring bFirstStr = {};
-			std::wstring bSecondStr = {};
-			std::wstring cFirstStr = {};
-			std::wstring cSecondStr = {};
-			std::wstring dSubStr = {};
+			std::string aSubStr = {};
+			std::string bFirstStr = {};
+			std::string bSecondStr = {};
+			std::string cFirstStr = {};
+			std::string cSecondStr = {};
+			std::string dSubStr = {};
 			switch (_format)
 			{
 			case EGuidFormats::Digits:
@@ -142,11 +142,11 @@ namespace Vacuum
 			return (A | B | C | D) != 0;
 		}
 
-		std::wstring ToString(const EGuidFormats& _format = EGuidFormats::Digits) const 
+		std::string ToString(const EGuidFormats& _format = EGuidFormats::Digits) const 
 		{
 			if (!IsValid())
 			{
-				return std::wstring();
+				return std::string();
 			}
 			uint16 bFirst = B >> 16;
 			uint16 bSecond = 0;
@@ -156,11 +156,11 @@ namespace Vacuum
 			cSecond |= C;
 			uint64 dTemp = ((uint64)cSecond) << 32;
 			dTemp |= D;
-			std::wstringstream aStream;
-			std::wstringstream bFirstStream;
-			std::wstringstream bSecondStream;
-			std::wstringstream cStream;
-			std::wstringstream dStream;
+			std::stringstream aStream;
+			std::stringstream bFirstStream;
+			std::stringstream bSecondStream;
+			std::stringstream cStream;
+			std::stringstream dStream;
 			if (A <= 0xFFFFFFF)
 			{
 				aStream << L'0';
@@ -186,7 +186,7 @@ namespace Vacuum
 			bSecondStream << std::hex << bSecond;
 			cStream << std::hex << cFirst;
 			dStream << std::hex << dTemp;
-			std::wstringstream resultStream;
+			std::stringstream resultStream;
 			switch (_format)
 			{
 			case EGuidFormats::Digits:

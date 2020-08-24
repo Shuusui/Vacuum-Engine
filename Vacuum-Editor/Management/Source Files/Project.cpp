@@ -1,4 +1,5 @@
 #include "..\Header Files\Project.h"
+#include "..\Header Files\MeshManager.h"
 
 #include <fstream>
 #include "Json.h"
@@ -29,8 +30,8 @@ Vacuum::CProject::CProject(const std::filesystem::path& _projectPath)
 	Json json = {};
 	projectFile >> json;
 	m_name = json[JSONNAME].get<std::string>();
-	m_guid = json[JSONGUID].get<std::wstring>();
-	SGuid mostRecentSceneGuid = json[JSONMOSTRECENTSCENEGUID].get<std::wstring>();
+	m_guid = json[JSONGUID].get<std::string>();
+	SGuid mostRecentSceneGuid = json[JSONMOSTRECENTSCENEGUID].get<std::string>();
 
 	if (!std::filesystem::exists(m_projectPaths.ScenesDir))
 	{
@@ -57,6 +58,8 @@ Vacuum::CProject::CProject(const std::filesystem::path& _projectPath)
 	{
 		CBaseEntity* entity = new CBaseEntity(entityPath);
 	}
+
+	CMeshManager::OnCreate(m_projectPaths.ModelsDir, m_projectPaths.ConfigDir);
 }
 
 Vacuum::CProject::~CProject()
@@ -78,4 +81,5 @@ Vacuum::CProject::~CProject()
 		delete scene;
 		scene = nullptr;
 	}
+	CMeshManager::OnDestroy();
 }

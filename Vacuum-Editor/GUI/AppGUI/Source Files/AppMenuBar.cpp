@@ -161,7 +161,7 @@ void Vacuum::CAppMenuBar::ShowSaveWindow()
 	{
 		for (CBaseObject* dirtyObject : CSavingSystem::GetHandle()->GetDirtyObjects())
 		{
-			m_dirtyObjects.insert(std::make_pair(dirtyObject, false));
+			m_dirtyObjects.insert(std::make_pair(dirtyObject, true));
 		}
 		bIsInitialized = true;
 	}
