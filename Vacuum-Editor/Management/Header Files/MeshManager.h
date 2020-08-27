@@ -90,7 +90,15 @@ namespace Vacuum
 		void RegisterModel(const std::filesystem::path& _modelPath)
 		{
 			m_meshes.insert(std::make_pair(SGuid::NewGuid(), SModel(_modelPath)));
+			m_meshPaths.insert(_modelPath.string());
 		}
+
+		void UnregisterModel(const SGuid& _guid, const std::string& _modelPath)
+		{
+			m_meshes.erase(_guid);
+			m_meshPaths.erase(_modelPath);
+		}
+
 		void Load();
 		void Save();
 		~CMeshManager();

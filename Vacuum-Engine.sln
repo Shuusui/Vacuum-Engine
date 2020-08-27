@@ -16,6 +16,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Game", "Game", "{912521B3-7
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Projects\Game\Game.vcxproj", "{A940890B-0AEF-4835-B469-0F6ED1E41D8C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{C30E5946-25C3-4DE0-9840-15E007C37A90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{8D7D03C9-76E0-4050-97C6-D5C61711BACE}"
+	ProjectSection(SolutionItems) = preProject
+		Projects\Game\Content\Shaders\shaders.hlsl = Projects\Game\Content\Shaders\shaders.hlsl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +58,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{912521B3-75E6-4625-BB70-5E93DBCDD815} = {5E08ED98-F956-4F75-9295-06BB363F8134}
 		{A940890B-0AEF-4835-B469-0F6ED1E41D8C} = {912521B3-75E6-4625-BB70-5E93DBCDD815}
+		{C30E5946-25C3-4DE0-9840-15E007C37A90} = {912521B3-75E6-4625-BB70-5E93DBCDD815}
+		{8D7D03C9-76E0-4050-97C6-D5C61711BACE} = {C30E5946-25C3-4DE0-9840-15E007C37A90}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11B6CDA6-84C4-487C-9EC4-7B4C759D3781}

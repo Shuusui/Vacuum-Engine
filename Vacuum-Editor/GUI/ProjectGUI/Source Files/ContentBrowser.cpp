@@ -200,13 +200,18 @@ void Vacuum::CContentBrowser::ManageModelPaths()
 		m_meshManager->RegisterModel(modelPath);
 	}
 
-	for (const std::pair<SGuid, SModel>& model : models)
+	for (const auto& [guid, model] : models)
 	{
-		ImGui::Selectable(model.second.Name.c_str());
+		if (!std::filesystem::exists(model.Path))
+		{
+			m_meshManager->UnregisterModel(guid, model.Path.string());
+		}
+
+		ImGui::Selectable(model.Name.c_str());
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
-			ImGui::Text("Path: %s", model.second.Path.string().c_str());
+			ImGui::Text("Path: %s", model.Path.string().c_str());
 			ImGui::EndTooltip();
 		}
 	}

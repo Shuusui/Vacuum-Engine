@@ -88,21 +88,17 @@ namespace Vacuum
 			,m_swapChain(nullptr)
 			,m_rtvHeap(nullptr)
 			,m_srvDescHeap(nullptr)
-			,m_rootSignature(nullptr)
-			,m_pipelineState(nullptr)
+			,m_guiRootSignature(nullptr)
+			,m_guiPipelineState(nullptr)
 			,m_guiCommandList(nullptr)
 			,m_fence(nullptr)
 			,m_fontTextureResource(nullptr)
-			,m_vertexBufferView({})
 			,m_barrier({})
 			,m_renderTargetDescs()
-			,m_viewPort(0.0f, 0.0f, static_cast<float>(_width), static_cast<float>(_height))
-			,m_scissorRect(0, 0, static_cast<int64>(_width), static_cast<int64>(_height))
 			,m_fenceEvent(nullptr)
 			,m_frameResources(nullptr)
 			,m_frameContext()
 			,m_frameIndex(0)
-			,m_rtvDescriptorSize(0)
 			,m_fenceValue(0)
 		{
 		}
@@ -149,8 +145,8 @@ namespace Vacuum
 		ID3D12DescriptorHeap* m_rtvHeap;
 		ID3D12DescriptorHeap* m_srvDescHeap;
 		ID3D12Resource* m_renderTargets[s_frameCount];
-		ID3D12RootSignature* m_rootSignature;
-		ID3D12PipelineState* m_pipelineState;
+		ID3D12RootSignature* m_guiRootSignature;
+		ID3D12PipelineState* m_guiPipelineState;
 		ID3D12GraphicsCommandList* m_guiCommandList;
 		ID3D12GraphicsCommandList* m_viewPostCommandList;
 		ID3D12Fence* m_fence;
@@ -158,17 +154,13 @@ namespace Vacuum
 		ID3DBlob* m_guiVertexShader;
 		ID3DBlob* m_guiPixelShader;
 
-		D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
 		D3D12_RESOURCE_BARRIER m_barrier;
 		CD3DX12_CPU_DESCRIPTOR_HANDLE m_renderTargetDescs[s_frameCount];
-		CD3DX12_VIEWPORT m_viewPort;
-		CD3DX12_RECT m_scissorRect;
 		HANDLE m_fenceEvent;
 		SFrameResource* m_frameResources;
 		SFrameContext m_frameContext[s_frameCount];
 
 		uint32 m_frameIndex;
-		uint32 m_rtvDescriptorSize;
 		uint64 m_fenceValue;
 		std::vector<std::function<void(HWND, uint32, WPARAM, LPARAM)>> m_afterResizeCallbacks;
 	};

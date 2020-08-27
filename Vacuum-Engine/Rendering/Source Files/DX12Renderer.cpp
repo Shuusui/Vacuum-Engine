@@ -65,7 +65,7 @@ void Vacuum::DX12Renderer::OnUpdate()
 
 void Vacuum::DX12Renderer::PrepareRendering()
 {
-	if (!m_pipelineState)
+	if (!m_guiPipelineState)
 	{
 		LoadAssets();
 	}
@@ -394,7 +394,7 @@ void Vacuum::DX12Renderer::LoadGUIShaders()
             float2 uv  : TEXCOORD0;\
         };\
         \
-        PS_INPUT main(VS_INPUT input)\
+        PS_INPUT vs_main(VS_INPUT input)\
         {\
             PS_INPUT output;\
             output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
@@ -413,14 +413,14 @@ void Vacuum::DX12Renderer::LoadGUIShaders()
         SamplerState sampler0 : register(s0);\
         Texture2D texture0 : register(t0);\
         \
-        float4 main(PS_INPUT input) : SV_Target\
+        float4 ps_main(PS_INPUT input) : SV_Target\
         {\
             float4 out_col = input.col * texture0.Sample(sampler0, input.uv); \
             return out_col; \
         }";
 
-	THROW_IF_FAILED(D3DCompile(vertexShaderStr, strlen(vertexShaderStr), nullptr, nullptr, nullptr, "main", "vs_5_0", 0, 0, &m_guiVertexShader, nullptr));
-	THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "main", "ps_5_0", 0, 0, &m_guiPixelShader, nullptr));
+	THROW_IF_FAILED(D3DCompile(vertexShaderStr, strlen(vertexShaderStr), nullptr, nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &m_guiVertexShader, nullptr));
+	THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &m_guiPixelShader, nullptr));
 }
 
 void Vacuum::DX12Renderer::LoadAssets()
@@ -481,7 +481,7 @@ void Vacuum::DX12Renderer::LoadAssets()
 		ComPtr<ID3DBlob> blob = nullptr;
 		THROW_IF_FAILED(D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, &error));
 
-		m_device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature));
+		m_device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_guiRootSignature));
 	}
 
 	{
@@ -501,7 +501,7 @@ void Vacuum::DX12Renderer::LoadAssets()
 
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 		psoDesc.InputLayout = { inputElementDescs, 3 };
-		psoDesc.pRootSignature = m_rootSignature;
+		psoDesc.pRootSignature = m_guiRootSignature;
 		psoDesc.NodeMask = 1;
 		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_guiVertexShader);
 		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_guiPixelShader);
@@ -557,7 +557,7 @@ void Vacuum::DX12Renderer::LoadAssets()
 			desc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 			desc.BackFace = desc.FrontFace;
 
-			THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState)));
+			THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_guiPipelineState)));
 		}
 	}
 }
@@ -824,8 +824,8 @@ void Vacuum::DX12Renderer::SetupRenderState(SGuiDrawData* _drawData, SFrameResou
 
 	m_guiCommandList->IASetIndexBuffer(&idxBufferView);
 	m_guiCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_guiCommandList->SetPipelineState(m_pipelineState);
-	m_guiCommandList->SetGraphicsRootSignature(m_rootSignature);
+	m_guiCommandList->SetPipelineState(m_guiPipelineState);
+	m_guiCommandList->SetGraphicsRootSignature(m_guiRootSignature);
 	m_guiCommandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
 
 	const float blendFactor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
@@ -887,8 +887,8 @@ void Vacuum::DX12Renderer::InvalidateObjects()
 		return;
 	}
 
-	SafeRelease(m_rootSignature);
-	SafeRelease(m_pipelineState);
+	SafeRelease(m_guiRootSignature);
+	SafeRelease(m_guiPipelineState);
 	SafeRelease(m_fontTextureResource);
 
 	for (uint32 i = 0; i < s_frameCount; ++i)
