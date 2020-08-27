@@ -153,7 +153,7 @@ void Vacuum::CProjectGUI::RenderCreateEntityWindow()
 
 	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * .5f, io.DisplaySize.y * .5f));
 	ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin("Create entity", &m_bShowCreateEntityWindow, ImGuiCond_FirstUseEver))
+	if (!ImGui::Begin("Create entity", &m_bShowCreateEntityWindow))
 	{
 		ImGui::End();
 		return;

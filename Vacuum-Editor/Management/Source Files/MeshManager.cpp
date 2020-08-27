@@ -41,6 +41,7 @@ void Vacuum::CMeshManager::Load()
 			SModel model = SModel(value);
 			alreadyFoundMeshes.insert(model.Name);
 			m_meshes.insert(std::make_pair(key, model));
+			m_meshPaths.insert(model.Path.string());
 		}
 	}
 
@@ -62,7 +63,7 @@ void Vacuum::CMeshManager::Load()
 		wfReader.Load(meshPath.wstring().c_str());
 		model.MeshData.Vertices = std::move(wfReader.vertices);
 		model.MeshData.Indices = std::move(wfReader.indices);
-
+		m_meshPaths.insert(model.Path.string());
 		m_meshes.insert(std::make_pair(model.Guid, model));
 	}
 }

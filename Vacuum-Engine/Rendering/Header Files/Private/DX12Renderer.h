@@ -38,8 +38,14 @@ namespace Vacuum
 		uint32 Col;
 	};
 
+	struct S3DVert
+	{
+		DirectX::XMFLOAT3 Pos; 
+		DirectX::XMFLOAT2 UV; 
+		uint32 Col;
+	};
 
-	struct SDrawCmd
+	struct SGuiDrawCmd
 	{
 		DirectX::XMFLOAT4 ClipRect;
 		void* TextureID;
@@ -51,20 +57,20 @@ namespace Vacuum
 		bool CallUserCallback = false;
 	};
 
-	struct SDrawList
+	struct SGuiDrawList
 	{
 		std::vector<S2DVert> VertexBuffer;
 		std::vector<unsigned short> IndexBuffer;
-		std::vector<SDrawCmd> DrawCommands;
+		std::vector<SGuiDrawCmd> DrawCommands;
 	};
 
-	struct SDrawData
+	struct SGuiDrawData
 	{
 		DirectX::XMFLOAT2 DisplayPos;
 		DirectX::XMFLOAT2 DisplaySize;
 		int32 TotalIdxCount;
 		int32 TotalVtxCount;
-		std::vector<SDrawList> DrawLists;
+		std::vector<SGuiDrawList> DrawLists;
 	};
 
 
@@ -106,7 +112,7 @@ namespace Vacuum
 		virtual void OnInit() override;
 		virtual void OnUpdate() override;
 		virtual void PrepareRendering() override;
-		virtual void UpdateDrawData(SDrawData* _drawData);
+		virtual void UpdateDrawData(SGuiDrawData* _drawData);
 		virtual void OnRender() override;
 		virtual void OnDestroy() override;
 		virtual void RegisterAfterResizeCallback(const std::function<void(HWND, uint32, WPARAM, LPARAM)>& _func) override;
@@ -122,12 +128,13 @@ namespace Vacuum
 		}
 
 		void LoadPipeline();
+		void LoadGUIShaders();
 		void LoadAssets();
 		void GetHandwareAdapter(struct IDXGIFactory1* _factory, Microsoft::WRL::ComPtr<IDXGIAdapter1>& _adapter);
 		SFrameContext* WaitForNextFrameResources();
 		void WaitForLastSubmittedFrame();
-		void SetupRenderState(SDrawData* _drawData, SFrameResource* _frameResource);
-		//void SetupViewportRenderState(struct ImDrawData* _drawData);
+		void SetupRenderState(SGuiDrawData* _drawData, SFrameResource* _frameResource);
+		void SetupViewportRenderState(SGuiDrawData* _drawData);
 		void InvalidateObjects();
 		void CreateRenderTarget();
 		void CleanupRenderTarget();
@@ -148,6 +155,8 @@ namespace Vacuum
 		ID3D12GraphicsCommandList* m_viewPostCommandList;
 		ID3D12Fence* m_fence;
 		ID3D12Resource* m_fontTextureResource;
+		ID3DBlob* m_guiVertexShader;
+		ID3DBlob* m_guiPixelShader;
 
 		D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView;
 		D3D12_RESOURCE_BARRIER m_barrier;

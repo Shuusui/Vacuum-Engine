@@ -30,21 +30,24 @@ Vacuum::CEntityEditor* Vacuum::CEntityEditor::OnCreate()
 void Vacuum::CEntityEditor::OpenEditor(CBaseEntity* _entity)
 {
 	m_entity = _entity;
+	m_bEntityEditorOpen = true;
 }
 
 void Vacuum::CEntityEditor::OnRender()
 {
-	if (!m_entity)
+	if (!m_entity || !m_bEntityEditorOpen)
 	{
+		m_bEntityEditorOpen = false;
 		return;
 	}
 
 	ImVec2 windowPos = ImGui::GetWindowPos();
 	ImGui::SetWindowPos(ImVec2(windowPos.x * 0.5f, windowPos.y * 0.5f), ImGuiCond_FirstUseEver);
 	ImGui::SetWindowSize(ImVec2(600, 600), ImGuiCond_FirstUseEver);
-	if(!ImGui::Begin("Entity Editor", (bool*)m_entity))
+	if(!ImGui::Begin("Entity Editor", &m_bEntityEditorOpen))
 	{
 		ImGui::End();
+		return;
 	}
 
 	entt::registry& registry = CECSManager::GetRegistry();

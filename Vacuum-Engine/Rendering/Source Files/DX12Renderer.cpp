@@ -90,9 +90,8 @@ void Vacuum::DX12Renderer::PrepareRendering()
 	m_guiCommandList->SetDescriptorHeaps(1, &m_srvDescHeap);
 }
 
-void Vacuum::DX12Renderer::UpdateDrawData(SDrawData* _drawData)
+void Vacuum::DX12Renderer::UpdateDrawData(SGuiDrawData* _drawData)
 {
-	//PrepareRendering();
 	if (_drawData->DisplaySize.x <= 0.0f || _drawData->DisplaySize.y <= 0.0f)
 	{
 		return;
@@ -170,7 +169,7 @@ void Vacuum::DX12Renderer::UpdateDrawData(SDrawData* _drawData)
 	S2DVert* vtxDestination = (S2DVert*)vtxResource;
 	unsigned short* idxDestination = (unsigned short*)idxResource;
 
-	for (const SDrawList& drawList : _drawData->DrawLists)
+	for (const SGuiDrawList& drawList : _drawData->DrawLists)
 	{
 		memcpy(vtxDestination, drawList.VertexBuffer.data(), drawList.VertexBuffer.size() * sizeof(S2DVert));
 		memcpy(idxDestination, drawList.IndexBuffer.data(), drawList.IndexBuffer.size() * sizeof(unsigned short));
@@ -185,9 +184,9 @@ void Vacuum::DX12Renderer::UpdateDrawData(SDrawData* _drawData)
 	int32 vtxOffset = 0;
 	int32 idxOffset = 0;
 	DirectX::XMFLOAT2 clipOff =  _drawData->DisplayPos;
-	for (const SDrawList& drawList : _drawData->DrawLists)
+	for (const SGuiDrawList& drawList : _drawData->DrawLists)
 	{
-		for (const SDrawCmd& drawCmd : drawList.DrawCommands)
+		for (const SGuiDrawCmd& drawCmd : drawList.DrawCommands)
 		{
 			if (drawCmd.UserCallbackValid)
 			{
@@ -216,8 +215,10 @@ void Vacuum::DX12Renderer::UpdateDrawData(SDrawData* _drawData)
 
 	m_guiCommandList->ResourceBarrier(1, &m_barrier);
 	m_guiCommandList->Close();
+}
 
-
+void Vacuum::DX12Renderer::OnRender()
+{
 	std::vector<ID3D12CommandList*> commandLists = std::vector<ID3D12CommandList*>(1);
 	commandLists[0] = m_guiCommandList;
 
@@ -230,10 +231,6 @@ void Vacuum::DX12Renderer::UpdateDrawData(SDrawData* _drawData)
 
 	SFrameContext* frameCtx = &m_frameContext[m_frameIndex % s_frameCount];
 	frameCtx->FenceValue = fenceValue;
-}
-
-void Vacuum::DX12Renderer::OnRender()
-{
 }
 
 void Vacuum::DX12Renderer::OnDestroy()
@@ -257,6 +254,8 @@ void Vacuum::DX12Renderer::OnDestroy()
 	SafeRelease(m_srvDescHeap);
 	SafeRelease(m_rtvHeap);
 	SafeRelease(m_fence);
+	SafeRelease(m_guiVertexShader);
+	SafeRelease(m_guiPixelShader);
 	if(m_fenceEvent) CloseHandle(m_fenceEvent); m_fenceEvent = nullptr;
 	SafeRelease(m_device);
 
@@ -374,8 +373,63 @@ void Vacuum::DX12Renderer::LoadPipeline()
 	CreateRenderTarget();
 }
 
+void Vacuum::DX12Renderer::LoadGUIShaders()
+{
+	static const char* vertexShaderStr =
+		"cbuffer vertexBuffer : register(b0) \
+        {\
+            float4x4 ProjectionMatrix; \
+        };\
+        struct VS_INPUT\
+        {\
+            float2 pos : POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+        };\
+        \
+        struct PS_INPUT\
+        {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+        };\
+        \
+        PS_INPUT main(VS_INPUT input)\
+        {\
+            PS_INPUT output;\
+            output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
+            output.col = input.col;\
+            output.uv  = input.uv;\
+            return output;\
+        }";
+
+	static const char* pixelShaderStr =
+		"struct PS_INPUT\
+        {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+        };\
+        SamplerState sampler0 : register(s0);\
+        Texture2D texture0 : register(t0);\
+        \
+        float4 main(PS_INPUT input) : SV_Target\
+        {\
+            float4 out_col = input.col * texture0.Sample(sampler0, input.uv); \
+            return out_col; \
+        }";
+
+	THROW_IF_FAILED(D3DCompile(vertexShaderStr, strlen(vertexShaderStr), nullptr, nullptr, nullptr, "main", "vs_5_0", 0, 0, &m_guiVertexShader, nullptr));
+	THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "main", "ps_5_0", 0, 0, &m_guiPixelShader, nullptr));
+}
+
 void Vacuum::DX12Renderer::LoadAssets()
 {
+	if (!m_guiVertexShader || !m_guiPixelShader)
+	{
+		LoadGUIShaders();
+	}
+
 	ComPtr<ID3DBlob> error;
 	{
 		D3D12_DESCRIPTOR_RANGE descRange = {};
@@ -431,130 +485,79 @@ void Vacuum::DX12Renderer::LoadAssets()
 	}
 
 	{
-		ComPtr<ID3DBlob> vertexShader; 
-		ComPtr<ID3DBlob> pixelShader;
-
 #if defined(_DEBUG)
 		uint32 compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
 		uint32 compileFlags = 0;
 #endif
-		/*for (const std::filesystem::path& shaderPath : m_shaderPaths)
-		{*/
-			static const char* vertexShaderStr = 
-				"cbuffer vertexBuffer : register(b0) \
-            {\
-              float4x4 ProjectionMatrix; \
-            };\
-            struct VS_INPUT\
-            {\
-              float2 pos : POSITION;\
-              float4 col : COLOR0;\
-              float2 uv  : TEXCOORD0;\
-            };\
-            \
-            struct PS_INPUT\
-            {\
-              float4 pos : SV_POSITION;\
-              float4 col : COLOR0;\
-              float2 uv  : TEXCOORD0;\
-            };\
-            \
-            PS_INPUT main(VS_INPUT input)\
-            {\
-              PS_INPUT output;\
-              output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
-              output.col = input.col;\
-              output.uv  = input.uv;\
-              return output;\
-            }";
+		
 
-			static const char* pixelShaderStr = 
-				"struct PS_INPUT\
-            {\
-              float4 pos : SV_POSITION;\
-              float4 col : COLOR0;\
-              float2 uv  : TEXCOORD0;\
-            };\
-            SamplerState sampler0 : register(s0);\
-            Texture2D texture0 : register(t0);\
-            \
-            float4 main(PS_INPUT input) : SV_Target\
-            {\
-              float4 out_col = input.col * texture0.Sample(sampler0, input.uv); \
-              return out_col; \
-            }";
+		static D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (uint32)DX_OFFSETOF(S2DVert, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (uint32)DX_OFFSETOF(S2DVert, UV),  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (uint32)DX_OFFSETOF(S2DVert, Col), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
 
-			THROW_IF_FAILED(D3DCompile(vertexShaderStr, strlen(vertexShaderStr), nullptr, nullptr, nullptr, "main", "vs_5_0", 0, 0, &vertexShader, nullptr));
-			THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "main", "ps_5_0", 0, 0, &pixelShader, nullptr));
-
-			static D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
-			{
-				{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (uint32)DX_OFFSETOF(S2DVert, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (uint32)DX_OFFSETOF(S2DVert, UV),  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-				{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (uint32)DX_OFFSETOF(S2DVert, Col), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			};
-
-			D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
-			psoDesc.InputLayout = { inputElementDescs, 3 };
-			psoDesc.pRootSignature = m_rootSignature;
-			psoDesc.NodeMask = 1;
-			psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertexShader.Get());
-			psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixelShader.Get());
-			psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-			psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-			psoDesc.DepthStencilState.DepthEnable = FALSE; 
-			psoDesc.DepthStencilState.StencilEnable = FALSE; 
-			psoDesc.SampleMask = UINT_MAX;
-			psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-			psoDesc.NumRenderTargets = 1; 
-			psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-			psoDesc.SampleDesc.Count = 1;
-			psoDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
+		psoDesc.InputLayout = { inputElementDescs, 3 };
+		psoDesc.pRootSignature = m_rootSignature;
+		psoDesc.NodeMask = 1;
+		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_guiVertexShader);
+		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_guiPixelShader);
+		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+		psoDesc.DepthStencilState.DepthEnable = FALSE;
+		psoDesc.DepthStencilState.StencilEnable = FALSE;
+		psoDesc.SampleMask = UINT_MAX;
+		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		psoDesc.NumRenderTargets = 1;
+		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		psoDesc.SampleDesc.Count = 1;
+		psoDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
 			// Create the blending setup
-			{
-				D3D12_BLEND_DESC& desc = psoDesc.BlendState;
-				desc.AlphaToCoverageEnable = false;
-				desc.RenderTarget[0].BlendEnable = true;
-				desc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-				desc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-				desc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-				desc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
-				desc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-				desc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-				desc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-			}
+		{
+			D3D12_BLEND_DESC& desc = psoDesc.BlendState;
+			desc.AlphaToCoverageEnable = false;
+			desc.RenderTarget[0].BlendEnable = true;
+			desc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+			desc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+			desc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+			desc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
+			desc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+			desc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+			desc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		}
 
 			// Create the rasterizer state
-			{
-				D3D12_RASTERIZER_DESC& desc = psoDesc.RasterizerState;
-				desc.FillMode = D3D12_FILL_MODE_SOLID;
-				desc.CullMode = D3D12_CULL_MODE_NONE;
-				desc.FrontCounterClockwise = FALSE;
-				desc.DepthBias = D3D12_DEFAULT_DEPTH_BIAS;
-				desc.DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP;
-				desc.SlopeScaledDepthBias = D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
-				desc.DepthClipEnable = true;
-				desc.MultisampleEnable = FALSE;
-				desc.AntialiasedLineEnable = FALSE;
-				desc.ForcedSampleCount = 0;
-				desc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
-			}
+		{
+			D3D12_RASTERIZER_DESC& desc = psoDesc.RasterizerState;
+			desc.FillMode = D3D12_FILL_MODE_SOLID;
+			desc.CullMode = D3D12_CULL_MODE_NONE;
+			desc.FrontCounterClockwise = FALSE;
+			desc.DepthBias = D3D12_DEFAULT_DEPTH_BIAS;
+			desc.DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP;
+			desc.SlopeScaledDepthBias = D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
+			desc.DepthClipEnable = true;
+			desc.MultisampleEnable = FALSE;
+			desc.AntialiasedLineEnable = FALSE;
+			desc.ForcedSampleCount = 0;
+			desc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+		}
 
 			// Create depth-stencil State
-			{
-				D3D12_DEPTH_STENCIL_DESC& desc = psoDesc.DepthStencilState;
-				desc.DepthEnable = false;
-				desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-				desc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-				desc.StencilEnable = false;
-				desc.FrontFace.StencilFailOp = desc.FrontFace.StencilDepthFailOp = desc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-				desc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-				desc.BackFace = desc.FrontFace;
-			//}
+		{
+			D3D12_DEPTH_STENCIL_DESC& desc = psoDesc.DepthStencilState;
+			desc.DepthEnable = false;
+			desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+			desc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+			desc.StencilEnable = false;
+			desc.FrontFace.StencilFailOp = desc.FrontFace.StencilDepthFailOp = desc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+			desc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+			desc.BackFace = desc.FrontFace;
 
-				THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState)));
+			THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState)));
 		}
 	}
 }
@@ -777,7 +780,7 @@ void Vacuum::DX12Renderer::WaitForLastSubmittedFrame()
 	WaitForSingleObject(m_fenceEvent, INFINITE);
 }
 
-void Vacuum::DX12Renderer::SetupRenderState(SDrawData* _drawData, SFrameResource* _frameResource)
+void Vacuum::DX12Renderer::SetupRenderState(SGuiDrawData* _drawData, SFrameResource* _frameResource)
 {
 	SVertexConstantBuffer vertConstBuffer;
 	{

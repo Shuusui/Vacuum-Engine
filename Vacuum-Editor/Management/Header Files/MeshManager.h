@@ -2,6 +2,7 @@
 #include "Guid.h"
 #include <filesystem>
 #include <unordered_map>
+#include <unordered_set>
 #include "Json.h"
 #include "Utilities\WaveFrontReader.h"
 #include "SharedStructs.h"
@@ -70,9 +71,15 @@ namespace Vacuum
 		{
 			return s_meshManager;
 		}
+
 		std::unordered_map<SGuid, SModel> GetMeshes() const
 		{
 			return m_meshes;
+		}
+
+		std::unordered_set<std::string> GetMeshPaths() const
+		{
+			return m_meshPaths;
 		}
 
 		SModel GetModelData(const SGuid& _guid)
@@ -95,6 +102,7 @@ namespace Vacuum
 		std::filesystem::path m_configsPath;
 		std::filesystem::path m_configFilePath;
 		std::unordered_map<SGuid, SModel> m_meshes;
+		std::unordered_set<std::string> m_meshPaths;
 	};
 }
 

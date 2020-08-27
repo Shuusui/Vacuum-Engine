@@ -24,7 +24,7 @@ namespace Vacuum
 
 		virtual void OnCreate() = 0;
 		virtual void CreateFontsTexture(unsigned char* _pixels, const int32& _width, const int32& _height, uint64& _texID) = 0;
-		virtual void UpdateDrawData(struct SDrawData* _drawData) = 0;
+		virtual void UpdateDrawData(struct SGuiDrawData* _drawData) = 0;
 		virtual void OnInit() = 0;
 		virtual void OnUpdate() = 0;
 		virtual void PrepareRendering() = 0;

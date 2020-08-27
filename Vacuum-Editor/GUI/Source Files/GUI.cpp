@@ -126,12 +126,12 @@ void Vacuum::CGUI::Render()
 
 	DirectX::XMFLOAT2 displayPos = {guiDrawData->DisplayPos.x, guiDrawData->DisplayPos.y};
 	DirectX::XMFLOAT2 displaySize = {guiDrawData->DisplaySize.x, guiDrawData->DisplaySize.y};
-	SDrawData* drawData = new SDrawData{displayPos, displaySize, guiDrawData->TotalIdxCount, guiDrawData->TotalVtxCount};
+	SGuiDrawData* drawData = new SGuiDrawData{displayPos, displaySize, guiDrawData->TotalIdxCount, guiDrawData->TotalVtxCount};
 
 	for (int32 i = 0; i < guiDrawData->CmdListsCount; ++i)
 	{
 		ImDrawList* guiDrawList = guiDrawData->CmdLists[i];
-		SDrawList drawList = {};
+		SGuiDrawList drawList = {};
 		drawList.IndexBuffer = std::vector<unsigned short>(guiDrawList->IdxBuffer.Data, guiDrawList->IdxBuffer.Data + guiDrawList->IdxBuffer.Size);
 		drawList.VertexBuffer = std::vector<S2DVert>((S2DVert*)guiDrawList->VtxBuffer.Data, (S2DVert*)guiDrawList->VtxBuffer.Data + guiDrawList->VtxBuffer.Size);
 
@@ -139,7 +139,7 @@ void Vacuum::CGUI::Render()
 		{
 			ImDrawCmd* guiDrawCmd = &guiDrawList->CmdBuffer[j];
 
-			SDrawCmd drawCmd = {};
+			SGuiDrawCmd drawCmd = {};
 			if (guiDrawCmd->UserCallback != nullptr)
 			{
 				drawCmd.UserCallbackValid = true;

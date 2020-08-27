@@ -15,7 +15,7 @@ namespace Vacuum
 		static void Create(const SRendererCreationInfo& _info);
 		static void CreateFontsTexture(unsigned char* _pixels, const int32& _width, const int32& _height, uint64& _texID);
 		static void PrepareRendering();
-		static void UpdateDrawData(struct SDrawData* _drawData);
+		static void UpdateDrawData(struct SGuiDrawData* _drawData);
 		static void OnInit(const std::vector<std::filesystem::path>& _shaderPaths);
 		static void OnRender();
 		static void Destroy();

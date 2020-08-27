@@ -20,7 +20,7 @@ void Vacuum::CRendererManager::PrepareRendering()
 	s_rendererManager->m_renderer->PrepareRendering();
 }
 
-void Vacuum::CRendererManager::UpdateDrawData(SDrawData* _drawData)
+void Vacuum::CRendererManager::UpdateDrawData(SGuiDrawData* _drawData)
 {
 	s_rendererManager->m_renderer->UpdateDrawData(_drawData);
 }
