@@ -4,14 +4,17 @@
 #include "ECS\Entities\Header Files\BaseEntity.h"
 #include "ECS\Header Files\ECSManager.h"
 #include "ECS\Components\Header Files\TransformComponent.h"
+#include "ECS\Components\Header Files\MeshComponent.h"
 #include "SavingSystem.h"
+#include "MeshManager.h"
 
 Vacuum::CEntityEditor* Vacuum::CEntityEditor::s_entityEditor = nullptr;
 
 enum class ESelected
 {
 	None,
-	Transform
+	Transform, 
+	Mesh
 };
 
 Vacuum::CEntityEditor* Vacuum::CEntityEditor::OnCreate()
@@ -51,10 +54,14 @@ void Vacuum::CEntityEditor::OnRender()
 
 	if (ImGui::BeginChild("Overview", ImVec2(300, 0), true))
 	{
+		static char* textBuf = _strdup(m_entity->GetObjectName().c_str());
 		ImGui::Text("Overview:");
-		ImGui::Text("Name:" );
-		ImGui::SameLine();
-		ImGui::Text(m_entity->GetObjectName().c_str());
+		if (ImGui::InputText("Name", textBuf, IM_ARRAYSIZE(textBuf)))
+		{
+			m_entity->SetObjectName(textBuf);
+			CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+		}
+
 		if (registry.has<CTransformComponent>(entity))
 		{
 			if (ImGui::Selectable("Transform Component", selected == ESelected::Transform))
@@ -62,14 +69,36 @@ void Vacuum::CEntityEditor::OnRender()
 				selected = ESelected::Transform;
 			}
 		}
-		else
+
+		if (registry.has<CMeshComponent>(entity))
 		{
-			if (ImGui::Button("Add transform component"))
+			if (ImGui::Selectable("Mesh Component", selected == ESelected::Mesh))
 			{
-				selected = ESelected::Transform;
-				registry.emplace<CTransformComponent>(entity);
-				CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+				selected = ESelected::Mesh;
 			}
+		}
+
+		if (ImGui::BeginCombo("Add Component", nullptr, ImGuiComboFlags_NoPreview))
+		{
+			if (!registry.has<CTransformComponent>(entity))
+			{
+				if (ImGui::Selectable("Transform Component", false))
+				{
+					selected = ESelected::Transform;
+					registry.emplace<CTransformComponent>(entity);
+					CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+				}
+			}
+			if (!registry.has<CMeshComponent>(entity))
+			{
+				if (ImGui::Selectable("Mesh Component", false))
+				{
+					selected = ESelected::Mesh;
+					registry.emplace<CMeshComponent>(entity);
+					CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+				}
+			}
+			ImGui::EndCombo();
 		}
 		ImGui::EndChild();
 	}
@@ -109,6 +138,36 @@ void Vacuum::CEntityEditor::OnRender()
 			if (bShouldSave)
 			{
 				CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+			}
+		}
+
+		if (selected == ESelected::Mesh)
+		{
+			CMeshComponent& meshComp = registry.get<CMeshComponent>(entity);
+
+			ImGui::Text("Guid: ");
+			ImGui::SameLine();
+			ImGui::Text(meshComp.GetGuid().ToString().c_str());
+
+			CMeshManager* meshManager = CMeshManager::GetHandle();
+			if (meshComp.GetModelGuid().IsValid())
+			{
+				SModel modelData = meshManager->GetModelData(meshComp.GetModelGuid());
+				ImGui::Text("Model: ");
+				ImGui::SameLine();
+				ImGui::Text(modelData.Name.c_str());
+			}
+
+			if(ImGui::BeginCombo("Model selection", nullptr, ImGuiComboFlags_NoPreview))
+			{
+				for (const auto& [key, value] : meshManager->GetMeshes())
+				{
+					if (ImGui::Selectable(value.Name.c_str()))
+					{
+						meshComp.SetModelGuid(value.Guid);
+					}
+				}
+				ImGui::EndCombo();
 			}
 		}
 		ImGui::EndChild();

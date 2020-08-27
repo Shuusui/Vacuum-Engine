@@ -2,12 +2,14 @@
 #include "ECS\Header Files\ECSManager.h"
 #include "ECS\Header Files\EntityManager.h"
 #include "ECS\Components\Header Files\TransformComponent.h"
+#include "ECS\Components\Header Files\MeshComponent.h"
 #include "Json.h"
 #include <fstream>
 
 const char* JSONENTITYNAME = "name";
 const char* JSONENTITYGUID = "guid";
 const char* JSONTRANSFORM = "transform";
+const char* JSONMESH = "mesh";
 
 Vacuum::CBaseEntity::CBaseEntity(const std::string& _name)
 	:CBaseObject(_name)
@@ -32,9 +34,17 @@ Vacuum::CBaseEntity::~CBaseEntity()
 
 void Vacuum::CBaseEntity::OnSave()
 {
-	std::ofstream objectFile(m_objectPath, std::ios::trunc);
 
 	entt::registry& registry = CECSManager::GetRegistry();
+
+	if (!m_oldPath.empty())
+	{
+		std::filesystem::remove(m_oldPath);
+		m_oldPath.clear();
+		m_oldName.clear();
+		m_objectPath.replace_extension(".veentity");
+	}
+	std::ofstream objectFile(m_objectPath, std::ios::trunc);
 
 	Json json =
 	{
@@ -49,6 +59,12 @@ void Vacuum::CBaseEntity::OnSave()
 		json[JSONTRANSFORM] = transform.GetJsonObject();
 	}
 
+	if (registry.has<CMeshComponent>(m_entity))
+	{
+		CMeshComponent mesh = registry.get<CMeshComponent>(m_entity);
+		mesh.OnSave();
+		json[JSONMESH] = mesh.GetJsonObject();
+	}
 
 	objectFile << json.dump();
 }
@@ -71,4 +87,11 @@ void Vacuum::CBaseEntity::LoadData()
 		blankTransform = transform;
 	}
 
+	if (json.contains(JSONMESH))
+	{
+		Json jsonMesh = json[JSONMESH].get<Json>();
+		CMeshComponent meshComp = CMeshComponent(jsonMesh);
+		CMeshComponent& blankMeshComp = registry.emplace<CMeshComponent>(m_entity);
+		blankMeshComp = meshComp;
+	}
 }

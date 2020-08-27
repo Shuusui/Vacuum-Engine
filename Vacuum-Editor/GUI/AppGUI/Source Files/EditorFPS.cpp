@@ -35,7 +35,8 @@ void Vacuum::CEditorFPS::OnRender()
 
 	ImGui::Checkbox("VSync", &CRendererManager::GetVSync());
 
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", CTimer::GetDeltaSeconds(), ImGui::GetIO().Framerate);
+	ImGui::Text("%.3f ms/frame", CTimer::GetDeltaSeconds());
+	ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 
 
 	ImGui::End();

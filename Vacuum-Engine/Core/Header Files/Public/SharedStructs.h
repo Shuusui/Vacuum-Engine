@@ -1,7 +1,9 @@
 #pragma once
 #include "GlobalDefs.h"
 #include <utility>
+#include <vector>
 #include "SharedEnums.h"
+#include "DirectXMath.h"
 
 namespace Vacuum
 {
@@ -12,6 +14,33 @@ namespace Vacuum
 		uint32 Height;
 		bool bVSync;
 		void* WndHandle;
+	};
+
+	struct SVertex
+	{
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT3 normal;
+		DirectX::XMFLOAT2 textureCoordinate;
+	};
+
+	struct SMesh
+	{
+		SMesh()
+			:Vertices({})
+			,Indices({})
+		{
+
+		}
+
+		SMesh(const SMesh& _other)
+			:Vertices(_other.Vertices)
+			,Indices(_other.Indices)
+		{
+
+		}
+
+		std::vector<SVertex> Vertices;
+		std::vector<uint32> Indices;
 	};
 
 	struct SWindowDimParams

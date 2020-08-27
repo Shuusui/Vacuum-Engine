@@ -10,15 +10,25 @@ void Vacuum::CRendererManager::Create(const SRendererCreationInfo& _info)
 	}
 }
 
-void Vacuum::CRendererManager::OnInit(const std::vector<std::filesystem::path>& _shaderPaths)
+void Vacuum::CRendererManager::CreateFontsTexture(unsigned char* _pixels, const int32& _width, const int32& _height, uint64& _texID)
 {
-	s_rendererManager->m_renderer->SetShaderPaths(_shaderPaths);
-	s_rendererManager->m_renderer->OnInit();
+	s_rendererManager->m_renderer->CreateFontsTexture(_pixels, _width, _height, _texID);
 }
 
 void Vacuum::CRendererManager::PrepareRendering()
 {
 	s_rendererManager->m_renderer->PrepareRendering();
+}
+
+void Vacuum::CRendererManager::UpdateDrawData(SDrawData* _drawData)
+{
+	s_rendererManager->m_renderer->UpdateDrawData(_drawData);
+}
+
+void Vacuum::CRendererManager::OnInit(const std::vector<std::filesystem::path>& _shaderPaths)
+{
+	s_rendererManager->m_renderer->SetShaderPaths(_shaderPaths);
+	s_rendererManager->m_renderer->OnInit();
 }
 
 void Vacuum::CRendererManager::OnRender()
@@ -36,4 +46,9 @@ void Vacuum::CRendererManager::Destroy()
 	delete s_rendererManager->m_renderer;
 	delete s_rendererManager;
 	s_rendererManager = nullptr;
+}
+
+void Vacuum::CRendererManager::RegisterAfterResizeCallback(const std::function<void(HWND, uint32, WPARAM, LPARAM)>& _func)
+{
+	s_rendererManager->m_renderer->RegisterAfterResizeCallback(_func);
 }

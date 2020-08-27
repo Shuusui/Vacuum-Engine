@@ -21,6 +21,8 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "dxguid.lib")
 #endif
 
+#define DX_OFFSETOF(_TYPE,_MEMBER)  ((size_t)&(((_TYPE*)0)->_MEMBER))   
+
 void Vacuum::DX12Renderer::OnCreate()
 {
 	CMainWindow* mainWindow =  CMainWindow::GetWindowHandle();
@@ -40,7 +42,10 @@ void Vacuum::DX12Renderer::OnCreate()
 				ResizeSwapChain(_hwnd, (uint32)LOWORD(_lParam), (uint32)HIWORD(_lParam));
 				CreateRenderTarget();
 				LoadAssets();
-				CreateFontsTexture();
+				for(const std::function<void(HWND, uint32, WPARAM, LPARAM)>& func : m_afterResizeCallbacks)
+				{
+					func(_hwnd, _msg, _wParam, _lParam);
+				}
 			}
 			return 0;
 	});
@@ -51,8 +56,6 @@ void Vacuum::DX12Renderer::OnCreate()
 void Vacuum::DX12Renderer::OnInit()
 {
 	LoadAssets();
-	CreateFontsTexture();
-
 }
 
 void Vacuum::DX12Renderer::OnUpdate()
@@ -80,28 +83,28 @@ void Vacuum::DX12Renderer::PrepareRendering()
 	m_barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
 	const float clearColor[] = { 0.1f, 0.1f, 0.1f, 1.0f };
-	THROW_IF_FAILED(m_commandList->Reset(frameCtx->CommandAllocator, nullptr));
-	m_commandList->ResourceBarrier(1, &m_barrier);
-	m_commandList->ClearRenderTargetView(m_renderTargetDescs[backBufferIndex], clearColor, 0, nullptr);
-	m_commandList->OMSetRenderTargets(1, &m_renderTargetDescs[backBufferIndex], FALSE, nullptr);
-	m_commandList->SetDescriptorHeaps(1, &m_srvDescHeap);
+	THROW_IF_FAILED(m_guiCommandList->Reset(frameCtx->CommandAllocator, nullptr));
+	m_guiCommandList->ResourceBarrier(1, &m_barrier);
+	m_guiCommandList->ClearRenderTargetView(m_renderTargetDescs[backBufferIndex], clearColor, 0, nullptr);
+	m_guiCommandList->OMSetRenderTargets(1, &m_renderTargetDescs[backBufferIndex], FALSE, nullptr);
+	m_guiCommandList->SetDescriptorHeaps(1, &m_srvDescHeap);
 }
 
-void Vacuum::DX12Renderer::OnRender()
+void Vacuum::DX12Renderer::UpdateDrawData(SDrawData* _drawData)
 {
-	ImDrawData* drawData = ImGui::GetDrawData();
-	if (drawData->DisplaySize.x <= 0.0f || drawData->DisplaySize.y <= 0.0f)
+	//PrepareRendering();
+	if (_drawData->DisplaySize.x <= 0.0f || _drawData->DisplaySize.y <= 0.0f)
 	{
 		return;
-	} 
+	}
 
 	m_frameIndex = m_frameIndex + 1;
 	SFrameResource* frameResource = &m_frameResources[m_frameIndex % s_frameCount];
 
-	if (frameResource->VertexBuffer == nullptr || frameResource->VertexBufferSize < drawData->TotalVtxCount)
+	if (frameResource->VertexBuffer == nullptr || frameResource->VertexBufferSize < _drawData->TotalVtxCount)
 	{
 		SafeRelease(frameResource->VertexBuffer);
-		frameResource->VertexBufferSize = drawData->TotalVtxCount + 5000;
+		frameResource->VertexBufferSize = _drawData->TotalVtxCount + 5000;
 
 		D3D12_HEAP_PROPERTIES props = {};
 		props.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -110,7 +113,7 @@ void Vacuum::DX12Renderer::OnRender()
 
 		D3D12_RESOURCE_DESC desc = {};
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		desc.Width = frameResource->VertexBufferSize * sizeof(ImDrawVert);
+		desc.Width = frameResource->VertexBufferSize * sizeof(S2DVert);
 		desc.Height = 1;
 		desc.DepthOrArraySize = 1;
 		desc.MipLevels = 1;
@@ -124,10 +127,10 @@ void Vacuum::DX12Renderer::OnRender()
 			return;
 		}
 	}
-	if(frameResource->IndexBuffer == nullptr || frameResource->IndexBufferSize < drawData->TotalIdxCount)
+	if (frameResource->IndexBuffer == nullptr || frameResource->IndexBufferSize < _drawData->TotalIdxCount)
 	{
 		SafeRelease(frameResource->IndexBuffer);
-		frameResource->IndexBufferSize = drawData->TotalIdxCount + 10000;
+		frameResource->IndexBufferSize = _drawData->TotalIdxCount + 10000;
 
 		D3D12_HEAP_PROPERTIES props = {};
 		props.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -136,7 +139,7 @@ void Vacuum::DX12Renderer::OnRender()
 
 		D3D12_RESOURCE_DESC desc = {};
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		desc.Width = frameResource->IndexBufferSize * sizeof(ImDrawIdx);
+		desc.Width = frameResource->IndexBufferSize * sizeof(unsigned short);
 		desc.Height = 1;
 		desc.DepthOrArraySize = 1;
 		desc.MipLevels = 1;
@@ -164,69 +167,73 @@ void Vacuum::DX12Renderer::OnRender()
 		return;
 	}
 
-	ImDrawVert* vtxDestination = (ImDrawVert*)vtxResource;
-	ImDrawIdx* idxDestination = (ImDrawIdx*)idxResource;
+	S2DVert* vtxDestination = (S2DVert*)vtxResource;
+	unsigned short* idxDestination = (unsigned short*)idxResource;
 
-	for (int32 i = 0; i < drawData->CmdListsCount; ++i)
+	for (const SDrawList& drawList : _drawData->DrawLists)
 	{
-		const ImDrawList* cmdList = drawData->CmdLists[i];
-		memcpy(vtxDestination, cmdList->VtxBuffer.Data, cmdList->VtxBuffer.Size * sizeof(ImDrawVert));
-		memcpy(idxDestination, cmdList->IdxBuffer.Data, cmdList->IdxBuffer.Size * sizeof(ImDrawIdx));
-		vtxDestination += cmdList->VtxBuffer.Size;
-		idxDestination += cmdList->IdxBuffer.Size;
+		memcpy(vtxDestination, drawList.VertexBuffer.data(), drawList.VertexBuffer.size() * sizeof(S2DVert));
+		memcpy(idxDestination, drawList.IndexBuffer.data(), drawList.IndexBuffer.size() * sizeof(unsigned short));
+		vtxDestination += drawList.VertexBuffer.size();
+		idxDestination += drawList.IndexBuffer.size();
 	}
 	frameResource->VertexBuffer->Unmap(0, &range);
 	frameResource->IndexBuffer->Unmap(0, &range);
 
-	SetupRenderState(drawData, frameResource);
+	SetupRenderState(_drawData, frameResource);
 
 	int32 vtxOffset = 0;
 	int32 idxOffset = 0;
-	ImVec2 clipOff = drawData->DisplayPos;
-	for (int32 i = 0; i < drawData->CmdListsCount; ++i)
+	DirectX::XMFLOAT2 clipOff =  _drawData->DisplayPos;
+	for (const SDrawList& drawList : _drawData->DrawLists)
 	{
-		const ImDrawList* cmdList = drawData->CmdLists[i];
-		for (int32 cmdIndex = 0; cmdIndex < cmdList->CmdBuffer.Size; ++cmdIndex)
+		for (const SDrawCmd& drawCmd : drawList.DrawCommands)
 		{
-			const ImDrawCmd* cmd = &cmdList->CmdBuffer[cmdIndex];
-			if (cmd->UserCallback != nullptr)
+			if (drawCmd.UserCallbackValid)
 			{
-				if (cmd->UserCallback == ImDrawCallback_ResetRenderState)
+				if (!drawCmd.CallUserCallback)
 				{
-					SetupRenderState(drawData, frameResource);
+					SetupRenderState(_drawData, frameResource);
 				}
 				else
 				{
-					cmd->UserCallback(cmdList, cmd);
+					drawCmd.UserCallback();
 				}
 			}
 			else
 			{
-				const D3D12_RECT rect = {(LONG)(cmd->ClipRect.x, - clipOff.x), (LONG)(cmd->ClipRect.y - clipOff.y), (LONG)(cmd->ClipRect.z - clipOff.x), (LONG)(cmd->ClipRect.w - clipOff.y)};
-				m_commandList->SetGraphicsRootDescriptorTable(1, *(D3D12_GPU_DESCRIPTOR_HANDLE*)&cmd->TextureId);
-				m_commandList->RSSetScissorRects(1, &rect);
-				m_commandList->DrawIndexedInstanced(cmd->ElemCount, 1, cmd->IdxOffset + idxOffset, cmd->VtxOffset + vtxOffset, 0);
+				const D3D12_RECT rect = { (LONG)(drawCmd.ClipRect.x, -clipOff.x), (LONG)(drawCmd.ClipRect.y - clipOff.y), (LONG)(drawCmd.ClipRect.z - clipOff.x), (LONG)(drawCmd.ClipRect.w - clipOff.y) };
+				m_guiCommandList->SetGraphicsRootDescriptorTable(1, *(D3D12_GPU_DESCRIPTOR_HANDLE*)&drawCmd.TextureID);
+				m_guiCommandList->RSSetScissorRects(1, &rect);
+				m_guiCommandList->DrawIndexedInstanced(drawCmd.ElemCount, 1, drawCmd.IdxOffset + idxOffset, drawCmd.VtxOffset + vtxOffset, 0);
 			}
 		}
-		idxOffset += cmdList->IdxBuffer.Size;
-		vtxOffset += cmdList->VtxBuffer.Size;
+		idxOffset += drawList.IndexBuffer.size();
+		vtxOffset += drawList.VertexBuffer.size();
 	}
 	m_barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	m_barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 
-	m_commandList->ResourceBarrier(1, &m_barrier);
-	m_commandList->Close();
+	m_guiCommandList->ResourceBarrier(1, &m_barrier);
+	m_guiCommandList->Close();
 
-	ID3D12GraphicsCommandList* graphCommandList = m_commandList;
-	m_commandQueue->ExecuteCommandLists(1, (ID3D12CommandList* const*)&graphCommandList);
+
+	std::vector<ID3D12CommandList*> commandLists = std::vector<ID3D12CommandList*>(1);
+	commandLists[0] = m_guiCommandList;
+
+	m_commandQueue->ExecuteCommandLists(1, commandLists.data());
 	m_swapChain->Present(m_bVSync, 0);
 
-	uint64 fenceValue = m_fenceValue +1;
+	uint64 fenceValue = m_fenceValue + 1;
 	m_commandQueue->Signal(m_fence, fenceValue);
 	m_fenceValue = fenceValue;
 
 	SFrameContext* frameCtx = &m_frameContext[m_frameIndex % s_frameCount];
 	frameCtx->FenceValue = fenceValue;
+}
+
+void Vacuum::DX12Renderer::OnRender()
+{
 }
 
 void Vacuum::DX12Renderer::OnDestroy()
@@ -246,7 +253,7 @@ void Vacuum::DX12Renderer::OnDestroy()
 		SafeRelease(m_frameContext[i].CommandAllocator);
 	}
 	SafeRelease(m_commandQueue);
-	SafeRelease(m_commandList);
+	SafeRelease(m_guiCommandList);
 	SafeRelease(m_srvDescHeap);
 	SafeRelease(m_rtvHeap);
 	SafeRelease(m_fence);
@@ -261,6 +268,11 @@ void Vacuum::DX12Renderer::OnDestroy()
 		debug->Release();
 	}
 #endif
+}
+
+void Vacuum::DX12Renderer::RegisterAfterResizeCallback(const std::function<void(HWND, uint32, WPARAM, LPARAM)>& _func)
+{
+	m_afterResizeCallbacks.push_back(_func);
 }
 
 void Vacuum::DX12Renderer::LoadPipeline()
@@ -326,9 +338,9 @@ void Vacuum::DX12Renderer::LoadPipeline()
 		THROW_IF_FAILED(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_frameContext[i].CommandAllocator)));
 	}
 
-	THROW_IF_FAILED(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_frameContext[0].CommandAllocator, nullptr, IID_PPV_ARGS(&m_commandList)));
+	THROW_IF_FAILED(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_frameContext[0].CommandAllocator, nullptr, IID_PPV_ARGS(&m_guiCommandList)));
 
-	THROW_IF_FAILED(m_commandList->Close());
+	THROW_IF_FAILED(m_guiCommandList->Close());
 
 	THROW_IF_FAILED(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 
@@ -473,17 +485,14 @@ void Vacuum::DX12Renderer::LoadAssets()
               return out_col; \
             }";
 
-			/*ThrowIfFailed(D3DCompileFromFile(shaderPath.c_str(), nullptr, nullptr, "vs_main", "vs_5_0", compileFlags, 0, &vertexShader, nullptr));
-			ThrowIfFailed(D3DCompileFromFile(shaderPath.c_str(), nullptr, nullptr, "ps_main", "ps_5_0", compileFlags, 0, &pixelShader, nullptr));*/
-
 			THROW_IF_FAILED(D3DCompile(vertexShaderStr, strlen(vertexShaderStr), nullptr, nullptr, nullptr, "main", "vs_5_0", 0, 0, &vertexShader, nullptr));
 			THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "main", "ps_5_0", 0, 0, &pixelShader, nullptr));
 
 			static D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
 			{
-				{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (UINT)IM_OFFSETOF(ImDrawVert, pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (UINT)IM_OFFSETOF(ImDrawVert, uv),  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-				{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (UINT)IM_OFFSETOF(ImDrawVert, col), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+				{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (uint32)DX_OFFSETOF(S2DVert, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (uint32)DX_OFFSETOF(S2DVert, UV),  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+				{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (uint32)DX_OFFSETOF(S2DVert, Col), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 			};
 
 			D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
@@ -579,14 +588,8 @@ void Vacuum::DX12Renderer::GetHandwareAdapter(IDXGIFactory1* _factory, Microsoft
 	_adapter = tempHardwareAdapter.Detach();
 }
 
-void Vacuum::DX12Renderer::CreateFontsTexture()
+void Vacuum::DX12Renderer::CreateFontsTexture(unsigned char* _pixels, const int32& _width, const int32& _height, uint64& _texID)
 {
-	// Build texture atlas
-	ImGuiIO& io = ImGui::GetIO();
-	unsigned char* pixels;
-	int width, height;
-	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-
 	// Upload texture to graphics system
 	{
 		D3D12_HEAP_PROPERTIES props;
@@ -599,8 +602,8 @@ void Vacuum::DX12Renderer::CreateFontsTexture()
 		ZeroMemory(&desc, sizeof(desc));
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 		desc.Alignment = 0;
-		desc.Width = width;
-		desc.Height = height;
+		desc.Width = _width;
+		desc.Height = _height;
 		desc.DepthOrArraySize = 1;
 		desc.MipLevels = 1;
 		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -613,8 +616,8 @@ void Vacuum::DX12Renderer::CreateFontsTexture()
 		m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc,
 			D3D12_RESOURCE_STATE_COPY_DEST, NULL, IID_PPV_ARGS(&pTexture));
 
-		UINT uploadPitch = (width * 4 + D3D12_TEXTURE_DATA_PITCH_ALIGNMENT - 1u) & ~(D3D12_TEXTURE_DATA_PITCH_ALIGNMENT - 1u);
-		UINT uploadSize = height * uploadPitch;
+		UINT uploadPitch = (_width * 4 + D3D12_TEXTURE_DATA_PITCH_ALIGNMENT - 1u) & ~(D3D12_TEXTURE_DATA_PITCH_ALIGNMENT - 1u);
+		UINT uploadSize = _height * uploadPitch;
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 		desc.Alignment = 0;
 		desc.Width = uploadSize;
@@ -634,22 +637,22 @@ void Vacuum::DX12Renderer::CreateFontsTexture()
 		ID3D12Resource* uploadBuffer = NULL;
 		HRESULT hr = m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc,
 			D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&uploadBuffer));
-		IM_ASSERT(SUCCEEDED(hr));
+		THROW_IF_FAILED(hr);
 
 		void* mapped = NULL;
 		D3D12_RANGE range = { 0, uploadSize };
 		hr = uploadBuffer->Map(0, &range, &mapped);
-		IM_ASSERT(SUCCEEDED(hr));
-		for (int y = 0; y < height; y++)
-			memcpy((void*)((uintptr_t)mapped + y * uploadPitch), pixels + y * width * 4, width * 4);
+		THROW_IF_FAILED(hr);
+		for (int y = 0; y < _height; y++)
+			memcpy((void*)((uintptr_t)mapped + y * uploadPitch), _pixels + y * _width * 4, _width * 4);
 		uploadBuffer->Unmap(0, &range);
 
 		D3D12_TEXTURE_COPY_LOCATION srcLocation = {};
 		srcLocation.pResource = uploadBuffer;
 		srcLocation.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
 		srcLocation.PlacedFootprint.Footprint.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		srcLocation.PlacedFootprint.Footprint.Width = width;
-		srcLocation.PlacedFootprint.Footprint.Height = height;
+		srcLocation.PlacedFootprint.Footprint.Width = _width;
+		srcLocation.PlacedFootprint.Footprint.Height = _height;
 		srcLocation.PlacedFootprint.Footprint.Depth = 1;
 		srcLocation.PlacedFootprint.Footprint.RowPitch = uploadPitch;
 
@@ -668,10 +671,13 @@ void Vacuum::DX12Renderer::CreateFontsTexture()
 
 		ID3D12Fence* fence = NULL;
 		hr = m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-		IM_ASSERT(SUCCEEDED(hr));
+		THROW_IF_FAILED(hr);
 
 		HANDLE event = CreateEvent(0, 0, 0, 0);
-		IM_ASSERT(event != NULL);
+		if (!event)
+		{
+			throw std::runtime_error("event handle invalid");
+		}
 
 		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -680,25 +686,25 @@ void Vacuum::DX12Renderer::CreateFontsTexture()
 
 		ID3D12CommandQueue* cmdQueue = NULL;
 		hr = m_device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&cmdQueue));
-		IM_ASSERT(SUCCEEDED(hr));
+		THROW_IF_FAILED(hr);
 
 		ID3D12CommandAllocator* cmdAlloc = NULL;
 		hr = m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&cmdAlloc));
-		IM_ASSERT(SUCCEEDED(hr));
+		THROW_IF_FAILED(hr);
 
 		ID3D12GraphicsCommandList* cmdList = NULL;
 		hr = m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, cmdAlloc, NULL, IID_PPV_ARGS(&cmdList));
-		IM_ASSERT(SUCCEEDED(hr));
+		THROW_IF_FAILED(hr);
 
 		cmdList->CopyTextureRegion(&dstLocation, 0, 0, 0, &srcLocation, NULL);
 		cmdList->ResourceBarrier(1, &barrier);
 
 		hr = cmdList->Close();
-		IM_ASSERT(SUCCEEDED(hr));
+		THROW_IF_FAILED(hr);
 
 		cmdQueue->ExecuteCommandLists(1, (ID3D12CommandList* const*)&cmdList);
 		hr = cmdQueue->Signal(fence, 1);
-		IM_ASSERT(SUCCEEDED(hr));
+		THROW_IF_FAILED(hr);
 
 		fence->SetEventOnCompletion(1, event);
 		WaitForSingleObject(event, INFINITE);
@@ -724,8 +730,8 @@ void Vacuum::DX12Renderer::CreateFontsTexture()
 	}
 
 	// Store our identifier
-	static_assert(sizeof(ImTextureID) >= sizeof(m_srvDescHeap->GetGPUDescriptorHandleForHeapStart().ptr), "Can't pack descriptor handle into TexID, 32-bit not supported yet.");
-	io.Fonts->TexID = (ImTextureID)m_srvDescHeap->GetGPUDescriptorHandleForHeapStart().ptr;
+	static_assert(sizeof(void*) >= sizeof(m_srvDescHeap->GetGPUDescriptorHandleForHeapStart().ptr), "Can't pack descriptor handle into TexID, 32-bit not supported yet.");
+	_texID = m_srvDescHeap->GetGPUDescriptorHandleForHeapStart().ptr;
 }
 
 Vacuum::SFrameContext* Vacuum::DX12Renderer::WaitForNextFrameResources()
@@ -771,7 +777,7 @@ void Vacuum::DX12Renderer::WaitForLastSubmittedFrame()
 	WaitForSingleObject(m_fenceEvent, INFINITE);
 }
 
-void Vacuum::DX12Renderer::SetupRenderState(ImDrawData* _drawData, SFrameResource* _frameResource)
+void Vacuum::DX12Renderer::SetupRenderState(SDrawData* _drawData, SFrameResource* _frameResource)
 {
 	SVertexConstantBuffer vertConstBuffer;
 	{
@@ -793,12 +799,12 @@ void Vacuum::DX12Renderer::SetupRenderState(ImDrawData* _drawData, SFrameResourc
 	viewPort.Width = _drawData->DisplaySize.x;
 	viewPort.Height = _drawData->DisplaySize.y;
 	viewPort.MinDepth = 0.0f;
-	viewPort.MaxDepth = 1.0f; 
+	viewPort.MaxDepth = 1.0f;
 	viewPort.TopLeftX = viewPort.TopLeftY = 0.0f;
 
-	m_commandList->RSSetViewports(1, &viewPort);
+	m_guiCommandList->RSSetViewports(1, &viewPort); //this needs more viewports since I want to make my editor viewport work here
 
-	uint32 stride = sizeof(ImDrawVert);
+	uint32 stride = sizeof(S2DVert);
 	uint32 offset = 0;
 
 	D3D12_VERTEX_BUFFER_VIEW vtxBufferView = {};
@@ -806,22 +812,70 @@ void Vacuum::DX12Renderer::SetupRenderState(ImDrawData* _drawData, SFrameResourc
 	vtxBufferView.SizeInBytes = _frameResource->VertexBufferSize * stride;
 	vtxBufferView.StrideInBytes = stride;
 
-	m_commandList->IASetVertexBuffers(0, 1, &vtxBufferView);
+	m_guiCommandList->IASetVertexBuffers(0, 1, &vtxBufferView); //This needs to get reworked to make the editor viewport work
 
 	D3D12_INDEX_BUFFER_VIEW idxBufferView = {};
 	idxBufferView.BufferLocation = _frameResource->IndexBuffer->GetGPUVirtualAddress();
-	idxBufferView.SizeInBytes = _frameResource->IndexBufferSize * sizeof(ImDrawIdx);
-	idxBufferView.Format = sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+	idxBufferView.SizeInBytes = _frameResource->IndexBufferSize * sizeof(unsigned short);
+	idxBufferView.Format = DXGI_FORMAT_R16_UINT;
 
-	m_commandList->IASetIndexBuffer(&idxBufferView);
-	m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_commandList->SetPipelineState(m_pipelineState);
-	m_commandList->SetGraphicsRootSignature(m_rootSignature);
-	m_commandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
+	m_guiCommandList->IASetIndexBuffer(&idxBufferView);
+	m_guiCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_guiCommandList->SetPipelineState(m_pipelineState);
+	m_guiCommandList->SetGraphicsRootSignature(m_rootSignature);
+	m_guiCommandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
 
 	const float blendFactor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-	m_commandList->OMSetBlendFactor(blendFactor);
+	m_guiCommandList->OMSetBlendFactor(blendFactor);
 }
+
+//void Vacuum::DX12Renderer::SetupViewportRenderState(ImDrawData* _drawData)
+//{
+//	SVertexConstantBuffer vertConstBuffer;
+//	{
+//		float l = _drawData->DisplayPos.x; // add here the x pos of the viewport 
+//		float r = _drawData->DisplayPos.x + _drawData->DisplaySize.x; // add here the width of the viewport
+//		float t = _drawData->DisplayPos.y; // add here the y pos of the viewport
+//		float b = _drawData->DisplayPos.y + _drawData->DisplaySize.y; // add here the height of the viewport
+//		float mvp[4][4] = //This needs to get reworked to make a real mvp for a camera
+//		{
+//			{2.0f / (r - l),		0.0f,			0.0f,			0.0f},
+//			{0.0f,				2.0f / (t - b),		0.0f,			0.0f},
+//			{0.0f,				0.0f,			0.5f,			0.0f},
+//			{(r + l) / (l - r),		(t + b) / (b - t),	0.5,			1.0f},
+//		};
+//		memcpy(&vertConstBuffer.MVP, mvp, sizeof(mvp));
+//	}
+//
+//	D3D12_VIEWPORT viewPort = {};
+//	viewPort.Width = _drawData->DisplaySize.x; //this will need the actual width of the viewport
+//	viewPort.Height = _drawData->DisplaySize.y; //this will need the actual height of the viewport
+//	viewPort.MinDepth = 0.0f;
+//	viewPort.MaxDepth = 1.0f;
+//	viewPort.TopLeftX = viewPort.TopLeftY = 0.0f; //This needs the actual pos of the viewport
+//
+//	uint32 stride = sizeof(SVertex);
+//	uint32 offset = 0;
+//
+//	D3D12_VERTEX_BUFFER_VIEW vtxBufferView = {};
+//	//vtxBufferView.BufferLocation = _frameResource->VertexBuffer->GetGPUVirtualAddress() + offset; // The bufferlocation of the vertexbuffer for the viewport
+//	//vtxBufferView.SizeInBytes = _frameResource->VertexBufferSize * stride; //The size of the vertexbuffer 
+//	vtxBufferView.StrideInBytes = stride;
+//
+//	D3D12_INDEX_BUFFER_VIEW idxBufferView = {};
+//	//idxBufferView.BufferLocation = _frameResource->IndexBuffer->GetGPUVirtualAddress(); //The actual index buffer location
+//	//idxBufferView.SizeInBytes = _frameResource->IndexBufferSize * sizeof(ImDrawIdx); // The size of the index buffer
+//	//idxBufferView.Format = sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT; //Idx buffer format
+//
+//	m_guiCommandList->IASetIndexBuffer(&idxBufferView);
+//	m_guiCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//	m_guiCommandList->SetPipelineState(m_pipelineState);
+//	m_guiCommandList->SetGraphicsRootSignature(m_rootSignature);
+//	m_guiCommandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
+//
+//	const float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+//	m_guiCommandList->OMSetBlendFactor(blendFactor);
+//}
 
 void Vacuum::DX12Renderer::InvalidateObjects()
 {
@@ -833,9 +887,6 @@ void Vacuum::DX12Renderer::InvalidateObjects()
 	SafeRelease(m_rootSignature);
 	SafeRelease(m_pipelineState);
 	SafeRelease(m_fontTextureResource);
-
-	ImGuiIO& io = ImGui::GetIO();
-	io.Fonts->TexID = nullptr;
 
 	for (uint32 i = 0; i < s_frameCount; ++i)
 	{

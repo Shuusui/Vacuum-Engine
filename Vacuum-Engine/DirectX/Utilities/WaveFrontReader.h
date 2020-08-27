@@ -24,6 +24,8 @@
 #define NOHELP
 #pragma warning(pop)
 
+#include "SharedStructs.h"
+
 #include <Windows.h>
 
 #include <algorithm>
@@ -40,12 +42,6 @@ template<class index_t>
 class WaveFrontReader
 {
 public:
-    struct Vertex
-    {
-        DirectX::XMFLOAT3 position;
-        DirectX::XMFLOAT3 normal;
-        DirectX::XMFLOAT2 textureCoordinate;
-    };
 
     WaveFrontReader() noexcept : hasNormals(false), hasTexcoords(false) {}
 
@@ -132,7 +128,7 @@ public:
             {
                 // Face
                 INT iPosition, iTexCoord, iNormal;
-                Vertex vertex;
+                Vacuum::SVertex vertex;
 
                 uint32_t faceIndex[MAX_POLY];
                 size_t iFace = 0;
@@ -460,14 +456,14 @@ public:
                 // Alpha
                 float alpha;
                 InFile >> alpha;
-                curMaterial->fAlpha = std::min(1.f, std::max(0.f, alpha));
+                curMaterial->fAlpha = (std::min)(1.f, (std::max)(0.f, alpha));
             }
             else if (0 == wcscmp(strCommand.c_str(), L"Tr"))
             {
                 // Transparency (inverse of alpha)
                 float invAlpha;
                 InFile >> invAlpha;
-                curMaterial->fAlpha = std::min(1.f, std::max(0.f, 1.f - invAlpha));
+                curMaterial->fAlpha = (std::min)(1.f, (std::max)(0.f, 1.f - invAlpha));
             }
             else if (0 == wcscmp(strCommand.c_str(), L"Ns"))
             {
@@ -572,7 +568,7 @@ public:
             return E_FAIL;
 
         vertices.resize(numVertices);
-        vboFile.read(reinterpret_cast<char*>(vertices.data()), sizeof(Vertex) * numVertices);
+        vboFile.read(reinterpret_cast<char*>(vertices.data()), sizeof(Vacuum::SVertex) * numVertices);
 
 #pragma warning( suppress : 4127 )
         if (sizeof(index_t) == 2)
@@ -593,7 +589,7 @@ public:
             }
         }
 
-        BoundingBox::CreateFromPoints(bounds, vertices.size(), reinterpret_cast<const XMFLOAT3*>(vertices.data()), sizeof(Vertex));
+        BoundingBox::CreateFromPoints(bounds, vertices.size(), reinterpret_cast<const XMFLOAT3*>(vertices.data()), sizeof(Vacuum::SVertex));
 
         vboFile.close();
 
@@ -638,7 +634,7 @@ public:
         }
     };
 
-    std::vector<Vertex>     vertices;
+    std::vector<Vacuum::SVertex>     vertices;
     std::vector<index_t>    indices;
     std::vector<uint32_t>   attributes;
     std::vector<Material>   materials;
@@ -652,7 +648,7 @@ public:
 private:
     using VertexCache = std::unordered_multimap<uint32_t, uint32_t>;
 
-    uint32_t AddVertex(uint32_t hash, const Vertex* pVertex, VertexCache& cache)
+    uint32_t AddVertex(uint32_t hash, const Vacuum::SVertex* pVertex, VertexCache& cache)
     {
         auto f = cache.equal_range(hash);
 
@@ -660,7 +656,7 @@ private:
         {
             auto& tv = vertices[it->second];
 
-            if (0 == memcmp(pVertex, &tv, sizeof(Vertex)))
+            if (0 == memcmp(pVertex, &tv, sizeof(Vacuum::SVertex)))
             {
                 return it->second;
             }

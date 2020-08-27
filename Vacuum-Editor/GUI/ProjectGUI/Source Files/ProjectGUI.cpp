@@ -111,8 +111,6 @@ void Vacuum::CProjectGUI::OnRender()
 
 	ImGui::InvisibleButton("Viewport", ImGui::GetContentRegionAvail(), ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
 
-	ImDrawList* drawList = ImGui::GetWindowDrawList();
-
 	ImGui::End();
 
 	RenderCreateSceneWindow();

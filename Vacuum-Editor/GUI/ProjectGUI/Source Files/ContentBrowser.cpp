@@ -181,7 +181,7 @@ void Vacuum::CContentBrowser::ManageModelPaths()
 		return;
 	}
 
-	std::unordered_map<std::string, SModel> models = m_meshManager->GetMeshes();
+	std::unordered_map<SGuid, SModel> models = m_meshManager->GetMeshes();
 
 	for (const std::filesystem::path& modelPath : std::filesystem::directory_iterator(m_project->GetProjectPaths().ModelsDir))
 	{
@@ -197,13 +197,13 @@ void Vacuum::CContentBrowser::ManageModelPaths()
 		m_meshManager->RegisterModel(modelPath);
 	}
 
-	for (const std::pair<std::filesystem::path, SModel>& model : models)
+	for (const std::pair<SGuid, SModel>& model : models)
 	{
 		ImGui::Selectable(model.second.Name.c_str());
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
-			ImGui::Text("Path: %s", model.first.string().c_str());
+			ImGui::Text("Path: %s", model.second.Path.c_str());
 			ImGui::EndTooltip();
 		}
 	}

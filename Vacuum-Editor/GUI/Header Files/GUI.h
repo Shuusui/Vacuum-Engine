@@ -66,6 +66,8 @@ namespace Vacuum
 		static int32 OnChar(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
 		static int32 OnMouseWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
 		static int32 OnMouseHWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static void OnUpdateFontTexture(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
+
 		CGUI(HWND _hwnd)
 			:m_hwnd(_hwnd)
 			,m_lastMouseCursor(ImGuiMouseCursor_COUNT)

@@ -48,7 +48,7 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	SWindowInfo windowInfo = {};
 	windowInfo.ClassParams.ClassName = TEXT("Vacuum Engine window");
 	windowInfo.ClassParams.HInstance = _hInstance;
-	windowInfo.ClassParams.BackgroundColor = CreateSolidBrush(RGB(1,1,1));
+	windowInfo.ClassParams.BackgroundColor = CreateSolidBrush(RGB(1, 1, 1));
 	windowInfo.ClassParams.Style = CS_HREDRAW | CS_VREDRAW;
 	windowInfo.CreationParams.DwExStyle = NULL;
 	windowInfo.CreationParams.DwStyle = WS_OVERLAPPEDWINDOW;
@@ -67,9 +67,17 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().Width, (uint32)appMgrHandle->GetInitWindowDimParams().Height, appMgrHandle->GetLastVSyncState(), CMainWindow::GetWindowHandle()->GetHwnd() });
+
 	CGUI::Init(CMainWindow::GetWindowHandle()->GetHwnd());
 
-	CRendererManager::Create(SRendererCreationInfo{ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().Width, (uint32)appMgrHandle->GetInitWindowDimParams().Height, appMgrHandle->GetLastVSyncState(), CMainWindow::GetWindowHandle()->GetHwnd()});
+	ImGuiIO& io = ImGui::GetIO();
+	unsigned char* pixels;
+	int width, height;
+	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+	uint64 texID = 0;
+	CRendererManager::CreateFontsTexture(pixels, width, height, texID);
+	io.Fonts->TexID = (void*)texID;
 
 	CMainWindow::ShowAndUpdate(_nShowCmd);
 

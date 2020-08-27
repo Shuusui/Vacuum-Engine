@@ -1,6 +1,6 @@
 #include "..\Header Files\MeshManager.h"
-#include "Utilities\WaveFrontReader.h"
 #include <fstream>
+#include <unordered_set>
 
 #define JSONMESHMAP "mesh_map"
 
@@ -27,7 +27,7 @@ void Vacuum::CMeshManager::OnDestroy()
 
 void Vacuum::CMeshManager::Load()
 {
-
+	std::unordered_set<std::string> alreadyFoundMeshes = {};
 	if (std::filesystem::exists(m_configFilePath))
 	{
 		std::ifstream configFile(m_configFilePath);
@@ -38,18 +38,32 @@ void Vacuum::CMeshManager::Load()
 		Json meshMapJson = json[JSONMESHMAP].get<Json>();
 		for (auto& [key, value] : meshMapJson.items())
 		{
-			m_meshes.insert(std::make_pair(key, value));
+			SModel model = SModel(value);
+			alreadyFoundMeshes.insert(model.Name);
+			m_meshes.insert(std::make_pair(key, model));
 		}
 	}
 
+	WaveFrontReader<uint32> wfReader = WaveFrontReader<uint32>();
 	for (const std::filesystem::path& meshPath : std::filesystem::directory_iterator(m_meshesPath))
 	{
+		if (alreadyFoundMeshes.find(meshPath.filename().string()) != alreadyFoundMeshes.end())
+		{
+			continue;
+		}
+
 		std::filesystem::path extension = meshPath.extension();
 		if (extension != ".obj" && extension != ".fbx")
 		{
 			continue;
 		}
-		m_meshes.insert(std::make_pair(meshPath.string(), SModel(meshPath.filename().string())));
+		SModel model = SModel(meshPath);
+		wfReader.Clear();
+		wfReader.Load(meshPath.wstring().c_str());
+		model.MeshData.Vertices = std::move(wfReader.vertices);
+		model.MeshData.Indices = std::move(wfReader.indices);
+
+		m_meshes.insert(std::make_pair(model.Guid, model));
 	}
 }
 
@@ -59,7 +73,7 @@ void Vacuum::CMeshManager::Save()
 	Json meshMapJson = {}; 
 	for (const auto& [key, value] : m_meshes)
 	{
-		meshMapJson[key] = value.ToJson();
+		meshMapJson[key.ToString()] = value.ToJson();
 	}
 	json[JSONMESHMAP] = meshMapJson;
 
