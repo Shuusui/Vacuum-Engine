@@ -85,7 +85,7 @@ namespace Vacuum
 	void CLog::Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
-		for (int32 i = 0; i < _handleGuidAmount; ++i)
+		for (s32 i = 0; i < _handleGuidAmount; ++i)
 		{
 			LogToHandle(s_logHandle->m_logInfos.at(_handleGuids[i]), _logString);
 		}
@@ -101,7 +101,7 @@ namespace Vacuum
 	void CLog::ClearLog(SGuid* _handleGuids, const size_t& _handleGuidAmount)
 	{
 		s_logHandle->m_logMutex.lock();
-		for (int32 i = 0; i < _handleGuidAmount; ++i)
+		for (s32 i = 0; i < _handleGuidAmount; ++i)
 		{
 			ClearLogHandle(s_logHandle->m_logInfos.at(_handleGuids[i]));
 		}
@@ -126,7 +126,7 @@ namespace Vacuum
 
 		DWORD garbage = 0;
 
-		for (int32 i = 0; i < _logString.size(); ++i)
+		for (s32 i = 0; i < _logString.size(); ++i)
 		{
 			FillConsoleOutputCharacterA(_info.ConsoleHandle, _logString[i], 1, _info.ConsolePos, &garbage);
 			_info.ConsolePos.X++;

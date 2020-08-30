@@ -56,7 +56,7 @@ namespace Vacuum
 			* @param _threadIndex The index of the thread in the owners container
 			* @param _owner The owner of this thread. In this case the CThreadPool object
 			*/
-		CThread(const int32& _threadIndex, class CThreadPool* _owner, std::condition_variable& _semaphore, std::atomic_bool& _stopThread)
+		CThread(const s32& _threadIndex, class CThreadPool* _owner, std::condition_variable& _semaphore, std::atomic_bool& _stopThread)
 			:m_threadIndex(_threadIndex)
 			,m_owner(_owner)
 			,m_currentJob(nullptr)
@@ -106,7 +106,7 @@ namespace Vacuum
 			*/
 		void WorkerRun();
 
-		int32 m_threadIndex;
+		s32 m_threadIndex;
 		class CThreadPool* m_owner;
 		CBaseJob* m_currentJob;
 		std::condition_variable& m_semaphore;
@@ -125,7 +125,7 @@ namespace Vacuum
 			* The only constructor which will create the amount of screenshots get passed
 			* @param The amount of threads to create
 			*/
-		CThreadPool(const int32& _threadAmount);
+		CThreadPool(const s32& _threadAmount);
 		/**
 			* Destructor which will join all threads and delete them
 			*/
@@ -156,7 +156,7 @@ namespace Vacuum
 		bool StopThreads();
 	private:
 		std::vector<CThread*> m_threads;
-		int32 m_threadAmount;
+		s32 m_threadAmount;
 		std::queue<CBaseJob*> m_jobQueue;
 		std::mutex m_queueLock;
 		std::condition_variable m_semaphore;

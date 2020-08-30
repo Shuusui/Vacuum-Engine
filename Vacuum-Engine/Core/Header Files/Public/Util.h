@@ -73,13 +73,13 @@ namespace Vacuum
 				{
 				case 'i':
 				case 'd':
-					strAddFunc(std::to_string(va_arg(args, int32)), i);
+					strAddFunc(std::to_string(va_arg(args, s32)), i);
 					break;
 				case 'f':
 					strAddFunc(std::to_string(va_arg(args, float)), i);
 					break;
 				case 'u':
-					strAddFunc(std::to_string(va_arg(args, uint32)), i);
+					strAddFunc(std::to_string(va_arg(args, u32)), i);
 					break;
 				case 'w':
 					strAddFunc(ToString(va_arg(args, const wchar_t*)), i);

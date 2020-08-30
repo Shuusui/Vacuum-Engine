@@ -53,19 +53,19 @@ void Vacuum::CAppManager::InitApp()
 		appConfig >> json;
 		if (json.contains(JSONHEIGHT))
 		{
-			s_app->m_mainWindowDim.Height = json[JSONHEIGHT].get<int64>();
+			s_app->m_mainWindowDim.Height = json[JSONHEIGHT].get<s64>();
 		}
 		if (json.contains(JSONWIDTH))
 		{
-			s_app->m_mainWindowDim.Width = json[JSONWIDTH].get<int64>();
+			s_app->m_mainWindowDim.Width = json[JSONWIDTH].get<s64>();
 		}
 		if (json.contains(JSONX))
 		{
-			s_app->m_mainWindowDim.LeftTopCornerX = json[JSONX].get<int32>();
+			s_app->m_mainWindowDim.LeftTopCornerX = json[JSONX].get<s32>();
 		}
 		if (json.contains(JSONY))
 		{
-			s_app->m_mainWindowDim.LeftTopCornerY = json[JSONY].get<int32>();
+			s_app->m_mainWindowDim.LeftTopCornerY = json[JSONY].get<s32>();
 		}
 		if (json.contains(JSONVSYNC))
 		{

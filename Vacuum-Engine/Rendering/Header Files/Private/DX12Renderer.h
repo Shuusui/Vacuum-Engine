@@ -16,14 +16,14 @@ namespace Vacuum
 	{
 		ID3D12Resource* IndexBuffer;
 		ID3D12Resource* VertexBuffer;
-		int32 IndexBufferSize;
-		int32 VertexBufferSize;
+		s32 IndexBufferSize;
+		s32 VertexBufferSize;
 	};
 
 	struct SFrameContext
 	{
 		ID3D12CommandAllocator* CommandAllocator;
-		uint64 FenceValue;
+		u64 FenceValue;
 	};
 
 	struct SVertexConstantBuffer
@@ -35,23 +35,23 @@ namespace Vacuum
 	{
 		DirectX::XMFLOAT2 Pos;
 		DirectX::XMFLOAT2 UV;
-		uint32 Col;
+		u32 Col;
 	};
 
 	struct S3DVert
 	{
 		DirectX::XMFLOAT3 Pos; 
 		DirectX::XMFLOAT2 UV; 
-		uint32 Col;
+		u32 Col;
 	};
 
 	struct SGuiDrawCmd
 	{
 		DirectX::XMFLOAT4 ClipRect;
 		void* TextureID;
-		uint32 VtxOffset;
-		uint32 IdxOffset;
-		uint32 ElemCount;
+		u32 VtxOffset;
+		u32 IdxOffset;
+		u32 ElemCount;
 		std::function<void()> UserCallback;
 		bool UserCallbackValid = false;
 		bool CallUserCallback = false;
@@ -68,18 +68,42 @@ namespace Vacuum
 	{
 		DirectX::XMFLOAT2 DisplayPos;
 		DirectX::XMFLOAT2 DisplaySize;
-		int32 TotalIdxCount;
-		int32 TotalVtxCount;
+		s32 TotalIdxCount;
+		s32 TotalVtxCount;
 		std::vector<SGuiDrawList> DrawLists;
+	};
+
+	struct SDrawCmd
+	{
+		DirectX::XMFLOAT4 ClipRect;
+		u32 VtxOffset;
+		u32 IdxOffset;
+		u32 ElemCount;
+	};
+
+	struct SDrawList
+	{
+		std::vector<S3DVert> VertexBuffer;
+		std::vector<unsigned short> IndexBuffer;
+		std::vector<SDrawCmd> DrawCmds;
+	};
+
+	struct SDrawData
+	{
+		DirectX::XMFLOAT2 DisplayPos;
+		DirectX::XMFLOAT2 DisplaySize;
+		s32 TotalIdxCount;
+		s32 TotalVtxCount;
+		std::vector<SDrawList> DrawLists;
 	};
 
 
 	class DX12Renderer : public IRenderer
 	{
-		static const uint32 s_frameCount = 3;
+		static const u32 s_frameCount = 3;
 
 	public:
-		DX12Renderer(const uint32& _width, const uint32& _height, const HWND& _hwnd, bool& _bVSync)
+		DX12Renderer(const u32& _width, const u32& _height, const HWND& _hwnd, bool& _bVSync)
 			:IRenderer(_width, _height, _hwnd, _bVSync)
 			,m_hwnd(HWND(_hwnd))
 			,m_swapChainWaitableObject(nullptr)
@@ -88,11 +112,15 @@ namespace Vacuum
 			,m_swapChain(nullptr)
 			,m_rtvHeap(nullptr)
 			,m_srvDescHeap(nullptr)
+			,m_renderTargets()
 			,m_guiRootSignature(nullptr)
 			,m_guiPipelineState(nullptr)
 			,m_guiCommandList(nullptr)
+			,m_viewPortCommandList(nullptr)
 			,m_fence(nullptr)
 			,m_fontTextureResource(nullptr)
+			,m_guiVertexShader(nullptr)
+			,m_guiPixelShader(nullptr)
 			,m_barrier({})
 			,m_renderTargetDescs()
 			,m_fenceEvent(nullptr)
@@ -101,17 +129,21 @@ namespace Vacuum
 			,m_frameIndex(0)
 			,m_fenceValue(0)
 		{
+			m_renderTargets[0] = nullptr;
+			m_renderTargets[1] = nullptr;
+			m_renderTargets[2] = nullptr;
 		}
 
 		virtual void OnCreate() override;
-		virtual void CreateFontsTexture(unsigned char* _pixels, const int32& _width, const int32& _height, uint64& _texID) override;
+		virtual void CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID) override;
 		virtual void OnInit() override;
 		virtual void OnUpdate() override;
 		virtual void PrepareRendering() override;
 		virtual void UpdateDrawData(SGuiDrawData* _drawData);
+		virtual void UpdateVPDrawData(SDrawData* _drawData);
 		virtual void OnRender() override;
 		virtual void OnDestroy() override;
-		virtual void RegisterAfterResizeCallback(const std::function<void(HWND, uint32, WPARAM, LPARAM)>& _func) override;
+		virtual void RegisterAfterResizeCallback(const std::function<void(HWND, u32, WPARAM, LPARAM)>& _func) override;
 	private:
 		template<typename T>
 		static void SafeRelease(T*& resource)
@@ -130,11 +162,11 @@ namespace Vacuum
 		SFrameContext* WaitForNextFrameResources();
 		void WaitForLastSubmittedFrame();
 		void SetupRenderState(SGuiDrawData* _drawData, SFrameResource* _frameResource);
-		void SetupViewportRenderState(SGuiDrawData* _drawData);
+		void SetupViewportRenderState(SDrawData* _drawData, SFrameResource* _frameResource);
 		void InvalidateObjects();
 		void CreateRenderTarget();
 		void CleanupRenderTarget();
-		void ResizeSwapChain(HWND _hwnd, const uint32& _width, const uint32& _height);
+		void ResizeSwapChain(HWND _hwnd, const u32& _width, const u32& _height);
 
 		HWND m_hwnd;
 		HANDLE m_swapChainWaitableObject;
@@ -148,7 +180,8 @@ namespace Vacuum
 		ID3D12RootSignature* m_guiRootSignature;
 		ID3D12PipelineState* m_guiPipelineState;
 		ID3D12GraphicsCommandList* m_guiCommandList;
-		ID3D12GraphicsCommandList* m_viewPostCommandList;
+		ID3D12GraphicsCommandList* m_vpCommandList;
+		ID3D12GraphicsCommandList* m_viewPortCommandList;
 		ID3D12Fence* m_fence;
 		ID3D12Resource* m_fontTextureResource;
 		ID3DBlob* m_guiVertexShader;
@@ -160,8 +193,8 @@ namespace Vacuum
 		SFrameResource* m_frameResources;
 		SFrameContext m_frameContext[s_frameCount];
 
-		uint32 m_frameIndex;
-		uint64 m_fenceValue;
-		std::vector<std::function<void(HWND, uint32, WPARAM, LPARAM)>> m_afterResizeCallbacks;
+		u32 m_frameIndex;
+		u64 m_fenceValue;
+		std::vector<std::function<void(HWND, u32, WPARAM, LPARAM)>> m_afterResizeCallbacks;
 	};
 }

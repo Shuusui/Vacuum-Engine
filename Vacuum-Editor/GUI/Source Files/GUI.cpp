@@ -53,7 +53,7 @@ bool Vacuum::CGUI::Init(HWND _hwnd)
 
 	
 	CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
-	auto updateDisplaySize = [mainWindow](HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)->int32 {
+	auto updateDisplaySize = [mainWindow](HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)->s32 {
 		if (!mainWindow)
 		{
 			return 0;
@@ -128,14 +128,14 @@ void Vacuum::CGUI::Render()
 	DirectX::XMFLOAT2 displaySize = {guiDrawData->DisplaySize.x, guiDrawData->DisplaySize.y};
 	SGuiDrawData* drawData = new SGuiDrawData{displayPos, displaySize, guiDrawData->TotalIdxCount, guiDrawData->TotalVtxCount};
 
-	for (int32 i = 0; i < guiDrawData->CmdListsCount; ++i)
+	for (s32 i = 0; i < guiDrawData->CmdListsCount; ++i)
 	{
 		ImDrawList* guiDrawList = guiDrawData->CmdLists[i];
 		SGuiDrawList drawList = {};
 		drawList.IndexBuffer = std::vector<unsigned short>(guiDrawList->IdxBuffer.Data, guiDrawList->IdxBuffer.Data + guiDrawList->IdxBuffer.Size);
 		drawList.VertexBuffer = std::vector<S2DVert>((S2DVert*)guiDrawList->VtxBuffer.Data, (S2DVert*)guiDrawList->VtxBuffer.Data + guiDrawList->VtxBuffer.Size);
 
-		for (int32 j = 0; j < guiDrawList->CmdBuffer.Size; ++j)
+		for (s32 j = 0; j < guiDrawList->CmdBuffer.Size; ++j)
 		{
 			ImDrawCmd* guiDrawCmd = &guiDrawList->CmdBuffer[j];
 
@@ -163,6 +163,7 @@ void Vacuum::CGUI::Render()
 	}
 
 	CRendererManager::UpdateDrawData(drawData);
+	CRendererManager::UpdateVPDrawData(nullptr);
 }
 
 void Vacuum::CGUI::SetCaptureIfNotSet(HWND _hwnd)
@@ -181,7 +182,7 @@ void Vacuum::CGUI::ReleaseCaptureIfSet(HWND _hwnd)
 	}
 }
 
-int32 Vacuum::CGUI::OnLButtonDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnLButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	SetCaptureIfNotSet(_hwnd);
@@ -189,7 +190,7 @@ int32 Vacuum::CGUI::OnLButtonDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARA
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnRButtonDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnRButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	SetCaptureIfNotSet(_hwnd);
@@ -197,7 +198,7 @@ int32 Vacuum::CGUI::OnRButtonDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARA
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnLButtonUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnLButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseDown[0] = false;
@@ -205,7 +206,7 @@ int32 Vacuum::CGUI::OnLButtonUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM 
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnRButtonUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnRButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseDown[1] = false;
@@ -213,7 +214,7 @@ int32 Vacuum::CGUI::OnRButtonUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM 
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnSetCursor(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnSetCursor(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	if (LOWORD(_lParam) == HTCLIENT && s_gui->UpdateMouseCursor())
 	{
@@ -222,7 +223,7 @@ int32 Vacuum::CGUI::OnSetCursor(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM 
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnKeyDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnKeyDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	if (_wParam < 256)
 	{
@@ -232,7 +233,7 @@ int32 Vacuum::CGUI::OnKeyDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _l
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnKeyUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnKeyUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	if (_wParam < 256)
 	{
@@ -242,40 +243,40 @@ int32 Vacuum::CGUI::OnKeyUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lPa
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnChar(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnChar(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	if (_wParam > 0 && _wParam < 0x10000)
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		io.AddInputCharacterUTF16((uint16)_wParam);
+		io.AddInputCharacterUTF16((u16)_wParam);
 	}
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnMouseWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnMouseWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseWheel += (float)GET_WHEEL_DELTA_WPARAM(_wParam) / (float)WHEEL_DELTA;
 	return 0;
 }
 
-int32 Vacuum::CGUI::OnMouseHWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Vacuum::CGUI::OnMouseHWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseWheelH += (float)GET_WHEEL_DELTA_WPARAM(_wParam) / (float)WHEEL_DELTA;
 	return 0;
 }
 
-void Vacuum::CGUI::OnUpdateFontTexture(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)
+void Vacuum::CGUI::OnUpdateFontTexture(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->TexID = nullptr;
 
 	unsigned char* pixels; 
-	int32 width, height;
+	s32 width, height;
 	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
-	uint64 texID = 0;
+	u64 texID = 0;
 	CRendererManager::CreateFontsTexture(pixels, width, height, texID);
 	io.Fonts->TexID = (void*)texID;
 }
@@ -316,7 +317,7 @@ void Vacuum::CGUI::UpdateMousePos()
 
 	if (io.WantSetMousePos)
 	{
-		POINT pos = {(int32)io.MousePos.x, (int32)io.MousePos.y};
+		POINT pos = {(s32)io.MousePos.x, (s32)io.MousePos.y};
 		ClientToScreen(m_hwnd, &pos);
 		SetCursorPos(pos.x, pos.y);
 	}

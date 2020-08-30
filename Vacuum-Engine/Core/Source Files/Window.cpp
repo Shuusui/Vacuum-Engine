@@ -19,15 +19,15 @@ namespace Vacuum
 		LPARAM _lParam)
 	{
 		CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
-		int32 returnValue = 0;
+		s32 returnValue = 0;
 		
 		switch (_msg)
 		{
 		case WM_SIZE:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SIZE))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SIZE))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -46,9 +46,9 @@ namespace Vacuum
 				}
 				mainWindow->UpdateWindowSize(rect.right - rect.left, rect.bottom - rect.top);
 				mainWindow->UpdateWindowPos(rect.left, rect.top);
-				for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_EXITSIZEMOVE))
+				for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_EXITSIZEMOVE))
 				{
-					int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+					s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 					if (tempReturn != 0)
 					{
 						returnValue = tempReturn;
@@ -58,9 +58,9 @@ namespace Vacuum
 			return returnValue;
 		}
 		case WM_SETCURSOR:
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SETCURSOR))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SETCURSOR))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -69,9 +69,9 @@ namespace Vacuum
 			return returnValue;
 		case WM_PAINT:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_PAINT))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_PAINT))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -81,9 +81,9 @@ namespace Vacuum
 		}
 		case WM_LBUTTONDOWN:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONDOWN))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONDOWN))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -93,9 +93,9 @@ namespace Vacuum
 		}
 		case WM_LBUTTONDBLCLK:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONDBLCLK))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONDBLCLK))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -105,9 +105,9 @@ namespace Vacuum
 		}
 		case WM_RBUTTONDOWN:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONDOWN))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONDOWN))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -117,9 +117,9 @@ namespace Vacuum
 		}
 		case WM_RBUTTONDBLCLK:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONDBLCLK))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONDBLCLK))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -129,9 +129,9 @@ namespace Vacuum
 		}
 		case WM_MBUTTONDOWN: 
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONDOWN))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONDOWN))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -141,9 +141,9 @@ namespace Vacuum
 		}
 		case WM_MBUTTONDBLCLK:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONDBLCLK))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONDBLCLK))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -153,9 +153,9 @@ namespace Vacuum
 		}
 		case WM_XBUTTONDOWN:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONDOWN))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONDOWN))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -165,9 +165,9 @@ namespace Vacuum
 		}
 		case WM_XBUTTONDBLCLK:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONDBLCLK))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONDBLCLK))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -177,9 +177,9 @@ namespace Vacuum
 		}
 		case WM_LBUTTONUP:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONUP))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_LBUTTONUP))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -189,9 +189,9 @@ namespace Vacuum
 		}
 		case WM_RBUTTONUP:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONUP))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_RBUTTONUP))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -201,9 +201,9 @@ namespace Vacuum
 		}
 		case WM_MBUTTONUP:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONUP))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MBUTTONUP))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -213,9 +213,9 @@ namespace Vacuum
 		}
 		case WM_XBUTTONUP:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONUP))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_XBUTTONUP))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -225,9 +225,9 @@ namespace Vacuum
 		}
 		case WM_MOUSEWHEEL:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MOUSEWHEEL))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MOUSEWHEEL))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -237,9 +237,9 @@ namespace Vacuum
 		}
 		case WM_MOUSEHWHEEL:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MOUSEHWHEEL))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_MOUSEHWHEEL))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -250,17 +250,17 @@ namespace Vacuum
 		case WM_KEYDOWN:
 		case WM_SYSKEYDOWN:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_KEYDOWN))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_KEYDOWN))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
 				}
 			}
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SYSKEYDOWN))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SYSKEYDOWN))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -271,17 +271,17 @@ namespace Vacuum
 		case WM_KEYUP:
 		case WM_SYSKEYUP:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_KEYUP))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_KEYUP))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
 				}
 			}
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SYSKEYUP))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_SYSKEYUP))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -291,9 +291,9 @@ namespace Vacuum
 		}
 		case WM_CHAR:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_CHAR))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_CHAR))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -303,9 +303,9 @@ namespace Vacuum
 		}
 		case WM_DEVICECHANGE:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_DEVICECHANGE))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_DEVICECHANGE))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -315,9 +315,9 @@ namespace Vacuum
 		}
 		case WM_DESTROY:
 		{
-			for (const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_DESTROY))
+			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : mainWindow->GetWMFunctions(WM_DESTROY))
 			{
-				int32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
+				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
 				if (tempReturn != 0)
 				{
 					returnValue = tempReturn;
@@ -384,7 +384,7 @@ namespace Vacuum
 		return true;
 	}
 
-	void CMainWindow::ShowAndUpdate(const int32& _nCmdShow)
+	void CMainWindow::ShowAndUpdate(const s32& _nCmdShow)
 	{
 		ShowWindow(s_mainWindow->m_wndHandle, _nCmdShow);
 		UpdateWindow(s_mainWindow->m_wndHandle);
@@ -406,24 +406,24 @@ namespace Vacuum
 		return s_mainWindow;
 	}
 
-	void CMainWindow::UpdateWindowPos(const int32& _x, const int32& _y)
+	void CMainWindow::UpdateWindowPos(const s32& _x, const s32& _y)
 	{
 		m_windowInfo.DimParams.LeftTopCornerX = _x;
 		m_windowInfo.DimParams.LeftTopCornerY = _y;
 	}
 
-	void CMainWindow::UpdateWindowSize(const int32& _width, const int32& _height)
+	void CMainWindow::UpdateWindowSize(const s32& _width, const s32& _height)
 	{
 		m_windowInfo.DimParams.Width = _width;
 		m_windowInfo.DimParams.Height = _height;
 	}
 
-	void CMainWindow::RegisterCallbackForWMEvents(const uint32& _wmEvent, const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& _func)
+	void CMainWindow::RegisterCallbackForWMEvents(const u32& _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func)
 	{
 		m_wmEventMap[_wmEvent].push_back(_func);
 	}
 
-	std::vector<std::function<int32(HWND, uint32, WPARAM, LPARAM)>>& CMainWindow::GetWMFunctions(uint32 _wmEvent) const
+	std::vector<std::function<s32(HWND, u32, WPARAM, LPARAM)>>& CMainWindow::GetWMFunctions(u32 _wmEvent) const
 	{
 		return s_mainWindow->m_wmEventMap[_wmEvent];
 	}

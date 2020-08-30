@@ -10,8 +10,8 @@ namespace Vacuum
 	struct SRendererCreationInfo
 	{
 		ERenderAPIs RenderApi;
-		uint32 Width;
-		uint32 Height;
+		u32 Width;
+		u32 Height;
 		bool bVSync;
 		void* WndHandle;
 	};
@@ -40,7 +40,7 @@ namespace Vacuum
 		}
 
 		std::vector<SVertex> Vertices;
-		std::vector<uint32> Indices;
+		std::vector<u32> Indices;
 	};
 
 	struct SWindowDimParams
@@ -71,9 +71,9 @@ namespace Vacuum
 			LeftTopCornerY = _other.LeftTopCornerY;
 		}
 
-		int64 Width;
-		int64 Height;
-		int32 LeftTopCornerX;
-		int32 LeftTopCornerY;
+		s64 Width;
+		s64 Height;
+		s32 LeftTopCornerX;
+		s32 LeftTopCornerY;
 	};
 }

@@ -13,7 +13,7 @@ bool Vacuum::CTimer::Create()
 	return true;
 }
 
-int64 Vacuum::CTimer::GetTicksPerSecond()
+s64 Vacuum::CTimer::GetTicksPerSecond()
 {
 	if (!s_timer)
 	{
@@ -22,7 +22,7 @@ int64 Vacuum::CTimer::GetTicksPerSecond()
 	return s_timer->m_ticksPerSecond;
 }
 
-int64 Vacuum::CTimer::GetTime()
+s64 Vacuum::CTimer::GetTime()
 {
 	if (!s_timer)
 	{
@@ -61,7 +61,7 @@ Vacuum::CTimer::~CTimer()
 
 void Vacuum::CTimer::Update()
 {
-	int64 currentTime;
+	s64 currentTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
 	m_deltaSeconds = (float)(currentTime - m_time) / m_ticksPerSecond;
 	m_time = currentTime;

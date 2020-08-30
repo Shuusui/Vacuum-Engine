@@ -31,10 +31,10 @@ namespace Vacuum
 	struct SGuid
 	{
 	public:
-		uint32 A;
-		uint32 B;
-		uint32 C;
-		uint32 D;
+		u32 A;
+		u32 B;
+		u32 C;
+		u32 D;
 
 		SGuid()
 			:A(0)
@@ -55,10 +55,10 @@ namespace Vacuum
 				return;
 			}
 			std::stringstream stream;
-			uint16 bFirst = 0;
-			uint16 bSecond = 0;
-			uint16 cFirst = 0;
-			uint16 cSecond = 0;
+			u16 bFirst = 0;
+			u16 bSecond = 0;
+			u16 cFirst = 0;
+			u16 cSecond = 0;
 			std::string aSubStr = {};
 			std::string bFirstStr = {};
 			std::string bSecondStr = {};
@@ -148,13 +148,13 @@ namespace Vacuum
 			{
 				return std::string();
 			}
-			uint16 bFirst = B >> 16;
-			uint16 bSecond = 0;
+			u16 bFirst = B >> 16;
+			u16 bSecond = 0;
 			bSecond |= B;
-			uint16 cFirst = C >> 16;
-			uint16 cSecond = 0;
+			u16 cFirst = C >> 16;
+			u16 cSecond = 0;
 			cSecond |= C;
-			uint64 dTemp = ((uint64)cSecond) << 32;
+			u64 dTemp = ((u64)cSecond) << 32;
 			dTemp |= D;
 			std::stringstream aStream;
 			std::stringstream bFirstStream;
@@ -261,8 +261,8 @@ namespace std
 	{
 		std::size_t operator()(Vacuum::SGuid _guid) const
 		{
-			const uint64* guidPtr = reinterpret_cast<const uint64*>(&_guid);
-			std::hash<uint64> hash;
+			const u64* guidPtr = reinterpret_cast<const u64*>(&_guid);
+			std::hash<u64> hash;
 			return hash(guidPtr[0]) ^ hash(guidPtr[1]);
 		}
 	};

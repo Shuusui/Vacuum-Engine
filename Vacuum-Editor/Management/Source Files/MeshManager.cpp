@@ -45,7 +45,7 @@ void Vacuum::CMeshManager::Load()
 		}
 	}
 
-	WaveFrontReader<uint32> wfReader = WaveFrontReader<uint32>();
+	WaveFrontReader<u32> wfReader = WaveFrontReader<u32>();
 	for (const std::filesystem::path& meshPath : std::filesystem::directory_iterator(m_meshesPath))
 	{
 		if (alreadyFoundMeshes.find(meshPath.filename().string()) != alreadyFoundMeshes.end())

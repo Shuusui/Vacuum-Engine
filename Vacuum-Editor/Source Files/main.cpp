@@ -17,7 +17,7 @@
 #include "Timer.h"
 #include "ECS\Header Files\ECSManager.h"
 
-int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ LPSTR _lpCmdLine, _In_ int32 _nShowCmd)
+s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ LPSTR _lpCmdLine, _In_ s32 _nShowCmd)
 {
 	using namespace Vacuum;
 
@@ -67,7 +67,7 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (uint32)appMgrHandle->GetInitWindowDimParams().Width, (uint32)appMgrHandle->GetInitWindowDimParams().Height, appMgrHandle->GetLastVSyncState(), CMainWindow::GetWindowHandle()->GetHwnd() });
+	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)appMgrHandle->GetInitWindowDimParams().Width, (u32)appMgrHandle->GetInitWindowDimParams().Height, appMgrHandle->GetLastVSyncState(), CMainWindow::GetWindowHandle()->GetHwnd() });
 
 	CGUI::Init(CMainWindow::GetWindowHandle()->GetHwnd());
 
@@ -75,7 +75,7 @@ int32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In
 	unsigned char* pixels;
 	int width, height;
 	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-	uint64 texID = 0;
+	u64 texID = 0;
 	CRendererManager::CreateFontsTexture(pixels, width, height, texID);
 	io.Fonts->TexID = (void*)texID;
 

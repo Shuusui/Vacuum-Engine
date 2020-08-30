@@ -25,12 +25,12 @@ namespace Vacuum
 		}
 	}
 
-	CThreadPool::CThreadPool(const int32& _threadAmount)
+	CThreadPool::CThreadPool(const s32& _threadAmount)
 		:m_stopThreads(false)
 	{
 		m_threads = std::vector<CThread*>(_threadAmount);
 		m_threadAmount = _threadAmount;
-		for (int32 i = 0; i < _threadAmount; ++i)
+		for (s32 i = 0; i < _threadAmount; ++i)
 		{
 			m_threads[i] = std::move(new CThread(i, this, m_semaphore, m_stopThreads));
 		}

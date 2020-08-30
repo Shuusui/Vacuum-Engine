@@ -56,17 +56,17 @@ namespace Vacuum
 	private: 
 		static void SetCaptureIfNotSet(HWND _hwnd);
 		static void ReleaseCaptureIfSet(HWND _hwnd);
-		static int32 OnLButtonDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnRButtonDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnLButtonUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnRButtonUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnSetCursor(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnKeyDown(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnKeyUp(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnChar(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnMouseWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static int32 OnMouseHWheel(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
-		static void OnUpdateFontTexture(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnLButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnRButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnLButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnRButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnSetCursor(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnKeyDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnKeyUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnChar(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnMouseWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static s32 OnMouseHWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		static void OnUpdateFontTexture(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
 
 		CGUI(HWND _hwnd)
 			:m_hwnd(_hwnd)

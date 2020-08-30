@@ -13,13 +13,14 @@ namespace Vacuum
 	{
 	public:
 		static void Create(const SRendererCreationInfo& _info);
-		static void CreateFontsTexture(unsigned char* _pixels, const int32& _width, const int32& _height, uint64& _texID);
+		static void CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID);
 		static void PrepareRendering();
 		static void UpdateDrawData(struct SGuiDrawData* _drawData);
+		static void UpdateVPDrawData(struct SDrawData* _drawData);
 		static void OnInit(const std::vector<std::filesystem::path>& _shaderPaths);
 		static void OnRender();
 		static void Destroy();
-		static void RegisterAfterResizeCallback(const std::function<void(HWND, uint32, WPARAM, LPARAM)>& _func);
+		static void RegisterAfterResizeCallback(const std::function<void(HWND, u32, WPARAM, LPARAM)>& _func);
 		static bool& GetVSync()
 		{
 			return s_rendererManager->m_bVSync;

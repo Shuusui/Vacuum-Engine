@@ -8,8 +8,8 @@ namespace Vacuum
 	{
 	public:
 		static bool Create();
-		static int64 GetTicksPerSecond();
-		static int64 GetTime();
+		static s64 GetTicksPerSecond();
+		static s64 GetTime();
 		static float GetDeltaSeconds();
 		static void OnUpdate();
 		CTimer();
@@ -19,8 +19,8 @@ namespace Vacuum
 	private:
 		static CTimer* s_timer;
 
-		int64 m_ticksPerSecond;
-		int64 m_time;
+		s64 m_ticksPerSecond;
+		s64 m_time;
 		float m_deltaSeconds;
 	};
 }

@@ -110,19 +110,19 @@ namespace Vacuum
 
 		static bool Create(std::string& _errorMsg);
 
-		static void ShowAndUpdate(const int32& _nCmdShow);
+		static void ShowAndUpdate(const s32& _nCmdShow);
 
 		static bool RunWindow(MSG& _msg);
 
 		static CMainWindow* GetWindowHandle();
 
-		void UpdateWindowPos(const int32& _x, const int32& _y);
+		void UpdateWindowPos(const s32& _x, const s32& _y);
 
-		void UpdateWindowSize(const int32& _width, const int32& _height);
+		void UpdateWindowSize(const s32& _width, const s32& _height);
 
-		void RegisterCallbackForWMEvents(const uint32& _wmEvent, const std::function<int32(HWND, uint32, WPARAM, LPARAM)>& _func);
+		void RegisterCallbackForWMEvents(const u32& _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func);
 
-		std::vector<std::function<int32(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)>>& GetWMFunctions(uint32 _wmEvent) const;
+		std::vector<std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>>& GetWMFunctions(u32 _wmEvent) const;
 
 		HWND GetHwnd() const;
 
@@ -153,6 +153,6 @@ namespace Vacuum
 		SWindowInfo m_windowInfo;
 		HWND m_wndHandle;
 		static CMainWindow* s_mainWindow;
-		std::unordered_map<uint32, std::vector<std::function<int32(HWND _hwnd, uint32 _msg, WPARAM _wParam, LPARAM _lParam)>>> m_wmEventMap;
+		std::unordered_map<u32, std::vector<std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>>> m_wmEventMap;
 	};
 }
