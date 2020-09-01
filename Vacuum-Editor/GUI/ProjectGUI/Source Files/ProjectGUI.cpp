@@ -7,6 +7,8 @@
 #include "GlobalMacros.h"
 #include "Util.h"
 #include "GUI.h"
+#include "RendererManager.h"
+#include "MeshManager.h"
 
 Vacuum::CProjectGUI* Vacuum::CProjectGUI::s_projectGUI = nullptr;
 
@@ -99,7 +101,15 @@ void Vacuum::CProjectGUI::OnRender()
 	{
 		m_entityEditor->OnRender();
 	}
+	RenderViewport();
 
+	RenderCreateSceneWindow();
+
+	RenderCreateEntityWindow();
+}
+
+void Vacuum::CProjectGUI::RenderViewport()
+{
 	std::string wndLable = m_currentProject->GetCurrentScene() ? PRINTF("%s (%s)", m_currentProject->GetName().c_str(), m_currentProject->GetCurrentScene()->GetObjectName().c_str()).c_str() : m_currentProject->GetName();
 
 	ImGui::SetNextWindowSize(ImVec2(600, 600), ImGuiCond_FirstUseEver);
@@ -111,11 +121,48 @@ void Vacuum::CProjectGUI::OnRender()
 
 	ImGui::InvisibleButton("Viewport", ImGui::GetContentRegionAvail(), ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
 
+	ImVec2 viewportPos = ImGui::GetWindowPos();
+	ImVec2 viewportSize = ImGui::GetWindowSize();
+
+	SDrawData* drawData = new SDrawData();
+	
+	drawData->DisplayPos.x = viewportPos.x;
+	drawData->DisplayPos.y = viewportPos.y;
+
+	drawData->DisplaySize.x = viewportSize.x;
+	drawData->DisplaySize.y = viewportSize.y;
+
+	CMeshManager* meshManager = CMeshManager::GetHandle();
+	std::unordered_map<SGuid, SModel> meshes = meshManager->GetMeshes();
+	SModel currentModel = {};
+	for (const auto& [guid, model] : meshes)
+	{
+		currentModel = model;
+		break;
+	}
+
+	SMesh meshData = currentModel.MeshData;
+
+	drawData->TotalIdxCount = meshData.Indices.size();
+	drawData->TotalVtxCount = meshData.Vertices.size();
+
+	SDrawList meshDrawList = {};
+	meshDrawList.IndexBuffer = meshData.Indices;
+	meshDrawList.VertexBuffer = meshData.Vertices;
+
+
+	SDrawCmd meshDrawCmd = {};
+	meshDrawCmd.ElemCount = meshData.Indices.size();
+	meshDrawCmd.ClipRect.z = viewportSize.x;
+	meshDrawCmd.ClipRect.w = viewportSize.y;
+
+	meshDrawList.DrawCmds.push_back(meshDrawCmd);
+
+	drawData->DrawLists.push_back(meshDrawList);
+
+	CGUI::SetVPDrawData(drawData);
+
 	ImGui::End();
-
-	RenderCreateSceneWindow();
-
-	RenderCreateEntityWindow();
 }
 
 void Vacuum::CProjectGUI::RenderCreateSceneWindow()

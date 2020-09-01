@@ -95,6 +95,7 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 
 		CRendererManager::PrepareRendering();
 		CGUI::Render();
+		CRendererManager::OnUpdate();
 		CRendererManager::OnRender();
 	}
 	CAppManager::SetLastVSyncState(CRendererManager::GetVSync());

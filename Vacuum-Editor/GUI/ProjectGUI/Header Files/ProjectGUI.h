@@ -14,6 +14,7 @@ namespace Vacuum
 		}
 		~CProjectGUI();
 		void OnRender();
+		void RenderViewport();
 		void RenderCreateSceneWindow();
 		void RenderCreateEntityWindow();
 		class CEntityEditor* GetEntityEditorHandle()

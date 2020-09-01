@@ -4,6 +4,7 @@
 #include <d3d12.h>
 #include "GlobalDefs.h"
 #include <filesystem>
+#include "RendererManager.h"
 
 namespace Vacuum
 {
@@ -23,19 +24,24 @@ namespace Vacuum
 		static void Destroy();
 		static SGUIInfo& GetGUIInfo();
 
-		static void SetOpenLog(const bool& bConsoleOpen)
+		static void SetOpenLog(const bool& _bConsoleOpen)
 		{
-			s_gui->m_guiInfo.bOpenConsole = bConsoleOpen;
+			s_gui->m_guiInfo.bOpenConsole = _bConsoleOpen;
 		}
 
-		static void SetOpenContentBrowser(const bool& bContentBrowserOpen)
+		static void SetOpenContentBrowser(const bool& _bContentBrowserOpen)
 		{
-			s_gui->m_guiInfo.bOpenContentBrowser = bContentBrowserOpen;
+			s_gui->m_guiInfo.bOpenContentBrowser = _bContentBrowserOpen;
 		}
 
-		static void SetOpenEditorFPS(const bool& bOpenEditorFPS)
+		static void SetOpenEditorFPS(const bool& _bOpenEditorFPS)
 		{
-			s_gui->m_guiInfo.bOpenEditorFPS = bOpenEditorFPS;
+			s_gui->m_guiInfo.bOpenEditorFPS = _bOpenEditorFPS;
+		}
+
+		static void SetVPDrawData(SDrawData* _drawData)
+		{
+			s_gui->m_vpDrawData = _drawData;
 		}
 
 		~CGUI();
@@ -85,5 +91,6 @@ namespace Vacuum
 		std::filesystem::path m_guiIniFilePath;
 		std::filesystem::path m_guiIniPath;
 		SGUIInfo m_guiInfo;
+		SDrawData* m_vpDrawData;
 	};
 }

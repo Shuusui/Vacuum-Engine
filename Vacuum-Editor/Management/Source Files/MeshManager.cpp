@@ -27,6 +27,7 @@ void Vacuum::CMeshManager::OnDestroy()
 
 void Vacuum::CMeshManager::Load()
 {
+	WaveFrontReader<u32> wfReader = WaveFrontReader<u32>();
 	std::unordered_set<std::string> alreadyFoundMeshes = {};
 	if (std::filesystem::exists(m_configFilePath))
 	{
@@ -40,12 +41,17 @@ void Vacuum::CMeshManager::Load()
 		{
 			SModel model = SModel(value);
 			alreadyFoundMeshes.insert(model.Name);
+			wfReader.Clear();
+			wfReader.Load(model.Path.wstring().c_str());
+			model.MeshData.Vertices = std::move(wfReader.vertices);
+			model.MeshData.Indices = std::move(wfReader.indices);
+
 			m_meshes.insert(std::make_pair(key, model));
 			m_meshPaths.insert(model.Path.string());
+
 		}
 	}
 
-	WaveFrontReader<u32> wfReader = WaveFrontReader<u32>();
 	for (const std::filesystem::path& meshPath : std::filesystem::directory_iterator(m_meshesPath))
 	{
 		if (alreadyFoundMeshes.find(meshPath.filename().string()) != alreadyFoundMeshes.end())

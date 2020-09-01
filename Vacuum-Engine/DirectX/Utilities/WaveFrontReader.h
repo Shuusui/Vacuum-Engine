@@ -164,7 +164,7 @@ public:
                     if (vertexIndex >= positions.size())
                         return E_FAIL;
 
-                    vertex.position = positions[vertexIndex];
+                    vertex.Position = positions[vertexIndex];
 
                     if ('/' == InFile.peek())
                     {
@@ -195,7 +195,7 @@ public:
                             if (coordIndex >= texCoords.size())
                                 return E_FAIL;
 
-                            vertex.textureCoordinate = texCoords[coordIndex];
+                            vertex.TextureCoordinate = texCoords[coordIndex];
                         }
 
                         if ('/' == InFile.peek())
@@ -225,7 +225,7 @@ public:
                             if (normIndex >= normals.size())
                                 return E_FAIL;
 
-                            vertex.normal = normals[normIndex];
+                            vertex.Normal = normals[normIndex];
                         }
                     }
 

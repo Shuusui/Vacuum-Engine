@@ -36,6 +36,11 @@ void Vacuum::CRendererManager::OnInit(const std::vector<std::filesystem::path>& 
 	s_rendererManager->m_renderer->OnInit();
 }
 
+void Vacuum::CRendererManager::OnUpdate()
+{
+	s_rendererManager->m_renderer->OnUpdate();
+}
+
 void Vacuum::CRendererManager::OnRender()
 {
 	s_rendererManager->m_renderer->OnRender();

@@ -18,6 +18,7 @@ namespace Vacuum
 		static void UpdateDrawData(struct SGuiDrawData* _drawData);
 		static void UpdateVPDrawData(struct SDrawData* _drawData);
 		static void OnInit(const std::vector<std::filesystem::path>& _shaderPaths);
+		static void OnUpdate();
 		static void OnRender();
 		static void Destroy();
 		static void RegisterAfterResizeCallback(const std::function<void(HWND, u32, WPARAM, LPARAM)>& _func);

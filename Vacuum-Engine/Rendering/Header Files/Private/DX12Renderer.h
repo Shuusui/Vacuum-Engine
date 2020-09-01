@@ -22,7 +22,8 @@ namespace Vacuum
 
 	struct SFrameContext
 	{
-		ID3D12CommandAllocator* CommandAllocator;
+		ID3D12CommandAllocator* GUICommandAllocator;
+		ID3D12CommandAllocator* VPCommandAllocator;
 		u64 FenceValue;
 	};
 
@@ -35,13 +36,6 @@ namespace Vacuum
 	{
 		DirectX::XMFLOAT2 Pos;
 		DirectX::XMFLOAT2 UV;
-		u32 Col;
-	};
-
-	struct S3DVert
-	{
-		DirectX::XMFLOAT3 Pos; 
-		DirectX::XMFLOAT2 UV; 
 		u32 Col;
 	};
 
@@ -83,8 +77,8 @@ namespace Vacuum
 
 	struct SDrawList
 	{
-		std::vector<S3DVert> VertexBuffer;
-		std::vector<unsigned short> IndexBuffer;
+		std::vector<struct SVertex> VertexBuffer;
+		std::vector<u32> IndexBuffer;
 		std::vector<SDrawCmd> DrawCmds;
 	};
 
@@ -112,16 +106,22 @@ namespace Vacuum
 			,m_swapChain(nullptr)
 			,m_rtvHeap(nullptr)
 			,m_srvDescHeap(nullptr)
+			,m_vpSrvDescHeap(nullptr)
 			,m_renderTargets()
 			,m_guiRootSignature(nullptr)
+			,m_vpRootSignature(nullptr)
 			,m_guiPipelineState(nullptr)
+			,m_vpPipelineState(nullptr)
 			,m_guiCommandList(nullptr)
-			,m_viewPortCommandList(nullptr)
+			,m_vpCommandList(nullptr)
 			,m_fence(nullptr)
 			,m_fontTextureResource(nullptr)
 			,m_guiVertexShader(nullptr)
 			,m_guiPixelShader(nullptr)
-			,m_barrier({})
+			,m_vpVertexShader(nullptr)
+			,m_vpPixelShader(nullptr)
+			,m_guiBarrier({})
+			,m_vpBarrier({})
 			,m_renderTargetDescs()
 			,m_fenceEvent(nullptr)
 			,m_frameResources(nullptr)
@@ -157,7 +157,9 @@ namespace Vacuum
 
 		void LoadPipeline();
 		void LoadGUIShaders();
+		void LoadVPShaders();
 		void LoadAssets();
+		void LoadVPAssets();
 		void GetHandwareAdapter(struct IDXGIFactory1* _factory, Microsoft::WRL::ComPtr<IDXGIAdapter1>& _adapter);
 		SFrameContext* WaitForNextFrameResources();
 		void WaitForLastSubmittedFrame();
@@ -176,18 +178,23 @@ namespace Vacuum
 		IDXGISwapChain3* m_swapChain;
 		ID3D12DescriptorHeap* m_rtvHeap;
 		ID3D12DescriptorHeap* m_srvDescHeap;
+		ID3D12DescriptorHeap* m_vpSrvDescHeap;
 		ID3D12Resource* m_renderTargets[s_frameCount];
 		ID3D12RootSignature* m_guiRootSignature;
+		ID3D12RootSignature* m_vpRootSignature;
 		ID3D12PipelineState* m_guiPipelineState;
+		ID3D12PipelineState* m_vpPipelineState;
 		ID3D12GraphicsCommandList* m_guiCommandList;
 		ID3D12GraphicsCommandList* m_vpCommandList;
-		ID3D12GraphicsCommandList* m_viewPortCommandList;
 		ID3D12Fence* m_fence;
 		ID3D12Resource* m_fontTextureResource;
 		ID3DBlob* m_guiVertexShader;
 		ID3DBlob* m_guiPixelShader;
+		ID3DBlob* m_vpVertexShader;
+		ID3DBlob* m_vpPixelShader;
 
-		D3D12_RESOURCE_BARRIER m_barrier;
+		D3D12_RESOURCE_BARRIER m_guiBarrier;
+		D3D12_RESOURCE_BARRIER m_vpBarrier;
 		CD3DX12_CPU_DESCRIPTOR_HANDLE m_renderTargetDescs[s_frameCount];
 		HANDLE m_fenceEvent;
 		SFrameResource* m_frameResources;
@@ -196,5 +203,12 @@ namespace Vacuum
 		u32 m_frameIndex;
 		u64 m_fenceValue;
 		std::vector<std::function<void(HWND, u32, WPARAM, LPARAM)>> m_afterResizeCallbacks;
+
+		std::vector<SGuiDrawData*> m_guiDrawDatas;
+		std::vector<SDrawData*> m_drawDatas;
+		u32 m_vertexBufferSizeNextTick;
+		u32 m_vertexResourceWidthNextTick;
+		u32 m_idxBufferSizeNextTick;
+		u32 m_idxResourceWidthNextTick;
 	};
 }

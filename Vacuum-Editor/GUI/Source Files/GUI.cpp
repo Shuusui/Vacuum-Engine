@@ -163,7 +163,12 @@ void Vacuum::CGUI::Render()
 	}
 
 	CRendererManager::UpdateDrawData(drawData);
-	CRendererManager::UpdateVPDrawData(nullptr);
+	VE_LOG("Update gui draw data");
+	if (s_gui->m_vpDrawData)
+	{
+		VE_LOG("Update vp draw data");
+		CRendererManager::UpdateVPDrawData(s_gui->m_vpDrawData);
+	}
 }
 
 void Vacuum::CGUI::SetCaptureIfNotSet(HWND _hwnd)
@@ -272,7 +277,7 @@ void Vacuum::CGUI::OnUpdateFontTexture(HWND _hwnd, u32 _msg, WPARAM _wParam, LPA
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->TexID = nullptr;
 
-	unsigned char* pixels; 
+	unsigned char* pixels;
 	s32 width, height;
 	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 

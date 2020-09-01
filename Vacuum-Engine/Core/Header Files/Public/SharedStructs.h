@@ -18,9 +18,9 @@ namespace Vacuum
 
 	struct SVertex
 	{
-		DirectX::XMFLOAT3 position;
-		DirectX::XMFLOAT3 normal;
-		DirectX::XMFLOAT2 textureCoordinate;
+		DirectX::XMFLOAT3 Position;
+		DirectX::XMFLOAT3 Normal;
+		DirectX::XMFLOAT2 TextureCoordinate;
 	};
 
 	struct SMesh
