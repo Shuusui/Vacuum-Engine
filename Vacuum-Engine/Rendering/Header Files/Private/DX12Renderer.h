@@ -20,6 +20,12 @@ namespace Vacuum
 		s32 VertexBufferSize;
 	};
 
+	struct SFrameResources
+	{
+		SFrameResource* GUIFrameResources;
+		SFrameResource* VPFrameResources;
+	};
+
 	struct SFrameContext
 	{
 		ID3D12CommandAllocator* GUICommandAllocator;
@@ -197,7 +203,7 @@ namespace Vacuum
 		D3D12_RESOURCE_BARRIER m_vpBarrier;
 		CD3DX12_CPU_DESCRIPTOR_HANDLE m_renderTargetDescs[s_frameCount];
 		HANDLE m_fenceEvent;
-		SFrameResource* m_frameResources;
+		SFrameResources* m_frameResources;
 		SFrameContext m_frameContext[s_frameCount];
 
 		u32 m_frameIndex;
@@ -206,9 +212,17 @@ namespace Vacuum
 
 		std::vector<SGuiDrawData*> m_guiDrawDatas;
 		std::vector<SDrawData*> m_drawDatas;
-		u32 m_vertexBufferSizeNextTick;
-		u32 m_vertexResourceWidthNextTick;
-		u32 m_idxBufferSizeNextTick;
-		u32 m_idxResourceWidthNextTick;
+
+		u32 m_guiVertexCountNextTick;
+		u32 m_vpVertexCountNextTick;
+
+		u32 m_guiIdxCountNextTick;
+		u32 m_vpIdxCountNextTick;
+
+		u32 m_guiVertexBufferSizeNextTick;
+		u32 m_vpVertexBufferSizeNextTick;
+
+		u32 m_guiIdxBufferSizeNextTick;
+		u32 m_vpIdxBufferSizeNextTick;
 	};
 }
