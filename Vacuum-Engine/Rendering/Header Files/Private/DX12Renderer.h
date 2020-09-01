@@ -97,7 +97,6 @@ namespace Vacuum
 		std::vector<SDrawList> DrawLists;
 	};
 
-
 	class DX12Renderer : public IRenderer
 	{
 		static const u32 s_frameCount = 3;
