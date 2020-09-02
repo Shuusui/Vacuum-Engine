@@ -45,6 +45,11 @@ void Vacuum::CMeshManager::Load()
 		}
 	}
 
+	if(!std::filesystem::exists(m_meshesPath))
+	{
+		std::filesystem::create_directory(m_meshesPath);
+	}
+
 	WaveFrontReader<uint32> wfReader = WaveFrontReader<uint32>();
 	for (const std::filesystem::path& meshPath : std::filesystem::directory_iterator(m_meshesPath))
 	{
