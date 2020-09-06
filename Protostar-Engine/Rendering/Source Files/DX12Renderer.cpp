@@ -3,7 +3,6 @@
 #pragma region Internal Includes 
 #include "..\Header Files\Private\DXHelper.h"
 #include "Window.h"
-#include "SharedStructs.h"
 #pragma endregion //Internal Includes
 #pragma region External Includes
 #include <d3d12sdklayers.h>
@@ -26,7 +25,7 @@ using namespace Microsoft::WRL;
 
 void Protostar::DX12Renderer::OnCreate()
 {
-	CMainWindow* mainWindow =  CMainWindow::GetWindowHandle();
+	CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
 	if (!mainWindow)
 	{
 		return;
@@ -34,7 +33,7 @@ void Protostar::DX12Renderer::OnCreate()
 	LoadPipeline();
 
 	std::function<s32(HWND, u32, WPARAM, LPARAM)> func([this](HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)->s32
-	{
+		{
 			if (m_device != nullptr && _wParam != SIZE_MINIMIZED)
 			{
 				WaitForLastSubmittedFrame();
@@ -43,14 +42,13 @@ void Protostar::DX12Renderer::OnCreate()
 				ResizeSwapChain(_hwnd, (u32)LOWORD(_lParam), (u32)HIWORD(_lParam));
 				CreateRenderTarget();
 				LoadAssets();
-				LoadVPAssets();
-				for(const std::function<void(HWND, u32, WPARAM, LPARAM)>& func : m_afterResizeCallbacks)
+				for (const std::function<void(HWND, u32, WPARAM, LPARAM)>& func : m_afterResizeCallbacks)
 				{
 					func(_hwnd, _msg, _wParam, _lParam);
 				}
 			}
 			return 0;
-	});
+		});
 
 	mainWindow->RegisterCallbackForWMEvents(WM_SIZE, func);
 }
@@ -62,247 +60,7 @@ void Protostar::DX12Renderer::OnInit()
 
 void Protostar::DX12Renderer::OnUpdate()
 {
-	m_frameIndex = m_frameIndex + 1;
-	SFrameResources* frameResources = &m_frameResources[m_frameIndex % s_frameCount];
 
-	void* vtxResource = nullptr;
-	void* idxResource = nullptr;
-	D3D12_RANGE range = {};
-
-	if (frameResources->GUIFrameResources->VertexBuffer == nullptr || frameResources->GUIFrameResources->VertexBufferSize < m_guiVertexCountNextTick)
-	{
-		SafeRelease(frameResources->GUIFrameResources->VertexBuffer);
-		frameResources->GUIFrameResources->VertexBufferSize = m_guiVertexCountNextTick + 5000;
-
-		D3D12_HEAP_PROPERTIES props = {};
-		props.Type = D3D12_HEAP_TYPE_UPLOAD;
-		props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-		props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-
-		D3D12_RESOURCE_DESC desc = {};
-		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		desc.Width = frameResources->GUIFrameResources->VertexBufferSize * sizeof(S2DVert);
-		desc.Height = 1;
-		desc.DepthOrArraySize = 1;
-		desc.MipLevels = 1;
-		desc.Format = DXGI_FORMAT_UNKNOWN;
-		desc.SampleDesc.Count = 1;
-		desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-		desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-
-		if (m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&frameResources->GUIFrameResources->VertexBuffer)) < 0)
-		{
-			return;
-		}
-	}
-	if (frameResources->GUIFrameResources->IndexBuffer == nullptr || frameResources->GUIFrameResources->IndexBufferSize < m_guiIdxCountNextTick)
-	{
-		SafeRelease(frameResources->GUIFrameResources->IndexBuffer);
-		frameResources->GUIFrameResources->IndexBufferSize = m_guiIdxCountNextTick + 10000;
-
-		D3D12_HEAP_PROPERTIES props = {};
-		props.Type = D3D12_HEAP_TYPE_UPLOAD;
-		props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-		props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-
-		D3D12_RESOURCE_DESC desc = {};
-		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		desc.Width = frameResources->GUIFrameResources->IndexBufferSize * sizeof(u16);
-		desc.Height = 1;
-		desc.DepthOrArraySize = 1;
-		desc.MipLevels = 1;
-		desc.Format = DXGI_FORMAT_UNKNOWN;
-		desc.SampleDesc.Count = 1;
-		desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-		desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-
-		if (m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&frameResources->GUIFrameResources->IndexBuffer)) < 0)
-		{
-			return;
-		}
-	}
-
-	frameResources->GUIFrameResources->VertexBuffer->Map(0, &range, &vtxResource);
-	frameResources->GUIFrameResources->IndexBuffer->Map(0, &range, &idxResource);
-
-	for(SGuiDrawData* guiDrawData : m_guiDrawDatas)
-	{
-		for (const SGuiDrawList& guiDrawList : guiDrawData->DrawLists)
-		{
-			S2DVert* vtxDest = (S2DVert*)vtxResource;
-			u16* idxDest = (u16*)idxResource;
-
-			memcpy(vtxDest, guiDrawList.VertexBuffer.data(), guiDrawList.VertexBuffer.size() * sizeof(S2DVert));
-			memcpy(idxDest, guiDrawList.IndexBuffer.data(), guiDrawList.IndexBuffer.size() * sizeof(u16));
-
-			vtxDest += guiDrawList.VertexBuffer.size();
-			idxDest += guiDrawList.IndexBuffer.size();
-		}
-	}
-
-	frameResources->GUIFrameResources->VertexBuffer->Unmap(0, &range);
-	frameResources->GUIFrameResources->IndexBuffer->Unmap(0, &range);
-
-	for (SGuiDrawData* guiDrawData : m_guiDrawDatas)
-	{
-		DirectX::XMFLOAT2 clipOff = guiDrawData->DisplayPos;
-
-		SetupRenderState(guiDrawData, frameResources->GUIFrameResources);
-
-		s32 vtxOffset = 0;
-		s32 idxOffset = 0;
-
-		for (const SGuiDrawList& drawList : guiDrawData->DrawLists)
-		{
-			for (const SGuiDrawCmd& drawCmd : drawList.DrawCommands)
-			{
-				if (drawCmd.UserCallbackValid)
-				{
-					if (!drawCmd.CallUserCallback)
-					{
-						SetupRenderState(guiDrawData, frameResources->GUIFrameResources);
-					}
-					else
-					{
-						drawCmd.UserCallback();
-					}
-				}
-				else
-				{
-					const D3D12_RECT rect = { (LONG)(drawCmd.ClipRect.x, - clipOff.x), (LONG)(drawCmd.ClipRect.y - clipOff.y), (LONG)(drawCmd.ClipRect.z - clipOff.x), (LONG)(drawCmd.ClipRect.w - clipOff.y) };
-					m_guiCommandList->SetGraphicsRootDescriptorTable(1, *(D3D12_GPU_DESCRIPTOR_HANDLE*)&drawCmd.TextureID);
-					m_guiCommandList->RSSetScissorRects(1, &rect);
-					m_guiCommandList->DrawIndexedInstanced(drawCmd.ElemCount, 1, drawCmd.IdxOffset + idxOffset, drawCmd.VtxOffset + vtxOffset, 0);
-				}
-			}
-
-			idxOffset += drawList.IndexBuffer.size();
-			vtxOffset += drawList.VertexBuffer.size();
-		}
-	}
-
-
-	if (frameResources->VPFrameResources->VertexBuffer == nullptr || frameResources->VPFrameResources->VertexBufferSize < m_vpVertexCountNextTick)
-	{
-		SafeRelease(frameResources->VPFrameResources->VertexBuffer);
-		frameResources->VPFrameResources->VertexBufferSize = m_vpVertexCountNextTick + 5000;
-
-		D3D12_HEAP_PROPERTIES props = {};
-		props.Type = D3D12_HEAP_TYPE_UPLOAD;
-		props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-		props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-
-		D3D12_RESOURCE_DESC desc = {};
-		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		desc.Width = frameResources->VPFrameResources->VertexBufferSize * sizeof(SVertex);
-		desc.Height = 1;
-		desc.DepthOrArraySize = 1;
-		desc.MipLevels = 1;
-		desc.Format = DXGI_FORMAT_UNKNOWN;
-		desc.SampleDesc.Count = 1;
-		desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-		desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-
-		if (m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&frameResources->VPFrameResources->VertexBuffer)) < 0)
-		{
-			return;
-		}
-	}
-	if (frameResources->VPFrameResources->IndexBuffer == nullptr || frameResources->VPFrameResources->IndexBufferSize < m_vpIdxCountNextTick)
-	{
-		SafeRelease(frameResources->VPFrameResources->IndexBuffer);
-		frameResources->VPFrameResources->IndexBufferSize = m_vpIdxCountNextTick + 10000;
-
-		D3D12_HEAP_PROPERTIES props = {};
-		props.Type = D3D12_HEAP_TYPE_UPLOAD;
-		props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-		props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-
-		D3D12_RESOURCE_DESC desc = {};
-		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		desc.Width = frameResources->VPFrameResources->IndexBufferSize * sizeof(u16);
-		desc.Height = 1;
-		desc.DepthOrArraySize = 1;
-		desc.MipLevels = 1;
-		desc.Format = DXGI_FORMAT_UNKNOWN;
-		desc.SampleDesc.Count = 1;
-		desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-		desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-
-		if (m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&frameResources->VPFrameResources->IndexBuffer)) < 0)
-		{
-			return;
-		}
-	}
-
-	frameResources->VPFrameResources->VertexBuffer->Map(0, &range, &vtxResource);
-	frameResources->VPFrameResources->IndexBuffer->Map(0, &range, &idxResource);
-
-	for(SDrawData* drawData : m_drawDatas)
-	{
-		for(const SDrawList& drawList : drawData->DrawLists)
-		{
-			SVertex* vtxDest = (SVertex*)vtxResource;
-			u16* idxDest = (u16*)idxResource;
-
-			memcpy(vtxDest, drawList.VertexBuffer.data(), drawList.VertexBuffer.size() * sizeof(SVertex));
-			memcpy(idxDest, drawList.IndexBuffer.data(), drawList.IndexBuffer.size() * sizeof(u16));
-
-			vtxDest += drawList.VertexBuffer.size();
-			idxDest += drawList.IndexBuffer.size();
-		}
-	}
-
-	frameResources->VPFrameResources->VertexBuffer->Unmap(0, &range);
-	frameResources->VPFrameResources->IndexBuffer->Unmap(0, &range);
-
-	for(SDrawData* drawData : m_drawDatas)
-	{
-		DirectX::XMFLOAT2 clipOff = drawData->DisplayPos;
-
-		s32 vtxOffset = 0;
-		s32 idxOffset = 0;
-
-		SetupViewportRenderState(drawData, frameResources->VPFrameResources);
-
-		for (const SDrawList& drawList : drawData->DrawLists)
-		{
-			for (const SDrawCmd& drawCmd : drawList.DrawCmds)
-			{
-				const D3D12_RECT rect = { (LONG)(drawCmd.ClipRect.x, - clipOff.x), (LONG)(drawCmd.ClipRect.y - clipOff.y), (LONG)(drawCmd.ClipRect.z - clipOff.x), (LONG)(drawCmd.ClipRect.w - clipOff.y) };
-				m_vpCommandList->RSSetScissorRects(1, &rect);
-				m_vpCommandList->DrawIndexedInstanced(drawCmd.ElemCount, 1, drawCmd.IdxOffset + idxOffset, drawCmd.VtxOffset + vtxOffset, 0);
-			}
-
-			idxOffset += drawList.IndexBuffer.size();
-			vtxOffset += drawList.VertexBuffer.size();
-		}
-	}
-
-
-	m_guiBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	m_guiBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-
-	m_guiCommandList->ResourceBarrier(1, &m_guiBarrier);
-	m_guiCommandList->Close();
-
-	m_vpBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	m_vpBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-
-	m_vpCommandList->ResourceBarrier(1, &m_vpBarrier);
-	m_vpCommandList->Close();
-
-	m_guiVertexCountNextTick = 0;
-	m_vpVertexCountNextTick = 0;
-
-	m_guiIdxCountNextTick = 0;
-	m_vpIdxCountNextTick = 0;
-
-	m_guiVertexBufferSizeNextTick = 0;
-	m_vpVertexBufferSizeNextTick = 0;
-
-	m_guiIdxBufferSizeNextTick = 0;
-	m_vpIdxBufferSizeNextTick = 0;
 }
 
 void Protostar::DX12Renderer::PrepareRendering()
@@ -312,50 +70,24 @@ void Protostar::DX12Renderer::PrepareRendering()
 		LoadAssets();
 	}
 
-	if(!m_vpPipelineState)
-	{
-		LoadVPAssets();
-	}
-
 	SFrameContext* frameCtx = WaitForNextFrameResources();
 	u32 backBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
-	frameCtx->GUICommandAllocator->Reset();
-	PE_LOG("gui command allocator reset");
-	frameCtx->VPCommandAllocator->Reset();
-	PE_LOG("vp command allocator reset");
+	frameCtx->CommandAllocator->Reset();
 
-	m_guiBarrier = {};
-	m_guiBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	m_guiBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	m_guiBarrier.Transition.pResource = m_renderTargets[backBufferIndex];
-	m_guiBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	m_guiBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	m_guiBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-
-	m_vpBarrier = {};
-	m_vpBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	m_vpBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	m_vpBarrier.Transition.pResource = m_renderTargets[backBufferIndex];
-	m_vpBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	m_vpBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	m_vpBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-
+	m_barrier = {};
+	m_barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	m_barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	m_barrier.Transition.pResource = m_renderTargets[backBufferIndex];
+	m_barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	m_barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	m_barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 
 	const float clearColor[] = { 0.1f, 0.1f, 0.1f, 1.0f };
-	THROW_IF_FAILED(m_guiCommandList->Reset(frameCtx->GUICommandAllocator, nullptr));
-	PE_LOG("gui command list reset");
-	m_guiCommandList->ResourceBarrier(1, &m_guiBarrier);
+	THROW_IF_FAILED(m_guiCommandList->Reset(frameCtx->CommandAllocator, nullptr));
+	m_guiCommandList->ResourceBarrier(1, &m_barrier);
 	m_guiCommandList->ClearRenderTargetView(m_renderTargetDescs[backBufferIndex], clearColor, 0, nullptr);
 	m_guiCommandList->OMSetRenderTargets(1, &m_renderTargetDescs[backBufferIndex], FALSE, nullptr);
 	m_guiCommandList->SetDescriptorHeaps(1, &m_srvDescHeap);
-
-
-	THROW_IF_FAILED(m_vpCommandList->Reset(frameCtx->VPCommandAllocator, nullptr));
-	PE_LOG("vp command list reset");
-	m_vpCommandList->ResourceBarrier(1, &m_vpBarrier);
-	//m_vpCommandList->ClearRenderTargetView(m_renderTargetDescs[backBufferIndex], redClearColor, 0, nullptr);
-	m_vpCommandList->OMSetRenderTargets(1, &m_renderTargetDescs[backBufferIndex], FALSE, nullptr);
-	m_vpCommandList->SetDescriptorHeaps(1, &m_vpSrvDescHeap);
 }
 
 void Protostar::DX12Renderer::UpdateDrawData(SGuiDrawData* _drawData)
@@ -365,39 +97,132 @@ void Protostar::DX12Renderer::UpdateDrawData(SGuiDrawData* _drawData)
 		return;
 	}
 
-	m_guiDrawDatas.push_back(_drawData);
+	m_frameIndex = m_frameIndex + 1;
+	SFrameResource* frameResource = &m_frameResources[m_frameIndex % s_frameCount];
 
-	m_guiVertexCountNextTick += _drawData->TotalVtxCount;
-	m_guiIdxCountNextTick += _drawData->TotalIdxCount;
+	if (frameResource->VertexBuffer == nullptr || frameResource->VertexBufferSize < _drawData->TotalVtxCount)
+	{
+		SafeRelease(frameResource->VertexBuffer);
+		frameResource->VertexBufferSize = _drawData->TotalVtxCount + 5000;
 
-	m_guiVertexBufferSizeNextTick += _drawData->TotalVtxCount * sizeof(S2DVert);
-	m_guiIdxBufferSizeNextTick += _drawData->TotalIdxCount * sizeof(u16);
-}
+		D3D12_HEAP_PROPERTIES props = {};
+		props.Type = D3D12_HEAP_TYPE_UPLOAD;
+		props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+		props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 
-void Protostar::DX12Renderer::UpdateVPDrawData(SDrawData* _drawData)
-{
-	if (_drawData->DisplaySize.x <= 0.0f || _drawData->DisplaySize.y <= 0.0f)
+		D3D12_RESOURCE_DESC desc = {};
+		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+		desc.Width = frameResource->VertexBufferSize * sizeof(S2DVert);
+		desc.Height = 1;
+		desc.DepthOrArraySize = 1;
+		desc.MipLevels = 1;
+		desc.Format = DXGI_FORMAT_UNKNOWN;
+		desc.SampleDesc.Count = 1;
+		desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+		desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+		if (m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&frameResource->VertexBuffer)) < 0)
+		{
+			return;
+		}
+	}
+	if (frameResource->IndexBuffer == nullptr || frameResource->IndexBufferSize < _drawData->TotalIdxCount)
+	{
+		SafeRelease(frameResource->IndexBuffer);
+		frameResource->IndexBufferSize = _drawData->TotalIdxCount + 10000;
+
+		D3D12_HEAP_PROPERTIES props = {};
+		props.Type = D3D12_HEAP_TYPE_UPLOAD;
+		props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+		props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+
+		D3D12_RESOURCE_DESC desc = {};
+		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+		desc.Width = frameResource->IndexBufferSize * sizeof(unsigned short);
+		desc.Height = 1;
+		desc.DepthOrArraySize = 1;
+		desc.MipLevels = 1;
+		desc.Format = DXGI_FORMAT_UNKNOWN;
+		desc.SampleDesc.Count = 1;
+		desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+		desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+
+		if (m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&frameResource->IndexBuffer)) < 0)
+		{
+			return;
+		}
+	}
+
+	void* vtxResource;
+	void* idxResource;
+	D3D12_RANGE range = {};
+
+	if (frameResource->VertexBuffer->Map(0, &range, &vtxResource) != S_OK)
+	{
+		return;
+	}
+	if (frameResource->IndexBuffer->Map(0, &range, &idxResource) != S_OK)
 	{
 		return;
 	}
 
-	m_drawDatas.push_back(_drawData);
+	S2DVert* vtxDestination = (S2DVert*)vtxResource;
+	unsigned short* idxDestination = (unsigned short*)idxResource;
 
-	m_vpVertexCountNextTick += _drawData->TotalVtxCount;
-	m_vpIdxCountNextTick += _drawData->TotalIdxCount;
+	for (const SGuiDrawList& drawList : _drawData->DrawLists)
+	{
+		memcpy(vtxDestination, drawList.VertexBuffer.data(), drawList.VertexBuffer.size() * sizeof(S2DVert));
+		memcpy(idxDestination, drawList.IndexBuffer.data(), drawList.IndexBuffer.size() * sizeof(unsigned short));
+		vtxDestination += drawList.VertexBuffer.size();
+		idxDestination += drawList.IndexBuffer.size();
+	}
+	frameResource->VertexBuffer->Unmap(0, &range);
+	frameResource->IndexBuffer->Unmap(0, &range);
 
-	m_vpVertexBufferSizeNextTick += _drawData->TotalVtxCount * sizeof(SVertex);
-	m_vpVertexBufferSizeNextTick += _drawData->TotalIdxCount * sizeof(u16);
+	SetupRenderState(_drawData, frameResource);
+
+	s32 vtxOffset = 0;
+	s32 idxOffset = 0;
+	DirectX::XMFLOAT2 clipOff = _drawData->DisplayPos;
+	for (const SGuiDrawList& drawList : _drawData->DrawLists)
+	{
+		for (const SGuiDrawCmd& drawCmd : drawList.DrawCommands)
+		{
+			if (drawCmd.UserCallbackValid)
+			{
+				if (!drawCmd.CallUserCallback)
+				{
+					SetupRenderState(_drawData, frameResource);
+				}
+				else
+				{
+					drawCmd.UserCallback();
+				}
+			}
+			else
+			{
+				const D3D12_RECT rect = { (LONG)(drawCmd.ClipRect.x, -clipOff.x), (LONG)(drawCmd.ClipRect.y - clipOff.y), (LONG)(drawCmd.ClipRect.z - clipOff.x), (LONG)(drawCmd.ClipRect.w - clipOff.y) };
+				m_guiCommandList->SetGraphicsRootDescriptorTable(1, *(D3D12_GPU_DESCRIPTOR_HANDLE*)&drawCmd.TextureID);
+				m_guiCommandList->RSSetScissorRects(1, &rect);
+				m_guiCommandList->DrawIndexedInstanced(drawCmd.ElemCount, 1, drawCmd.IdxOffset + idxOffset, drawCmd.VtxOffset + vtxOffset, 0);
+			}
+		}
+		idxOffset += drawList.IndexBuffer.size();
+		vtxOffset += drawList.VertexBuffer.size();
+	}
+	m_barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	m_barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+
+	m_guiCommandList->ResourceBarrier(1, &m_barrier);
+	m_guiCommandList->Close();
 }
 
 void Protostar::DX12Renderer::OnRender()
 {
-	std::vector<ID3D12CommandList*> commandLists = std::vector<ID3D12CommandList*>(2);
+	std::vector<ID3D12CommandList*> commandLists = std::vector<ID3D12CommandList*>(1);
 	commandLists[0] = m_guiCommandList;
-	commandLists[1] = m_vpCommandList;
 
-	m_commandQueue->ExecuteCommandLists(2, commandLists.data());
-	PE_LOG("Execute command lists");
+	m_commandQueue->ExecuteCommandLists(1, commandLists.data());
 	m_swapChain->Present(m_bVSync, 0);
 
 	u64 fenceValue = m_fenceValue + 1;
@@ -419,24 +244,19 @@ void Protostar::DX12Renderer::OnDestroy()
 
 	CleanupRenderTarget();
 	SafeRelease(m_swapChain);
-	if(m_swapChainWaitableObject) CloseHandle(m_swapChainWaitableObject);
+	if (m_swapChainWaitableObject) CloseHandle(m_swapChainWaitableObject);
 	for (u32 i = 0; i < s_frameCount; ++i)
 	{
-		SafeRelease(m_frameContext[i].GUICommandAllocator);
-		SafeRelease(m_frameContext[i].VPCommandAllocator);
+		SafeRelease(m_frameContext[i].CommandAllocator);
 	}
 	SafeRelease(m_commandQueue);
 	SafeRelease(m_guiCommandList);
-	SafeRelease(m_vpCommandList);
 	SafeRelease(m_srvDescHeap);
-	SafeRelease(m_vpSrvDescHeap);
 	SafeRelease(m_rtvHeap);
 	SafeRelease(m_fence);
 	SafeRelease(m_guiVertexShader);
-	SafeRelease(m_vpVertexShader);
 	SafeRelease(m_guiPixelShader);
-	SafeRelease(m_vpPixelShader);
-	if(m_fenceEvent) CloseHandle(m_fenceEvent); m_fenceEvent = nullptr;
+	if (m_fenceEvent) CloseHandle(m_fenceEvent); m_fenceEvent = nullptr;
 	SafeRelease(m_device);
 
 #ifdef DX12_ENABLE_DEBUG_LAYER
@@ -464,24 +284,15 @@ void Protostar::DX12Renderer::LoadPipeline()
 	}
 #endif
 
-	m_frameResources = new SFrameResources[s_frameCount];
+	m_frameResources = new SFrameResource[s_frameCount];
 
 	for (s32 i = 0; i < s_frameCount; ++i)
 	{
-		m_frameResources[i].GUIFrameResources = new SFrameResource();
-		m_frameResources[i].VPFrameResources = new SFrameResource();
-
-		SFrameResources* frameResources = &m_frameResources[i];
-
-		frameResources->GUIFrameResources->IndexBuffer = nullptr;
-		frameResources->GUIFrameResources->VertexBuffer = nullptr;
-		frameResources->GUIFrameResources->IndexBufferSize = 10000;
-		frameResources->GUIFrameResources->VertexBufferSize = 5000;
-
-		frameResources->VPFrameResources->IndexBuffer = nullptr;
-		frameResources->VPFrameResources->VertexBuffer = nullptr;
-		frameResources->VPFrameResources->IndexBufferSize = 10000;
-		frameResources->VPFrameResources->VertexBufferSize = 5000;
+		SFrameResource* frameResource = &m_frameResources[i];
+		frameResource->IndexBuffer = nullptr;
+		frameResource->VertexBuffer = nullptr;
+		frameResource->IndexBufferSize = 10000;
+		frameResource->VertexBufferSize = 5000;
 	}
 
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
@@ -514,14 +325,6 @@ void Protostar::DX12Renderer::LoadPipeline()
 	}
 
 	{
-		D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-		desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		desc.NumDescriptors = 1;
-		desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-		THROW_IF_FAILED(m_device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_vpSrvDescHeap)));
-	}
-
-	{
 		D3D12_COMMAND_QUEUE_DESC desc = {};
 		desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 		desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -531,18 +334,12 @@ void Protostar::DX12Renderer::LoadPipeline()
 
 	for (s32 i = 0; i < s_frameCount; ++i)
 	{
-		THROW_IF_FAILED(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_frameContext[i].GUICommandAllocator)));
-		THROW_IF_FAILED(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_frameContext[i].VPCommandAllocator)));
+		THROW_IF_FAILED(m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_frameContext[i].CommandAllocator)));
 	}
 
-	THROW_IF_FAILED(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_frameContext[0].GUICommandAllocator, nullptr, IID_PPV_ARGS(&m_guiCommandList)));
-
+	THROW_IF_FAILED(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_frameContext[0].CommandAllocator, nullptr, IID_PPV_ARGS(&m_guiCommandList)));
 
 	THROW_IF_FAILED(m_guiCommandList->Close());
-
-	THROW_IF_FAILED(m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_frameContext[0].VPCommandAllocator, nullptr, IID_PPV_ARGS(&m_vpCommandList)));
-
-	THROW_IF_FAILED(m_vpCommandList->Close());
 
 	THROW_IF_FAILED(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
 
@@ -626,193 +423,11 @@ void Protostar::DX12Renderer::LoadGUIShaders()
 	THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &m_guiPixelShader, nullptr));
 }
 
-void Protostar::DX12Renderer::LoadVPShaders()
-{
-	static const char* vertexShaderStr =
-		"cbuffer vertexBuffer : register(b0) \
-        {\
-            float4x4 ProjectionMatrix; \
-        };\
-        struct VS_INPUT\
-        {\
-            float3 pos : POSITION;\
-            float3 normal : NORMAL0;\
-            float2 texcoord  : TEXCOORD0;\
-        };\
-        \
-        struct PS_INPUT\
-        {\
-            float4 pos : SV_POSITION;\
-        };\
-        \
-        PS_INPUT vs_main(VS_INPUT input)\
-        {\
-            PS_INPUT output;\
-            output.pos = mul(ProjectionMatrix, float4(input.pos.xyz, 1.f));\
-            return output;\
-        }";
-
-	static const char* pixelShaderStr =
-		"struct PS_INPUT\
-        {\
-            float4 pos : SV_POSITION;\
-        };\
-        \
-        float4 ps_main(PS_INPUT input) : SV_Target\
-        {\
-			float4 outCol = {1.0, 0.0, 0.0, 1.0};\
-            return outCol; \
-        }";
-
-	THROW_IF_FAILED(D3DCompile(vertexShaderStr, strlen(vertexShaderStr), nullptr, nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &m_vpVertexShader, nullptr));
-	THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &m_vpPixelShader, nullptr));
-
-}
-
 void Protostar::DX12Renderer::LoadAssets()
 {
 	if (!m_guiVertexShader || !m_guiPixelShader)
 	{
 		LoadGUIShaders();
-	}
-
-	ComPtr<ID3DBlob> error;
-	{
-		D3D12_DESCRIPTOR_RANGE descRange = {};
-		descRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descRange.NumDescriptors = 1;
-		descRange.BaseShaderRegister = 0;
-		descRange.RegisterSpace = 0;
-		descRange.OffsetInDescriptorsFromTableStart = 0;
-
-		D3D12_ROOT_PARAMETER param[2] = {};
-
-		param[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-		param[0].Constants.ShaderRegister = 0;
-		param[0].Constants.RegisterSpace = 0;
-		param[0].Constants.Num32BitValues = 16;
-		param[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-
-		param[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		param[1].DescriptorTable.NumDescriptorRanges = 1;
-		param[1].DescriptorTable.pDescriptorRanges = &descRange;
-		param[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-		D3D12_STATIC_SAMPLER_DESC staticSampler = {};
-		staticSampler.Filter = D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-		staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSampler.MipLODBias = 0.0f;
-		staticSampler.MaxAnisotropy = 0;
-		staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-		staticSampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-		staticSampler.MinLOD = 0.0f;
-		staticSampler.MaxLOD = 0.0f;
-		staticSampler.ShaderRegister = 0;
-		staticSampler.RegisterSpace = 0;
-		staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-		D3D12_ROOT_SIGNATURE_DESC desc = {};
-		desc.NumParameters = _countof(param);
-		desc.pParameters = param;
-		desc.NumStaticSamplers = 1;
-		desc.pStaticSamplers = &staticSampler;
-		desc.Flags = 
-			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
-			D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
-			D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-			D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
-
-		ComPtr<ID3DBlob> blob = nullptr;
-		THROW_IF_FAILED(D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, &error));
-
-		m_device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_guiRootSignature));
-	}
-
-	{
-#if defined(_DEBUG)
-		u32 compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
-#else
-		uint32 compileFlags = 0;
-#endif
-		
-
-		static D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (u32)DX_OFFSETOF(S2DVert, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (u32)DX_OFFSETOF(S2DVert, UV),  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (u32)DX_OFFSETOF(S2DVert, Col), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		};
-
-		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
-		psoDesc.InputLayout = { inputElementDescs, 3 };
-		psoDesc.pRootSignature = m_guiRootSignature;
-		psoDesc.NodeMask = 1;
-		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_guiVertexShader);
-		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_guiPixelShader);
-		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-		psoDesc.DepthStencilState.DepthEnable = FALSE;
-		psoDesc.DepthStencilState.StencilEnable = FALSE;
-		psoDesc.SampleMask = UINT_MAX;
-		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-		psoDesc.NumRenderTargets = 1;
-		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		psoDesc.SampleDesc.Count = 1;
-		psoDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
-
-			// Create the blending setup
-		{
-			D3D12_BLEND_DESC& desc = psoDesc.BlendState;
-			desc.AlphaToCoverageEnable = false;
-			desc.RenderTarget[0].BlendEnable = true;
-			desc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-			desc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-			desc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-			desc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
-			desc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-			desc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-			desc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-		}
-
-			// Create the rasterizer state
-		{
-			D3D12_RASTERIZER_DESC& desc = psoDesc.RasterizerState;
-			desc.FillMode = D3D12_FILL_MODE_SOLID;
-			desc.CullMode = D3D12_CULL_MODE_NONE;
-			desc.FrontCounterClockwise = FALSE;
-			desc.DepthBias = D3D12_DEFAULT_DEPTH_BIAS;
-			desc.DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP;
-			desc.SlopeScaledDepthBias = D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
-			desc.DepthClipEnable = true;
-			desc.MultisampleEnable = FALSE;
-			desc.AntialiasedLineEnable = FALSE;
-			desc.ForcedSampleCount = 0;
-			desc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
-		}
-
-			// Create depth-stencil State
-		{
-			D3D12_DEPTH_STENCIL_DESC& desc = psoDesc.DepthStencilState;
-			desc.DepthEnable = false;
-			desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-			desc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-			desc.StencilEnable = false;
-			desc.FrontFace.StencilFailOp = desc.FrontFace.StencilDepthFailOp = desc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-			desc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-			desc.BackFace = desc.FrontFace;
-
-			THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_guiPipelineState)));
-		}
-	}
-}
-
-void Protostar::DX12Renderer::LoadVPAssets()
-{
-	if (!m_vpVertexShader || !m_vpPixelShader)
-	{
-		LoadVPShaders();
 	}
 
 	ComPtr<ID3DBlob> error;
@@ -866,30 +481,30 @@ void Protostar::DX12Renderer::LoadVPAssets()
 		ComPtr<ID3DBlob> blob = nullptr;
 		THROW_IF_FAILED(D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, &error));
 
-		m_device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_vpRootSignature));
+		m_device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_guiRootSignature));
 	}
 
 	{
 #if defined(_DEBUG)
 		u32 compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #else
-		uint32 compileFlags = 0;
+		u32 compileFlags = 0;
 #endif
 
 
 		static D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
 		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,   0, (u32)DX_OFFSETOF(SVertex, Position), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,   0, (u32)DX_OFFSETOF(SVertex, Normal),  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, (u32)DX_OFFSETOF(SVertex, TextureCoordinate), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (u32)DX_OFFSETOF(S2DVert, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (u32)DX_OFFSETOF(S2DVert, UV),  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (u32)DX_OFFSETOF(S2DVert, Col), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		};
 
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 		psoDesc.InputLayout = { inputElementDescs, 3 };
-		psoDesc.pRootSignature = m_vpRootSignature;
+		psoDesc.pRootSignature = m_guiRootSignature;
 		psoDesc.NodeMask = 1;
-		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vpVertexShader);
-		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_vpPixelShader);
+		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_guiVertexShader);
+		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_guiPixelShader);
 		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 		psoDesc.DepthStencilState.DepthEnable = FALSE;
@@ -942,7 +557,7 @@ void Protostar::DX12Renderer::LoadVPAssets()
 			desc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 			desc.BackFace = desc.FrontFace;
 
-			THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_vpPipelineState)));
+			THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_guiPipelineState)));
 		}
 	}
 }
@@ -1124,18 +739,18 @@ void Protostar::DX12Renderer::CreateFontsTexture(unsigned char* _pixels, const s
 
 Protostar::SFrameContext* Protostar::DX12Renderer::WaitForNextFrameResources()
 {
-	u32 nextFrameIndex = m_frameIndex +1;
+	u32 nextFrameIndex = m_frameIndex + 1;
 	m_frameIndex = nextFrameIndex;
 
 	HANDLE waitableObjects[] = { m_swapChainWaitableObject, nullptr };
 	DWORD numWaitableObjects = 1;
 
 	SFrameContext* frameCtx = &m_frameContext[nextFrameIndex % s_frameCount];
-	
-	if (frameCtx->FenceValue!= 0)
+	u64 fenceValue = frameCtx->FenceValue;
+	if (fenceValue != 0)
 	{
 		frameCtx->FenceValue = 0;
-		m_fence->SetEventOnCompletion(frameCtx->FenceValue, m_fenceEvent);
+		m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent);
 		waitableObjects[1] = m_fenceEvent;
 		numWaitableObjects = 2;
 	}
@@ -1156,11 +771,13 @@ void Protostar::DX12Renderer::WaitForLastSubmittedFrame()
 	}
 
 	frameCtx->FenceValue = 0;
-	if (m_fence->GetCompletedValue() < fenceValue)
+	if (m_fence->GetCompletedValue() >= fenceValue)
 	{
-		m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent);
-		WaitForSingleObject(m_fenceEvent, INFINITE);
+		return;
 	}
+
+	m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent);
+	WaitForSingleObject(m_fenceEvent, INFINITE);
 }
 
 void Protostar::DX12Renderer::SetupRenderState(SGuiDrawData* _drawData, SFrameResource* _frameResource)
@@ -1173,10 +790,10 @@ void Protostar::DX12Renderer::SetupRenderState(SGuiDrawData* _drawData, SFrameRe
 		float b = _drawData->DisplayPos.y + _drawData->DisplaySize.y;
 		float mvp[4][4] =
 		{
-			{2.0f/(r-l),		0.0f,			0.0f,			0.0f},
-			{0.0f,				2.0f/(t-b),		0.0f,			0.0f},
+			{2.0f / (r - l),		0.0f,			0.0f,			0.0f},
+			{0.0f,				2.0f / (t - b),		0.0f,			0.0f},
 			{0.0f,				0.0f,			0.5f,			0.0f},
-			{(r+l)/(l-r),		(t+b)/(b-t),	0.5,			1.0f},
+			{(r + l) / (l - r),		(t + b) / (b - t),	0.5,			1.0f},
 		};
 		memcpy(&vertConstBuffer.MVP, mvp, sizeof(mvp));
 	}
@@ -1202,7 +819,7 @@ void Protostar::DX12Renderer::SetupRenderState(SGuiDrawData* _drawData, SFrameRe
 
 	D3D12_INDEX_BUFFER_VIEW idxBufferView = {};
 	idxBufferView.BufferLocation = _frameResource->IndexBuffer->GetGPUVirtualAddress();
-	idxBufferView.SizeInBytes = _frameResource->IndexBufferSize * sizeof(u16);
+	idxBufferView.SizeInBytes = _frameResource->IndexBufferSize * sizeof(unsigned short);
 	idxBufferView.Format = DXGI_FORMAT_R16_UINT;
 
 	m_guiCommandList->IASetIndexBuffer(&idxBufferView);
@@ -1211,62 +828,57 @@ void Protostar::DX12Renderer::SetupRenderState(SGuiDrawData* _drawData, SFrameRe
 	m_guiCommandList->SetGraphicsRootSignature(m_guiRootSignature);
 	m_guiCommandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
 
-	const float blendFactor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+	const float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	m_guiCommandList->OMSetBlendFactor(blendFactor);
 }
 
-void Protostar::DX12Renderer::SetupViewportRenderState(SDrawData* _drawData, SFrameResource* _frameResource)
-{
-	SVertexConstantBuffer vertConstBuffer;
-	{
-		float l = _drawData->DisplayPos.x; // add here the x pos of the viewport 
-		float r = _drawData->DisplayPos.x + _drawData->DisplaySize.x; // add here the width of the viewport
-		float t = _drawData->DisplayPos.y; // add here the y pos of the viewport
-		float b = _drawData->DisplayPos.y + _drawData->DisplaySize.y; // add here the height of the viewport
-		float mvp[4][4] = //This needs to get reworked to make a real mvp for a camera
-		{
-			{2.0f / (r - l),		0.0f,			0.0f,			0.0f},
-			{0.0f,				2.0f / (t - b),		0.0f,			0.0f},
-			{0.0f,				0.0f,			0.5f,			0.0f},
-			{(r + l) / (l - r),		(t + b) / (b - t),	0.5,			1.0f},
-		};
-		memcpy(&vertConstBuffer.MVP, mvp, sizeof(mvp));
-	}
-
-	D3D12_VIEWPORT viewPort = {};
-	viewPort.Width = _drawData->DisplaySize.x; //this will need the actual width of the viewport
-	viewPort.Height = _drawData->DisplaySize.y; //this will need the actual height of the viewport
-	viewPort.MinDepth = 0.0f;
-	viewPort.MaxDepth = 1.0f;
-	viewPort.TopLeftX = _drawData->DisplayPos.x;
-	viewPort.TopLeftY = _drawData->DisplayPos.y;
-
-	m_vpCommandList->RSSetViewports(1, &viewPort);
-
-	u32 stride = sizeof(SVertex);
-	u32 offset = 0;
-
-	D3D12_VERTEX_BUFFER_VIEW vtxBufferView = {};
-	vtxBufferView.BufferLocation = _frameResource->VertexBuffer->GetGPUVirtualAddress() + offset; // The bufferlocation of the vertexbuffer for the viewport
-	vtxBufferView.SizeInBytes = _frameResource->VertexBufferSize * stride; //The size of the vertexbuffer 
-	vtxBufferView.StrideInBytes = stride;
-
-	m_vpCommandList->IASetVertexBuffers(0, 1, &vtxBufferView);
-
-	D3D12_INDEX_BUFFER_VIEW idxBufferView = {};
-	idxBufferView.BufferLocation = _frameResource->IndexBuffer->GetGPUVirtualAddress(); //The actual index buffer location
-	idxBufferView.SizeInBytes = _frameResource->IndexBufferSize * sizeof(u16); // The size of the index buffer
-	idxBufferView.Format = DXGI_FORMAT_R16_UINT; //Idx buffer format
-
-	m_vpCommandList->IASetIndexBuffer(&idxBufferView);
-	m_vpCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_vpCommandList->SetPipelineState(m_vpPipelineState);
-	m_vpCommandList->SetGraphicsRootSignature(m_vpRootSignature);
-	m_vpCommandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
-
-	const float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	m_vpCommandList->OMSetBlendFactor(blendFactor);
-}
+//void Protostar::DX12Renderer::SetupViewportRenderState(ImDrawData* _drawData)
+//{
+//	SVertexConstantBuffer vertConstBuffer;
+//	{
+//		float l = _drawData->DisplayPos.x; // add here the x pos of the viewport 
+//		float r = _drawData->DisplayPos.x + _drawData->DisplaySize.x; // add here the width of the viewport
+//		float t = _drawData->DisplayPos.y; // add here the y pos of the viewport
+//		float b = _drawData->DisplayPos.y + _drawData->DisplaySize.y; // add here the height of the viewport
+//		float mvp[4][4] = //This needs to get reworked to make a real mvp for a camera
+//		{
+//			{2.0f / (r - l),		0.0f,			0.0f,			0.0f},
+//			{0.0f,				2.0f / (t - b),		0.0f,			0.0f},
+//			{0.0f,				0.0f,			0.5f,			0.0f},
+//			{(r + l) / (l - r),		(t + b) / (b - t),	0.5,			1.0f},
+//		};
+//		memcpy(&vertConstBuffer.MVP, mvp, sizeof(mvp));
+//	}
+//
+//	D3D12_VIEWPORT viewPort = {};
+//	viewPort.Width = _drawData->DisplaySize.x; //this will need the actual width of the viewport
+//	viewPort.Height = _drawData->DisplaySize.y; //this will need the actual height of the viewport
+//	viewPort.MinDepth = 0.0f;
+//	viewPort.MaxDepth = 1.0f;
+//	viewPort.TopLeftX = viewPort.TopLeftY = 0.0f; //This needs the actual pos of the viewport
+//
+//	u32 stride = sizeof(SVertex);
+//	u32 offset = 0;
+//
+//	D3D12_VERTEX_BUFFER_VIEW vtxBufferView = {};
+//	//vtxBufferView.BufferLocation = _frameResource->VertexBuffer->GetGPUVirtualAddress() + offset; // The bufferlocation of the vertexbuffer for the viewport
+//	//vtxBufferView.SizeInBytes = _frameResource->VertexBufferSize * stride; //The size of the vertexbuffer 
+//	vtxBufferView.StrideInBytes = stride;
+//
+//	D3D12_INDEX_BUFFER_VIEW idxBufferView = {};
+//	//idxBufferView.BufferLocation = _frameResource->IndexBuffer->GetGPUVirtualAddress(); //The actual index buffer location
+//	//idxBufferView.SizeInBytes = _frameResource->IndexBufferSize * sizeof(ImDrawIdx); // The size of the index buffer
+//	//idxBufferView.Format = sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT; //Idx buffer format
+//
+//	m_guiCommandList->IASetIndexBuffer(&idxBufferView);
+//	m_guiCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//	m_guiCommandList->SetPipelineState(m_pipelineState);
+//	m_guiCommandList->SetGraphicsRootSignature(m_rootSignature);
+//	m_guiCommandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
+//
+//	const float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+//	m_guiCommandList->OMSetBlendFactor(blendFactor);
+//}
 
 void Protostar::DX12Renderer::InvalidateObjects()
 {
@@ -1281,12 +893,10 @@ void Protostar::DX12Renderer::InvalidateObjects()
 
 	for (u32 i = 0; i < s_frameCount; ++i)
 	{
-		SFrameResources* frameResources = &m_frameResources[i];
+		SFrameResource* frameResource = &m_frameResources[i];
 
-		SafeRelease(frameResources->GUIFrameResources->VertexBuffer);
-		SafeRelease(frameResources->GUIFrameResources->IndexBuffer);
-		SafeRelease(frameResources->VPFrameResources->VertexBuffer);
-		SafeRelease(frameResources->VPFrameResources->IndexBuffer);
+		SafeRelease(frameResource->VertexBuffer);
+		SafeRelease(frameResource->IndexBuffer);
 	}
 }
 

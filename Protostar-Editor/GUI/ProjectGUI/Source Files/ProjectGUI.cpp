@@ -124,14 +124,6 @@ void Protostar::CProjectGUI::RenderViewport()
 	ImVec2 viewportPos = ImGui::GetWindowPos();
 	ImVec2 viewportSize = ImGui::GetWindowSize();
 
-	SDrawData* drawData = new SDrawData();
-	
-	drawData->DisplayPos.x = viewportPos.x;
-	drawData->DisplayPos.y = viewportPos.y;
-
-	drawData->DisplaySize.x = viewportSize.x;
-	drawData->DisplaySize.y = viewportSize.y;
-
 	CMeshManager* meshManager = CMeshManager::GetHandle();
 	std::unordered_map<SGuid, SModel> meshes = meshManager->GetMeshes();
 	SModel currentModel = {};
@@ -142,25 +134,6 @@ void Protostar::CProjectGUI::RenderViewport()
 	}
 
 	SMesh meshData = currentModel.MeshData;
-
-	drawData->TotalIdxCount = meshData.Indices.size();
-	drawData->TotalVtxCount = meshData.Vertices.size();
-
-	SDrawList meshDrawList = {};
-	meshDrawList.IndexBuffer = meshData.Indices;
-	meshDrawList.VertexBuffer = meshData.Vertices;
-
-
-	SDrawCmd meshDrawCmd = {};
-	meshDrawCmd.ElemCount = meshData.Indices.size();
-	meshDrawCmd.ClipRect.z = viewportSize.x;
-	meshDrawCmd.ClipRect.w = viewportSize.y;
-
-	meshDrawList.DrawCmds.push_back(meshDrawCmd);
-
-	drawData->DrawLists.push_back(meshDrawList);
-
-	CGUI::SetVPDrawData(drawData);
 
 	ImGui::End();
 }

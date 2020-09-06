@@ -163,12 +163,6 @@ void Protostar::CGUI::Render()
 	}
 
 	CRendererManager::UpdateDrawData(drawData);
-	PE_LOG("Update gui draw data");
-	if (s_gui->m_vpDrawData)
-	{
-		PE_LOG("Update vp draw data");
-		CRendererManager::UpdateVPDrawData(s_gui->m_vpDrawData);
-	}
 }
 
 void Protostar::CGUI::SetCaptureIfNotSet(HWND _hwnd)

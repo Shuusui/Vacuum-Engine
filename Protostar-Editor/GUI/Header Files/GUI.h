@@ -39,11 +39,6 @@ namespace Protostar
 			s_gui->m_guiInfo.bOpenEditorFPS = _bOpenEditorFPS;
 		}
 
-		static void SetVPDrawData(SDrawData* _drawData)
-		{
-			s_gui->m_vpDrawData = _drawData;
-		}
-
 		~CGUI();
 
 		void CreateAppMenuBar();
@@ -91,6 +86,5 @@ namespace Protostar
 		std::filesystem::path m_guiIniFilePath;
 		std::filesystem::path m_guiIniPath;
 		SGUIInfo m_guiInfo;
-		SDrawData* m_vpDrawData;
 	};
 }

@@ -25,11 +25,6 @@ void Protostar::CRendererManager::UpdateDrawData(SGuiDrawData* _drawData)
 	s_rendererManager->m_renderer->UpdateDrawData(_drawData);
 }
 
-void Protostar::CRendererManager::UpdateVPDrawData(SDrawData* _drawData)
-{
-	s_rendererManager->m_renderer->UpdateVPDrawData(_drawData);
-}
-
 void Protostar::CRendererManager::OnInit(const std::vector<std::filesystem::path>& _shaderPaths)
 {
 	s_rendererManager->m_renderer->SetShaderPaths(_shaderPaths);
