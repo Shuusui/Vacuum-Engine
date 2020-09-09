@@ -5,6 +5,7 @@
 #include "Json.h"
 #include <string>
 #include "ECS\Header Files\EntityManager.h"
+#include "ShaderLibrary.h"
 
 const char* JSONNAME = "name";
 const char* JSONGUID = "guid";
@@ -17,14 +18,15 @@ Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 	,m_projectPaths(SProjectPaths())
 {
 	m_projectPaths.ProjectDir = _projectPath;
-	m_projectPaths.ContentDir = _projectPath;
 	m_projectPaths.ConfigDir = _projectPath / "Configs";
-	m_projectPaths.ProjectFilePath = _projectPath / ".project";
+	m_projectPaths.ProjectFilePath = _projectPath / ".peproject";
 	m_projectPaths.ContentDir = _projectPath / "Content";
 	m_projectPaths.ShaderDir = m_projectPaths.ContentDir / "Shaders";
 	m_projectPaths.ModelsDir = m_projectPaths.ContentDir / "Models";
 	m_projectPaths.ScenesDir = m_projectPaths.ContentDir / "Scenes";
 	m_projectPaths.EntitiesDir = m_projectPaths.ContentDir / "Entities";
+
+	CShaderLibrary::Create(_projectPath);
 
 	std::ifstream projectFile(m_projectPaths.ProjectFilePath);
 	Json json = {};
@@ -82,4 +84,5 @@ Protostar::CProject::~CProject()
 		scene = nullptr;
 	}
 	CMeshManager::OnDestroy();
+	CShaderLibrary::Destroy();
 }

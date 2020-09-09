@@ -23,24 +23,6 @@ namespace Protostar
 		std::filesystem::path EntitiesDir;
 	};
 
-	struct SShaderInfo
-	{
-		SShaderInfo(const std::filesystem::path& _filePath)
-			:ShaderName(_filePath.filename().string())
-		{
-
-		}
-
-		std::string ShaderName;
-
-		Json ToJson() const
-		{
-			return Json{
-				{"name", ShaderName}
-			};
-		}
-	};
-
 	class CProject
 	{
 	public:
@@ -62,20 +44,20 @@ namespace Protostar
 			return m_projectPaths;
 		}
 
-		void RegisterShader(const std::filesystem::path& _shaderPath)
-		{
-			m_shaders.insert(std::make_pair(_shaderPath.string(), SShaderInfo(_shaderPath)));
-		}
+		//void RegisterShader(const std::filesystem::path& _shaderPath)
+		//{
+		//	m_shaders.insert(std::make_pair(_shaderPath.string(), SShaderInfo(_shaderPath)));
+		//}
 
-		void RemoveShader(const std::filesystem::path& _shaderPath)
-		{
-			m_shaders.erase(_shaderPath.string());
-		}
+		//void RemoveShader(const std::filesystem::path& _shaderPath)
+		//{
+		//	m_shaders.erase(_shaderPath.string());
+		//}
 
-		std::unordered_map<std::string, SShaderInfo> GetShaders() const
-		{
-			return m_shaders;
-		}
+		//std::unordered_map<std::string, SShaderInfo> GetShaders() const
+		//{
+		//	return m_shaders;
+		//}
 
 		std::unordered_set<CScene*> GetScenes() const 
 		{
@@ -90,7 +72,7 @@ namespace Protostar
 		void CreateScene(const std::string& _name)
 		{
 			CScene* newScene = new CScene(_name);
-			newScene->SetObjectPath(m_projectPaths.ScenesDir / (_name + ".vescene"));
+			newScene->SetObjectPath(m_projectPaths.ScenesDir / (_name + ".pescene"));
 			m_scenes.insert(newScene);
 			CSavingSystem::GetHandle()->RegisterDirtyObject(newScene);
 		}
@@ -98,7 +80,7 @@ namespace Protostar
 		void CreateEntity(const std::string& _name)
 		{
 			CBaseEntity* newEntity = new CBaseEntity(_name);
-			newEntity->SetObjectPath(m_projectPaths.EntitiesDir / (_name + ".veentity"));
+			newEntity->SetObjectPath(m_projectPaths.EntitiesDir / (_name + ".peentity"));
 			CEntityManager::GetHandle()->RegisterEntity(newEntity);
 			CSavingSystem::GetHandle()->RegisterDirtyObject(newEntity);
 		}
@@ -132,6 +114,6 @@ namespace Protostar
 		std::unordered_set<CScene*> m_scenes;
 		std::string m_name;
 		SProjectPaths m_projectPaths;
-		std::unordered_map<std::string, SShaderInfo> m_shaders;
+		//std::unordered_map<std::string, SShaderInfo> m_shaders;
 	};
 }

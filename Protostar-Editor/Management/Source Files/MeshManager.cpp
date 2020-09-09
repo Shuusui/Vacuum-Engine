@@ -83,6 +83,7 @@ void Protostar::CMeshManager::Save()
 {
 	Json json = {};
 	Json meshMapJson = {}; 
+
 	for (const auto& [key, value] : m_meshes)
 	{
 		meshMapJson[key.ToString()] = value.ToJson();
@@ -102,7 +103,9 @@ Protostar::CMeshManager::~CMeshManager()
 Protostar::CMeshManager::CMeshManager(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath)
 	:m_meshesPath(_meshesPath)
 	,m_configsPath(_configsPath)
-	,m_configFilePath(m_configsPath / "meshmanager.config")
+	,m_configFilePath(m_configsPath / "meshmanager.ini")
 {
 	Load();
 }
+
+#undef JSONMESHMAP

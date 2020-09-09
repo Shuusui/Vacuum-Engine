@@ -35,13 +35,6 @@ namespace Protostar
 		u32 Col;
 	};
 
-	struct S3DVert
-	{
-		DirectX::XMFLOAT3 Pos;
-		DirectX::XMFLOAT2 UV;
-		u32 Col;
-	};
-
 	struct SGuiDrawCmd
 	{
 		DirectX::XMFLOAT4 ClipRect;
@@ -70,6 +63,30 @@ namespace Protostar
 		std::vector<SGuiDrawList> DrawLists;
 	};
 
+	struct SDrawCmd
+	{
+		DirectX::XMFLOAT4 ClipRect;
+		u32 VtxOffset;
+		u32 IdxOffset;
+		u32 ElemCount;
+	};
+
+	struct SDrawList
+	{
+		std::vector<struct SVertex> VertexBuffer;
+		std::vector<u32> IndexBuffer;
+		std::vector<SDrawCmd> DrawCmds;
+	};
+
+	struct SDrawData
+	{
+		DirectX::XMFLOAT2 DisplayPos;
+		DirectX::XMFLOAT2 DisplaySize;
+		s32 TotalIdxCount;
+		s32 TotalVtxCount;
+		std::vector<SDrawList> DrawLists;
+	};
+
 
 	class DX12Renderer : public IRenderer
 	{
@@ -85,11 +102,14 @@ namespace Protostar
 			, m_swapChain(nullptr)
 			, m_rtvHeap(nullptr)
 			, m_srvDescHeap(nullptr)
-			, m_guiRootSignature(nullptr)
-			, m_guiPipelineState(nullptr)
-			, m_guiCommandList(nullptr)
+			, m_rootSignature(nullptr)
+			, m_pipelineState(nullptr)
+			, m_commandList(nullptr)
 			, m_fence(nullptr)
 			, m_fontTextureResource(nullptr)
+			, m_guiVertexShader(nullptr)
+			, m_guiPixelShader(nullptr)
+			, m_guiDrawData(nullptr)
 			, m_barrier({})
 			, m_renderTargetDescs()
 			, m_fenceEvent(nullptr)
@@ -97,12 +117,24 @@ namespace Protostar
 			, m_frameContext()
 			, m_frameIndex(0)
 			, m_fenceValue(0)
+			, m_windowSize(DirectX::XMFLOAT2(0, 0))
+			, m_currentVertexBufferSize(0)
+			, m_currentIndexBufferSize(0)
+			, m_currentVtxBufferOffset(0)
+			, m_currentIdxBufferOffset(0)
+			, m_totalVtxCount(0)
+			, m_totalIdxCount(0)
 		{
+			for (s32 i = 0; i < s_frameCount; ++i)
+			{
+				m_renderTargets[i] = nullptr;
+			}
 		}
 
 		virtual void OnCreate() override;
 		virtual void CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID) override;
-		virtual void UpdateDrawData(SGuiDrawData* _drawData);
+		virtual void UpdateGuiDrawData(SGuiDrawData* _drawData);
+		virtual void AddDrawData(SDrawData* _drawData) override;
 		virtual void OnInit() override;
 		virtual void OnUpdate() override;
 		virtual void PrepareRendering() override;
@@ -110,15 +142,6 @@ namespace Protostar
 		virtual void OnDestroy() override;
 		virtual void RegisterAfterResizeCallback(const std::function<void(HWND, u32, WPARAM, LPARAM)>& _func) override;
 	private:
-		template<typename T>
-		static void SafeRelease(T*& resource)
-		{
-			if (resource)
-			{
-				resource->Release();
-			}
-			resource = nullptr;
-		}
 
 		void LoadPipeline();
 		void LoadGUIShaders();
@@ -141,14 +164,14 @@ namespace Protostar
 		ID3D12DescriptorHeap* m_rtvHeap;
 		ID3D12DescriptorHeap* m_srvDescHeap;
 		ID3D12Resource* m_renderTargets[s_frameCount];
-		ID3D12RootSignature* m_guiRootSignature;
-		ID3D12PipelineState* m_guiPipelineState;
-		ID3D12GraphicsCommandList* m_guiCommandList;
-		ID3D12GraphicsCommandList* m_viewPostCommandList;
+		ID3D12RootSignature* m_rootSignature;
+		ID3D12PipelineState* m_pipelineState;
+		ID3D12GraphicsCommandList* m_commandList;
 		ID3D12Fence* m_fence;
 		ID3D12Resource* m_fontTextureResource;
 		ID3DBlob* m_guiVertexShader;
 		ID3DBlob* m_guiPixelShader;
+		SGuiDrawData* m_guiDrawData;
 
 		D3D12_RESOURCE_BARRIER m_barrier;
 		CD3DX12_CPU_DESCRIPTOR_HANDLE m_renderTargetDescs[s_frameCount];
@@ -159,5 +182,19 @@ namespace Protostar
 		u32 m_frameIndex;
 		u64 m_fenceValue;
 		std::vector<std::function<void(HWND, u32, WPARAM, LPARAM)>> m_afterResizeCallbacks;
+
+		DirectX::XMFLOAT2 m_windowSize;
+
+		u32 m_currentVertexBufferSize;
+		u32 m_currentIndexBufferSize;
+
+		u32 m_currentVtxBufferOffset;
+		u32 m_currentIdxBufferOffset;
+
+		u32 m_totalVtxCount;
+		u32 m_totalIdxCount;
+
+		u32 m_totalVtxSize;
+		u32 m_totalIdxSize;
 	};
 }

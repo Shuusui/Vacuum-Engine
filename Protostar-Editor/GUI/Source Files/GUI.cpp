@@ -162,7 +162,7 @@ void Protostar::CGUI::Render()
 		drawData->DrawLists.push_back(drawList);
 	}
 
-	CRendererManager::UpdateDrawData(drawData);
+	CRendererManager::UpdateGuiDrawData(drawData);
 }
 
 void Protostar::CGUI::SetCaptureIfNotSet(HWND _hwnd)

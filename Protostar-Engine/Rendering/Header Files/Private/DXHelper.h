@@ -21,7 +21,16 @@
 // it has no understanding of the lifetime of resources on the GPU. Apps must account
 // for the GPU lifetime of resources to avoid destroying objects that may still be
 // referenced by the GPU.
-using Microsoft::WRL::ComPtr;
+
+template<typename T>
+static void SafeRelease(T*& resource)
+{
+	if (resource)
+	{
+		resource->Release();
+	}
+	resource = nullptr;
+}
 
 inline std::string HrToString(HRESULT hr)
 {
@@ -81,8 +90,6 @@ inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 
 inline HRESULT ReadDataFromFile(LPCWSTR filename, byte** data, UINT* size)
 {
-    using namespace Microsoft::WRL;
-
 #if WINVER >= _WIN32_WINNT_WIN8
     CREATEFILE2_EXTENDED_PARAMETERS extendedParams = {};
     extendedParams.dwSize = sizeof(CREATEFILE2_EXTENDED_PARAMETERS);

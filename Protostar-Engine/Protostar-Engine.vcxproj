@@ -66,7 +66,9 @@
     <ClInclude Include="Rendering\Header Files\Private\DX12Renderer.h" />
     <ClInclude Include="Rendering\Header Files\Private\DXHelper.h" />
     <ClInclude Include="Rendering\Header Files\Private\IRenderer.h" />
+    <ClInclude Include="Rendering\Header Files\Public\PSOLibrary.h" />
     <ClInclude Include="Rendering\Header Files\Public\RendererManager.h" />
+    <ClInclude Include="Rendering\Header Files\Public\ShaderLibrary.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\ECS\Entities\Source Files\BaseEntity.cpp" />
@@ -116,7 +118,9 @@
     <ClCompile Include="DirectX\Stereo3D\Stereo3DMatrixHelper.cpp" />
     <ClCompile Include="DirectX\WICTextureLoader\WICTextureLoader12.cpp" />
     <ClCompile Include="Rendering\Source Files\DX12Renderer.cpp" />
+    <ClCompile Include="Rendering\Source Files\PSOLibrary.cpp" />
     <ClCompile Include="Rendering\Source Files\RendererManager.cpp" />
+    <ClCompile Include="Rendering\Source Files\ShaderLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectX\DirectXMesh\DirectXMesh.inl" />

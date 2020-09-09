@@ -273,6 +273,12 @@
     <ClInclude Include="Core\ECS\Components\Header Files\CameraComponent.h">
       <Filter>Core\ECS\Components\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Rendering\Header Files\Public\PSOLibrary.h">
+      <Filter>Rendering\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Header Files\Public\ShaderLibrary.h">
+      <Filter>Rendering\Header Files\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Source Files\Log.cpp">
@@ -418,6 +424,12 @@
     </ClCompile>
     <ClCompile Include="Core\ECS\Source Files\EntityManager.cpp">
       <Filter>Core\ECS\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Source Files\PSOLibrary.cpp">
+      <Filter>Rendering\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Source Files\ShaderLibrary.cpp">
+      <Filter>Rendering\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

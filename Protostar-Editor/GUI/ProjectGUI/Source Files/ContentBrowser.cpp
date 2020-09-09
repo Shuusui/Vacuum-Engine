@@ -140,7 +140,7 @@ void Protostar::CContentBrowser::ManageShaderPaths()
 		return;
 	}
 	
-	std::unordered_map<std::string, SShaderInfo> shaders = m_project->GetShaders();
+	/*std::unordered_map<std::string, SShaderInfo> shaders = m_project->GetShaders();
 
 	for (const std::filesystem::path& shaderPath : std::filesystem::directory_iterator(m_project->GetProjectPaths().ShaderDir))
 	{
@@ -169,7 +169,7 @@ void Protostar::CContentBrowser::ManageShaderPaths()
 			ImGui::Text("Path: %s", shader.first.c_str());
 			ImGui::EndTooltip();
 		}
-	}
+	}*/
 
 	ImGui::TreePop();
 }

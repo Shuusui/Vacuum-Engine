@@ -15,7 +15,8 @@ namespace Protostar
 		static void Create(const SRendererCreationInfo& _info);
 		static void CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID);
 		static void PrepareRendering();
-		static void UpdateDrawData(struct SGuiDrawData* _drawData);
+		static void UpdateGuiDrawData(struct SGuiDrawData* _drawData);
+		static void AddDrawData(struct SDrawData* _drawData);
 		static void OnInit(const std::vector<std::filesystem::path>& _shaderPaths);
 		static void OnUpdate();
 		static void OnRender();

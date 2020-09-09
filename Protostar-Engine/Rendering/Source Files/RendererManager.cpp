@@ -20,9 +20,14 @@ void Protostar::CRendererManager::PrepareRendering()
 	s_rendererManager->m_renderer->PrepareRendering();
 }
 
-void Protostar::CRendererManager::UpdateDrawData(SGuiDrawData* _drawData)
+void Protostar::CRendererManager::UpdateGuiDrawData(SGuiDrawData* _drawData)
 {
-	s_rendererManager->m_renderer->UpdateDrawData(_drawData);
+	s_rendererManager->m_renderer->UpdateGuiDrawData(_drawData);
+}
+
+void Protostar::CRendererManager::AddDrawData(SDrawData* _drawData)
+{
+	s_rendererManager->m_renderer->AddDrawData(_drawData);
 }
 
 void Protostar::CRendererManager::OnInit(const std::vector<std::filesystem::path>& _shaderPaths)
