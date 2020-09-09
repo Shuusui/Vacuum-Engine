@@ -7,6 +7,7 @@
 #include "GUI.h"
 #include "AppManager.h"
 #include "Log.h"
+#include "ShaderLibrary.h"
 
 Protostar::CContentBrowser::CContentBrowser(CProject* _project)
 	:m_project(_project)
@@ -139,37 +140,23 @@ void Protostar::CContentBrowser::ManageShaderPaths()
 	{
 		return;
 	}
-	
-	/*std::unordered_map<std::string, SShaderInfo> shaders = m_project->GetShaders();
 
-	for (const std::filesystem::path& shaderPath : std::filesystem::directory_iterator(m_project->GetProjectPaths().ShaderDir))
+	CShaderLibrary* shaderLibray = CShaderLibrary::GetHandle();
+
+	std::unordered_map<SGuid, SShaderComplement> shaderComplements = shaderLibray->GetShaderComplements();
+
+	for (const auto& [guid, shaderComplement] : shaderComplements)
 	{
-		if (shaderPath.extension() != ".hlsl")
+		if (shaderComplement.VertexShaderInfo.has_value())
 		{
+			ImGui::MenuItem(shaderComplement.VertexShaderInfo.value().Name.c_str());
 			continue;
 		}
-		if (shaders.find(shaderPath.string()) != shaders.end())
+		if (shaderComplement.PixelShaderInfo.has_value())
 		{
-			continue;
+			ImGui::MenuItem(shaderComplement.PixelShaderInfo.value().Name.c_str());
 		}
-		m_project->RegisterShader(shaderPath);
 	}
-
-	for (const std::pair<std::string, SShaderInfo>& shader : shaders)
-	{
-		if (!std::filesystem::exists(shader.first))
-		{
-			m_project->RemoveShader(shader.first);
-		}
-
-		ImGui::Selectable(shader.second.ShaderName.c_str());
-		if (ImGui::IsItemHovered())
-		{
-			ImGui::BeginTooltip();
-			ImGui::Text("Path: %s", shader.first.c_str());
-			ImGui::EndTooltip();
-		}
-	}*/
 
 	ImGui::TreePop();
 }

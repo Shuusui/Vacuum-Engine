@@ -129,6 +129,8 @@ namespace Protostar
 		std::unordered_map<SGuid, SConsoleInfo> m_logInfos;
 		std::unordered_map<SGuid, std::vector<std::pair<SColor, std::string>>*> m_logBuffer;
 
+		std::vector<std::pair<SColor, std::string>> m_buffer;
+
 		std::mutex m_logMutex;
 	};
 }

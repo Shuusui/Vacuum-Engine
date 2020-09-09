@@ -25,6 +25,7 @@ namespace Protostar
 
 	void CLog::RegisterBuffer(const SGuid& _bufGuid, std::vector<std::pair<SColor, std::string>>* buf)
 	{
+		*buf = s_logHandle->m_buffer;
 		s_logHandle->m_logBuffer.insert(std::make_pair(_bufGuid, buf));
 	}
 
@@ -41,6 +42,7 @@ namespace Protostar
 	void CLog::Log(const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
+		s_logHandle->m_buffer.push_back(std::make_pair(SColor{1.0f, 0.4f, 0.8f, 1.0f}, _logString));
 		for (std::pair<const SGuid, SConsoleInfo>& handlePair : s_logHandle->m_logInfos)
 		{
 			LogToHandle(handlePair.second, _logString);

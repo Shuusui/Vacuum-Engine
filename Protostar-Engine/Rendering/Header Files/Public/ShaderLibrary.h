@@ -84,5 +84,8 @@ namespace Protostar
 
 		std::unordered_map<SGuid, SShaderInfo> m_vertexShaders;
 		std::unordered_map<SGuid, SShaderInfo> m_pixelShaders;
+
+		std::unordered_map<std::string, SGuid> m_vertexShaderNames;
+		std::unordered_map<std::string, SGuid> m_pixelShaderNames;
 	};
 }

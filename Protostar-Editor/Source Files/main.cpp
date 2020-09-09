@@ -35,13 +35,13 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 		return -1;
 	}
 
-	CECSManager::CreateECS();
-
-	CSavingSystem::OnCreate();
-
 	CAppManager::InitApp();
 
 	CAppManager* appMgrHandle = CAppManager::GetAppHandle();
+
+	CECSManager::CreateECS();
+
+	CSavingSystem::OnCreate();
 
 	CThreadPool* threadPool = new CThreadPool(std::thread::hardware_concurrency());
 
@@ -61,7 +61,7 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 	CMainWindow::InitWindow(windowInfo);
 	if (!CMainWindow::Create(errorMsg))
 	{
-		PE_LOG(errorMsg);
+		PE_LOG(errorMsg.c_str());
 		return -1;
 	}
 
@@ -82,6 +82,7 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 	CMainWindow::ShowAndUpdate(_nShowCmd);
 
 	ImGui::StyleColorsDark();
+
 
 	MSG msg = {};
 	while (msg.message != WM_QUIT)

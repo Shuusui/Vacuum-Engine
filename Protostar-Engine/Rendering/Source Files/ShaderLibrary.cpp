@@ -111,7 +111,7 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 
 		if (D3DCompileFromFile(shaderInfo.ShaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) != S_OK)
 		{
-			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
+			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
 			SafeRelease(vertexShader);
 			SafeRelease(errorBlob);
 			continue;
@@ -119,6 +119,7 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 		shaderInfo.Shader = vertexShader;
 
 		m_vertexShaders.insert(std::make_pair(shaderGuid, shaderInfo));
+		m_vertexShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
 	}
 
 	Json pixelShaderMapJson = json[JSONPIXELSHADERMAP].get<Json>();
@@ -136,14 +137,15 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 
 		if (D3DCompileFromFile(shaderInfo.ShaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) != S_OK)
 		{
-			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
-			SafeRelease(vertexShader);
+			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
+			SafeRelease(pixelShader);
 			SafeRelease(errorBlob);
 			continue;
 		}
 		shaderInfo.Shader = pixelShader;
 
 		m_pixelShaders.insert(std::make_pair(shaderGuid, shaderInfo));
+		m_pixelShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
 	}
 
 	SafeRelease(errorBlob);
@@ -172,8 +174,7 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 	ID3DBlob* pixelShader = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
-	std::unordered_map<std::string, SGuid> vertexShaderNames = {};
-	std::unordered_map<std::string, SGuid> pixelShaderNames = {};
+
 
 	for (const std::filesystem::path& vertexShaderPath : std::filesystem::recursive_directory_iterator(vertexShaderDirPath))
 	{
@@ -184,7 +185,7 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 			shaderInfo.Shader = vertexShader;
 			shaderInfo.ShaderPath = vertexShaderPath;
 
-			if (vertexShaderNames.find(shaderInfo.Name) != vertexShaderNames.end())
+			if (m_vertexShaderNames.find(shaderInfo.Name) != m_vertexShaderNames.end())
 			{
 				continue;
 			}
@@ -192,7 +193,7 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 			SGuid shaderGuid = SGuid::NewGuid();
 
 			m_vertexShaders.insert(std::make_pair(shaderGuid, shaderInfo));
-			vertexShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
+			m_vertexShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
 		}
 		else
 		{
@@ -212,18 +213,18 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 
 			SGuid shaderGuid = SGuid::NewGuid();
 
-			if (pixelShaderNames.find(shaderInfo.Name) != pixelShaderNames.end())
+			if (m_pixelShaderNames.find(shaderInfo.Name) != m_pixelShaderNames.end())
 			{
 				continue;
 			}
 
-			if (vertexShaderNames.find(shaderInfo.Name) != vertexShaderNames.end())
+			if (m_vertexShaderNames.find(shaderInfo.Name) != m_vertexShaderNames.end())
 			{
-				shaderGuid = vertexShaderNames[shaderInfo.Name];
+				shaderGuid = m_vertexShaderNames[shaderInfo.Name];
 			}
 
 			m_pixelShaders.insert(std::make_pair(shaderGuid, shaderInfo));
-			pixelShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
+			m_pixelShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
 		}
 		else
 		{
@@ -234,22 +235,22 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 	}
 	for (const std::filesystem::path& combinedShaderPath : std::filesystem::recursive_directory_iterator(combinedShaderDirPath))
 	{
-		auto vertexShaderIterator = vertexShaderNames.find(combinedShaderPath.filename().string());
-		auto pixelShaderIterator = pixelShaderNames.find(combinedShaderPath.filename().string());
+		auto vertexShaderIterator = m_vertexShaderNames.find(combinedShaderPath.filename().string());
+		auto pixelShaderIterator = m_pixelShaderNames.find(combinedShaderPath.filename().string());
 
-		if (vertexShaderIterator != vertexShaderNames.end() && pixelShaderIterator != pixelShaderNames.end())
+		if (vertexShaderIterator != m_vertexShaderNames.end() && pixelShaderIterator != m_pixelShaderNames.end())
 		{
 			continue;
 		}
 
 		SGuid combinedShaderGuid = SGuid::NewGuid();
 
-		if (vertexShaderIterator != vertexShaderNames.end())
+		if (vertexShaderIterator != m_vertexShaderNames.end())
 		{
 			combinedShaderGuid = vertexShaderIterator->second;
 		}
 
-		if (pixelShaderIterator != pixelShaderNames.end())
+		if (pixelShaderIterator != m_pixelShaderNames.end())
 		{
 			combinedShaderGuid = pixelShaderIterator->second;
 		}
@@ -263,14 +264,14 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 
 
 			m_vertexShaders.insert(std::make_pair(combinedShaderGuid, shaderInfo));
-			if (vertexShaderIterator == vertexShaderNames.end())
+			if (vertexShaderIterator == m_vertexShaderNames.end())
 			{
-				vertexShaderNames.insert(std::make_pair(shaderInfo.Name, combinedShaderGuid));
+				m_vertexShaderNames.insert(std::make_pair(shaderInfo.Name, combinedShaderGuid));
 			}
 		}
 		else
 		{
-			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
+			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
 			SafeRelease(errorBlob);
 			SafeRelease(vertexShader);
 		}
@@ -283,14 +284,14 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 			shaderInfo.ShaderPath = combinedShaderPath;
 
 			m_pixelShaders.insert(std::make_pair(combinedShaderGuid, shaderInfo));
-			if (pixelShaderIterator == pixelShaderNames.end())
+			if (pixelShaderIterator == m_pixelShaderNames.end())
 			{
-				pixelShaderNames.insert(std::make_pair(shaderInfo.Name, combinedShaderGuid));
+				m_pixelShaderNames.insert(std::make_pair(shaderInfo.Name, combinedShaderGuid));
 			}
 		}
 		else
 		{
-			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
+			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
 			SafeRelease(errorBlob);
 			SafeRelease(pixelShader);
 		}

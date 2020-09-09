@@ -29,7 +29,7 @@ void Protostar::CAppManager::InitApp()
 		s_app = new CAppManager();
 	}
 
-	PE_LOG(TEXT("Initialize app"));
+	PE_LOG("Initialize app");
 
 	std::filesystem::path currentPath = std::filesystem::current_path();
 	std::wstring::size_type pos = std::wstring(currentPath.c_str()).find_last_of(L"\\/");
@@ -38,7 +38,7 @@ void Protostar::CAppManager::InitApp()
 	s_app->m_appPaths.ConfigDir = s_app->m_appPaths.RootDir / L"Config";
 	if (!std::filesystem::exists(s_app->m_appPaths.ConfigDir))
 	{
-		PE_LOG(TEXT("Creating config directory"));
+		PE_LOG("Creating config directory");
 		std::filesystem::create_directory(s_app->m_appPaths.ConfigDir);
 	}
 
