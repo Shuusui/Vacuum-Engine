@@ -36,9 +36,9 @@ void Protostar::CContentBrowser::OnRender()
 	CAppManager* appManager = CAppManager::GetAppHandle();
 	if (!appManager)
 	{
-		ImGui::End();
 		return;
 	}
+
 	SWindowDimParams wndDim = appManager->GetInitWindowDimParams();
 	float width = (float)wndDim.Width * .2f;
 	float height = (float)wndDim.Height * .8f;

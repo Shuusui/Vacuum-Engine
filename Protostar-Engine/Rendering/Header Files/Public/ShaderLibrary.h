@@ -79,6 +79,7 @@ namespace Protostar
 		CShaderLibrary(const std::filesystem::path& _projectPath);
 
 		static CShaderLibrary* s_shaderLibrary;
+
 		std::filesystem::path m_projectConfigPath;
 		std::filesystem::path m_shaderLibConfigPath;
 
