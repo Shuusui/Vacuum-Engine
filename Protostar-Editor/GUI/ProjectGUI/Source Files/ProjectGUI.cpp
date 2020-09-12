@@ -123,7 +123,7 @@ void Protostar::CProjectGUI::RenderViewport()
 
 	ImVec2 viewportPos = ImGui::GetWindowPos();
 	ImVec2 viewportSize = ImGui::GetWindowSize();
-
+	viewportPos.y += ImGui::GetFrameHeight();
 	CMeshManager* meshManager = CMeshManager::GetHandle();
 	std::unordered_map<SGuid, SModel> meshes = meshManager->GetMeshes();
 	SModel currentModel = {};
