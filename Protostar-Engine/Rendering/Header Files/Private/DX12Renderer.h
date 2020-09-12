@@ -197,7 +197,6 @@ namespace Protostar
 		ID3DBlob* m_vpVertexShader;
 		ID3DBlob* m_vpPixelShader;
 		ID3D12PipelineState* m_vpPipelineState;
-		ID3D12RootSignature* m_vpRootSignature;
 
 		u32 m_currentVertexBufferSize;
 		u32 m_currentIndexBufferSize;

@@ -76,7 +76,7 @@ void Protostar::DX12Renderer::OnUpdate()
 		SafeRelease(frameResource->VertexBuffer);
 		frameResource->VertexBufferSize = m_totalVtxSize + 5000;
 
-		PE_LOG_F("Resize vertex buffer to: %i", m_totalVtxSize + 5000);
+		//PE_LOG_F("Resize vertex buffer to: %i", m_totalVtxSize + 5000);
 
 		D3D12_HEAP_PROPERTIES props = {};
 		props.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -104,7 +104,7 @@ void Protostar::DX12Renderer::OnUpdate()
 	{
 		SafeRelease(frameResource->IndexBuffer);
 		frameResource->IndexBufferSize = m_totalIdxSize + 2000;
-		PE_LOG_F("Resize index buffer to: %i", m_totalIdxSize + 2000);
+		//PE_LOG_F("Resize index buffer to: %i", m_totalIdxSize + 2000);
 
 		D3D12_HEAP_PROPERTIES props = {};
 		props.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -709,7 +709,7 @@ void Protostar::DX12Renderer::LoadVPAssets()
 		LoadVPShaders();
 	}
 
-	ComPtr<ID3DBlob> error;
+	/*ComPtr<ID3DBlob> error;
 	{
 		D3D12_DESCRIPTOR_RANGE descRange = {};
 		descRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -761,7 +761,7 @@ void Protostar::DX12Renderer::LoadVPAssets()
 		THROW_IF_FAILED(D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, &error));
 
 		m_device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_vpRootSignature));
-	}
+	}*/
 
 	{
 #if defined(_DEBUG)
@@ -780,7 +780,7 @@ void Protostar::DX12Renderer::LoadVPAssets()
 
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 		psoDesc.InputLayout = { inputElementDescs, 3 };
-		psoDesc.pRootSignature = m_vpRootSignature;
+		psoDesc.pRootSignature = m_rootSignature;
 		psoDesc.NodeMask = 1;
 		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vpVertexShader);
 		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_vpPixelShader);
@@ -1156,7 +1156,7 @@ void Protostar::DX12Renderer::SetupVPRenderState(SDrawData* _drawData, SFrameRes
 	m_commandList->IASetIndexBuffer(&idxBufferView);
 	m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_commandList->SetPipelineState(m_vpPipelineState);
-	m_commandList->SetGraphicsRootSignature(m_vpRootSignature);
+	m_commandList->SetGraphicsRootSignature(m_rootSignature);
 	m_commandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
 
 	const float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
