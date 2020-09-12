@@ -124,6 +124,8 @@ namespace Protostar
 			, m_currentIdxBufferOffset(0)
 			, m_totalVtxCount(0)
 			, m_totalIdxCount(0)
+			, m_totalVtxSize(0)
+			, m_totalIdxSize(0)
 		{
 			for (s32 i = 0; i < s_frameCount; ++i)
 			{
@@ -145,11 +147,14 @@ namespace Protostar
 
 		void LoadPipeline();
 		void LoadGUIShaders();
+		void LoadVPShaders();
 		void LoadAssets();
+		void LoadVPAssets();
 		void GetHandwareAdapter(struct IDXGIFactory1* _factory, Microsoft::WRL::ComPtr<IDXGIAdapter1>& _adapter);
 		SFrameContext* WaitForNextFrameResources();
 		void WaitForLastSubmittedFrame();
 		void SetupRenderState(SGuiDrawData* _drawData, SFrameResource* _frameResource);
+		void SetupVPRenderState(SDrawData* _drawData, SFrameResource* _frameresource);
 		void InvalidateObjects();
 		void CreateRenderTarget();
 		void CleanupRenderTarget();
@@ -184,6 +189,15 @@ namespace Protostar
 		std::vector<std::function<void(HWND, u32, WPARAM, LPARAM)>> m_afterResizeCallbacks;
 
 		DirectX::XMFLOAT2 m_windowSize;
+
+		/**
+		 * temp stuff here
+		 */
+		std::vector<SDrawData*> m_drawDatas;
+		ID3DBlob* m_vpVertexShader;
+		ID3DBlob* m_vpPixelShader;
+		ID3D12PipelineState* m_vpPipelineState;
+		ID3D12RootSignature* m_vpRootSignature;
 
 		u32 m_currentVertexBufferSize;
 		u32 m_currentIndexBufferSize;

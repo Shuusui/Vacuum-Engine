@@ -42,6 +42,7 @@ void Protostar::DX12Renderer::OnCreate()
 				ResizeSwapChain(_hwnd, (u32)LOWORD(_lParam), (u32)HIWORD(_lParam));
 				CreateRenderTarget();
 				LoadAssets();
+				LoadVPAssets();
 				for (const std::function<void(HWND, u32, WPARAM, LPARAM)>& func : m_afterResizeCallbacks)
 				{
 					func(_hwnd, _msg, _wParam, _lParam);
@@ -56,6 +57,7 @@ void Protostar::DX12Renderer::OnCreate()
 void Protostar::DX12Renderer::OnInit()
 {
 	LoadAssets();
+	LoadVPAssets();
 }
 
 void Protostar::DX12Renderer::OnUpdate()
@@ -69,10 +71,12 @@ void Protostar::DX12Renderer::OnUpdate()
 
 	SFrameResource* frameResource = &m_frameResources[m_frameIndex % s_frameCount];
 
-	if (frameResource->VertexBuffer == nullptr || frameResource->VertexBufferSize < m_totalVtxCount)
+	if (frameResource->VertexBuffer == nullptr || frameResource->VertexBufferSize < m_totalVtxSize)
 	{
 		SafeRelease(frameResource->VertexBuffer);
-		frameResource->VertexBufferSize = m_totalVtxCount;
+		frameResource->VertexBufferSize = m_totalVtxSize + 5000;
+
+		PE_LOG_F("Resize vertex buffer to: %i", m_totalVtxSize + 5000);
 
 		D3D12_HEAP_PROPERTIES props = {};
 		props.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -81,7 +85,7 @@ void Protostar::DX12Renderer::OnUpdate()
 
 		D3D12_RESOURCE_DESC desc = {};
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		desc.Width = frameResource->VertexBufferSize * sizeof(S2DVert);
+		desc.Width = m_totalVtxSize;
 		desc.Height = 1;
 		desc.DepthOrArraySize = 1;
 		desc.MipLevels = 1;
@@ -92,13 +96,15 @@ void Protostar::DX12Renderer::OnUpdate()
 
 		if (m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&frameResource->VertexBuffer)) < 0)
 		{
+			PE_LOG("Couldn't create vertex buffer");
 			return;
 		}
 	}
-	if (frameResource->IndexBuffer == nullptr || frameResource->IndexBufferSize < m_totalIdxCount)
+	if (frameResource->IndexBuffer == nullptr || frameResource->IndexBufferSize < m_totalIdxSize)
 	{
 		SafeRelease(frameResource->IndexBuffer);
-		frameResource->IndexBufferSize = m_totalIdxCount;
+		frameResource->IndexBufferSize = m_totalIdxSize + 2000;
+		PE_LOG_F("Resize index buffer to: %i", m_totalIdxSize + 2000);
 
 		D3D12_HEAP_PROPERTIES props = {};
 		props.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -107,7 +113,7 @@ void Protostar::DX12Renderer::OnUpdate()
 
 		D3D12_RESOURCE_DESC desc = {};
 		desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		desc.Width = frameResource->IndexBufferSize * sizeof(u16);
+		desc.Width = m_totalIdxSize;
 		desc.Height = 1;
 		desc.DepthOrArraySize = 1;
 		desc.MipLevels = 1;
@@ -118,6 +124,7 @@ void Protostar::DX12Renderer::OnUpdate()
 
 		if (m_device->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&frameResource->IndexBuffer)) < 0)
 		{
+			PE_LOG("Couldn't create index buffer");
 			return;
 		}
 	}
@@ -138,23 +145,50 @@ void Protostar::DX12Renderer::OnUpdate()
 	S2DVert* vtxDestination = (S2DVert*)vtxResource;
 	u16* idxDestination = (u16*)idxResource;
 
+	u32 currentVtxOffset = 0;
+	u32 currentIdxOffset = 0;
+	u32 idxStride = sizeof(u16);
+	u32 vtx2DStride = sizeof(S2DVert);
+	u32 vtx3DStride = sizeof(SVertex);
+
 	for (const SGuiDrawList& drawList : m_guiDrawData->DrawLists)
 	{
-		m_currentVertexBufferSize = drawList.VertexBuffer.size() * sizeof(S2DVert);
-		m_currentIndexBufferSize = drawList.IndexBuffer.size() * sizeof(u16);
-		memcpy(vtxDestination, drawList.VertexBuffer.data(), m_currentVertexBufferSize);
-		memcpy(idxDestination, drawList.IndexBuffer.data(), m_currentIndexBufferSize);
+		m_currentVertexBufferSize += drawList.VertexBuffer.size() * vtx2DStride;
+		m_currentIndexBufferSize += drawList.IndexBuffer.size() * idxStride;
+
+		memcpy(vtxDestination, drawList.VertexBuffer.data(), drawList.VertexBuffer.size() * vtx2DStride);
+		memcpy(idxDestination, drawList.IndexBuffer.data(), drawList.IndexBuffer.size() * idxStride);
 		vtxDestination += drawList.VertexBuffer.size();
 		idxDestination += drawList.IndexBuffer.size();
-		m_currentVertexBufferSize += sizeof(drawList.VertexBuffer.size());
-		m_currentIndexBufferSize += sizeof(drawList.IndexBuffer.size());
+
+		currentVtxOffset += drawList.VertexBuffer.size() * vtx2DStride;
+		currentIdxOffset += drawList.IndexBuffer.size() * idxStride;
+
+		m_currentVertexBufferSize += drawList.VertexBuffer.size();
+		m_currentIndexBufferSize += drawList.IndexBuffer.size();
 	}
+
+	SVertex* vtx3DDestination = (SVertex*)vtxDestination;
+
+	for (SDrawData* drawData : m_drawDatas)
+	{
+		for(const SDrawList& drawList : drawData->DrawLists)
+		{
+			memcpy(vtx3DDestination, drawList.VertexBuffer.data(), drawList.VertexBuffer.size() * vtx3DStride);
+			memcpy(idxDestination, drawList.IndexBuffer.data(), drawList.IndexBuffer.size() * idxStride);
+			vtx3DDestination += drawList.VertexBuffer.size();
+			idxDestination += drawList.IndexBuffer.size();
+		}
+	}
+
 	frameResource->VertexBuffer->Unmap(0, &range);
 	frameResource->IndexBuffer->Unmap(0, &range);
 
 	SetupRenderState(m_guiDrawData, frameResource);
 
 	DirectX::XMFLOAT2 clipOff = m_guiDrawData->DisplayPos;
+	u32 idxOffset = 0;
+	u32 vtxOffset = 0;
 	for (const SGuiDrawList& drawList : m_guiDrawData->DrawLists)
 	{
 		for (const SGuiDrawCmd& drawCmd : drawList.DrawCommands)
@@ -175,13 +209,40 @@ void Protostar::DX12Renderer::OnUpdate()
 				const D3D12_RECT rect = { (LONG)(drawCmd.ClipRect.x, -clipOff.x), (LONG)(drawCmd.ClipRect.y - clipOff.y), (LONG)(drawCmd.ClipRect.z - clipOff.x), (LONG)(drawCmd.ClipRect.w - clipOff.y) };
 				m_commandList->SetGraphicsRootDescriptorTable(1, *(D3D12_GPU_DESCRIPTOR_HANDLE*)&drawCmd.TextureID);
 				m_commandList->RSSetScissorRects(1, &rect);
-				m_commandList->DrawIndexedInstanced(drawCmd.ElemCount, 1, drawCmd.IdxOffset + m_currentIdxBufferOffset, drawCmd.VtxOffset + m_currentVtxBufferOffset, 0);
+				m_commandList->DrawIndexedInstanced(drawCmd.ElemCount, 1, drawCmd.IdxOffset + idxOffset, drawCmd.VtxOffset + vtxOffset, 0);
 			}
 		}
-		m_currentVtxBufferOffset += drawList.VertexBuffer.size();
-		m_currentIdxBufferOffset += drawList.IndexBuffer.size();
+
+		vtxOffset += drawList.VertexBuffer.size();
+		idxOffset += drawList.IndexBuffer.size();
+
+		m_currentVtxBufferOffset += drawList.VertexBuffer.size() * sizeof(S2DVert);
+		m_currentIdxBufferOffset += drawList.IndexBuffer.size() * sizeof(u16);
 	}
 
+	for (SDrawData* drawData : m_drawDatas)
+	{
+		SetupVPRenderState(drawData, frameResource);
+
+		DirectX::XMFLOAT2 vpClipOff = drawData->DisplayPos;
+
+		for (const SDrawList& drawList : drawData->DrawLists)
+		{
+			for (const SDrawCmd& drawCmd : drawList.DrawCmds)
+			{
+				const D3D12_RECT rect = { (LONG)(drawCmd.ClipRect.x, + vpClipOff.x), (LONG)(drawCmd.ClipRect.y + vpClipOff.y), (LONG)(drawCmd.ClipRect.z - vpClipOff.x), (LONG)(drawCmd.ClipRect.w - vpClipOff.y) };
+				m_commandList->RSSetScissorRects(1, &rect);
+				m_commandList->DrawIndexedInstanced(drawCmd.ElemCount, 1, 0, 0, 0);
+			}
+
+			m_currentVtxBufferOffset += drawList.VertexBuffer.size();
+			m_currentIdxBufferOffset += drawList.IndexBuffer.size();
+		}
+		delete drawData;
+		drawData = nullptr;
+	}
+
+	m_drawDatas.clear();
 
 	m_barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	m_barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
@@ -227,10 +288,21 @@ void Protostar::DX12Renderer::UpdateGuiDrawData(SGuiDrawData* _drawData)
 	m_totalVtxCount += _drawData->TotalVtxCount;
 	m_totalVtxSize += _drawData->TotalVtxCount * sizeof(S2DVert);
 	m_totalIdxSize += _drawData->TotalIdxCount * sizeof(u16);
+	m_totalIdxSize += _drawData->TotalIdxCount;
+	m_totalVtxSize += _drawData->TotalVtxCount;
 }
 
 void Protostar::DX12Renderer::AddDrawData(SDrawData* _drawData)
 {
+	m_drawDatas.push_back(_drawData);
+
+	m_totalIdxCount += _drawData->TotalIdxCount;
+	m_totalVtxCount += _drawData->TotalVtxCount;
+
+	m_totalIdxSize += _drawData->TotalIdxCount * sizeof(u16);
+	m_totalVtxSize += _drawData->TotalVtxCount * sizeof(SVertex);
+	m_totalIdxSize += _drawData->TotalIdxCount;
+	m_totalVtxSize += _drawData->TotalVtxCount;
 }
 
 void Protostar::DX12Renderer::OnRender()
@@ -449,6 +521,48 @@ void Protostar::DX12Renderer::LoadGUIShaders()
 	THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &m_guiPixelShader, nullptr));
 }
 
+void Protostar::DX12Renderer::LoadVPShaders()
+{
+	static const char* vertexShaderStr =
+		"cbuffer vertexBuffer : register(b0) \
+        {\
+            float4x4 ProjectionMatrix; \
+        };\
+        struct VS_INPUT\
+        {\
+            float3 pos : POSITION;\
+            float3 normal : NORMAL0;\
+            float2 texcoord  : TEXCOORD0;\
+        };\
+        \
+        struct PS_INPUT\
+        {\
+            float4 pos : SV_POSITION;\
+        };\
+        \
+        PS_INPUT vs_main(VS_INPUT input)\
+        {\
+            PS_INPUT output;\
+            output.pos = mul(ProjectionMatrix, float4(input.pos.xyz, 1.f));\
+            return output;\
+        }";
+
+	static const char* pixelShaderStr =
+		"struct PS_INPUT\
+        {\
+            float4 pos : SV_POSITION;\
+        };\
+        \
+        float4 ps_main(PS_INPUT input) : SV_Target\
+        {\
+			float4 outCol = {1.0, 0.0, 0.0, 1.0};\
+            return outCol; \
+        }";
+
+	THROW_IF_FAILED(D3DCompile(vertexShaderStr, strlen(vertexShaderStr), nullptr, nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &m_vpVertexShader, nullptr));
+	THROW_IF_FAILED(D3DCompile(pixelShaderStr, strlen(pixelShaderStr), nullptr, nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &m_vpPixelShader, nullptr));
+}
+
 void Protostar::DX12Renderer::LoadAssets()
 {
 	if (!m_guiVertexShader || !m_guiPixelShader)
@@ -584,6 +698,145 @@ void Protostar::DX12Renderer::LoadAssets()
 			desc.BackFace = desc.FrontFace;
 
 			THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState)));
+		}
+	}
+}
+
+void Protostar::DX12Renderer::LoadVPAssets()
+{
+	if (!m_vpVertexShader || !m_vpPixelShader)
+	{
+		LoadVPShaders();
+	}
+
+	ComPtr<ID3DBlob> error;
+	{
+		D3D12_DESCRIPTOR_RANGE descRange = {};
+		descRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+		descRange.NumDescriptors = 1;
+		descRange.BaseShaderRegister = 0;
+		descRange.RegisterSpace = 0;
+		descRange.OffsetInDescriptorsFromTableStart = 0;
+
+		D3D12_ROOT_PARAMETER param[2] = {};
+
+		param[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+		param[0].Constants.ShaderRegister = 0;
+		param[0].Constants.RegisterSpace = 0;
+		param[0].Constants.Num32BitValues = 16;
+		param[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+
+		param[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		param[1].DescriptorTable.NumDescriptorRanges = 1;
+		param[1].DescriptorTable.pDescriptorRanges = &descRange;
+		param[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+		D3D12_STATIC_SAMPLER_DESC staticSampler = {};
+		staticSampler.Filter = D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+		staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		staticSampler.MipLODBias = 0.0f;
+		staticSampler.MaxAnisotropy = 0;
+		staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+		staticSampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+		staticSampler.MinLOD = 0.0f;
+		staticSampler.MaxLOD = 0.0f;
+		staticSampler.ShaderRegister = 0;
+		staticSampler.RegisterSpace = 0;
+		staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+		D3D12_ROOT_SIGNATURE_DESC desc = {};
+		desc.NumParameters = _countof(param);
+		desc.pParameters = param;
+		desc.NumStaticSamplers = 1;
+		desc.pStaticSamplers = &staticSampler;
+		desc.Flags =
+			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+			D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+			D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+			D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+
+		ComPtr<ID3DBlob> blob = nullptr;
+		THROW_IF_FAILED(D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, &error));
+
+		m_device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_vpRootSignature));
+	}
+
+	{
+#if defined(_DEBUG)
+		u32 compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#else
+		u32 compileFlags = 0;
+#endif
+
+
+		static D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,   0, (u32)DX_OFFSETOF(SVertex, Position), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "NORMAL",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, (u32)DX_OFFSETOF(SVertex, TextureCoordinate), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,   0, (u32)DX_OFFSETOF(SVertex, Normal),  D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		};
+
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
+		psoDesc.InputLayout = { inputElementDescs, 3 };
+		psoDesc.pRootSignature = m_vpRootSignature;
+		psoDesc.NodeMask = 1;
+		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vpVertexShader);
+		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_vpPixelShader);
+		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+		psoDesc.DepthStencilState.DepthEnable = FALSE;
+		psoDesc.DepthStencilState.StencilEnable = FALSE;
+		psoDesc.SampleMask = UINT_MAX;
+		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		psoDesc.NumRenderTargets = 1;
+		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		psoDesc.SampleDesc.Count = 1;
+		psoDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
+
+		// Create the blending setup
+		{
+			D3D12_BLEND_DESC& desc = psoDesc.BlendState;
+			desc.AlphaToCoverageEnable = false;
+			desc.RenderTarget[0].BlendEnable = true;
+			desc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+			desc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+			desc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+			desc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
+			desc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+			desc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+			desc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		}
+
+		// Create the rasterizer state
+		{
+			D3D12_RASTERIZER_DESC& desc = psoDesc.RasterizerState;
+			desc.FillMode = D3D12_FILL_MODE_SOLID;
+			desc.CullMode = D3D12_CULL_MODE_NONE;
+			desc.FrontCounterClockwise = FALSE;
+			desc.DepthBias = D3D12_DEFAULT_DEPTH_BIAS;
+			desc.DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP;
+			desc.SlopeScaledDepthBias = D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
+			desc.DepthClipEnable = true;
+			desc.MultisampleEnable = FALSE;
+			desc.AntialiasedLineEnable = FALSE;
+			desc.ForcedSampleCount = 0;
+			desc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+		}
+
+		// Create depth-stencil State
+		{
+			D3D12_DEPTH_STENCIL_DESC& desc = psoDesc.DepthStencilState;
+			desc.DepthEnable = false;
+			desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+			desc.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+			desc.StencilEnable = false;
+			desc.FrontFace.StencilFailOp = desc.FrontFace.StencilDepthFailOp = desc.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+			desc.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+			desc.BackFace = desc.FrontFace;
+
+			THROW_IF_FAILED(m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_vpPipelineState)));
 		}
 	}
 }
@@ -838,20 +1091,72 @@ void Protostar::DX12Renderer::SetupRenderState(SGuiDrawData* _drawData, SFrameRe
 
 	D3D12_VERTEX_BUFFER_VIEW vtxBufferView = {};
 	vtxBufferView.BufferLocation = _frameResource->VertexBuffer->GetGPUVirtualAddress() + offset;
-	vtxBufferView.SizeInBytes = _frameResource->VertexBufferSize * stride;
+	vtxBufferView.SizeInBytes = _drawData->TotalVtxCount * stride;
 	vtxBufferView.StrideInBytes = stride;
 
 	m_commandList->IASetVertexBuffers(0, 1, &vtxBufferView); //This needs to get reworked to make the editor viewport work
 
 	D3D12_INDEX_BUFFER_VIEW idxBufferView = {};
 	idxBufferView.BufferLocation = _frameResource->IndexBuffer->GetGPUVirtualAddress();
-	idxBufferView.SizeInBytes = _frameResource->IndexBufferSize * sizeof(unsigned short);
+	idxBufferView.SizeInBytes = _drawData->TotalIdxCount * sizeof(u16);
 	idxBufferView.Format = DXGI_FORMAT_R16_UINT;
 
 	m_commandList->IASetIndexBuffer(&idxBufferView);
 	m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_commandList->SetPipelineState(m_pipelineState);
 	m_commandList->SetGraphicsRootSignature(m_rootSignature);
+	m_commandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
+
+	const float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	m_commandList->OMSetBlendFactor(blendFactor);
+}
+
+void Protostar::DX12Renderer::SetupVPRenderState(SDrawData* _drawData, SFrameResource* _frameResource)
+{
+	SVertexConstantBuffer vertConstBuffer;
+	{
+		float l = _drawData->DisplayPos.x;
+		float r = _drawData->DisplayPos.x + _drawData->DisplaySize.x;
+		float t = _drawData->DisplayPos.y;
+		float b = _drawData->DisplayPos.y + _drawData->DisplaySize.y;
+		float mvp[4][4] =
+		{
+			{1,		0.0f,			0.0f,			0.0f},
+			{0.0f,				1,		0.0f,			0.0f},
+			{0.0f,				0.0f,			1,			0.0f},
+			{0,		0,	0,			1.0f},
+		};
+		memcpy(&vertConstBuffer.MVP, mvp, sizeof(mvp));
+	}
+
+	D3D12_VIEWPORT viewPort = {};
+	viewPort.Width = _drawData->DisplaySize.x;
+	viewPort.Height = _drawData->DisplaySize.y;
+	viewPort.MinDepth = 0.0f;
+	viewPort.MaxDepth = 1.0f;
+	viewPort.TopLeftX = _drawData->DisplayPos.x;
+	viewPort.TopLeftY = _drawData->DisplayPos.y;
+
+	m_commandList->RSSetViewports(1, &viewPort); //this needs more viewports since I want to make my editor viewport work here
+
+	u32 stride = sizeof(SVertex);
+
+	D3D12_VERTEX_BUFFER_VIEW vtxBufferView = {};
+	vtxBufferView.BufferLocation = _frameResource->VertexBuffer->GetGPUVirtualAddress() + m_currentVtxBufferOffset;
+	vtxBufferView.SizeInBytes = _drawData->DrawLists[0].VertexBuffer.size() * stride;
+	vtxBufferView.StrideInBytes = stride;
+
+	m_commandList->IASetVertexBuffers(0, 1, &vtxBufferView); //This needs to get reworked to make the editor viewport work
+
+	D3D12_INDEX_BUFFER_VIEW idxBufferView = {};
+	idxBufferView.BufferLocation = _frameResource->IndexBuffer->GetGPUVirtualAddress() + m_currentIdxBufferOffset;
+	idxBufferView.SizeInBytes = _drawData->DrawLists[0].IndexBuffer.size() * sizeof(u16);
+	idxBufferView.Format = DXGI_FORMAT_R16_UINT;
+
+	m_commandList->IASetIndexBuffer(&idxBufferView);
+	m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_commandList->SetPipelineState(m_vpPipelineState);
+	m_commandList->SetGraphicsRootSignature(m_vpRootSignature);
 	m_commandList->SetGraphicsRoot32BitConstants(0, 16, &vertConstBuffer, 0);
 
 	const float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };

@@ -34,14 +34,13 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 #endif
 		return -1;
 	}
+	CECSManager::CreateECS();
 
 	CAppManager::InitApp();
 
-	CAppManager* appMgrHandle = CAppManager::GetAppHandle();
-
-	CECSManager::CreateECS();
-
 	CSavingSystem::OnCreate();
+
+	CAppManager* appMgrHandle = CAppManager::GetAppHandle();
 
 	CThreadPool* threadPool = new CThreadPool(std::thread::hardware_concurrency());
 

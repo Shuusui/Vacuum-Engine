@@ -135,6 +135,27 @@ void Protostar::CProjectGUI::RenderViewport()
 
 	SMesh meshData = currentModel.MeshData;
 
+	SDrawData* drawData = new SDrawData();
+	drawData->DisplayPos = DirectX::XMFLOAT2{viewportPos.x, viewportPos.y};
+	drawData->DisplaySize = DirectX::XMFLOAT2{viewportSize.x, viewportSize.y};
+	drawData->TotalIdxCount = meshData.Indices.size();
+	drawData->TotalVtxCount = meshData.Vertices.size();
+
+	SDrawList drawList = {};
+	drawList.IndexBuffer = meshData.Indices;
+	drawList.VertexBuffer = meshData.Vertices;
+
+	SDrawCmd drawCmd = {};
+	drawCmd.IdxOffset = 0;
+	drawCmd.VtxOffset = 0;
+	drawCmd.ElemCount = meshData.Indices.size();
+	drawCmd.ClipRect = DirectX::XMFLOAT4{0, 0, viewportSize.x, viewportSize.y};
+
+	drawList.DrawCmds = std::vector<SDrawCmd>{drawCmd};
+	drawData->DrawLists = std::vector<SDrawList>{drawList};
+
+	CRendererManager::AddDrawData(drawData);
+
 	ImGui::End();
 }
 
