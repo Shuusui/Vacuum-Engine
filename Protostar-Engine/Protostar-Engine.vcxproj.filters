@@ -291,6 +291,9 @@
     <ClInclude Include="Core\Header Files\Public\Filesystem\Filesystem.h">
       <Filter>Core\Header Files\Public\Filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="Rendering\Header Files\Public\RootSignatureLibrary.h">
+      <Filter>Rendering\Header Files\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Source Files\Log.cpp">
@@ -441,6 +444,9 @@
       <Filter>Rendering\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Rendering\Source Files\ShaderLibrary.cpp">
+      <Filter>Rendering\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Source Files\RootSignatureLibrary.cpp">
       <Filter>Rendering\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
