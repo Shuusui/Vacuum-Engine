@@ -103,6 +103,12 @@
     <Filter Include="Core\ECS\Entt\Header Files">
       <UniqueIdentifier>{f2fe1b07-44fc-4264-89fb-c207c2402a8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Header Files\Public\Filesystem">
+      <UniqueIdentifier>{0be00cea-7daa-4328-924d-8b9466ec3e4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Source Files\Filesystem">
+      <UniqueIdentifier>{dfcfc925-9cbb-420e-94b3-756a5d15c461}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Header Files\Private\BaseJob.h">
@@ -278,6 +284,12 @@
     </ClInclude>
     <ClInclude Include="Rendering\Header Files\Public\ShaderLibrary.h">
       <Filter>Rendering\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Filesystem\FileTreeObject.h">
+      <Filter>Core\Header Files\Public\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\Filesystem\Filesystem.h">
+      <Filter>Core\Header Files\Public\Filesystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,26 +15,26 @@
 namespace Protostar
 {
 	/**
-		* Derived class of CBaseJob which will implement basic implementation of the std::package_task to bind functions to it. 
-		* Derive from it further to implement more custom and advanced threads with custom execute functions.
-		*/
+	* Derived class of CBaseJob which will implement basic implementation of the std::package_task to bind functions to it. 
+	* Derive from it further to implement more custom and advanced threads with custom execute functions.
+	*/
 	class CJob : public CBaseJob
 	{
 	public:
+
 		/**
-			* Default constructor
-			*/
+		* Default constructor
+		*/
 		CJob()
 		{
 
 		};
 
 		/**
-			* Override of execute function which will get called of the CThread when the job gets passed to a CThread
-			*/
+		* Override of execute function which will get called of the CThread when the job gets passed to a CThread
+		*/
 		virtual void Execute() override
 		{
-			PE_LOG("Just a log");
 		}
 
 		virtual ~CJob() override
@@ -46,16 +46,17 @@ namespace Protostar
 	class CThread
 	{
 	public:
+
 		/**
-			* Deleted cause it's unnecessary and maybe gets accidentally called
-			*/
+		* Deleted cause it's unnecessary and maybe gets accidentally called
+		*/
 		CThread() = delete;
 
 		/**
-			* The only constructor needed to construct the object
-			* @param _threadIndex The index of the thread in the owners container
-			* @param _owner The owner of this thread. In this case the CThreadPool object
-			*/
+		* The only constructor needed to construct the object
+		* @param _threadIndex The index of the thread in the owners container
+		* @param _owner The owner of this thread. In this case the CThreadPool object
+		*/
 		CThread(const s32& _threadIndex, class CThreadPool* _owner, std::condition_variable& _semaphore, std::atomic_bool& _stopThread)
 			:m_threadIndex(_threadIndex)
 			,m_owner(_owner)
@@ -67,9 +68,9 @@ namespace Protostar
 		}
 
 		/**
-			* move constructor
-			* @param _other The object which should get moved into this
-			*/
+		* move constructor
+		* @param _other The object which should get moved into this
+		*/
 		CThread(CThread&& _other) noexcept
 			:m_threadIndex(std::move(_other.m_threadIndex))
 			,m_owner(std::move(_other.m_owner))
@@ -84,8 +85,8 @@ namespace Protostar
 		}
 
 		/**
-			* Destructor which joins the thread to the overlying thread if it's joinable. 
-			*/
+		* Destructor which joins the thread to the overlying thread if it's joinable.
+		*/
 		~CThread()
 		{
 			if (m_thread.joinable())
@@ -101,9 +102,10 @@ namespace Protostar
 
 
 	private:
+
 		/**
-			* The function which will get called inside the std::thread
-			*/
+		* The function which will get called inside the std::thread
+		*/
 		void WorkerRun();
 
 		s32 m_threadIndex;
@@ -118,41 +120,48 @@ namespace Protostar
 	{
 	public:
 		/**
-			* No default constructor, Threadpool can only get initialized with an amount of threads to create
-			*/
+		* No default constructor, Threadpool can only get initialized with an amount of threads to create
+		*/
 		CThreadPool() = delete;
+
 		/**
-			* The only constructor which will create the amount of screenshots get passed
-			* @param The amount of threads to create
-			*/
+		* The only constructor which will create the amount of screenshots get passed
+		* @param The amount of threads to create
+		*/
 		CThreadPool(const s32& _threadAmount);
+
 		/**
-			* Destructor which will join all threads and delete them
-			*/
+		* Destructor which will join all threads and delete them
+		*/
 		~CThreadPool();
+
 		/**
-			* Queue a new job to the threadpool which will get processed
-			*/
+		* Queue a new job to the threadpool which will get processed
+		*/
 		void QueueJob(CBaseJob* _jobToQueue);
+
 		/**
-			* Function which will get called from the internal thread to dequeue the threadpool
-			* @return The first job in queue
-			*/
+		* Function which will get called from the internal thread to dequeue the threadpool
+		* @return The first job in queue
+		*/
 		CBaseJob* DequeueJob();
+
 		/**
-			* Does the threadpool currently has jobs queued? (threadsafe)
-			* @return If the threadpool has jobs queued or not 
-			*/
+		* Does the threadpool currently has jobs queued? (threadsafe)
+		* @return If the threadpool has jobs queued or not
+		*/
 		bool HasQueuedJob();
+
 		/**
-			* Function to call to reserve a job of the queue which will decrement the internal queue size before dequeing just for the loop of the thread
-			* @return If it could get a job reserved 
-			*/
+		* Function to call to reserve a job of the queue which will decrement the internal queue size before dequeing just for the loop of the thread
+		* @return If it could get a job reserved 
+		*/
 		bool ReserveJob();
+
 		/**
-			* Predicate function for the semaphore to wait
-			* @return If the threads should get stopped
-			*/
+		* Predicate function for the semaphore to wait
+		* @return If the threads should get stopped
+		*/
 		bool StopThreads();
 	private:
 		std::vector<CThread*> m_threads;

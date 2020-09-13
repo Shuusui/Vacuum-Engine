@@ -63,27 +63,27 @@ namespace Protostar
 		static bool IsBufRegistered(const SGuid& _bufGuid);
 
 		/**
-			* Logs to all registered console handles
-			* @param _logString The string to log
-			*/
+		* Logs to all registered console handles
+		* @param _logString The string to log
+		*/
 		static void Log(const std::string& _logString);
 
 		/**
-			* Clears the screen of all log handles
-			*/
+		* Clears the screen of all log handles
+		*/
 		static void ClearAllLogs();
 
 		/**
-			* Logs only to the console handles with the right guid
-			* @param _handleGuid The guid of the handle to log to
-			* @param _logString The string to log
-			*/
+		* Logs only to the console handles with the right guid
+		* @param _handleGuid The guid of the handle to log to
+		* @param _logString The string to log
+		*/
 		static void Log(const SGuid& _handleGuid, const std::string& _logString);
 
 		/**
-			* Clears the screen of the guid with the handle
-			* @param _handleGuid The Guid of the handle to clear
-			*/
+		* Clears the screen of the guid with the handle
+		* @param _handleGuid The Guid of the handle to clear
+		*/
 		static void ClearLog(const SGuid& _handleGuid);
 
 		/**
@@ -96,32 +96,32 @@ namespace Protostar
 
 #if defined(_DEBUG)
 		/**
-			* Just logs a debug string to the output window of VS
-			* @param _logString The string to log
-			*/
+		* Just logs a debug string to the output window of VS
+		* @param _logString The string to log
+		*/
 		static void LogDebugString(const std::string& _logString);
 #endif
 
 		/**
-			* Clears the handles with the guids
-			* @param _handleGuids The guids of the handles to clear
-			* @param _handleGuidAmount The amount of guids the handles to clear
-			*/
+		* Clears the handles with the guids
+		* @param _handleGuids The guids of the handles to clear
+		* @param _handleGuidAmount The amount of guids the handles to clear
+		*/
 		static void ClearLog(SGuid* _handleGuids, const size_t& _handleGuidAmount);
 	private:
 		CLog() = default;
 
 		/**
-			* Actually does the log to the handle
-			* @param _handle The handle to log to
-			* @param _logString The string to log
-			*/
+		* Actually does the log to the handle
+		* @param _handle The handle to log to
+		* @param _logString The string to log
+		*/
 		static void LogToHandle(SConsoleInfo& _info, const std::string& _logString);
 
 		/**
-			* Actually clears the handle
-			* @param _handle The handle to clear
-			*/
+		* Actually clears the handle
+		* @param _handle The handle to clear
+		*/
 		static void ClearLogHandle(SConsoleInfo& _info);
 
 		static CLog* s_logHandle;

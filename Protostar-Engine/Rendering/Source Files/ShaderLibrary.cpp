@@ -13,7 +13,8 @@
 Protostar::CShaderLibrary* Protostar::CShaderLibrary::s_shaderLibrary = nullptr;
 
 Protostar::CShaderLibrary::CShaderLibrary(const std::filesystem::path& _projectPath)
-	:m_projectConfigPath(_projectPath / "Configs")
+	: m_projectConfigPath(_projectPath / "Configs")
+	, m_shadersPath(_projectPath / "Content" / "Shaders")
 {
 	m_shaderLibConfigPath = m_projectConfigPath / "shaderlib.ini";
 
@@ -21,8 +22,7 @@ Protostar::CShaderLibrary::CShaderLibrary(const std::filesystem::path& _projectP
 	{
 		LoadShaderJson();
 	}
-
-	LoadShaders(_projectPath / "Content" / "Shaders");
+	LoadShaders(m_shadersPath);
 }
 
 Protostar::CShaderLibrary::~CShaderLibrary()
@@ -174,229 +174,229 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 	ID3DBlob* pixelShader = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
-
-
-	for (const std::filesystem::path& vertexShaderPath : std::filesystem::recursive_directory_iterator(vertexShaderDirPath))
-	{
-		if (D3DCompileFromFile(vertexShaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) == S_OK)
+	m_fileTree = CFilesystem::GenerateFileTree<SShaderComplement>(_shadersDirPath, [this](const std::filesystem::path& _path, STreeNode<SShaderComplement>& _treeNode)->bool
 		{
-			SShaderInfo shaderInfo = {};
-			shaderInfo.Name = vertexShaderPath.filename().string();
-			shaderInfo.Shader = vertexShader;
-			shaderInfo.ShaderPath = vertexShaderPath;
+			std::string filename = _path.filename().string();
 
-			if (m_vertexShaderNames.find(shaderInfo.Name) != m_vertexShaderNames.end())
+			SShaderComplement complement = {};
+
+			if (CFilesystem::HasParentDir(_path, "Vertex"))
 			{
-				continue;
+				if (m_vertexShaderNames.find(filename) != m_vertexShaderNames.end())
+				{
+					complement.VertexShaderInfo = m_vertexShaders[m_vertexShaderNames[filename]];
+					_treeNode.Asset = complement;
+					return true;
+				}
+
+				if (!LoadVertexShader(_path))
+				{
+					return false;
+				}
+
+				complement.VertexShaderInfo = m_vertexShaders[m_vertexShaderNames[filename]];
+				_treeNode.Asset = complement;
+				return true;
 			}
 
-			SGuid shaderGuid = SGuid::NewGuid();
-
-			m_vertexShaders.insert(std::make_pair(shaderGuid, shaderInfo));
-			m_vertexShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
-		}
-		else
-		{
-			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
-			SafeRelease(errorBlob);
-			SafeRelease(vertexShader);
-		}
-	}
-	for (const std::filesystem::path& pixelShaderPath : std::filesystem::recursive_directory_iterator(pixelShaderDirPath))
-	{
-		if (D3DCompileFromFile(pixelShaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "vs_5_0", 0, 0, &pixelShader, &errorBlob) == S_OK)
-		{
-			SShaderInfo shaderInfo = {};
-			shaderInfo.Name = pixelShaderPath.filename().string();
-			shaderInfo.Shader = pixelShader;
-			shaderInfo.ShaderPath = pixelShaderPath;
-
-			SGuid shaderGuid = SGuid::NewGuid();
-
-			if (m_pixelShaderNames.find(shaderInfo.Name) != m_pixelShaderNames.end())
+			if (CFilesystem::HasParentDir(_path, "Pixel"))
 			{
-				continue;
+				if (m_pixelShaderNames.find(filename) != m_pixelShaderNames.end())
+				{
+					complement.VertexShaderInfo = m_pixelShaders[m_pixelShaderNames[filename]];
+					_treeNode.Asset = complement;
+					return true;
+				}
+
+				if (!LoadPixelShader(_path))
+				{
+					return false;
+				}
+
+				complement.PixelShaderInfo = m_pixelShaders[m_pixelShaderNames[filename]];
+				_treeNode.Asset = complement;
+				return true;
 			}
 
-			if (m_vertexShaderNames.find(shaderInfo.Name) != m_vertexShaderNames.end())
+			if (CFilesystem::HasParentDir(_path, "Combined"))
 			{
-				shaderGuid = m_vertexShaderNames[shaderInfo.Name];
+				auto vertexShaderIterator = m_vertexShaderNames.find(filename);
+				auto pixelShaderIterator = m_pixelShaderNames.find(filename);
+
+				bool bVtxShaderExists = vertexShaderIterator != m_vertexShaderNames.end();
+				bool bPixelShaderExists = pixelShaderIterator != m_pixelShaderNames.end();
+
+				if (bVtxShaderExists && bPixelShaderExists)
+				{
+					PE_LOG_F("Shader with name %s already exists as vertex and pixel shader", filename.c_str());
+					return false;
+				}
+
+				SGuid combinedShaderGuid = SGuid::NewGuid();
+
+				if (bVtxShaderExists)
+				{
+					combinedShaderGuid = vertexShaderIterator->second;
+				}
+
+				if (bPixelShaderExists)
+				{
+					combinedShaderGuid = pixelShaderIterator->second;
+				}
+
+				bool bVtxShaderCompileFail = false;
+				bool bPixelShaderCompileFail = false;
+
+				if (!bVtxShaderExists)
+				{
+					if (LoadVertexShader(_path))
+					{
+						complement.VertexShaderInfo = m_vertexShaders[m_vertexShaderNames[filename]];
+
+					}
+					else
+					{
+						bVtxShaderCompileFail = true;
+					}
+				}
+
+				if (!bPixelShaderExists)
+				{
+					if (LoadPixelShader(_path))
+					{
+						complement.PixelShaderInfo = m_pixelShaders[m_pixelShaderNames[filename]];
+					}
+					else
+					{
+						bPixelShaderCompileFail = true;
+					}
+				}
+
+				if (bVtxShaderExists)
+				{
+					complement.VertexShaderInfo = m_vertexShaders[m_vertexShaderNames[filename]];
+				}
+				if (bPixelShaderExists)
+				{
+					complement.PixelShaderInfo = m_pixelShaders[m_pixelShaderNames[filename]];
+				}
+
+				_treeNode.Asset = complement;
+
+				if ((!bVtxShaderExists && bVtxShaderCompileFail) && (!bPixelShaderExists && bPixelShaderCompileFail))
+				{
+					return false;
+				}
+
+				return true;
 			}
 
-			m_pixelShaders.insert(std::make_pair(shaderGuid, shaderInfo));
-			m_pixelShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
+			PE_LOG_F("Path: %s is not in a content sub dir with Vertex/Pixel or Combined in it", _path.string().c_str());
+			return false;
 		}
-		else
-		{
-			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
-			SafeRelease(errorBlob);
-			SafeRelease(pixelShader);
-		}
-	}
-	for (const std::filesystem::path& combinedShaderPath : std::filesystem::recursive_directory_iterator(combinedShaderDirPath))
-	{
-		auto vertexShaderIterator = m_vertexShaderNames.find(combinedShaderPath.filename().string());
-		auto pixelShaderIterator = m_pixelShaderNames.find(combinedShaderPath.filename().string());
-
-		if (vertexShaderIterator != m_vertexShaderNames.end() && pixelShaderIterator != m_pixelShaderNames.end())
-		{
-			continue;
-		}
-
-		SGuid combinedShaderGuid = SGuid::NewGuid();
-
-		if (vertexShaderIterator != m_vertexShaderNames.end())
-		{
-			combinedShaderGuid = vertexShaderIterator->second;
-		}
-
-		if (pixelShaderIterator != m_pixelShaderNames.end())
-		{
-			combinedShaderGuid = pixelShaderIterator->second;
-		}
-
-		if (D3DCompileFromFile(combinedShaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) == S_OK)
-		{
-			SShaderInfo shaderInfo = {};
-			shaderInfo.Name = combinedShaderPath.filename().string();
-			shaderInfo.Shader = vertexShader;
-			shaderInfo.ShaderPath = combinedShaderPath;
-
-
-			m_vertexShaders.insert(std::make_pair(combinedShaderGuid, shaderInfo));
-			if (vertexShaderIterator == m_vertexShaderNames.end())
-			{
-				m_vertexShaderNames.insert(std::make_pair(shaderInfo.Name, combinedShaderGuid));
-			}
-		}
-		else
-		{
-			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
-			SafeRelease(errorBlob);
-			SafeRelease(vertexShader);
-		}
-
-		if (D3DCompileFromFile(combinedShaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "vs_5_0", 0, 0, &pixelShader, &errorBlob) == S_OK)
-		{
-			SShaderInfo shaderInfo = {};
-			shaderInfo.Name = combinedShaderPath.filename().string(); 
-			shaderInfo.Shader = pixelShader;
-			shaderInfo.ShaderPath = combinedShaderPath;
-
-			m_pixelShaders.insert(std::make_pair(combinedShaderGuid, shaderInfo));
-			if (pixelShaderIterator == m_pixelShaderNames.end())
-			{
-				m_pixelShaderNames.insert(std::make_pair(shaderInfo.Name, combinedShaderGuid));
-			}
-		}
-		else
-		{
-			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
-			SafeRelease(errorBlob);
-			SafeRelease(pixelShader);
-		}
-	}
-	SafeRelease(errorBlob);
+		, std::vector<std::filesystem::path>{".hlsl"});
 }
 
-void Protostar::CShaderLibrary::LoadVertexShader(const std::filesystem::path& _shaderPath)
+bool Protostar::CShaderLibrary::LoadVertexShader(const std::filesystem::path& _shaderPath)
 {
 	std::string filename = _shaderPath.filename().string();
-
-	for (const auto& [guid, shaderInfo] : m_vertexShaders)
-	{
-		if (shaderInfo.Name == filename)
-		{
-			PE_LOG("Vertexshader with name %s already exists, can't load vertex shader with same name");
-			return;
-		}
-	}
-	
-	ID3DBlob* vertexShader = nullptr;
-	ID3DBlob* errorBlob = nullptr;
-	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) != S_OK)
-	{
-		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
-		SafeRelease(errorBlob);
-		SafeRelease(vertexShader);
-		return;
-	}
-
-	SShaderInfo shaderInfo = {};
-	shaderInfo.Name = filename;
-	shaderInfo.Shader = vertexShader;
-	shaderInfo.ShaderPath = _shaderPath;
-
-	SafeRelease(errorBlob);
-
-	m_vertexShaders.insert(std::make_pair(SGuid::NewGuid(), shaderInfo));
-}
-
-void Protostar::CShaderLibrary::LoadPixelShader(const std::filesystem::path& _shaderPath)
-{
-	std::string filename = _shaderPath.filename().string();
-
-	for (const auto& [guid, shaderInfo] : m_pixelShaders)
-	{
-		if (shaderInfo.Name == filename)
-		{
-			PE_LOG_F("Pixelshader with name %s already exists, can't load pixel shader with same name", filename.c_str());
-			return;
-		}
-	}
-
-	ID3DBlob* pixelShader = nullptr;
-	ID3DBlob* errorBlob = nullptr;
-	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) != S_OK)
-	{
-		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
-		SafeRelease(errorBlob);
-		SafeRelease(pixelShader);
-		return;
-	}
-
-	SShaderInfo shaderInfo = {};
-	shaderInfo.Name = filename;
-	shaderInfo.Shader = pixelShader;
-	shaderInfo.ShaderPath = _shaderPath;
-
-	SafeRelease(errorBlob);
-
-	m_pixelShaders.insert(std::make_pair(SGuid::NewGuid(), shaderInfo));
-}
-
-void Protostar::CShaderLibrary::LoadCombinedShader(const std::filesystem::path& _shaderPath)
-{
-	std::string filename = _shaderPath.filename().string();
-
-	for (const auto& [guid, shaderInfo] : m_vertexShaders)
-	{
-		if (shaderInfo.Name == filename)
-		{
-			PE_LOG_F("Vertexshader with name %s already exists, can't load vertex shader with same name", filename.c_str());
-			return;
-		}
-	}
-
-	for (const auto& [guid, shaderInfo] : m_pixelShaders)
-	{
-		if (shaderInfo.Name == filename)
-		{
-			PE_LOG_F("Pixelshader with name %s already exists, can't load pixel shader with same name", filename.c_str());
-			return;
-		}
-	}
 
 	ID3DBlob* vertexShader = nullptr;
 	ID3DBlob* pixelShader = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
+	if (m_vertexShaderNames.find(filename) != m_vertexShaderNames.end())
+	{
+		return false;
+	}
+
+	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) == S_OK)
+	{
+		SShaderInfo shaderInfo = {};
+		shaderInfo.Name = filename;
+		shaderInfo.Shader = vertexShader;
+		shaderInfo.ShaderPath = _shaderPath;
+
+		SGuid shaderGuid = SGuid::NewGuid();
+
+		if (m_pixelShaderNames.find(filename) != m_pixelShaderNames.end())
+		{
+			shaderGuid = m_pixelShaderNames[filename];
+		}
+		m_vertexShaders.insert(std::make_pair(shaderGuid, shaderInfo));
+		m_vertexShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
+		return true;
+	}
+	else
+	{
+		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
+		SafeRelease(errorBlob);
+		SafeRelease(vertexShader);
+		return false;
+	}
+}
+
+bool Protostar::CShaderLibrary::LoadPixelShader(const std::filesystem::path& _shaderPath)
+{
+	std::string filename = _shaderPath.filename().string();
+
+	ID3DBlob* vertexShader = nullptr;
+	ID3DBlob* pixelShader = nullptr;
+	ID3DBlob* errorBlob = nullptr;
+
+	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) == S_OK)
+	{
+		SShaderInfo shaderInfo = {};
+		shaderInfo.Name = filename;
+		shaderInfo.Shader = pixelShader;
+		shaderInfo.ShaderPath = _shaderPath;
+
+		SGuid shaderGuid = SGuid::NewGuid();
+
+		if (m_vertexShaderNames.find(shaderInfo.Name) != m_vertexShaderNames.end())
+		{
+			shaderGuid = m_vertexShaderNames[shaderInfo.Name];
+		}
+
+		m_pixelShaders.insert(std::make_pair(shaderGuid, shaderInfo));
+		m_pixelShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
+		return true;
+	}
+	else
+	{
+		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
+		SafeRelease(errorBlob);
+		SafeRelease(pixelShader);
+		return false;
+	}
+}
+
+bool Protostar::CShaderLibrary::LoadCombinedShader(const std::filesystem::path& _shaderPath)
+{
+	std::string filename = _shaderPath.filename().string();
+
+	if (m_vertexShaderNames.find(filename) != m_vertexShaderNames.end())
+	{
+		PE_LOG_F("Vertexshader with name %s already exists, can't load vertex shader with same name", filename.c_str());
+		return false;
+	}
+
+	if (m_pixelShaderNames.find(filename) != m_pixelShaderNames.end())
+	{
+		PE_LOG_F("Pixelshader with name %s already exists, can't load pixel shader with same name", filename.c_str());
+		return false;
+	}
+
+	ID3DBlob* vertexShader = nullptr;
+	ID3DBlob* pixelShader = nullptr;
+	ID3DBlob* errorBlob = nullptr;
+
 	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) != S_OK)
 	{
 		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
 		SafeRelease(vertexShader);
 		SafeRelease(errorBlob);
-		return;
+		return false;
 	}
 
 	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) != S_OK)
@@ -404,7 +404,7 @@ void Protostar::CShaderLibrary::LoadCombinedShader(const std::filesystem::path& 
 		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
 		SafeRelease(pixelShader);
 		SafeRelease(errorBlob);
-		return;
+		return false;
 	}
 
 	SShaderInfo shaderInfo = {};
@@ -422,6 +422,7 @@ void Protostar::CShaderLibrary::LoadCombinedShader(const std::filesystem::path& 
 	m_pixelShaders.insert(std::make_pair(SGuid::NewGuid(), shaderInfo));
 
 	SafeRelease(errorBlob);
+	return true;
 }
 
 void Protostar::CShaderLibrary::UnloadVertexShader(const SGuid& _guid)
@@ -479,29 +480,11 @@ Protostar::SShaderComplement Protostar::CShaderLibrary::GetShaderInfos(const SGu
 	return SShaderComplement{m_vertexShaders.at(_guid), m_pixelShaders.at(_guid)};
 }
 
-std::unordered_map<Protostar::SGuid, Protostar::SShaderComplement> Protostar::CShaderLibrary::GetShaderComplements() const
+Protostar::STreeObject<Protostar::SShaderComplement> Protostar::CShaderLibrary::GetShaderComplements() const
 {
-	std::unordered_map<SGuid, SShaderComplement> shaderComplements = {};
-
-	for (const auto& [guid, shaderInfo] : m_vertexShaders)
-	{
-		shaderComplements.insert(std::make_pair(guid, SShaderComplement{shaderInfo}));
-	}
-
-	for (const auto& [guid, shaderInfo] : m_pixelShaders)
-	{
-		if (shaderComplements.find(guid) == shaderComplements.end())
-		{
-			SShaderComplement& shaderComplement = shaderComplements[guid];
-			shaderComplement.PixelShaderInfo = shaderInfo;
-			continue;
-		}
-
-		shaderComplements.insert(std::make_pair(guid, SShaderComplement{shaderInfo}));
-	}
-
-	return shaderComplements;
+	return m_fileTree;
 }
+
 
 
 #undef JSONVERTEXSHADERMAP

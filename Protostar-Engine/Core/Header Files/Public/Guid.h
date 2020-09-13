@@ -37,23 +37,24 @@ namespace Protostar
 		u32 D;
 
 		SGuid()
-			:A(0)
-			,B(0)
-			,C(0)
-			,D(0)
+			: A(0)
+			, B(0)
+			, C(0)
+			, D(0)
 		{
 		}
 
 		SGuid(const std::string& _guidStr, const EGuidFormats& _format = EGuidFormats::Digits)
-			:A(0)
-			,B(0)
-			,C(0)
-			,D(0)
+			: A(0)
+			, B(0)
+			, C(0)
+			, D(0)
 		{
 			if (_guidStr.empty())
 			{
 				return;
 			}
+
 			std::stringstream stream;
 			u16 bFirst = 0;
 			u16 bSecond = 0;
@@ -65,6 +66,7 @@ namespace Protostar
 			std::string cFirstStr = {};
 			std::string cSecondStr = {};
 			std::string dSubStr = {};
+
 			switch (_format)
 			{
 			case EGuidFormats::Digits:
@@ -93,6 +95,7 @@ namespace Protostar
 				dSubStr = _guidStr.substr(29, 8);
 				break;
 			}
+
 			stream << std::hex << aSubStr.c_str();
 			stream >> A;
 			stream = {};
@@ -117,7 +120,7 @@ namespace Protostar
 		}
 
 		SGuid(const SGuid& _other)
-			:A(_other.A)
+			: A(_other.A)
 			, B(_other.B)
 			, C(_other.C)
 			, D(_other.D)
@@ -125,10 +128,10 @@ namespace Protostar
 		}
 
 		SGuid(SGuid&& _other) noexcept
-			:A(std::move(_other.A))
-			,B(std::move(_other.B))
-			,C(std::move(_other.C))
-			,D(std::move(_other.D))
+			: A(std::move(_other.A))
+			, B(std::move(_other.B))
+			, C(std::move(_other.C))
+			, D(std::move(_other.D))
 		{
 		}
 
@@ -148,6 +151,7 @@ namespace Protostar
 			{
 				return std::string();
 			}
+
 			u16 bFirst = B >> 16;
 			u16 bSecond = 0;
 			bSecond |= B;
@@ -161,32 +165,39 @@ namespace Protostar
 			std::stringstream bSecondStream;
 			std::stringstream cStream;
 			std::stringstream dStream;
+
 			if (A <= 0xFFFFFFF)
 			{
 				aStream << L'0';
 			}
+
 			if (bFirst <= 0xFFF)
 			{
 				bFirstStream << L'0';
 			}
+
 			if (bSecond <= 0xFFF)
 			{
 				bSecondStream << L'0';
 			}
+
 			if (cFirst < 0xFFF)
 			{
 				cStream << L'0';
 			}
+
 			if (dTemp < 0xFFFFFFFFFFF)
 			{
 				dStream << L'0';
 			}
+
 			aStream << std::hex << A;
 			bFirstStream << std::hex << bFirst;
 			bSecondStream << std::hex << bSecond;
 			cStream << std::hex << cFirst;
 			dStream << std::hex << dTemp;
 			std::stringstream resultStream;
+
 			switch (_format)
 			{
 			case EGuidFormats::Digits:

@@ -11,19 +11,19 @@ namespace Protostar
 	{
 	public:
 		CNOQueue()
-			:m_queue()
+			: m_queue()
 		{
 
 		}
 
 		CNOQueue(const CNOQueue& _other)
-			:m_queue(_other.m_queue)
+			: m_queue(_other.m_queue)
 		{
 
 		}
 
 		CNOQueue(CNOQueue&& _other)
-			:m_queue(std::move(_other.m_queue))
+			: m_queue(std::move(_other.m_queue))
 		{
 
 		}
