@@ -26,15 +26,15 @@ namespace Protostar
 	struct SMesh
 	{
 		SMesh()
-			:Vertices({})
-			,Indices({})
+			: Vertices({})
+			, Indices({})
 		{
 
 		}
 
 		SMesh(const SMesh& _other)
-			:Vertices(_other.Vertices)
-			,Indices(_other.Indices)
+			: Vertices(_other.Vertices)
+			, Indices(_other.Indices)
 		{
 
 		}
@@ -48,7 +48,7 @@ namespace Protostar
 		SWindowDimParams() = default;
 
 		SWindowDimParams(const SWindowDimParams& _other)
-			:Width(_other.Width)
+			: Width(_other.Width)
 			, Height(_other.Height)
 			, LeftTopCornerX(_other.LeftTopCornerX)
 			, LeftTopCornerY(_other.LeftTopCornerY)
@@ -56,7 +56,7 @@ namespace Protostar
 		}
 
 		SWindowDimParams(SWindowDimParams&& _other) noexcept
-			:Width(std::move(_other.Width))
+			: Width(std::move(_other.Width))
 			, Height(std::move(_other.Height))
 			, LeftTopCornerX(std::move(_other.LeftTopCornerX))
 			, LeftTopCornerY(std::move(_other.LeftTopCornerY))

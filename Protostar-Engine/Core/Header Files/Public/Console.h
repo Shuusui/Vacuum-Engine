@@ -11,21 +11,21 @@ namespace Protostar
 		HANDLE ConsoleHandle;
 
 		SConsoleInfo()
-			:ConsolePos({0,0})
-			,ConsoleHandle(nullptr)
+			: ConsolePos({ 0,0 })
+			, ConsoleHandle(nullptr)
 		{
 		}
 
 		SConsoleInfo(const SConsoleInfo& _other)
-			:ConsolePos(_other.ConsolePos)
-			,ConsoleHandle(_other.ConsoleHandle)
+			: ConsolePos(_other.ConsolePos)
+			, ConsoleHandle(_other.ConsoleHandle)
 		{
 
 		}
 
 		SConsoleInfo(SConsoleInfo&& _other) noexcept
-			:ConsolePos(std::move(_other.ConsolePos))
-			,ConsoleHandle(std::move(_other.ConsoleHandle))
+			: ConsolePos(std::move(_other.ConsolePos))
+			, ConsoleHandle(std::move(_other.ConsoleHandle))
 		{
 			_other.ConsoleHandle = nullptr;
 			_other.ConsolePos = {};

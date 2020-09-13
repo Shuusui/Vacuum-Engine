@@ -1,6 +1,8 @@
 #pragma once
 #include <filesystem>
 #include <unordered_map>
+#include "Filesystem/FileTreeObject.h"
+#include "ShaderLibrary.h"
 #include "Guid.h"
 
 namespace Protostar
@@ -16,6 +18,7 @@ namespace Protostar
 	private:
 		void DisplayContextMenu();
 		void ManageShaderPaths();
+		void DisplayRecursiveShaderTrees(const STreeObject<SShaderComplement>& _subTree);
 		void ManageModelPaths();
 		void ManageScenePaths();
 		void ShowEntities();

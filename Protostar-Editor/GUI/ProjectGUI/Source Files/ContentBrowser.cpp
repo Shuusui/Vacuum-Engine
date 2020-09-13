@@ -7,7 +7,6 @@
 #include "GUI.h"
 #include "AppManager.h"
 #include "Log.h"
-#include "ShaderLibrary.h"
 
 Protostar::CContentBrowser::CContentBrowser(CProject* _project)
 	:m_project(_project)
@@ -143,22 +142,40 @@ void Protostar::CContentBrowser::ManageShaderPaths()
 
 	CShaderLibrary* shaderLibray = CShaderLibrary::GetHandle();
 
-	std::unordered_map<SGuid, SShaderComplement> shaderComplements = shaderLibray->GetShaderComplements();
+	STreeObject<SShaderComplement> shaderComplements = shaderLibray->GetShaderComplements();
 
-	for (const auto& [guid, shaderComplement] : shaderComplements)
-	{
-		if (shaderComplement.VertexShaderInfo.has_value())
-		{
-			ImGui::MenuItem(shaderComplement.VertexShaderInfo.value().Name.c_str());
-			continue;
-		}
-		if (shaderComplement.PixelShaderInfo.has_value())
-		{
-			ImGui::MenuItem(shaderComplement.PixelShaderInfo.value().Name.c_str());
-		}
-	}
+	DisplayRecursiveShaderTrees(shaderComplements);
+	
 
 	ImGui::TreePop();
+}
+
+void Protostar::CContentBrowser::DisplayRecursiveShaderTrees(const STreeObject<SShaderComplement>& _subTree)
+{
+	for (const STreeObject<SShaderComplement>& subTree : _subTree.SubDirs)
+	{
+		if (!ImGui::TreeNode(subTree.Path.filename().string().c_str()))
+		{
+			continue;
+		}
+
+		DisplayRecursiveShaderTrees(subTree);
+
+		for (const STreeNode<SShaderComplement>& treeNode : subTree.Nodes)
+		{
+			if (treeNode.Asset.VertexShaderInfo.has_value())
+			{
+				ImGui::MenuItem(treeNode.Asset.VertexShaderInfo->Name.c_str());
+			}
+
+			if (treeNode.Asset.PixelShaderInfo.has_value())
+			{
+				ImGui::MenuItem(treeNode.Asset.PixelShaderInfo->Name.c_str());
+			}
+		}
+
+		ImGui::TreePop();
+	}
 }
 
 void Protostar::CContentBrowser::ManageModelPaths()
