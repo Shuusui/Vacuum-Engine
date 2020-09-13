@@ -5,6 +5,7 @@
 #include "Guid.h"
 #include "Json.h"
 #include "..\Private\DXHelper.h"
+#include "Filesystem\Filesystem.h"
 
 namespace Protostar
 {
@@ -56,9 +57,9 @@ namespace Protostar
 		void LoadShaderJson();
 		void LoadShaders(const std::filesystem::path& _shadersDirPath);
 
-		void LoadVertexShader(const std::filesystem::path& _shaderPath);
-		void LoadPixelShader(const std::filesystem::path& _shaderPath);
-		void LoadCombinedShader(const std::filesystem::path& _shaderPath);
+		bool LoadVertexShader(const std::filesystem::path& _shaderPath);
+		bool LoadPixelShader(const std::filesystem::path& _shaderPath);
+		bool LoadCombinedShader(const std::filesystem::path& _shaderPath);
 
 		void UnloadVertexShader(const SGuid& _guid);
 		void UnloadPixelShader(const SGuid& _guid);
@@ -74,14 +75,17 @@ namespace Protostar
 		 * returns a pair of shaderinfos where the first is vertex shader and the second is the pixel shader
 		 */
 		SShaderComplement GetShaderInfos(const SGuid& _guid) const;
-		std::unordered_map<SGuid, SShaderComplement> GetShaderComplements() const;
+		STreeObject<SShaderComplement> GetShaderComplements() const;
 	private:
 		CShaderLibrary(const std::filesystem::path& _projectPath);
 
 		static CShaderLibrary* s_shaderLibrary;
 
 		std::filesystem::path m_projectConfigPath;
+		std::filesystem::path m_shadersPath;
 		std::filesystem::path m_shaderLibConfigPath;
+
+		STreeObject<SShaderComplement> m_fileTree;
 
 		std::unordered_map<SGuid, SShaderInfo> m_vertexShaders;
 		std::unordered_map<SGuid, SShaderInfo> m_pixelShaders;
