@@ -372,9 +372,9 @@ void Protostar::DX12Renderer::RegisterAfterResizeCallback(const std::function<vo
 	m_afterResizeCallbacks.push_back(_func);
 }
 
-bool Protostar::DX12Renderer::CreateRootSignature(ID3DBlob* _rootSignatureBlob, ID3D12RootSignature* _rootSignature)
+bool Protostar::DX12Renderer::CreateRootSignature(ID3DBlob* _rootSignatureBlob, ID3D12RootSignature** _rootSignature)
 {
-	HRESULT hr = m_device->CreateRootSignature(0, _rootSignatureBlob->GetBufferPointer(), _rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&_rootSignature));
+	HRESULT hr = m_device->CreateRootSignature(0, _rootSignatureBlob->GetBufferPointer(), _rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(_rootSignature));
 	if (hr != S_OK)
 	{
 		PE_LOG(HrToString(hr).c_str());

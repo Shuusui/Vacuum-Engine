@@ -63,7 +63,7 @@ void Protostar::CRendererManager::RegisterAfterResizeCallback(const std::functio
 	s_rendererManager->m_renderer->RegisterAfterResizeCallback(_func);
 }
 
-bool Protostar::CRendererManager::CreateRootSignature(void* _blob, void* _rootSignature)
+bool Protostar::CRendererManager::CreateRootSignature(void* _blob, void** _rootSignature)
 {
-	return s_rendererManager->m_renderer->CreateRootSignature((ID3DBlob*)_blob, (ID3D12RootSignature*)_rootSignature);
+	return s_rendererManager->m_renderer->CreateRootSignature((ID3DBlob*)_blob, (ID3D12RootSignature**)_rootSignature);
 }

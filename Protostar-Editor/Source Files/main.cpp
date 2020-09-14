@@ -36,7 +36,10 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 	}
 	CECSManager::CreateECS();
 
-	CAppManager::InitApp();
+	if (!CAppManager::InitApp(_hInstance))
+	{
+		return -1;
+	}
 
 	CSavingSystem::OnCreate();
 
@@ -44,29 +47,8 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 
 	CThreadPool* threadPool = new CThreadPool(std::thread::hardware_concurrency());
 
-	SWindowInfo windowInfo = {};
-	windowInfo.ClassParams.ClassName = TEXT("Protostar Engine window");
-	windowInfo.ClassParams.HInstance = _hInstance;
-	windowInfo.ClassParams.BackgroundColor = CreateSolidBrush(RGB(1, 1, 1));
-	windowInfo.ClassParams.Style = CS_HREDRAW | CS_VREDRAW;
-	windowInfo.CreationParams.DwExStyle = NULL;
-	windowInfo.CreationParams.DwStyle = WS_OVERLAPPEDWINDOW;
-	windowInfo.CreationParams.WindowName = TEXT("Protostar-Engine");
-	windowInfo.CreationParams.ParentWindow = nullptr;
-	windowInfo.CreationParams.Menu = nullptr;
-	windowInfo.CreationParams.LpParam = nullptr;
-	windowInfo.DimParams = appMgrHandle->GetInitWindowDimParams();
-
-	CMainWindow::InitWindow(windowInfo);
-	if (!CMainWindow::Create(errorMsg))
-	{
-		PE_LOG(errorMsg.c_str());
-		return -1;
-	}
-
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)appMgrHandle->GetInitWindowDimParams().Width, (u32)appMgrHandle->GetInitWindowDimParams().Height, appMgrHandle->GetLastVSyncState(), CMainWindow::GetWindowHandle()->GetHwnd() });
 
 	CGUI::Init(CMainWindow::GetWindowHandle()->GetHwnd());
 

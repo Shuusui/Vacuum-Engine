@@ -44,21 +44,6 @@ namespace Protostar
 			return m_projectPaths;
 		}
 
-		//void RegisterShader(const std::filesystem::path& _shaderPath)
-		//{
-		//	m_shaders.insert(std::make_pair(_shaderPath.string(), SShaderInfo(_shaderPath)));
-		//}
-
-		//void RemoveShader(const std::filesystem::path& _shaderPath)
-		//{
-		//	m_shaders.erase(_shaderPath.string());
-		//}
-
-		//std::unordered_map<std::string, SShaderInfo> GetShaders() const
-		//{
-		//	return m_shaders;
-		//}
-
 		std::unordered_set<CScene*> GetScenes() const 
 		{
 			return m_scenes;

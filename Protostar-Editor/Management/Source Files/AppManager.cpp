@@ -22,7 +22,7 @@ const char* JSONY = "y";
 const char* JSONCURRPROJGUID = "current_project_guid";
 const char* JSONVSYNC = "vsync";
 
-void Protostar::CAppManager::InitApp()
+bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
 {
 	if (!s_app)
 	{
@@ -83,11 +83,37 @@ void Protostar::CAppManager::InitApp()
 		s_app->m_mainWindowDim.LeftTopCornerX = 0;
 		s_app->m_mainWindowDim.LeftTopCornerY = 0;
 	}
+
+	std::string errorMsg = {};
+
+	SWindowInfo windowInfo = {};
+	windowInfo.ClassParams.ClassName = TEXT("Protostar Engine window");
+	windowInfo.ClassParams.HInstance = _hInstance;
+	windowInfo.ClassParams.BackgroundColor = CreateSolidBrush(RGB(1, 1, 1));
+	windowInfo.ClassParams.Style = CS_HREDRAW | CS_VREDRAW;
+	windowInfo.CreationParams.DwExStyle = NULL;
+	windowInfo.CreationParams.DwStyle = WS_OVERLAPPEDWINDOW;
+	windowInfo.CreationParams.WindowName = TEXT("Protostar-Engine");
+	windowInfo.CreationParams.ParentWindow = nullptr;
+	windowInfo.CreationParams.Menu = nullptr;
+	windowInfo.CreationParams.LpParam = nullptr;
+	windowInfo.DimParams = s_app->m_mainWindowDim;
+
+	CMainWindow::InitWindow(windowInfo);
+	if (!CMainWindow::Create(errorMsg))
+	{
+		PE_LOG(errorMsg.c_str());
+		return false;
+	}
+
+	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)s_app->m_mainWindowDim.Width, (u32)s_app->m_mainWindowDim.Height, s_app->m_bLastVSyncState, CMainWindow::GetWindowHandle()->GetHwnd() });
+
 	s_app->LoadProjects();
 	if (projectGuid.IsValid())
 	{
 		s_app->LoadRecentProject(projectGuid);
 	}
+	return true;
 }
 
 void Protostar::CAppManager::Destroy()

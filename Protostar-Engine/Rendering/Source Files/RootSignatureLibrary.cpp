@@ -6,7 +6,6 @@
 
 Protostar::CRootSignatureLibrary* Protostar::CRootSignatureLibrary::s_rootSignatureLib = nullptr;
 
-#define JSONROOTGUID "guid"
 #define JSONROOTINFO "info"
 
 void Protostar::CRootSignatureLibrary::Create(const std::filesystem::path& _projectPath)
@@ -44,7 +43,7 @@ bool Protostar::CRootSignatureLibrary::CreateRootSignature(const SSamplerInfo& _
 		return false;
 	}
 
-	if (!CRendererManager::CreateRootSignature(blob, rootSignature))
+	if (!CRendererManager::CreateRootSignature(blob, (void**)&rootSignature))
 	{
 		return false;
 	}
@@ -60,7 +59,6 @@ Protostar::CRootSignatureLibrary::~CRootSignatureLibrary()
 	{
 		Save();
 	}
-
 }
 
 Protostar::CRootSignatureLibrary::CRootSignatureLibrary(const std::filesystem::path& _projectPath)
@@ -80,8 +78,7 @@ void Protostar::CRootSignatureLibrary::Save()
 
 	for (const auto& [guid, rootInfo] : m_rootInfos)
 	{
-		json[JSONROOTGUID] = guid.ToString().c_str();
-		json[JSONROOTINFO] = rootInfo.Info.ToJson();
+		json[guid.ToString()] = rootInfo.Info.ToJson();
 	}
 
 	std::ofstream iniFile(m_rootSignatureLibIniPath, std::ios::trunc);
@@ -106,7 +103,7 @@ void Protostar::CRootSignatureLibrary::Load()
 		{
 			continue;
 		}
-		if (!CRendererManager::CreateRootSignature(blob, rootInfo.RootSignature))
+		if (!CRendererManager::CreateRootSignature(blob, (void**)&rootInfo.RootSignature))
 		{
 			continue;
 		}
@@ -115,7 +112,7 @@ void Protostar::CRootSignatureLibrary::Load()
 	}
 }
 
-bool Protostar::CRootSignatureLibrary::SerializeRootSignature(const std::vector<D3D12_STATIC_SAMPLER_DESC>& _descs, ID3DBlob* _blob)
+bool Protostar::CRootSignatureLibrary::SerializeRootSignature(const std::vector<D3D12_STATIC_SAMPLER_DESC>& _descs, ID3DBlob*& _blob)
 {
 	D3D12_DESCRIPTOR_RANGE descRange = {};
 	descRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
