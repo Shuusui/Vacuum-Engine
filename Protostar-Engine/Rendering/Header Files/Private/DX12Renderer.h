@@ -143,6 +143,7 @@ namespace Protostar
 		virtual void OnRender() override;
 		virtual void OnDestroy() override;
 		virtual void RegisterAfterResizeCallback(const std::function<void(HWND, u32, WPARAM, LPARAM)>& _func) override;
+		virtual bool CreateRootSignature(ID3DBlob* _rootSignatureBlob, ID3D12RootSignature** _rootSignature) override;
 	private:
 
 		void LoadPipeline();

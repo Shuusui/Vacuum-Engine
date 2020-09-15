@@ -90,7 +90,7 @@ void Protostar::CMeshManager::Save()
 	}
 	json[JSONMESHMAP] = meshMapJson;
 
-	std::ofstream configFile(m_configFilePath);
+	std::ofstream configFile(m_configFilePath, std::ios::trunc);
 
 	configFile << json.dump();
 }

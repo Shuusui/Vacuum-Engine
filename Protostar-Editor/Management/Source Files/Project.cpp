@@ -6,6 +6,7 @@
 #include <string>
 #include "ECS\Header Files\EntityManager.h"
 #include "ShaderLibrary.h"
+#include "RootSignatureLibrary.h"
 
 const char* JSONNAME = "name";
 const char* JSONGUID = "guid";
@@ -27,6 +28,7 @@ Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 	m_projectPaths.EntitiesDir = m_projectPaths.ContentDir / "Entities";
 
 	CShaderLibrary::Create(_projectPath);
+	CRootSignatureLibrary::Create(_projectPath);
 
 	std::ifstream projectFile(m_projectPaths.ProjectFilePath);
 	Json json = {};
@@ -85,4 +87,5 @@ Protostar::CProject::~CProject()
 	}
 	CMeshManager::OnDestroy();
 	CShaderLibrary::Destroy();
+	CRootSignatureLibrary::Destroy();
 }

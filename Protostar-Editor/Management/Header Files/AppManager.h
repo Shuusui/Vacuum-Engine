@@ -28,7 +28,7 @@ namespace Protostar
 	class CAppManager
 	{
 	public:
-		static void InitApp();
+		static bool InitApp(const HINSTANCE& _hInstance);
 		static void Destroy();
 		static CAppManager* GetAppHandle();
 
