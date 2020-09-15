@@ -23,6 +23,7 @@ namespace Protostar
 		static void Destroy();
 		static void RegisterAfterResizeCallback(const std::function<void(HWND, u32, WPARAM, LPARAM)>& _func);
 		static bool CreateRootSignature(void* _blob, void** _rootSignature);
+		static bool CreatePSO(void* _desc, void** _pso);
 		static bool& GetVSync()
 		{
 			return s_rendererManager->m_bVSync;

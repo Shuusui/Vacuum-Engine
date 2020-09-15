@@ -383,6 +383,11 @@ bool Protostar::DX12Renderer::CreateRootSignature(ID3DBlob* _rootSignatureBlob, 
 	return true;
 }
 
+bool Protostar::DX12Renderer::CreatePSO(D3D12_GRAPHICS_PIPELINE_STATE_DESC* _desc, ID3D12PipelineState** _pso)
+{
+	HRESULT hr = m_device->CreateGraphicsPipelineState(_desc, IID_PPV_ARGS(_pso));
+}
+
 void Protostar::DX12Renderer::LoadPipeline()
 {
 #if defined(_DEBUG)
@@ -719,60 +724,6 @@ void Protostar::DX12Renderer::LoadVPAssets()
 	{
 		LoadVPShaders();
 	}
-
-	/*ComPtr<ID3DBlob> error;
-	{
-		D3D12_DESCRIPTOR_RANGE descRange = {};
-		descRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		descRange.NumDescriptors = 1;
-		descRange.BaseShaderRegister = 0;
-		descRange.RegisterSpace = 0;
-		descRange.OffsetInDescriptorsFromTableStart = 0;
-
-		D3D12_ROOT_PARAMETER param[2] = {};
-
-		param[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-		param[0].Constants.ShaderRegister = 0;
-		param[0].Constants.RegisterSpace = 0;
-		param[0].Constants.Num32BitValues = 16;
-		param[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-
-		param[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		param[1].DescriptorTable.NumDescriptorRanges = 1;
-		param[1].DescriptorTable.pDescriptorRanges = &descRange;
-		param[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-		D3D12_STATIC_SAMPLER_DESC staticSampler = {};
-		staticSampler.Filter = D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-		staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSampler.MipLODBias = 0.0f;
-		staticSampler.MaxAnisotropy = 0;
-		staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-		staticSampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-		staticSampler.MinLOD = 0.0f;
-		staticSampler.MaxLOD = 0.0f;
-		staticSampler.ShaderRegister = 0;
-		staticSampler.RegisterSpace = 0;
-		staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-
-		D3D12_ROOT_SIGNATURE_DESC desc = {};
-		desc.NumParameters = _countof(param);
-		desc.pParameters = param;
-		desc.NumStaticSamplers = 1;
-		desc.pStaticSamplers = &staticSampler;
-		desc.Flags =
-			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
-			D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
-			D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-			D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
-
-		ComPtr<ID3DBlob> blob = nullptr;
-		THROW_IF_FAILED(D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, &error));
-
-		m_device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&m_vpRootSignature));
-	}*/
 
 	{
 #if defined(_DEBUG)

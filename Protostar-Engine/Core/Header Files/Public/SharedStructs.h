@@ -7,6 +7,19 @@
 
 namespace Protostar
 {
+	struct SPSOInfo
+	{
+		std::vector<D3D12_INPUT_ELEMENT_DESC> InputElementDescs;
+		ID3D12RootSignature* RootSignature;
+		ID3DBlob* VertexShader;
+		ID3DBlob* PixelShader;
+		u32 NodeMask;
+		D3D12_BLEND_DESC BlendDesc;
+		D3D12_RASTERIZER_DESC RasterizerDesc;
+		D3D12_DEPTH_STENCIL_DESC DepthStencilDesc;
+		ID3D12PipelineState** PipelineState;
+	};
+
 	struct SRendererCreationInfo
 	{
 		ERenderAPIs RenderApi;

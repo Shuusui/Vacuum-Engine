@@ -67,3 +67,8 @@ bool Protostar::CRendererManager::CreateRootSignature(void* _blob, void** _rootS
 {
 	return s_rendererManager->m_renderer->CreateRootSignature((ID3DBlob*)_blob, (ID3D12RootSignature**)_rootSignature);
 }
+
+bool Protostar::CRendererManager::CreatePSO(void* _desc, void** _pso)
+{
+	return s_rendererManager->m_renderer->CreatePSO((D3D12_GRAPHICS_PIPELINE_STATE_DESC*)_desc, (ID3D12PipelineState**)_pso);
+}
