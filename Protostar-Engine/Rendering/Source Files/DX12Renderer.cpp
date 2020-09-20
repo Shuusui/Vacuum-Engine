@@ -386,6 +386,12 @@ bool Protostar::DX12Renderer::CreateRootSignature(ID3DBlob* _rootSignatureBlob, 
 bool Protostar::DX12Renderer::CreatePSO(D3D12_GRAPHICS_PIPELINE_STATE_DESC* _desc, ID3D12PipelineState** _pso)
 {
 	HRESULT hr = m_device->CreateGraphicsPipelineState(_desc, IID_PPV_ARGS(_pso));
+	if (hr != S_OK)
+	{
+		PE_LOG(HrToString(hr).c_str());
+		return false;
+	}
+	return true;
 }
 
 void Protostar::DX12Renderer::LoadPipeline()

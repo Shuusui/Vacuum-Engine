@@ -2,6 +2,10 @@
 #include "d3dx12.h"
 #include "RendererManager.h"
 #include "DXHelper.h"
+#include "Json.h"
+#include "ShaderLibrary.h"
+#include "RootSignatureLibrary.h"
+#include <fstream>
 
 Protostar::CPSOLibrary* Protostar::CPSOLibrary::s_psoLibrary = nullptr;
 
@@ -26,19 +30,15 @@ void Protostar::CPSOLibrary::Destroy()
 
 Protostar::CPSOLibrary::~CPSOLibrary()
 {
-	for (auto& [guid, psoInfo] : m_PSOs)
-	{
-		SafeRelease(*psoInfo.PipelineState);
-	}
 }
 
 Protostar::SGuid Protostar::CPSOLibrary::CreatePSO(const SPSOInfo& _psoInfo)
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
-	psoDesc.InputLayout = {_psoInfo.InputElementDescs.data(), _psoInfo.InputElementDescs.size()};
-	psoDesc.pRootSignature = _psoInfo.RootSignature;
-	psoDesc.VS = CD3DX12_SHADER_BYTECODE(_psoInfo.VertexShader);
-	psoDesc.PS = CD3DX12_SHADER_BYTECODE(_psoInfo.PixelShader);
+	psoDesc.InputLayout = {_psoInfo.InputElementDescs.data(), (UINT)_psoInfo.InputElementDescs.size()};
+	psoDesc.pRootSignature = _psoInfo.RootSignature.second;
+	psoDesc.VS = CD3DX12_SHADER_BYTECODE(_psoInfo.VertexShader.second);
+	psoDesc.PS = CD3DX12_SHADER_BYTECODE(_psoInfo.PixelShader.second);
 	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(_psoInfo.RasterizerDesc);
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(_psoInfo.BlendDesc);
 	psoDesc.DepthStencilState.DepthEnable = FALSE;
@@ -59,8 +59,59 @@ Protostar::SGuid Protostar::CPSOLibrary::CreatePSO(const SPSOInfo& _psoInfo)
 	return guid;
 }
 
-Protostar::CPSOLibrary::CPSOLibrary(const std::filesystem::path& _projectPath)
-	:m_projectPath(_projectPath)
+void Protostar::CPSOLibrary::Load()
+{
+	Json json = {};
+	std::ifstream iniFile(m_psoLibraryIniPath);
+	iniFile >> json;
+	CRootSignatureLibrary* rootSignatureLib = CRootSignatureLibrary::GetHandle();
+	CShaderLibrary* shaderLib = CShaderLibrary::GetHandle();
+
+	for (const auto& [guid, psoInfoJson] : json.items())
+	{
+		SPSOInfo psoInfo = {};
+		psoInfo.FromJson(psoInfoJson);
+
+		psoInfo.RootSignature.second = rootSignatureLib->GetRootInfo(psoInfo.RootSignature.first).RootSignature;
+		psoInfo.VertexShader.second = shaderLib->GetVertexShaderInfo(psoInfo.VertexShader.first).Shader;
+		psoInfo.PixelShader.second = shaderLib->GetPixelShaderInfo(psoInfo.PixelShader.first).Shader;
+
+		m_PSOs.insert(std::make_pair(guid, psoInfo));
+	}
+}
+
+void Protostar::CPSOLibrary::Save()
+{
+	Json json = {};
+
+	for (auto& [guid, psoInfo] : m_PSOs)
+	{
+		json[guid.ToString()] = psoInfo.ToJson();
+		SafeRelease(*psoInfo.PipelineState);
+	}
+
+	std::ofstream iniFile(m_projectConfigPath, std::ios::trunc);
+	iniFile << json.dump();
+
+	iniFile.close();
+}
+
+void Protostar::CPSOLibrary::CreateDefaultPSO()
 {
 
+}
+
+Protostar::CPSOLibrary::CPSOLibrary(const std::filesystem::path& _projectPath)
+	:m_projectPath(_projectPath)
+	,m_projectConfigPath(_projectPath / "Configs")
+	,m_psoLibraryIniPath(m_projectConfigPath / "psolibrary.ini")
+{
+	if (std::filesystem::exists(m_psoLibraryIniPath))
+	{
+		Load();
+	}
+	else
+	{
+		CreateDefaultPSO();
+	}
 }
