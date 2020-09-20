@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{C30E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{8D7D03C9-76E0-4050-97C6-D5C61711BACE}"
 	ProjectSection(SolutionItems) = preProject
-		Projects\Game\Content\Shaders\shaders.hlsl = Projects\Game\Content\Shaders\shaders.hlsl
+		Projects\Game\Content\Shaders\Combined\shaders.hlsl = Projects\Game\Content\Shaders\Combined\shaders.hlsl
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Protostar-Engine", "Protostar-Engine\Protostar-Engine.vcxproj", "{99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2}"
