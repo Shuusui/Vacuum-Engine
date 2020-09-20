@@ -7,6 +7,7 @@
 #include "ECS\Header Files\EntityManager.h"
 #include "ShaderLibrary.h"
 #include "RootSignatureLibrary.h"
+#include "PSOLibrary.h"
 
 const char* JSONNAME = "name";
 const char* JSONGUID = "guid";
@@ -29,6 +30,7 @@ Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 
 	CShaderLibrary::Create(_projectPath);
 	CRootSignatureLibrary::Create(_projectPath);
+	CPSOLibrary::Create(_projectPath);
 
 	std::ifstream projectFile(m_projectPaths.ProjectFilePath);
 	Json json = {};
