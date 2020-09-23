@@ -11,7 +11,7 @@ namespace Protostar
 	{
 	public:
 		CMeshComponent()
-			:CBaseComponent("Mesh Component")
+			:CBaseComponent("Mesh Component", Json())
 			, m_guid(SGuid::NewGuid())
 			, m_modelGuid(SGuid())
 		{
@@ -19,7 +19,7 @@ namespace Protostar
 		}
 
 		CMeshComponent(const Json& _json)
-			:CBaseComponent("Mesh Component")
+			:CBaseComponent("Mesh Component", _json)
 		{
 			m_jsonObject = _json;
 			m_guid = m_jsonObject[JSONMESHCOMPGUID].get<std::string>();

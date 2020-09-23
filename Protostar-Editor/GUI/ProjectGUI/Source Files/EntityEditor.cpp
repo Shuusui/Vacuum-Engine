@@ -176,10 +176,6 @@ void Protostar::CEntityEditor::OnRender()
 					}
 				}
 				break;
-			case ESelected::Render:
-			{
-
-			}
 			default:
 				break;
 		}
