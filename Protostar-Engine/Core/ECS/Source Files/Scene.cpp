@@ -1,12 +1,14 @@
 #include "..\Header Files\Scene.h"
 #include <fstream>
 #include "Json.h"
+#include "Log.h"
 
 const char* JSONSCENENAME = "name";
 const char* JSONSCENEGUID = "guid";
 
 Protostar::CScene::CScene(const std::filesystem::path& _scenePath)
 	:CBaseObject("")
+	,m_cameraEntity(nullptr)
 {
 	m_objectPath = _scenePath;
 	LoadData();
@@ -34,6 +36,20 @@ void Protostar::CScene::OnSave()
 	};
 
 	objectFile << json.dump();
+}
+
+void Protostar::CScene::RenderActiveCamera()
+{
+	if (!m_cameraEntity)
+	{
+		PE_LOG("No active camera set");
+		return;
+	}
+}
+
+void Protostar::CScene::SetActiveCamera(CBaseEntity* _cameraEntity)
+{
+	m_cameraEntity = _cameraEntity;
 }
 
 void Protostar::CScene::Delete()

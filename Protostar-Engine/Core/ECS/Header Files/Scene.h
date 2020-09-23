@@ -16,10 +16,13 @@ namespace Protostar
 
 		CScene(const std::filesystem::path& _scenePath);
 
-		virtual void OnSave();
+		virtual void OnSave() override;
+		void RenderActiveCamera();
+		void SetActiveCamera(CBaseEntity* _cameraEntity);
 		void Delete();
 	private:
 		void LoadData();
 		std::vector<CBaseEntity*> m_entities;
+		CBaseEntity* m_cameraEntity;
 	};
 }

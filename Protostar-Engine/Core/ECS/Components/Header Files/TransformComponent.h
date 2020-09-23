@@ -2,21 +2,15 @@
 #include "BaseComponent.h"
 #include <DirectXMath.h>
 
-#define JSONPOSX "x"
-#define JSONPOSY "y"
-#define JSONPOSZ "z"
+#define JSONROW0 "row_0"
+#define JSONROW1 "row_1"
+#define JSONROW2 "row_2"
+#define JSONROW3 "row_3"
 
-#define JSONROTPITCH "pitch"
-#define JSONROTYAW "yaw"
-#define JSONROTROLL "roll"
-
-#define JSONSCALEX "x"
-#define JSONSCALEY "y"
-#define JSONSCALEZ "z"
-
-#define JSONPOS "position"
-#define JSONROT "rotation"
-#define JSONSCALE "scale"
+#define JSON0 "0"
+#define JSON1 "1"
+#define JSON2 "2"
+#define JSON3 "3"
 
 namespace Protostar
 {
@@ -24,175 +18,169 @@ namespace Protostar
 	{
 	public:
 		CTransformComponent()
-			:CBaseComponent("Transform Component")
-			,m_position(DirectX::XMFLOAT3())
-			,m_rotation(DirectX::XMFLOAT3())
-			,m_scale(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f))
+			:CBaseComponent("Transform Component", Json())
+			,m_transformationMatrix(DirectX::XMMatrixIdentity())
 		{
-
 		}
 
 		CTransformComponent(const Json& _json)
-			:CBaseComponent("Transform Component")
-			,m_position(DirectX::XMFLOAT3())
-			,m_rotation(DirectX::XMFLOAT3())
-			,m_scale(DirectX::XMFLOAT3())
+			:CBaseComponent("Transform Component", _json)
+			,m_transformationMatrix(DirectX::XMMATRIX())
 		{
-			m_jsonObject = _json;
-			if (m_jsonObject.contains(JSONPOS))
-			{
-				Json posJson = m_jsonObject[JSONPOS].get<Json>();
-				m_position.x = posJson[JSONPOSX].get<float>();
-				m_position.y = posJson[JSONPOSY].get<float>();
-				m_position.z = posJson[JSONPOSZ].get<float>();
-			}
 
-			if (m_jsonObject.contains(JSONROT))
-			{
-				Json rotJson = m_jsonObject[JSONROT].get<Json>();
-				m_rotation.x = rotJson[JSONROTPITCH].get<float>();
-				m_rotation.y = rotJson[JSONROTYAW].get<float>();
-				m_rotation.z = rotJson[JSONROTROLL].get<float>();
-			}
-
-			if (m_jsonObject.contains(JSONSCALE))
-			{
-				Json scaleJson = m_jsonObject[JSONSCALE].get<Json>();
-				m_scale.x = scaleJson[JSONSCALEX].get<float>();
-				m_scale.y = scaleJson[JSONSCALEY].get<float>();
-				m_scale.z = scaleJson[JSONSCALEZ].get<float>();
-			}
 		}
 
 		CTransformComponent(const CTransformComponent& _other)
-			:CBaseComponent("Transform Component")
-			,m_position(_other.m_position)
-			,m_rotation(_other.m_rotation)
-			,m_scale(_other.m_scale)
+			:CBaseComponent("Transform Component", _other.m_jsonObject)
+			,m_transformationMatrix(_other.m_transformationMatrix)
 		{
-
 		}
 
 		float GetPosX() const
 		{
-			return m_position.x;
+			return m_transformationMatrix.r[3].m128_f32[0];
 		}
 
 		float GetPosY() const
 		{
-			return m_position.y;
+			return m_transformationMatrix.r[3].m128_f32[1];
 		}
 
 		float GetPosZ() const
 		{
-			return m_position.z;
+			return m_transformationMatrix.r[3].m128_f32[2];
 		}
 
-		float GetRotPitch() const
+		float GetPitch() const
 		{
-			return m_rotation.x;
+			return -asin(m_transformationMatrix.r[2].m128_f32[0]);
 		}
 
-		float GetRotYaw() const
+		float GetYaw() const
 		{
-			return m_rotation.y;
+			return atan2(m_transformationMatrix.r[2].m128_f32[1] / cos(GetPitch()), m_transformationMatrix.r[2].m128_f32[2] / cos(GetPitch()));
 		}
 
-		float GetRotZ() const
+		float GetRoll() const
 		{
-			return m_rotation.z;
+			return atan2(m_transformationMatrix.r[1].m128_f32[0] / cos(GetPitch()), m_transformationMatrix.r[0].m128_f32[0] / cos(GetPitch()));
 		}
 
 		float GetScaleX() const
 		{
-			return m_scale.x;
+			return m_transformationMatrix.r[0].m128_f32[0];
 		}
 
 		float GetScaleY() const
 		{
-			return m_scale.y;
+			return m_transformationMatrix.r[1].m128_f32[1];
 		}
 
 		float GetScaleZ() const
 		{
-			return m_scale.z;
+			return m_transformationMatrix.r[2].m128_f32[2];
+		}
+
+		DirectX::XMMATRIX GetTransformationMatrix() const
+		{
+			return m_transformationMatrix;
 		}
 
 		DirectX::XMFLOAT3 GetPos() const
 		{
-			return m_position;
+			return DirectX::XMFLOAT3(
+				m_transformationMatrix.r[3].m128_f32[0],
+				m_transformationMatrix.r[3].m128_f32[1],
+				m_transformationMatrix.r[3].m128_f32[2]);
 		}
 
 		DirectX::XMFLOAT3 GetRot() const
 		{
-			return m_rotation;
+			return DirectX::XMFLOAT3();
 		}
 
 		DirectX::XMFLOAT3 GetScale() const
 		{
-			return m_scale;
+			return DirectX::XMFLOAT3(
+				m_transformationMatrix.r[0].m128_f32[0], 
+				m_transformationMatrix.r[1].m128_f32[1], 
+				m_transformationMatrix.r[2].m128_f32[2]);
 		}
 
 		void SetPos(const DirectX::XMFLOAT3& _pos)
 		{
-			m_position = _pos;
+			m_transformationMatrix.r[3].m128_f32[0] = _pos.x;
+			m_transformationMatrix.r[3].m128_f32[1] = _pos.y;
+			m_transformationMatrix.r[3].m128_f32[2] = _pos.z;
+		}
+
+		void SetPosX(const float& _posX)
+		{
+			m_transformationMatrix.r[3].m128_f32[0] = _posX;
+		}
+
+		void SetPosY(const float& _posY)
+		{
+			m_transformationMatrix.r[3].m128_f32[1] = _posY;
+		}
+
+		void SetPosZ(const float& _posZ)
+		{
+			m_transformationMatrix.r[3].m128_f32[2] = _posZ;
 		}
 
 		void SetRot(const DirectX::XMFLOAT3& _rot)
 		{
-			m_rotation = _rot;
+			m_transformationMatrix.r[0].m128_f32[0] = cos(_rot.y) * cos(_rot.z);
+			m_transformationMatrix.r[0].m128_f32[1] = (sin(_rot.x) * sin(_rot.y) * cos(_rot.z)) - (cos(_rot.x) * sin(_rot.z));
+			m_transformationMatrix.r[0].m128_f32[2] = (cos(_rot.x) * sin(_rot.y) * cos(_rot.z)) + (sin(_rot.x) * sin(_rot.z));
+
+			m_transformationMatrix.r[1].m128_f32[0] = cos(_rot.y) * sin(_rot.z);
+			m_transformationMatrix.r[1].m128_f32[1] = (sin(_rot.x) * sin(_rot.y) * sin(_rot.z)) + (cos(_rot.x) * cos(_rot.z));
+			m_transformationMatrix.r[1].m128_f32[2] = (cos(_rot.x) * sin(_rot.y) * sin(_rot.z)) - (sin(_rot.x) * cos(_rot.z));
+
+			m_transformationMatrix.r[2].m128_f32[0] = -sin(_rot.y);
+			m_transformationMatrix.r[2].m128_f32[1] = sin(_rot.x) * cos(_rot.y);
+			m_transformationMatrix.r[2].m128_f32[2] = cos(_rot.x) * cos(_rot.y);
 		}
 
 		void SetScale(const DirectX::XMFLOAT3& _scale)
 		{
-			m_scale = _scale;
+			m_transformationMatrix.r[0].m128_f32[0] = _scale.x;
+			m_transformationMatrix.r[1].m128_f32[1] = _scale.y;
+			m_transformationMatrix.r[2].m128_f32[2] = _scale.z;
 		}
 
 		virtual void OnSave() override
 		{
-			Json posJson = 
-			{
-				{JSONPOSX, m_position.x},
-				{JSONPOSY, m_position.y},
-				{JSONPOSZ, m_position.z}
-			};
-			Json rotJson = 
-			{
-				{JSONROTPITCH, m_rotation.x},
-				{JSONROTYAW, m_rotation.y},
-				{JSONROTROLL, m_rotation.z}
-			};
-			Json scaleJson = 
-			{
-				{JSONSCALEX, m_scale.x},
-				{JSONSCALEY, m_scale.y},
-				{JSONSCALEZ, m_scale.z}
-			};
-
-			m_jsonObject[JSONPOS] = posJson;
-			m_jsonObject[JSONROT] = rotJson;
-			m_jsonObject[JSONSCALE] = scaleJson;
+			m_jsonObject[JSONROW0] = GetRowJson(m_transformationMatrix.r[0]);
+			m_jsonObject[JSONROW1] = GetRowJson(m_transformationMatrix.r[1]);
+			m_jsonObject[JSONROW2] = GetRowJson(m_transformationMatrix.r[2]);
+			m_jsonObject[JSONROW3] = GetRowJson(m_transformationMatrix.r[3]);
 		}
 
 	private:
-		DirectX::XMFLOAT3 m_position;
-		DirectX::XMFLOAT3 m_rotation;
-		DirectX::XMFLOAT3 m_scale;
+		Json GetRowJson(const DirectX::XMVECTOR& _row) const
+		{
+			return Json
+			{
+				{JSON0, _row.m128_f32[0]},
+				{JSON1, _row.m128_f32[1]},
+				{JSON2, _row.m128_f32[2]},
+				{JSON3, _row.m128_f32[3]}
+			};
+		}
+
+		DirectX::XMMATRIX m_transformationMatrix;
 	};
 }
 
-#undef JSONPOSX
-#undef JSONPOSY
-#undef JSONPOSZ
- 
-#undef JSONROTPITCH 
-#undef JSONROTYAW 
-#undef JSONROTROLL 
- 
-#undef JSONSCALEX 
-#undef JSONSCALEY 
-#undef JSONSCALEZ 
- 
-#undef JSONPOS 
-#undef JSONROT 
-#undef JSONSCALE 
+#undef JSONROW0 
+#undef JSONROW1 
+#undef JSONROW2 
+#undef JSONROW3 
+
+#undef JSON0 
+#undef JSON1 
+#undef JSON2 
+#undef JSON3 

@@ -111,67 +111,77 @@ void Protostar::CEntityEditor::OnRender()
 	if (ImGui::BeginChild("Details", ImVec2(ImGui::GetWindowWidth() - 325, 0), true))
 	{
 		ImGui::Text("Details: ");
-		if (selected == ESelected::Transform)
+		switch(selected)
 		{
-			CTransformComponent& transform = registry.get<CTransformComponent>(entity);
-
-			bool bShouldSave = false;
-
-			float pos[3] = {transform.GetPos().x, transform.GetPos().y, transform.GetPos().z};
-			if (ImGui::InputFloat3("Position", pos, 4))
-			{
-				transform.SetPos({ pos[0], pos[1], pos[2] });
-				bShouldSave = true;
-			}
-
-			float rot[3] = { transform.GetRot().x, transform.GetRot().y, transform.GetRot().z };
-			if (ImGui::InputFloat3("Rotation", rot, 4))
-			{
-				transform.SetRot({rot[0], rot[1], rot[2]});
-				bShouldSave = true;
-			}
-
-			float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
-			if (ImGui::InputFloat3("Scale", scale, 4))
-			{
-				transform.SetScale({ scale[0], scale[1], scale[2] });
-				bShouldSave = true;
-			}
-
-			if (bShouldSave)
-			{
-				CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
-			}
-		}
-
-		if (selected == ESelected::Mesh)
-		{
-			CMeshComponent& meshComp = registry.get<CMeshComponent>(entity);
-
-			ImGui::Text("Guid: ");
-			ImGui::SameLine();
-			ImGui::Text(meshComp.GetGuid().ToString().c_str());
-
-			CMeshManager* meshManager = CMeshManager::GetHandle();
-			if (meshComp.GetModelGuid().IsValid())
-			{
-				SModel modelData = meshManager->GetModelData(meshComp.GetModelGuid());
-				ImGui::Text("Model: ");
-				ImGui::SameLine();
-				ImGui::Text(modelData.Name.c_str());
-			}
-
-			if(ImGui::BeginCombo("Model selection", nullptr, ImGuiComboFlags_NoPreview))
-			{
-				for (const auto& [key, value] : meshManager->GetMeshes())
+			case ESelected::Transform:
 				{
-					if (ImGui::Selectable(value.Name.c_str()))
+					CTransformComponent& transform = registry.get<CTransformComponent>(entity);
+
+					bool bShouldSave = false;
+
+					float pos[3] = { transform.GetPos().x, transform.GetPos().y, transform.GetPos().z };
+					if (ImGui::InputFloat3("Position", pos, 4))
 					{
-						meshComp.SetModelGuid(value.Guid);
+						transform.SetPos({ pos[0], pos[1], pos[2] });
+						bShouldSave = true;
+					}
+
+					float rot[3] = { transform.GetRot().x, transform.GetRot().y, transform.GetRot().z };
+					if (ImGui::InputFloat3("Rotation", rot, 4))
+					{
+						transform.SetRot({ rot[0], rot[1], rot[2] });
+						bShouldSave = true;
+					}
+
+					float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
+					if (ImGui::InputFloat3("Scale", scale, 4))
+					{
+						transform.SetScale({ scale[0], scale[1], scale[2] });
+						bShouldSave = true;
+					}
+
+					if (bShouldSave)
+					{
+						CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
 					}
 				}
-				ImGui::EndCombo();
+				break;
+			case ESelected::Mesh:
+				{
+					CMeshComponent& meshComp = registry.get<CMeshComponent>(entity);
+
+					ImGui::Text("Guid: ");
+					ImGui::SameLine();
+					ImGui::Text(meshComp.GetGuid().ToString().c_str());
+
+					CMeshManager* meshManager = CMeshManager::GetHandle();
+					if (meshComp.GetModelGuid().IsValid())
+					{
+						SModel modelData = meshManager->GetModelData(meshComp.GetModelGuid());
+						ImGui::Text("Model: ");
+						ImGui::SameLine();
+						ImGui::Text(modelData.Name.c_str());
+					}
+
+					if(ImGui::BeginCombo("Model selection", nullptr, ImGuiComboFlags_NoPreview))
+					{
+						for (const auto& [key, value] : meshManager->GetMeshes())
+						{
+							if (ImGui::Selectable(value.Name.c_str()))
+							{
+								meshComp.SetModelGuid(value.Guid);
+							}
+						}
+						ImGui::EndCombo();
+					}
+				}
+				break;
+			case ESelected::Render:
+			{
+
 			}
+			default:
+				break;
 		}
 		ImGui::EndChild();
 	}
