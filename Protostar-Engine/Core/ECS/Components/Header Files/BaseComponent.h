@@ -7,10 +7,10 @@ namespace Protostar
 	class CBaseComponent : public CBaseObject
 	{
 	public: 
-		CBaseComponent(const std::string& _name)
+		CBaseComponent(const std::string& _name, const Json& _json)
 			:CBaseObject(_name)
+			,m_jsonObject(_json)
 		{
-
 		}
 
 		Json GetJsonObject() const

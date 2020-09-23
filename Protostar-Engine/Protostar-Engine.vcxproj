@@ -31,6 +31,7 @@
     <ClInclude Include="Core\Header Files\Public\Guid.h" />
     <ClInclude Include="Core\Header Files\Public\Json.h" />
     <ClInclude Include="Core\Header Files\Public\Log.h" />
+    <ClInclude Include="Core\Header Files\Public\MathExt.h" />
     <ClInclude Include="Core\Header Files\Public\NOQueue.h" />
     <ClInclude Include="Core\Header Files\Public\SharedEnums.h" />
     <ClInclude Include="Core\Header Files\Public\SharedStructs.h" />
