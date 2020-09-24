@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseComponent.h"
+#include "MathExt.h"
 #include <DirectXMath.h>
-#include <cmath>
 
 #define JSONROW0 "row_0"
 #define JSONROW1 "row_1"

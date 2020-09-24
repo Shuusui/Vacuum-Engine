@@ -204,13 +204,13 @@ namespace Protostar
 				resultStream << aStream.str() << bFirstStream.str() << bSecondStream.str() << cStream.str() << dStream.str();
 				break;
 			case EGuidFormats::DigitsWithHyphens:
-				resultStream << aStream.str() << L'-' << bFirstStream.str() << L'-' << bSecondStream.str() << L'-' << cStream.str() << L'-' << dStream.str();
+				resultStream << aStream.str() << "-" << bFirstStream.str() << "-" << bSecondStream.str() << "-" << cStream.str() << "-" << dStream.str();
 				break;
 			case EGuidFormats::DigitsWithHyphensInBraces:
-				resultStream << L'{' << aStream.str() << L'-' << bFirstStream.str() << L'-' << bSecondStream.str() << L'-' << cStream.str() << L'-' << dStream.str() << L'}';
+				resultStream << "{" << aStream.str() << "-" << bFirstStream.str() << "-" << bSecondStream.str() << "-" << cStream.str() << "-" << dStream.str() << "}";
 				break;
 			case EGuidFormats::DigitsWithHyphensInParentheses:
-				resultStream << L'(' << aStream.str() << L'-' << bFirstStream.str() << L'-' << bSecondStream.str() << L'-' << cStream.str() << L'-' << dStream.str() << L')';
+				resultStream << "(" << aStream.str() << "-" << bFirstStream.str() << "-" << bSecondStream.str() << "-" << cStream.str() << "-" << dStream.str() << ")";
 				break;
 			}
 			return resultStream.str();
