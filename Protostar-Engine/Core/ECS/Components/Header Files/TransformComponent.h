@@ -26,9 +26,12 @@ namespace Protostar
 
 		CTransformComponent(const Json& _json)
 			:CBaseComponent("Transform Component", _json)
-			,m_transformationMatrix(DirectX::XMMATRIX())
+			,m_transformationMatrix(DirectX::XMMATRIX(
+			RowFromJson(_json[JSONROW0].get<Json>()), 
+			RowFromJson(_json[JSONROW1].get<Json>()),
+			RowFromJson(_json[JSONROW2].get<Json>()),
+			RowFromJson(_json[JSONROW3].get<Json>())))
 		{
-
 		}
 
 		CTransformComponent(const CTransformComponent& _other)
@@ -59,27 +62,58 @@ namespace Protostar
 
 		float GetYaw() const
 		{
-			return atan2(m_transformationMatrix.r[2].m128_f32[1] / cos(GetPitch()), m_transformationMatrix.r[2].m128_f32[2] / cos(GetPitch()));
+			float pitch = GetPitch();
+			return FloatCompare(pitch, DirectX::XM_PIDIV2) ?
+			atan2(m_transformationMatrix.r[0].m128_f32[1], m_transformationMatrix.r[0].m128_f32[2]):
+			FloatCompare(pitch, -DirectX::XM_PIDIV2) ?
+			atan2(-m_transformationMatrix.r[0].m128_f32[1], -m_transformationMatrix.r[0].m128_f32[2]):
+			atan2(m_transformationMatrix.r[2].m128_f32[1] / cos(pitch), m_transformationMatrix.r[2].m128_f32[2] / cos(pitch));
 		}
 
 		float GetRoll() const
 		{
-			return atan2(m_transformationMatrix.r[1].m128_f32[0] / cos(GetPitch()), m_transformationMatrix.r[0].m128_f32[0] / cos(GetPitch()));
+			float pitch = GetPitch();
+			return FloatCompare(pitch, DirectX::XM_PIDIV2) ?
+				0.0f :
+				FloatCompare(pitch, -DirectX::XM_PIDIV2) ?
+				0.0f :
+				atan2(m_transformationMatrix.r[1].m128_f32[0] / cos(pitch), m_transformationMatrix.r[0].m128_f32[0] / cos(pitch));
 		}
 
 		float GetScaleX() const
 		{
-			return m_transformationMatrix.r[0].m128_f32[0];
+			float scaleX = 0.0f;
+			DirectX::XMFLOAT3 scaleV(
+				m_transformationMatrix.r[0].m128_f32[0],
+				m_transformationMatrix.r[1].m128_f32[0],
+				m_transformationMatrix.r[2].m128_f32[0]);
+			DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&scaleV);
+			DirectX::XMStoreFloat(&scaleX, v);
+			return scaleX;
 		}
 
 		float GetScaleY() const
 		{
-			return m_transformationMatrix.r[1].m128_f32[1];
+			float scaleY = 0.0f;
+			DirectX::XMFLOAT3 scaleV(
+				m_transformationMatrix.r[0].m128_f32[1],
+				m_transformationMatrix.r[1].m128_f32[1],
+				m_transformationMatrix.r[2].m128_f32[1]);
+			DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&scaleV);
+			DirectX::XMStoreFloat(&scaleY, v);
+			return scaleY;
 		}
 
 		float GetScaleZ() const
 		{
-			return m_transformationMatrix.r[2].m128_f32[2];
+			float scaleZ = 0.0f;
+			DirectX::XMFLOAT3 scaleV(
+				m_transformationMatrix.r[0].m128_f32[2],
+				m_transformationMatrix.r[1].m128_f32[2],
+				m_transformationMatrix.r[2].m128_f32[2]);
+			DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&scaleV);
+			DirectX::XMStoreFloat(&scaleZ, v);
+			return scaleZ;
 		}
 
 		DirectX::XMMATRIX GetTransformationMatrix() const
@@ -97,15 +131,15 @@ namespace Protostar
 
 		DirectX::XMFLOAT3 GetRot() const
 		{
-			return DirectX::XMFLOAT3();
+			return DirectX::XMFLOAT3(GetPitch(), GetYaw(), GetRoll());
 		}
 
 		DirectX::XMFLOAT3 GetScale() const
 		{
 			return DirectX::XMFLOAT3(
-				m_transformationMatrix.r[0].m128_f32[0], 
-				m_transformationMatrix.r[1].m128_f32[1], 
-				m_transformationMatrix.r[2].m128_f32[2]);
+				GetScaleX(), 
+				GetScaleY(), 
+				GetScaleZ());
 		}
 
 		void SetPos(const DirectX::XMFLOAT3& _pos)
@@ -132,36 +166,50 @@ namespace Protostar
 
 		void SetRot(const DirectX::XMFLOAT3& _rot)
 		{
-			m_transformationMatrix.r[0].m128_f32[0] = cos(_rot.y) * cos(_rot.z);
-			m_transformationMatrix.r[0].m128_f32[1] = (sin(_rot.x) * sin(_rot.y) * cos(_rot.z)) - (cos(_rot.x) * sin(_rot.z));
-			m_transformationMatrix.r[0].m128_f32[2] = (cos(_rot.x) * sin(_rot.y) * cos(_rot.z)) + (sin(_rot.x) * sin(_rot.z));
+			DirectX::XMMATRIX rotMatrix = DirectX::XMMatrixIdentity();
 
-			m_transformationMatrix.r[1].m128_f32[0] = cos(_rot.y) * sin(_rot.z);
-			m_transformationMatrix.r[1].m128_f32[1] = (sin(_rot.x) * sin(_rot.y) * sin(_rot.z)) + (cos(_rot.x) * cos(_rot.z));
-			m_transformationMatrix.r[1].m128_f32[2] = (cos(_rot.x) * sin(_rot.y) * sin(_rot.z)) - (sin(_rot.x) * cos(_rot.z));
+			rotMatrix.r[0].m128_f32[0] = cos(_rot.y) * cos(_rot.z);
+			rotMatrix.r[0].m128_f32[1] = (sin(_rot.x) * sin(_rot.y) * cos(_rot.z)) - (cos(_rot.x) * sin(_rot.z));
+			rotMatrix.r[0].m128_f32[2] = (cos(_rot.x) * sin(_rot.y) * cos(_rot.z)) + (sin(_rot.x) * sin(_rot.z));
 
-			m_transformationMatrix.r[2].m128_f32[0] = -sin(_rot.y);
-			m_transformationMatrix.r[2].m128_f32[1] = sin(_rot.x) * cos(_rot.y);
-			m_transformationMatrix.r[2].m128_f32[2] = cos(_rot.x) * cos(_rot.y);
+			m_transformationMatrix = DirectX::XMMatrixMultiply(m_transformationMatrix, rotMatrix);
+			rotMatrix = DirectX::XMMatrixIdentity();
+
+			rotMatrix.r[1].m128_f32[0] = cos(_rot.y) * sin(_rot.z);
+			rotMatrix.r[1].m128_f32[1] = (sin(_rot.x) * sin(_rot.y) * sin(_rot.z)) + (cos(_rot.x) * cos(_rot.z));
+			rotMatrix.r[1].m128_f32[2] = (cos(_rot.x) * sin(_rot.y) * sin(_rot.z)) - (sin(_rot.x) * cos(_rot.z));
+
+			m_transformationMatrix = DirectX::XMMatrixMultiply(m_transformationMatrix, rotMatrix);
+			rotMatrix = DirectX::XMMatrixIdentity();
+
+			rotMatrix.r[2].m128_f32[0] = -sin(_rot.y);
+			rotMatrix.r[2].m128_f32[1] = sin(_rot.x) * cos(_rot.y);
+			rotMatrix.r[2].m128_f32[2] = cos(_rot.x) * cos(_rot.y);
+
+			m_transformationMatrix = DirectX::XMMatrixMultiply(m_transformationMatrix, rotMatrix);
 		}
 
 		void SetScale(const DirectX::XMFLOAT3& _scale)
 		{
-			m_transformationMatrix.r[0].m128_f32[0] = _scale.x;
-			m_transformationMatrix.r[1].m128_f32[1] = _scale.y;
-			m_transformationMatrix.r[2].m128_f32[2] = _scale.z;
+			DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixIdentity();
+			scaleMatrix.r[0].m128_f32[0] = _scale.x;
+			scaleMatrix.r[1].m128_f32[1] = _scale.y;
+			scaleMatrix.r[2].m128_f32[2] = _scale.z;
+
+			m_transformationMatrix = DirectX::XMMatrixMultiply(m_transformationMatrix, scaleMatrix);
 		}
+
 
 		virtual void OnSave() override
 		{
-			m_jsonObject[JSONROW0] = GetRowJson(m_transformationMatrix.r[0]);
-			m_jsonObject[JSONROW1] = GetRowJson(m_transformationMatrix.r[1]);
-			m_jsonObject[JSONROW2] = GetRowJson(m_transformationMatrix.r[2]);
-			m_jsonObject[JSONROW3] = GetRowJson(m_transformationMatrix.r[3]);
+			m_jsonObject[JSONROW0] = RowToJson(m_transformationMatrix.r[0]);
+			m_jsonObject[JSONROW1] = RowToJson(m_transformationMatrix.r[1]);
+			m_jsonObject[JSONROW2] = RowToJson(m_transformationMatrix.r[2]);
+			m_jsonObject[JSONROW3] = RowToJson(m_transformationMatrix.r[3]);
 		}
 
 	private:
-		Json GetRowJson(const DirectX::XMVECTOR& _row) const
+		Json RowToJson(const DirectX::XMVECTOR& _row) const
 		{
 			return Json
 			{
@@ -169,6 +217,17 @@ namespace Protostar
 				{JSON1, _row.m128_f32[1]},
 				{JSON2, _row.m128_f32[2]},
 				{JSON3, _row.m128_f32[3]}
+			};
+		}
+
+		DirectX::XMVECTOR RowFromJson(const Json& _json) const
+		{
+			return DirectX::XMVECTOR
+			{
+				_json[JSON0].get<float>(),
+				_json[JSON1].get<float>(), 
+				_json[JSON2].get<float>(),
+				_json[JSON3].get<float>()
 			};
 		}
 

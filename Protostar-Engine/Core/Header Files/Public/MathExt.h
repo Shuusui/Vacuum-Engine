@@ -20,5 +20,5 @@ namespace Protostar
 }
 
 #ifdef mindef
-#define min(a, b)
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
