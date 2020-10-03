@@ -119,22 +119,24 @@ void Protostar::CEntityEditor::OnRender()
 
 					bool bShouldSave = false;
 
+					ImGui::Text("Position");
+
 					float pos[3] = { transform.GetPos().x, transform.GetPos().y, transform.GetPos().z };
-					if (ImGui::InputFloat3("Position", pos, 4))
+					if (ImGui::InputFloat3("Position", pos, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
 					{
 						transform.SetPos({ pos[0], pos[1], pos[2] });
 						bShouldSave = true;
 					}
 
 					float rot[3] = { transform.GetRot().x, transform.GetRot().y, transform.GetRot().z };
-					if (ImGui::InputFloat3("Rotation", rot, 4))
+					if (ImGui::InputFloat3("Rotation", rot, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
 					{
 						transform.SetRot({ rot[0], rot[1], rot[2] });
 						bShouldSave = true;
 					}
 
 					float scale[3] = { transform.GetScale().x, transform.GetScale().y, transform.GetScale().z };
-					if (ImGui::InputFloat3("Scale", scale, 4))
+					if (ImGui::InputFloat3("Scale", scale, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
 					{
 						transform.SetScale({ scale[0], scale[1], scale[2] });
 						bShouldSave = true;
