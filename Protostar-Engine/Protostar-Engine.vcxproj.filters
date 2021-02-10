@@ -297,6 +297,9 @@
     <ClInclude Include="Core\Header Files\Public\MathExt.h">
       <Filter>Core\Header Files\Public</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Header Files\Public\GlobalConstants.h">
+      <Filter>Core\Header Files\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Source Files\Log.cpp">

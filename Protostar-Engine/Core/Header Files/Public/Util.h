@@ -4,6 +4,7 @@
 #include <strsafe.h>
 
 #include "GlobalDefs.h"
+#include "GlobalConstants.h"
 
 namespace Protostar
 {
@@ -26,73 +27,22 @@ namespace Protostar
 		* @param ... The variadic params which should get inserted in the string
 		* @return The formatted string
 		*/
-	static std::string Printf(std::string _string, ...)
+	template<typename... Args>
+	static std::string Printf(const std::string& _format, Args... args)
 	{
-		auto strAddFunc = [&_string](const std::string& _tempStr, size_t& _index)->void
+		char tempStr[PRINTF_SMALL_BUFFER_SIZE] = {};
+		const s32 writtenSize = std::snprintf(tempStr, 50, _format.c_str(), args...);
+		if (writtenSize > 0)
 		{
-			if (_string.max_size() < _string.size() + _tempStr.size())
-			{
-				_string.reserve(_string.size() + _tempStr.size());
-			}
-
-			if (_tempStr.size() == 0)
-			{
-				_string.erase(_string.begin() + _index);
-				_string.erase(_string.begin() + _index + 1);
-				return;
-			}
-
-			if (_tempStr.size() == 1)
-			{
-				_string[_index] = _tempStr[0];
-				_string.erase(_string.begin() + _index + 1);
-				return;
-			}
-
-			for (size_t i = 0; i < _tempStr.size(); ++i)
-			{
-				
-				if (i < 2)
-				{
-					_string[_index+i] = _tempStr[i];
-					continue;
-				}
-				_string.insert(_string.begin() +_index+i, _tempStr[i]);
-			}
-			_index +=_tempStr.size();
-		};
-		va_list args; 
-		va_start(args, _string);
-		for (size_t i = 0; i < _string.size(); ++i)
-		{
-			std::wstring tempArg;
-			if (_string[i] == '%')
-			{
-#pragma warning(disable : 6285)
-				switch (_string[i+1])
-				{
-				case 'i':
-				case 'd':
-					strAddFunc(std::to_string(va_arg(args, s32)), i);
-					break;
-				case 'f':
-					strAddFunc(std::to_string(va_arg(args, float)), i);
-					break;
-				case 'u':
-					strAddFunc(std::to_string(va_arg(args, u32)), i);
-					break;
-				case 'w':
-					strAddFunc(ToString(va_arg(args, const wchar_t*)), i);
-					break;
-				case 's':
-					strAddFunc(va_arg(args, const char*), i);
-					break;
-				}
-			}
+			return std::string(tempStr);
 		}
-#pragma warning(default : 6285)
-		va_end(args);
-		return _string;
+
+		const s32 dynamicStrSize = std::snprintf(nullptr, 0, _format.c_str(), args...);
+		char* dynamicTempStr = new char[dynamicStrSize];
+		std::snprintf(dynamicTempStr, dynamicStrSize, _format.c_str(), args...);
+		std::string returnStr = std::string(dynamicTempStr);
+		delete[] dynamicTempStr;
+		return returnStr;
 	}
 
 	/**

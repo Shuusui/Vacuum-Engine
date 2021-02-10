@@ -134,7 +134,7 @@ namespace Protostar
 		}
 
 		virtual void OnCreate() override;
-		virtual void CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID) override;
+		virtual void CreateFontsTexture(unsigned char* _pixels, const s32 _width, const s32 _height, u64& _texID) override;
 		virtual void UpdateGuiDrawData(SGuiDrawData* _drawData);
 		virtual void AddDrawData(SDrawData* _drawData) override;
 		virtual void OnInit() override;

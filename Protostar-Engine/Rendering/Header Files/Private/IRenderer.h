@@ -12,7 +12,7 @@ namespace Protostar
 	public:
 		IRenderer() = delete;
 
-		IRenderer(const u32& _width, const u32& _height, void* _wndHandle, bool& _bVSync)
+		IRenderer(const u32 _width, const u32 _height, void* _wndHandle, bool& _bVSync)
 			:m_width(_width)
 			,m_height(_height)
 			,m_wndHandle(_wndHandle)
@@ -23,7 +23,7 @@ namespace Protostar
 		virtual ~IRenderer() = default;
 
 		virtual void OnCreate() = 0;
-		virtual void CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID) = 0;
+		virtual void CreateFontsTexture(unsigned char* _pixels, const s32 _width, const s32 _height, u64& _texID) = 0;
 		virtual void UpdateGuiDrawData(struct SGuiDrawData* _drawData) = 0;
 		virtual void AddDrawData(struct SDrawData* _drawData) = 0;
 		virtual void OnInit() = 0;

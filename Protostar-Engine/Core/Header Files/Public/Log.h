@@ -52,7 +52,7 @@ namespace Protostar
 		/**
 		* registers a new handle with a guid which will get stored to make broadcasting over different handles possible. This will overwrite a handle with the same guid if it already exists.
 		* @param _handleGuid The guid of the handle to call it
-		* @param _outputHandle The actual outputhandle where the log system will log to
+		* @param _outputHandle The actual output handle where the log system will log to
 		*/
 		static void RegisterHandle(const SGuid& _handleGuid, const SConsoleInfo& _outputInfo);
 
