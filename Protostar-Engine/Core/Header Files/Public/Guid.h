@@ -268,12 +268,12 @@ namespace Protostar
 }
 namespace std
 {
-	template<> struct std::hash<Protostar::SGuid>
+	template<> struct hash<Protostar::SGuid>
 	{
-		std::size_t operator()(Protostar::SGuid _guid) const
+		size_t operator()(Protostar::SGuid _guid) const
 		{
 			const u64* guidPtr = reinterpret_cast<const u64*>(&_guid);
-			std::hash<u64> hash;
+			hash<u64> hash;
 			return hash(guidPtr[0]) ^ hash(guidPtr[1]);
 		}
 	};

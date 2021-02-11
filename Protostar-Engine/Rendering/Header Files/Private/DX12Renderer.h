@@ -93,7 +93,7 @@ namespace Protostar
 		static const u32 s_frameCount = 3;
 
 	public:
-		DX12Renderer(const u32& _width, const u32& _height, const HWND& _hwnd, bool& _bVSync)
+		DX12Renderer(const u32 _width, const u32 _height, const HWND& _hwnd, bool& _bVSync)
 			:IRenderer(_width, _height, _hwnd, _bVSync)
 			, m_hwnd(HWND(_hwnd))
 			, m_swapChainWaitableObject(nullptr)
@@ -118,6 +118,9 @@ namespace Protostar
 			, m_frameIndex(0)
 			, m_fenceValue(0)
 			, m_windowSize(DirectX::XMFLOAT2(0, 0))
+			, m_vpVertexShader(nullptr)
+			, m_vpPixelShader(nullptr)
+			, m_vpPipelineState(nullptr)
 			, m_currentVertexBufferSize(0)
 			, m_currentIndexBufferSize(0)
 			, m_currentVtxBufferOffset(0)

@@ -138,8 +138,8 @@ void Protostar::CProjectGUI::RenderViewport()
 	SDrawData* drawData = new SDrawData();
 	drawData->DisplayPos = DirectX::XMFLOAT2{viewportPos.x, viewportPos.y};
 	drawData->DisplaySize = DirectX::XMFLOAT2{viewportSize.x, viewportSize.y};
-	drawData->TotalIdxCount = meshData.Indices.size();
-	drawData->TotalVtxCount = meshData.Vertices.size();
+	drawData->TotalIdxCount = static_cast<s32>(meshData.Indices.size());
+	drawData->TotalVtxCount = static_cast<s32>(meshData.Vertices.size());
 
 	SDrawList drawList = {};
 	drawList.IndexBuffer = meshData.Indices;
@@ -148,7 +148,7 @@ void Protostar::CProjectGUI::RenderViewport()
 	SDrawCmd drawCmd = {};
 	drawCmd.IdxOffset = 0;
 	drawCmd.VtxOffset = 0;
-	drawCmd.ElemCount = meshData.Indices.size();
+	drawCmd.ElemCount = static_cast<u32>(meshData.Indices.size());
 	drawCmd.ClipRect = DirectX::XMFLOAT4{0, 0, viewportSize.x, viewportSize.y};
 
 	drawList.DrawCmds = std::vector<SDrawCmd>{drawCmd};

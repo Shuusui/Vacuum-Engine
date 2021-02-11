@@ -139,9 +139,12 @@ namespace Protostar
 		D3D12_INPUT_ELEMENT_DESC InputElementDescFromJson(const Json& _json) const
 		{
 			using namespace JsonKeys;
+			std::string descName = _json[JSONINPUTELEDESCSEMNAME].get<std::string>();
+			char* tempStr = new char[descName.size()];
+			strcpy_s(tempStr, descName.size(), descName.c_str());
 			return D3D12_INPUT_ELEMENT_DESC
 			{
-				_json[JSONINPUTELEDESCSEMNAME].get<std::string>().c_str(),
+				tempStr,
 				_json[JSONINPUTELEDESCSEMIDX].get<u32>(),
 				(DXGI_FORMAT)_json[JSONINPUTELEDESCFORMAT].get<u32>(),
 				_json[JSONINPUTELEDESCINPUTSLOT].get<u32>(),
@@ -336,13 +339,21 @@ namespace Protostar
 		bool bVSync;
 		void* WndHandle;
 
-		//TODO adjust this to make it work with the default.ini variables
 		SRendererCreationInfo()
 			:RenderApi(ERenderAPIs::DX12)
 			,Width(-1)
 			,Height(-1)
 			,bVSync(false)
 			,WndHandle(nullptr)
+		{
+		}
+
+		SRendererCreationInfo(ERenderAPIs _renderApi, u32 _width, u32 _height, bool _bVsync, void* _wndHandle)
+			:RenderApi(_renderApi)
+			,Width(_width)
+			,Height(_height)
+			,bVSync(_bVsync)
+			,WndHandle(_wndHandle)
 		{
 		}
 
@@ -386,8 +397,9 @@ namespace Protostar
 			:Vertices(std::move(_other.Vertices))
 			,Indices(std::move(_other.Indices))
 		{
-
 		}
+
+		SMesh& operator=(const SMesh&) = default;
 
 		std::vector<SVertex> Vertices;
 		std::vector<u32> Indices;
