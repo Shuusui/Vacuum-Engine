@@ -3,8 +3,6 @@
 #include "Json.h"
 #include "Log.h"
 
-const char* JSONSCENENAME = "name";
-const char* JSONSCENEGUID = "guid";
 
 Protostar::CScene::CScene(const std::filesystem::path& _scenePath)
 	:CBaseObject("")
@@ -20,7 +18,7 @@ void Protostar::CScene::LoadData()
 
 	Json json = {};
 	objectFile >> json;
-
+	using namespace JsonKeys;
 	m_objectName = json[JSONSCENENAME].get<std::string>();
 	m_guid = json[JSONSCENEGUID].get<std::string>();
 }
@@ -29,13 +27,14 @@ void Protostar::CScene::OnSave()
 {
 	std::ofstream objectFile(m_objectPath, std::ios::trunc);
 
+	using namespace JsonKeys;
 	Json json = 
 	{
 		{JSONSCENENAME , m_objectName},
 		{JSONSCENEGUID, m_guid.ToString()}
 	};
 
-	objectFile << json.dump();
+	objectFile << json.dump(0);
 }
 
 void Protostar::CScene::RenderActiveCamera()

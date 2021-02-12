@@ -82,7 +82,7 @@ void Protostar::CRootSignatureLibrary::Save()
 	}
 
 	std::ofstream iniFile(m_rootSignatureLibIniPath, std::ios::trunc);
-	iniFile << json.dump();
+	iniFile << json.dump(0);
 
 	iniFile.close();
 }

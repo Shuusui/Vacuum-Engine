@@ -7,22 +7,21 @@
 #include "Utilities\WaveFrontReader.h"
 #include "SharedStructs.h"
 
-#define JSONMESHGUID "guid"
-#define JSONMESHNAME "name"
-#define JSONMESHPATH "path"
+
 
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONMESHGUID		= "guid";
+		constexpr const char* JSONMESHNAME		= "name";
+		constexpr const char* JSONMESHPATH		= "path";
+		constexpr const char* JSONMESHMAP		= "mesh_map";
+	}
+
 	struct SModel
 	{
-		SModel()
-			:Guid(SGuid())
-			,Name(std::string())
-			,Path(std::filesystem::path())
-			,MeshData(SMesh())
-		{
-
-		}
+		SModel() = default;
 
 		SModel(const std::filesystem::path& _path)
 			:Guid(SGuid::NewGuid())
@@ -33,6 +32,7 @@ namespace Protostar
 
 		SModel(const Json& _json)
 		{
+			using namespace JsonKeys;
 			Guid = _json[JSONMESHGUID].get<std::string>();
 			Name = _json[JSONMESHNAME].get<std::string>();
 			Path = _json[JSONMESHPATH].get<std::string>();
@@ -44,6 +44,7 @@ namespace Protostar
 
 		Json ToJson() const
 		{
+			using namespace JsonKeys;
 			return Json{
 				{JSONMESHGUID, Guid.ToString()},
 				{JSONMESHNAME, Name},
@@ -93,6 +94,8 @@ namespace Protostar
 			m_meshes.erase(_guid);
 			m_meshPaths.erase(_modelPath);
 		}
+
+		std::filesystem::path GetModelPathAbsolute(const SModel& _model);
 
 		void Load();
 		void Save();

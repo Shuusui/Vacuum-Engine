@@ -91,7 +91,7 @@ void Protostar::CPSOLibrary::Save()
 	}
 
 	std::ofstream iniFile(m_projectConfigPath, std::ios::trunc);
-	iniFile << json.dump();
+	iniFile << json.dump(0);
 
 	iniFile.close();
 }

@@ -4,6 +4,14 @@
 
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONENTITYNAME =		"name";
+		constexpr const char* JSONENTITYGUID =		"guid";
+		constexpr const char* JSONTRANSFORM =		"transform";
+		constexpr const char* JSONMESH =			"mesh";
+	}
+
 	class CBaseEntity : public CBaseObject
 	{
 	public:

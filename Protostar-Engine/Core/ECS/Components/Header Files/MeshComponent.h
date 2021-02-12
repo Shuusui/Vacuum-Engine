@@ -2,11 +2,14 @@
 #include "BaseComponent.h"
 #include "Guid.h"
 
-#define JSONMESHCOMPGUID "guid"
-#define JSONMESHCOMPMODELGUID "model_guid"
-
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONMESHCOMPGUID				= "guid";
+		constexpr const char* JSONMESHCOMPMODELGUID			= "model_guid";
+	}
+
 	class CMeshComponent : public CBaseComponent
 	{
 	public:
@@ -21,6 +24,7 @@ namespace Protostar
 		CMeshComponent(const Json& _json)
 			:CBaseComponent("Mesh Component", _json)
 		{
+			using namespace JsonKeys;
 			m_jsonObject = _json;
 			m_guid = m_jsonObject[JSONMESHCOMPGUID].get<std::string>();
 			m_modelGuid = m_jsonObject[JSONMESHCOMPMODELGUID].get<std::string>();
@@ -28,6 +32,7 @@ namespace Protostar
 
 		virtual void OnSave() override
 		{
+			using namespace JsonKeys;
 			m_jsonObject =
 			{
 				{JSONMESHCOMPGUID, m_guid.ToString()},

@@ -3,18 +3,22 @@
 #include "MathExt.h"
 #include <DirectXMath.h>
 
-#define JSONROW0 "row_0"
-#define JSONROW1 "row_1"
-#define JSONROW2 "row_2"
-#define JSONROW3 "row_3"
 
-#define JSON0 "0"
-#define JSON1 "1"
-#define JSON2 "2"
-#define JSON3 "3"
 
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONROW0			="row_0";
+		constexpr const char* JSONROW1			="row_1";
+		constexpr const char* JSONROW2			="row_2";
+		constexpr const char* JSONROW3			="row_3";
+		constexpr const char* JSON0				="0";
+		constexpr const char* JSON1				="1";
+		constexpr const char* JSON2				="2";
+		constexpr const char* JSON3				="3";
+	}
+
 	class CTransformComponent : public CBaseComponent
 	{
 	public:
@@ -27,10 +31,10 @@ namespace Protostar
 		CTransformComponent(const Json& _json)
 			:CBaseComponent("Transform Component", _json)
 			,m_transformationMatrix(DirectX::XMMATRIX(
-			RowFromJson(_json[JSONROW0].get<Json>()), 
-			RowFromJson(_json[JSONROW1].get<Json>()),
-			RowFromJson(_json[JSONROW2].get<Json>()),
-			RowFromJson(_json[JSONROW3].get<Json>())))
+			RowFromJson(_json[JsonKeys::JSONROW0].get<Json>()), 
+			RowFromJson(_json[JsonKeys::JSONROW1].get<Json>()),
+			RowFromJson(_json[JsonKeys::JSONROW2].get<Json>()),
+			RowFromJson(_json[JsonKeys::JSONROW3].get<Json>())))
 		{
 		}
 
@@ -202,6 +206,7 @@ namespace Protostar
 
 		virtual void OnSave() override
 		{
+			using namespace JsonKeys;
 			m_jsonObject[JSONROW0] = RowToJson(m_transformationMatrix.r[0]);
 			m_jsonObject[JSONROW1] = RowToJson(m_transformationMatrix.r[1]);
 			m_jsonObject[JSONROW2] = RowToJson(m_transformationMatrix.r[2]);
@@ -211,6 +216,7 @@ namespace Protostar
 	private:
 		Json RowToJson(const DirectX::XMVECTOR& _row) const
 		{
+			using namespace JsonKeys;
 			return Json
 			{
 				{JSON0, _row.m128_f32[0]},
@@ -222,6 +228,7 @@ namespace Protostar
 
 		DirectX::XMVECTOR RowFromJson(const Json& _json) const
 		{
+			using namespace JsonKeys;
 			return DirectX::XMVECTOR
 			{
 				_json[JSON0].get<float>(),

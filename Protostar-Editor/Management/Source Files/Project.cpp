@@ -9,10 +9,6 @@
 #include "RootSignatureLibrary.h"
 #include "PSOLibrary.h"
 
-const char* JSONNAME = "name";
-const char* JSONGUID = "guid";
-const char* JSONMOSTRECENTSCENEGUID = "most_recent_scene_guid";
-
 Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 	:m_guid(SGuid())
 	,m_currentScene(nullptr)
@@ -32,6 +28,7 @@ Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 	CRootSignatureLibrary::Create(_projectPath);
 	CPSOLibrary::Create(_projectPath);
 
+	using namespace JsonKeys;
 	std::ifstream projectFile(m_projectPaths.ProjectFilePath);
 	Json json = {};
 	projectFile >> json;
@@ -70,6 +67,7 @@ Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 
 Protostar::CProject::~CProject()
 {
+	using namespace JsonKeys;
 	Json json = {};
 	json[JSONNAME] = m_name;
 	json[JSONGUID] = m_guid.ToString();

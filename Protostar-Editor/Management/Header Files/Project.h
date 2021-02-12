@@ -11,6 +11,13 @@
 
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONNAME = "name";
+		constexpr const char* JSONGUID = "guid";
+		constexpr const char* JSONMOSTRECENTSCENEGUID = "most_recent_scene_guid";
+	}
+
 	struct SProjectPaths
 	{
 		std::filesystem::path ConfigDir;
@@ -99,6 +106,5 @@ namespace Protostar
 		std::unordered_set<CScene*> m_scenes;
 		std::string m_name;
 		SProjectPaths m_projectPaths;
-		//std::unordered_map<std::string, SShaderInfo> m_shaders;
 	};
 }

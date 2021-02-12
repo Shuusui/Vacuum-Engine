@@ -6,11 +6,6 @@
 #include "Json.h"
 #include <fstream>
 
-const char* JSONENTITYNAME = "name";
-const char* JSONENTITYGUID = "guid";
-const char* JSONTRANSFORM = "transform";
-const char* JSONMESH = "mesh";
-
 Protostar::CBaseEntity::CBaseEntity(const std::string& _name)
 	:CBaseObject(_name)
 	,m_entity(CECSManager::CreateEntity())
@@ -46,6 +41,7 @@ void Protostar::CBaseEntity::OnSave()
 	}
 	std::ofstream objectFile(m_objectPath, std::ios::trunc);
 
+	using namespace JsonKeys;
 	Json json =
 	{
 		{JSONENTITYNAME, m_objectName},
@@ -75,7 +71,7 @@ void Protostar::CBaseEntity::LoadData()
 
 	Json json = {};
 	objectFile >> json;
-
+	using namespace JsonKeys;
 	m_objectName = json[JSONENTITYNAME].get<std::string>();
 	m_guid = json[JSONENTITYGUID].get<std::string>();
 	entt::registry& registry = CECSManager::GetRegistry();

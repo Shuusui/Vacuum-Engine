@@ -4,12 +4,6 @@
 #include <unordered_set>
 #include <fstream>
 
-#define JSONVERTEXSHADERMAP "vertex_shader_map"
-#define JSONPIXELSHADERMAP "pixel_shader_map"
-
-#define JSONSHADERINFONAME "name"
-#define JSONSHADERINFOPATH "path"
-
 Protostar::CShaderLibrary* Protostar::CShaderLibrary::s_shaderLibrary = nullptr;
 
 Protostar::CShaderLibrary::CShaderLibrary(const std::filesystem::path& _projectPath)
@@ -70,15 +64,17 @@ void Protostar::CShaderLibrary::Save()
 		pixelShaderMapJson[guid.ToString()] = ShaderInfoAsJson(shaderInfo);
 	}
 
+	using namespace JsonKeys;
 	json[JSONVERTEXSHADERMAP] = vertexShaderMapJson;
 	json[JSONPIXELSHADERMAP] = pixelShaderMapJson;
 
 	std::ofstream configFile(m_shaderLibConfigPath, std::ios::trunc);
-	configFile << json.dump();
+	configFile << json.dump(0);
 }
 
 Json Protostar::CShaderLibrary::ShaderInfoAsJson(const SShaderInfo& _shaderInfo) const
 {
+	using namespace JsonKeys;
 	return Json{
 		{JSONSHADERINFONAME,_shaderInfo.Name},
 		{JSONSHADERINFOPATH, _shaderInfo.ShaderPath.string()}, 
@@ -96,6 +92,7 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 	ID3DBlob* pixelShader = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
+	using namespace JsonKeys;
 	Json vertexShaderMapJson = json[JSONVERTEXSHADERMAP].get<Json>();
 	for (const auto& [guid, shaderInfoJson] : vertexShaderMapJson.items())
 	{
@@ -108,8 +105,9 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 		SShaderInfo shaderInfo = {};
 		shaderInfo.Name = shaderInfoJson[JSONSHADERINFONAME].get<std::string>();
 		shaderInfo.ShaderPath = shaderInfoJson[JSONSHADERINFOPATH].get<std::string>();
+		std::filesystem::path absolutePath = GetShaderPathAbsolute(shaderInfo);
 
-		if (D3DCompileFromFile(shaderInfo.ShaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) != S_OK)
+		if (D3DCompileFromFile(absolutePath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) != S_OK)
 		{
 			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
 			SafeRelease(vertexShader);
@@ -134,8 +132,9 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 		SShaderInfo shaderInfo = {};
 		shaderInfo.Name = shaderInfoJson[JSONSHADERINFONAME].get<std::string>();
 		shaderInfo.ShaderPath = shaderInfoJson[JSONSHADERINFOPATH].get<std::string>();
+		std::filesystem::path absolutePath = GetShaderPathAbsolute(shaderInfo);
 
-		if (D3DCompileFromFile(shaderInfo.ShaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) != S_OK)
+		if (D3DCompileFromFile(absolutePath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) != S_OK)
 		{
 			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
 			SafeRelease(pixelShader);
@@ -252,7 +251,6 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 					if (LoadVertexShader(_path))
 					{
 						complement.VertexShaderInfo = m_vertexShaders[m_vertexShaderNames[filename]];
-
 					}
 					else
 					{
@@ -310,12 +308,13 @@ bool Protostar::CShaderLibrary::LoadVertexShader(const std::filesystem::path& _s
 		return false;
 	}
 
-	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) == S_OK)
+	HRESULT hr = D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob);
+	if (hr == S_OK)
 	{
 		SShaderInfo shaderInfo = {};
 		shaderInfo.Name = filename;
 		shaderInfo.Shader = vertexShader;
-		shaderInfo.ShaderPath = _shaderPath;
+		shaderInfo.ShaderPath = _shaderPath.lexically_relative(m_shadersPath);
 
 		SGuid shaderGuid = SGuid::NewGuid();
 
@@ -329,7 +328,9 @@ bool Protostar::CShaderLibrary::LoadVertexShader(const std::filesystem::path& _s
 	}
 	else
 	{
-		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
+		std::string hrStr = HrToString(hr);
+		PE_LOG_F("%s %s", hrStr.c_str(), errorBlob ? std::string((char*)errorBlob->GetBufferPointer()).c_str() : "");
+
 		SafeRelease(errorBlob);
 		SafeRelease(vertexShader);
 		return false;
@@ -344,12 +345,13 @@ bool Protostar::CShaderLibrary::LoadPixelShader(const std::filesystem::path& _sh
 	ID3DBlob* pixelShader = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
-	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) == S_OK)
+	HRESULT hr = D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob);
+	if (hr == S_OK)
 	{
 		SShaderInfo shaderInfo = {};
 		shaderInfo.Name = filename;
 		shaderInfo.Shader = pixelShader;
-		shaderInfo.ShaderPath = _shaderPath;
+		shaderInfo.ShaderPath = _shaderPath.lexically_relative(m_shadersPath);
 
 		SGuid shaderGuid = SGuid::NewGuid();
 
@@ -364,7 +366,9 @@ bool Protostar::CShaderLibrary::LoadPixelShader(const std::filesystem::path& _sh
 	}
 	else
 	{
-		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
+		std::string hrStr = HrToString(hr);
+		PE_LOG_F("%s %s", hrStr.c_str(), errorBlob ? std::string((char*)errorBlob->GetBufferPointer()).c_str() : "");
+
 		SafeRelease(errorBlob);
 		SafeRelease(pixelShader);
 		return false;
@@ -391,17 +395,23 @@ bool Protostar::CShaderLibrary::LoadCombinedShader(const std::filesystem::path& 
 	ID3DBlob* pixelShader = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
-	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) != S_OK)
+	HRESULT hr = D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob);
+	if (hr != S_OK)
 	{
-		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
+		std::string hrStr = HrToString(hr);
+		PE_LOG_F("%s %s", hrStr.c_str(), errorBlob ? std::string((char*)errorBlob->GetBufferPointer()).c_str() : "");
+
 		SafeRelease(vertexShader);
 		SafeRelease(errorBlob);
 		return false;
 	}
 
-	if (D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) != S_OK)
+	hr = D3DCompileFromFile(_shaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob);
+	if (hr != S_OK)
 	{
-		PE_LOG(std::string((char*)errorBlob->GetBufferPointer()));
+		std::string hrStr = HrToString(hr);
+		PE_LOG_F("%s %s", hrStr.c_str(), errorBlob ? std::string((char*)errorBlob->GetBufferPointer()).c_str() : "");
+
 		SafeRelease(pixelShader);
 		SafeRelease(errorBlob);
 		return false;
@@ -410,14 +420,14 @@ bool Protostar::CShaderLibrary::LoadCombinedShader(const std::filesystem::path& 
 	SShaderInfo shaderInfo = {};
 	shaderInfo.Name = filename;
 	shaderInfo.Shader = vertexShader;
-	shaderInfo.ShaderPath = _shaderPath;
+	shaderInfo.ShaderPath = _shaderPath.lexically_relative(m_shadersPath);
 
 	m_vertexShaders.insert(std::make_pair(SGuid::NewGuid(), shaderInfo));
 
 	shaderInfo = {};
 	shaderInfo.Name = filename;
 	shaderInfo.Shader = pixelShader;
-	shaderInfo.ShaderPath = _shaderPath;
+	shaderInfo.ShaderPath = _shaderPath.lexically_relative(m_shadersPath);
 
 	m_pixelShaders.insert(std::make_pair(SGuid::NewGuid(), shaderInfo));
 
@@ -483,6 +493,11 @@ Protostar::SShaderComplement Protostar::CShaderLibrary::GetShaderInfos(const SGu
 Protostar::STreeObject<Protostar::SShaderComplement> Protostar::CShaderLibrary::GetShaderComplements() const
 {
 	return m_fileTree;
+}
+
+std::filesystem::path Protostar::CShaderLibrary::GetShaderPathAbsolute(const SShaderInfo& _shaderInfo) const
+{
+	return m_shadersPath / _shaderInfo.ShaderPath;
 }
 
 

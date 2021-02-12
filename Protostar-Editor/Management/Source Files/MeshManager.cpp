@@ -2,8 +2,6 @@
 #include <fstream>
 #include <unordered_set>
 
-#define JSONMESHMAP "mesh_map"
-
 Protostar::CMeshManager* Protostar::CMeshManager::s_meshManager = nullptr;
 
 void Protostar::CMeshManager::OnCreate(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath)
@@ -25,10 +23,16 @@ void Protostar::CMeshManager::OnDestroy()
 	}
 }
 
+std::filesystem::path Protostar::CMeshManager::GetModelPathAbsolute(const SModel& _model)
+{
+	return m_meshesPath / _model.Path;
+}
+
 void Protostar::CMeshManager::Load()
 {
 	WaveFrontReader<u32> wfReader = WaveFrontReader<u32>();
 	std::unordered_set<std::string> alreadyFoundMeshes = {};
+	using namespace JsonKeys;
 	if (std::filesystem::exists(m_configFilePath))
 	{
 		std::ifstream configFile(m_configFilePath);
@@ -42,13 +46,17 @@ void Protostar::CMeshManager::Load()
 			SModel model = SModel(value);
 			alreadyFoundMeshes.insert(model.Name);
 			wfReader.Clear();
-			wfReader.Load(model.Path.wstring().c_str());
+			std::filesystem::path modelAbsolutePath = GetModelPathAbsolute(model);
+			if (!std::filesystem::exists(modelAbsolutePath))
+			{
+				continue;
+			}
+			wfReader.Load(modelAbsolutePath.wstring().c_str());
 			model.MeshData.Vertices = std::move(wfReader.vertices);
 			model.MeshData.Indices = std::move(wfReader.indices);
 
 			m_meshes.insert(std::make_pair(key, model));
 			m_meshPaths.insert(model.Path.string());
-
 		}
 	}
 
@@ -69,7 +77,8 @@ void Protostar::CMeshManager::Load()
 		{
 			continue;
 		}
-		SModel model = SModel(meshPath);
+		
+		SModel model = SModel(meshPath.lexically_relative(m_meshesPath));
 		wfReader.Clear();
 		wfReader.Load(meshPath.wstring().c_str());
 		model.MeshData.Vertices = std::move(wfReader.vertices);
@@ -84,6 +93,7 @@ void Protostar::CMeshManager::Save()
 	Json json = {};
 	Json meshMapJson = {}; 
 
+	using namespace JsonKeys;
 	for (const auto& [key, value] : m_meshes)
 	{
 		meshMapJson[key.ToString()] = value.ToJson();

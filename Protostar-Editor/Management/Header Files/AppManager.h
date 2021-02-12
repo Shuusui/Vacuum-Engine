@@ -11,6 +11,16 @@
 
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONHEIGHT			= "height";
+		constexpr const char* JSONWIDTH				= "width";
+		constexpr const char* JSONX					= "x";
+		constexpr const char* JSONY					= "y";
+		constexpr const char* JSONCURRPROJGUID		= "current_project_guid";
+		constexpr const char* JSONVSYNC				= "vsync";
+	}
+
 	struct SAppPaths
 	{
 		SAppPaths()

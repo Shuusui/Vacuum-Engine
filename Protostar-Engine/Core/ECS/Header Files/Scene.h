@@ -6,11 +6,19 @@
 
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONSCENENAME = "name";
+		constexpr const char* JSONSCENEGUID = "guid";
+	}
+
 	class CScene : public CBaseObject
 	{
 	public: 
 		CScene(const std::string& _name)
 			:CBaseObject(_name)
+			,m_entities(std::vector<CBaseEntity*>())
+			,m_cameraEntity(nullptr)
 		{
 		}
 

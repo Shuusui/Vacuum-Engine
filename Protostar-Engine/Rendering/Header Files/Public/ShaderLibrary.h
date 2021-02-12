@@ -9,6 +9,14 @@
 
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONVERTEXSHADERMAP		="vertex_shader_map";
+		constexpr const char* JSONPIXELSHADERMAP		="pixel_shader_map";
+		constexpr const char* JSONSHADERINFONAME		="name";
+		constexpr const char* JSONSHADERINFOPATH		="path";
+	}
+
 	struct SShaderInfo
 	{
 		SShaderInfo()
@@ -76,6 +84,8 @@ namespace Protostar
 		 */
 		SShaderComplement GetShaderInfos(const SGuid& _guid) const;
 		STreeObject<SShaderComplement> GetShaderComplements() const;
+
+		std::filesystem::path GetShaderPathAbsolute(const SShaderInfo& _shaderInfo) const;
 	private:
 		CShaderLibrary(const std::filesystem::path& _projectPath);
 

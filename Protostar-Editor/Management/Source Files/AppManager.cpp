@@ -15,13 +15,6 @@
 
 Protostar::CAppManager* Protostar::CAppManager::s_app = nullptr;
 
-const char* JSONHEIGHT = "height";
-const char* JSONWIDTH = "width";
-const char* JSONX = "x";
-const char* JSONY = "y";
-const char* JSONCURRPROJGUID = "current_project_guid";
-const char* JSONVSYNC = "vsync";
-
 bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
 {
 	if (!s_app)
@@ -45,6 +38,7 @@ bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
 	s_app->m_appPaths.ProjectsDir = s_app->m_appPaths.RootDir / L"Projects";
 	s_app->m_appConfigPath = s_app->m_appPaths.ConfigDir / L"app.config";
 
+	using namespace JsonKeys;
 	SGuid projectGuid = {};
 	if (std::filesystem::exists(s_app->m_appConfigPath))
 	{
@@ -129,6 +123,7 @@ void Protostar::CAppManager::Destroy()
 		std::filesystem::create_directory(s_app->m_appPaths.ConfigDir);
 	}
 
+	using namespace JsonKeys;
 	SWindowDimParams wndDim = s_app->m_mainWindowDim;
 	Json json = 
 	{
