@@ -44,7 +44,7 @@ namespace Protostar
 		{
 		}
 
-		SGuid(const std::string& _guidStr, const EGuidFormats& _format = EGuidFormats::Digits)
+		SGuid(const std::string& _guidStr, const EGuidFormats _format = EGuidFormats::Digits)
 			: A(0)
 			, B(0)
 			, C(0)
@@ -145,7 +145,7 @@ namespace Protostar
 			return (A | B | C | D) != 0;
 		}
 
-		std::string ToString(const EGuidFormats& _format = EGuidFormats::Digits) const 
+		std::string ToString(const EGuidFormats _format = EGuidFormats::Digits) const 
 		{
 			if (!IsValid())
 			{

@@ -149,17 +149,17 @@ namespace Protostar
 			m_transformationMatrix.r[3].m128_f32[2] = _pos.z;
 		}
 
-		void SetPosX(const float& _posX)
+		void SetPosX(const float _posX)
 		{
 			m_transformationMatrix.r[3].m128_f32[0] = _posX;
 		}
 
-		void SetPosY(const float& _posY)
+		void SetPosY(const float _posY)
 		{
 			m_transformationMatrix.r[3].m128_f32[1] = _posY;
 		}
 
-		void SetPosZ(const float& _posZ)
+		void SetPosZ(const float _posZ)
 		{
 			m_transformationMatrix.r[3].m128_f32[2] = _posZ;
 		}

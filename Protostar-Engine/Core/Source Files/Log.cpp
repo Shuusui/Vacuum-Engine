@@ -84,7 +84,7 @@ namespace Protostar
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::string& _logString)
+	void CLog::Log(SGuid* _handleGuids, const size_t _handleGuidAmount, const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
 		for (s32 i = 0; i < _handleGuidAmount; ++i)
@@ -100,7 +100,7 @@ namespace Protostar
 		OutputDebugStringA("\n");
 	}
 
-	void CLog::ClearLog(SGuid* _handleGuids, const size_t& _handleGuidAmount)
+	void CLog::ClearLog(SGuid* _handleGuids, const size_t _handleGuidAmount)
 	{
 		s_logHandle->m_logMutex.lock();
 		for (s32 i = 0; i < _handleGuidAmount; ++i)

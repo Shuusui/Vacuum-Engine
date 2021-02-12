@@ -384,7 +384,7 @@ namespace Protostar
 		return true;
 	}
 
-	void CMainWindow::ShowAndUpdate(const s32& _nCmdShow)
+	void CMainWindow::ShowAndUpdate(const s32 _nCmdShow)
 	{
 		ShowWindow(s_mainWindow->m_wndHandle, _nCmdShow);
 		UpdateWindow(s_mainWindow->m_wndHandle);
@@ -406,19 +406,19 @@ namespace Protostar
 		return s_mainWindow;
 	}
 
-	void CMainWindow::UpdateWindowPos(const s32& _x, const s32& _y)
+	void CMainWindow::UpdateWindowPos(const s32 _x, const s32 _y)
 	{
 		m_windowInfo.DimParams.LeftTopCornerX = _x;
 		m_windowInfo.DimParams.LeftTopCornerY = _y;
 	}
 
-	void CMainWindow::UpdateWindowSize(const s32& _width, const s32& _height)
+	void CMainWindow::UpdateWindowSize(const s32 _width, const s32 _height)
 	{
 		m_windowInfo.DimParams.Width = _width;
 		m_windowInfo.DimParams.Height = _height;
 	}
 
-	void CMainWindow::RegisterCallbackForWMEvents(const u32& _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func)
+	void CMainWindow::RegisterCallbackForWMEvents(const u32 _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func)
 	{
 		m_wmEventMap[_wmEvent].push_back(_func);
 	}

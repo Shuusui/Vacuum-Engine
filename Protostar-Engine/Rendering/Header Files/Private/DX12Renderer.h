@@ -163,7 +163,7 @@ namespace Protostar
 		void InvalidateObjects();
 		void CreateRenderTarget();
 		void CleanupRenderTarget();
-		void ResizeSwapChain(HWND _hwnd, const u32& _width, const u32& _height);
+		void ResizeSwapChain(HWND _hwnd, const u32 _width, const u32 _height);
 
 		HWND m_hwnd;
 		HANDLE m_swapChainWaitableObject;

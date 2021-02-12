@@ -1175,7 +1175,7 @@ void Protostar::DX12Renderer::CleanupRenderTarget()
 	}
 }
 
-void Protostar::DX12Renderer::ResizeSwapChain(HWND _hwnd, const u32& _width, const u32& _height)
+void Protostar::DX12Renderer::ResizeSwapChain(HWND _hwnd, const u32 _width, const u32 _height)
 {
 	DXGI_SWAP_CHAIN_DESC1 desc = {};
 	m_swapChain->GetDesc1(&desc);

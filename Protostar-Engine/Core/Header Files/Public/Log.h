@@ -92,7 +92,7 @@ namespace Protostar
 		* @param _handleGuidAmount The amount of guids the handles to log to
 		* @param _logString The string to log
 		*/
-		static void Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::string& _logString);
+		static void Log(SGuid* _handleGuids, const size_t _handleGuidAmount, const std::string& _logString);
 
 #if defined(_DEBUG)
 		/**
@@ -107,7 +107,7 @@ namespace Protostar
 		* @param _handleGuids The guids of the handles to clear
 		* @param _handleGuidAmount The amount of guids the handles to clear
 		*/
-		static void ClearLog(SGuid* _handleGuids, const size_t& _handleGuidAmount);
+		static void ClearLog(SGuid* _handleGuids, const size_t _handleGuidAmount);
 	private:
 		CLog() = default;
 

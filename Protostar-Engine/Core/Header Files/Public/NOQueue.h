@@ -13,19 +13,16 @@ namespace Protostar
 		CNOQueue()
 			: m_queue()
 		{
-
 		}
 
 		CNOQueue(const CNOQueue& _other)
 			: m_queue(_other.m_queue)
 		{
-
 		}
 
 		CNOQueue(CNOQueue&& _other)
 			: m_queue(std::move(_other.m_queue))
 		{
-
 		}
 
 		T& Dequeue()
