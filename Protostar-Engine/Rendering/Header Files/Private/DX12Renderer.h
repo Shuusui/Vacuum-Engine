@@ -13,8 +13,8 @@ namespace Protostar
 	{
 		ID3D12Resource* IndexBuffer;
 		ID3D12Resource* VertexBuffer;
-		s32 IndexBufferSize;
-		s32 VertexBufferSize;
+		u32 IndexBufferSize;
+		u32 VertexBufferSize;
 	};
 
 	struct SFrameContext

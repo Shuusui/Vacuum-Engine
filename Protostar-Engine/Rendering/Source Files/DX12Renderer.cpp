@@ -71,7 +71,6 @@ void Protostar::DX12Renderer::OnUpdate()
 
 	SFrameResource* frameResource = &m_frameResources[m_frameIndex % s_frameCount];
 
-#pragma warning (disable : 4018)
 	if (frameResource->VertexBuffer == nullptr || frameResource->VertexBufferSize < m_totalVtxSize)
 	{
 		SafeRelease(frameResource->VertexBuffer);
@@ -103,7 +102,6 @@ void Protostar::DX12Renderer::OnUpdate()
 	}
 
 	if (frameResource->IndexBuffer == nullptr || frameResource->IndexBufferSize < m_totalIdxSize)
-#pragma warning(default : 4018)
 	{
 		SafeRelease(frameResource->IndexBuffer);
 		frameResource->IndexBufferSize = m_totalIdxSize + 2000;
@@ -753,6 +751,7 @@ void Protostar::DX12Renderer::LoadVPAssets()
 		psoDesc.InputLayout = { inputElementDescs, 3 };
 		psoDesc.pRootSignature = m_rootSignature;
 		psoDesc.NodeMask = 1;
+		//TODO: to make the warning disappear I have to check the shaders properly. This might be done in another branch in the future and is not related to this branch.
 		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vpVertexShader);
 		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_vpPixelShader);
 		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
@@ -896,6 +895,7 @@ void Protostar::DX12Renderer::CreateFontsTexture(unsigned char* _pixels, const s
 		D3D12_RANGE range = { 0, uploadSize };
 		hr = uploadBuffer->Map(0, &range, &mapped);
 		THROW_IF_FAILED(hr);
+		//TODO This functions needs to get done in a more consistent way and therefore the warning here might just disappear
 		for (int y = 0; y < _height; y++)
 			memcpy((void*)((uintptr_t)mapped + y * uploadPitch), _pixels + y * _width * 4, _width * 4);
 		uploadBuffer->Unmap(0, &range);
