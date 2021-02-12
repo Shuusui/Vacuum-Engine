@@ -98,7 +98,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\Protostar-Engine\DirectX\;$(SolutionDir)Protostar-Engine\Core\;$(SolutionDir)Protostar-Editor\GUI\Header Files\;$(SolutionDir)Protostar-Editor\ImGui\Header Files\Public\;$(SolutionDir)Protostar-Editor\Management\Header Files\;$(SolutionDir)Protostar-Engine\Core\Header Files\Public; $(SolutionDir)Protostar-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
