@@ -57,7 +57,7 @@ namespace Protostar
 		* @param _threadIndex The index of the thread in the owners container
 		* @param _owner The owner of this thread. In this case the CThreadPool object
 		*/
-		CThread(const s32& _threadIndex, class CThreadPool* _owner, std::condition_variable& _semaphore, std::atomic_bool& _stopThread)
+		CThread(const s32 _threadIndex, class CThreadPool* _owner, std::condition_variable& _semaphore, std::atomic_bool& _stopThread)
 			:m_threadIndex(_threadIndex)
 			,m_owner(_owner)
 			,m_currentJob(nullptr)
@@ -128,7 +128,7 @@ namespace Protostar
 		* The only constructor which will create the amount of screenshots get passed
 		* @param The amount of threads to create
 		*/
-		CThreadPool(const s32& _threadAmount);
+		CThreadPool(const s32 _threadAmount);
 
 		/**
 		* Destructor which will join all threads and delete them

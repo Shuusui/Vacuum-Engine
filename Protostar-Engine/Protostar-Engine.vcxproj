@@ -26,6 +26,7 @@
     <ClInclude Include="Core\Header Files\Public\Console.h" />
     <ClInclude Include="Core\Header Files\Public\Filesystem\FileTreeObject.h" />
     <ClInclude Include="Core\Header Files\Public\Filesystem\Filesystem.h" />
+    <ClInclude Include="Core\Header Files\Public\GlobalConstants.h" />
     <ClInclude Include="Core\Header Files\Public\GlobalDefs.h" />
     <ClInclude Include="Core\Header Files\Public\GlobalMacros.h" />
     <ClInclude Include="Core\Header Files\Public\Guid.h" />

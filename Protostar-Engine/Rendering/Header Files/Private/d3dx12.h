@@ -2133,6 +2133,7 @@ inline HRESULT D3DX12SerializeVersionedRootSignature(
                         {
                             if (desc_1_1.pParameters[n].ParameterType == D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE)
                             {
+                                //TODO I see dead code here. This might need a refactoring. I should have a look at the repository this code is from or fix it myself. 
                                 HeapFree(GetProcessHeap(), 0, reinterpret_cast<void*>(const_cast<D3D12_DESCRIPTOR_RANGE*>(pParameters_1_0[n].DescriptorTable.pDescriptorRanges)));
                             }
                         }

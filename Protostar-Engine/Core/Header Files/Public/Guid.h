@@ -44,7 +44,7 @@ namespace Protostar
 		{
 		}
 
-		SGuid(const std::string& _guidStr, const EGuidFormats& _format = EGuidFormats::Digits)
+		SGuid(const std::string& _guidStr, const EGuidFormats _format = EGuidFormats::Digits)
 			: A(0)
 			, B(0)
 			, C(0)
@@ -145,7 +145,7 @@ namespace Protostar
 			return (A | B | C | D) != 0;
 		}
 
-		std::string ToString(const EGuidFormats& _format = EGuidFormats::Digits) const 
+		std::string ToString(const EGuidFormats _format = EGuidFormats::Digits) const 
 		{
 			if (!IsValid())
 			{
@@ -268,12 +268,12 @@ namespace Protostar
 }
 namespace std
 {
-	template<> struct std::hash<Protostar::SGuid>
+	template<> struct hash<Protostar::SGuid>
 	{
-		std::size_t operator()(Protostar::SGuid _guid) const
+		size_t operator()(Protostar::SGuid _guid) const
 		{
 			const u64* guidPtr = reinterpret_cast<const u64*>(&_guid);
-			std::hash<u64> hash;
+			hash<u64> hash;
 			return hash(guidPtr[0]) ^ hash(guidPtr[1]);
 		}
 	};

@@ -52,7 +52,7 @@ namespace Protostar
 		/**
 		* registers a new handle with a guid which will get stored to make broadcasting over different handles possible. This will overwrite a handle with the same guid if it already exists.
 		* @param _handleGuid The guid of the handle to call it
-		* @param _outputHandle The actual outputhandle where the log system will log to
+		* @param _outputHandle The actual output handle where the log system will log to
 		*/
 		static void RegisterHandle(const SGuid& _handleGuid, const SConsoleInfo& _outputInfo);
 
@@ -92,7 +92,7 @@ namespace Protostar
 		* @param _handleGuidAmount The amount of guids the handles to log to
 		* @param _logString The string to log
 		*/
-		static void Log(SGuid* _handleGuids, const size_t& _handleGuidAmount, const std::string& _logString);
+		static void Log(SGuid* _handleGuids, const size_t _handleGuidAmount, const std::string& _logString);
 
 #if defined(_DEBUG)
 		/**
@@ -107,7 +107,7 @@ namespace Protostar
 		* @param _handleGuids The guids of the handles to clear
 		* @param _handleGuidAmount The amount of guids the handles to clear
 		*/
-		static void ClearLog(SGuid* _handleGuids, const size_t& _handleGuidAmount);
+		static void ClearLog(SGuid* _handleGuids, const size_t _handleGuidAmount);
 	private:
 		CLog() = default;
 

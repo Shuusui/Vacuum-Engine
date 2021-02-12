@@ -1,7 +1,9 @@
 #pragma once
-#include "GlobalDefs.h"
 #include <utility>
 #include <vector>
+#include <algorithm>
+
+#include "GlobalDefs.h"
 #include "SharedEnums.h"
 #include "DirectXMath.h"
 #include "d3d12.h"
@@ -10,6 +12,62 @@
 
 namespace Protostar
 {
+	namespace JsonKeys
+	{
+		constexpr const char* JSONPSOINFOINPUTELEDESCS					="input_element_descs";
+		constexpr const char* JSONPSOINFOROOTSIGNATUREGUID				="root_signature_guid";
+		constexpr const char* JSONPSOINFOVTXSHADERGUID					="vtx_shader_guid";
+		constexpr const char* JSONPSOINFOPIXELSHADERGUID				="pixel_shader_guid";
+		constexpr const char* JSONPSOINFONODEMASK						="node_mask";
+		constexpr const char* JSONPSOINFOBLENDDESC						="blend_desc";
+		constexpr const char* JSONPSOINFORASTERIZERDESC					="rasterizer_desc";
+		constexpr const char* JSONPSOINFODEPTHSTENCILDESC				="depth_stencil_desc";
+		constexpr const char* JSONINPUTELEDESCSEMNAME					="semantic_name";
+		constexpr const char* JSONINPUTELEDESCSEMIDX					="semantic_index";
+		constexpr const char* JSONINPUTELEDESCFORMAT					="format";
+		constexpr const char* JSONINPUTELEDESCINPUTSLOT					="input_slot";
+		constexpr const char* JSONINPUTELEDESCALIGNEDBYTEOFFSET			="aligned_byte_offset";
+		constexpr const char* JSONINPUTELEDESCINPUTCLASSIFICATION		="input_classification";
+		constexpr const char* JSONINPUTELEDESCINSTANCEDATASTEPRATE		="instace_data_step_rate";
+		constexpr const char* JSONBLENDDESCALPHATOCOVENABLE				="alpha_to_cov_enable";
+		constexpr const char* JSONBLENDDESCINDEPENDENTBLENDENABLE		="independent_blend_enable";
+		constexpr const char* JSONBLENDDESCRENDERTARGETBLENDDESCS		="render_target_blend_descs";
+		constexpr const char* JSONRTBLENDDESCBLENDENABLE				="blend_enable";
+		constexpr const char* JSONRTBLENDDESCLOGICOPENABLE				="logic_op_enable";
+		constexpr const char* JSONRTBLENDDESCSRCBLEND					="src_blend";
+		constexpr const char* JSONRTBLENDDESCDESTBLEND					="dest_blend";
+		constexpr const char* JSONRTBLENDDESCBLENDOP					="blend_op";
+		constexpr const char* JSONRTBLENDDESCSRCBLENDALPHA				="src_blend_alpha";
+		constexpr const char* JSONRTBLENDDESCDESTBLENDALPHA				="dest_blend_alpha";
+		constexpr const char* JSONRTBLENDDESCBLENDOPALPHA				="blend_op_alpha";
+		constexpr const char* JSONRTBLENDDESCLOGICOP					="logic_op";
+		constexpr const char* JSONRTBLENDDESCRTWRITEMASK				="render_target_write_mask";
+		constexpr const char* JSONRASTERIZERDESCFILLMODE				="fill_mode";
+		constexpr const char* JSONRASTERIZERDESCCULLMODE				="cull_mode";
+		constexpr const char* JSONRASTERIZERDESCFRONTCOUNTERCLOCKWISE	="front_counter_clockwise";
+		constexpr const char* JSONRASTERIZERDESCDEPTHBIAS				="depth_bias";
+		constexpr const char* JSONRASTERIZERDESCDEPTHBIASCLAMP			="depth_bias_clamp";
+		constexpr const char* JSONRASTERIZERDESCSLOPESCALEDEPTHBIAS		="slope_scale_depth_bias";
+		constexpr const char* JSONRASTERIZERDESCDEPTHCLIPENABLE			="depth_clip_enable";
+		constexpr const char* JSONRASTERIZERDESCMULTISAMPLEENABLE		="multisample_enable";
+		constexpr const char* JSONRASTERIZERDESCANTIALIASEDLINEENABLE	="antialiased_line_enable";
+		constexpr const char* JSONRASTERIZERDESCFORCEDSAMPLECOUNT		="forced_sample_count";
+		constexpr const char* JSONRASTERIZERDESCCONSERVATIVERASTER		="conservative_raster";
+		constexpr const char* JSONDEPTHSTENCILDESCDEPTHENABLE			="depth_enable";
+		constexpr const char* JSONDEPTHSTENCILDESCDEPTHWRITEMASK		="depth_write_mask";
+		constexpr const char* JSONDEPTHSTENCILDESCDEPTHFUNC				="depth_func";
+		constexpr const char* JSONDEPTHSTENCILDESCSTENCILENABLE			="stencil_enable";
+		constexpr const char* JSONDEPTHSTENCILDESCSTENCILREADMASK		="stencil_read_mask";
+		constexpr const char* JSONDEPTHSTENCILDESCSTENCILWRITEMASK		="stencil_write_mask";
+		constexpr const char* JSONDEPTHSTENCILDESCFRONTFACE				="front_face";
+		constexpr const char* JSONDEPTHSTENCILDESCBACKFACE				="back_face";
+		constexpr const char* JSONDEPTHSTENCILOPDESCSTENCILFAILOP		="stencil_fail_op";
+		constexpr const char* JSONDEPTHSTENCILOPDESCSTENCILDEPTHFAILOP	="stencil_depth_fail_op";
+		constexpr const char* JSONDEPTHSTENCILOPDESCSTENCILPASSOP		="stencil_Pass_op";
+		constexpr const char* JSONDEPTHSTENCILOPDESCSTENCILFUNC			="stencil_func";
+	}
+
+
 	struct SPSOInfo
 	{
 		std::vector<D3D12_INPUT_ELEMENT_DESC> InputElementDescs;
@@ -22,14 +80,6 @@ namespace Protostar
 		D3D12_DEPTH_STENCIL_DESC DepthStencilDesc;
 		ID3D12PipelineState** PipelineState;
 
-#define JSONPSOINFOINPUTELEDESCS					"input_element_descs"
-#define JSONPSOINFOROOTSIGNATUREGUID				"root_signature_guid"	
-#define JSONPSOINFOVTXSHADERGUID					"vtx_shader_guid"
-#define JSONPSOINFOPIXELSHADERGUID					"pixel_shader_guid"
-#define JSONPSOINFONODEMASK							"node_mask"
-#define JSONPSOINFOBLENDDESC						"blend_desc"
-#define JSONPSOINFORASTERIZERDESC					"rasterizer_desc"
-#define JSONPSOINFODEPTHSTENCILDESC					"depth_stencil_desc"
 
 		Json ToJson() const
 		{
@@ -38,6 +88,8 @@ namespace Protostar
 			{
 				inputDescsJson.push_back(InputElementDescToJson(inputElemendDesc));
 			}
+
+			using namespace JsonKeys;
 
 			return Json
 			{
@@ -54,6 +106,7 @@ namespace Protostar
 
 		void FromJson(const Json& _json)
 		{
+			using namespace JsonKeys;
 			for (const Json& json : _json[JSONPSOINFOINPUTELEDESCS].get<std::vector<Json>>())
 			{
 				InputElementDescs.push_back(InputElementDescFromJson(json));
@@ -67,23 +120,10 @@ namespace Protostar
 			DepthStencilDesc = DepthStencilDescFromJson(_json[JSONPSOINFODEPTHSTENCILDESC].get<Json>());
 		}
 
-#undef JSONPSOINFOINPUTELEDESCS	
-#undef JSONPSOINFOROOTSIGNATUREGUID	
-#undef JSONPSOINFOVTXSHADERGUID	
-#undef JSONPSOINFOPIXELSHADERGUID	
-#undef JSONPSOINFONODEMASK			
-
 	private:
-#define JSONINPUTELEDESCSEMNAME						"semantic_name"
-#define JSONINPUTELEDESCSEMIDX						"semantic_index"
-#define JSONINPUTELEDESCFORMAT						"format"
-#define JSONINPUTELEDESCINPUTSLOT					"input_slot"
-#define JSONINPUTELEDESCALIGNEDBYTEOFFSET			"aligned_byte_offset"
-#define JSONINPUTELEDESCINPUTCLASSIFICATION			"input_classification"
-#define JSONINPUTELEDESCINSTANCEDATASTEPRATE		"instace_data_step_rate"
-
 		Json InputElementDescToJson(const D3D12_INPUT_ELEMENT_DESC& _inputDesc) const
 		{
+			using namespace JsonKeys;
 			return Json
 			{
 				{JSONINPUTELEDESCSEMNAME, _inputDesc.SemanticName}, 
@@ -98,9 +138,13 @@ namespace Protostar
 
 		D3D12_INPUT_ELEMENT_DESC InputElementDescFromJson(const Json& _json) const
 		{
+			using namespace JsonKeys;
+			std::string descName = _json[JSONINPUTELEDESCSEMNAME].get<std::string>();
+			char* tempStr = new char[descName.size()];
+			strcpy_s(tempStr, descName.size(), descName.c_str());
 			return D3D12_INPUT_ELEMENT_DESC
 			{
-				_json[JSONINPUTELEDESCSEMNAME].get<std::string>().c_str(),
+				tempStr,
 				_json[JSONINPUTELEDESCSEMIDX].get<u32>(),
 				(DXGI_FORMAT)_json[JSONINPUTELEDESCFORMAT].get<u32>(),
 				_json[JSONINPUTELEDESCINPUTSLOT].get<u32>(),
@@ -110,9 +154,7 @@ namespace Protostar
 			};
 		}
 
-#define JSONBLENDDESCALPHATOCOVENABLE				"alpha_to_cov_enable"
-#define JSONBLENDDESCINDEPENDENTBLENDENABLE			"independent_blend_enable"
-#define JSONBLENDDESCRENDERTARGETBLENDDESCS			"render_target_blend_descs"
+
 
 		Json BlendDescToJson(const D3D12_BLEND_DESC& _blendDesc) const
 		{
@@ -127,7 +169,7 @@ namespace Protostar
 				RTBlendDescToJson(_blendDesc.RenderTarget[6]),
 				RTBlendDescToJson(_blendDesc.RenderTarget[7])
 			};
-
+			using namespace JsonKeys;
 			return Json 
 			{
 				{JSONBLENDDESCALPHATOCOVENABLE, _blendDesc.AlphaToCoverageEnable}, 
@@ -138,6 +180,7 @@ namespace Protostar
 
 		D3D12_BLEND_DESC BlendDescFromJson(const Json& _json) const
 		{
+			using namespace JsonKeys;
 			D3D12_BLEND_DESC blendDesc = {};
 			for (s32 i = 0; i < _json[JSONBLENDDESCRENDERTARGETBLENDDESCS].get<std::vector<Json>>().size(); ++i)
 			{
@@ -150,19 +193,11 @@ namespace Protostar
 			return blendDesc;
 		}
 
-#define JSONRTBLENDDESCBLENDENABLE					"blend_enable"
-#define JSONRTBLENDDESCLOGICOPENABLE				"logic_op_enable"
-#define JSONRTBLENDDESCSRCBLEND						"src_blend"
-#define JSONRTBLENDDESCDESTBLEND					"dest_blend"
-#define JSONRTBLENDDESCBLENDOP						"blend_op"
-#define JSONRTBLENDDESCSRCBLENDALPHA				"src_blend_alpha"
-#define JSONRTBLENDDESCDESTBLENDALPHA				"dest_blend_alpha"
-#define JSONRTBLENDDESCBLENDOPALPHA					"blend_op_alpha"
-#define JSONRTBLENDDESCLOGICOP						"logic_op"
-#define JSONRTBLENDDESCRTWRITEMASK					"render_target_write_mask"
+
 
 		Json RTBlendDescToJson(const D3D12_RENDER_TARGET_BLEND_DESC& _rtBlendDesc) const
 		{
+			using namespace JsonKeys;
 			return Json
 			{
 				{JSONRTBLENDDESCBLENDENABLE, _rtBlendDesc.BlendEnable},
@@ -179,6 +214,7 @@ namespace Protostar
 
 		D3D12_RENDER_TARGET_BLEND_DESC RTBlendDescFromJson(const Json& _json) const
 		{
+			using namespace JsonKeys;
 			return D3D12_RENDER_TARGET_BLEND_DESC
 			{
 				_json[JSONRTBLENDDESCBLENDENABLE].get<bool>(),
@@ -194,20 +230,11 @@ namespace Protostar
 			};
 		}
 
-#define JSONRASTERIZERDESCFILLMODE					"fill_mode"
-#define JSONRASTERIZERDESCCULLMODE					"cull_mode"
-#define JSONRASTERIZERDESCFRONTCOUNTERCLOCKWISE		"front_counter_clockwise"
-#define JSONRASTERIZERDESCDEPTHBIAS					"depth_bias"
-#define JSONRASTERIZERDESCDEPTHBIASCLAMP			"depth_bias_clamp"
-#define JSONRASTERIZERDESCSLOPESCALEDEPTHBIAS		"slope_scale_depth_bias"
-#define JSONRASTERIZERDESCDEPTHCLIPENABLE			"depth_clip_enable"
-#define JSONRASTERIZERDESCMULTISAMPLEENABLE			"multisample_enable"
-#define JSONRASTERIZERDESCANTIALIASEDLINEENABLE		"antialiased_line_enable"
-#define JSONRASTERIZERDESCFORCEDSAMPLECOUNT			"forced_sample_count"
-#define JSONRASTERIZERDESCCONSERVATIVERASTER		"conservative_raster"
+
 
 		Json RasterizerDescToJson(const D3D12_RASTERIZER_DESC& _rasterizerDesc) const
 		{
+			using namespace JsonKeys;
 			return Json
 			{
 				{JSONRASTERIZERDESCFILLMODE, _rasterizerDesc.FillMode},
@@ -226,6 +253,7 @@ namespace Protostar
 
 		D3D12_RASTERIZER_DESC RasterizerDescFromJson(const Json& _json) const
 		{
+			using namespace JsonKeys;
 			return D3D12_RASTERIZER_DESC
 			{
 				(D3D12_FILL_MODE)_json[JSONRASTERIZERDESCFILLMODE].get<u32>(),
@@ -242,17 +270,11 @@ namespace Protostar
 			};
 		}
 
-#define JSONDEPTHSTENCILDESCDEPTHENABLE				"depth_enable"
-#define JSONDEPTHSTENCILDESCDEPTHWRITEMASK			"depth_write_mask"
-#define JSONDEPTHSTENCILDESCDEPTHFUNC				"depth_func"
-#define JSONDEPTHSTENCILDESCSTENCILENABLE			"stencil_enable"
-#define JSONDEPTHSTENCILDESCSTENCILREADMASK			"stencil_read_mask"
-#define JSONDEPTHSTENCILDESCSTENCILWRITEMASK		"stencil_write_mask"
-#define JSONDEPTHSTENCILDESCFRONTFACE				"front_face"
-#define JSONDEPTHSTENCILDESCBACKFACE				"back_face"
+
 
 		Json DepthStencilDescToJson(const D3D12_DEPTH_STENCIL_DESC& _depthStencilDesc) const
 		{
+			using namespace JsonKeys;
 			return Json
 			{
 				{JSONDEPTHSTENCILDESCDEPTHENABLE, _depthStencilDesc.DepthEnable},
@@ -268,6 +290,7 @@ namespace Protostar
 
 		D3D12_DEPTH_STENCIL_DESC DepthStencilDescFromJson(const Json& _json) const 
 		{
+			using namespace JsonKeys;
 			return D3D12_DEPTH_STENCIL_DESC
 			{
 				_json[JSONDEPTHSTENCILDESCDEPTHENABLE].get<bool>(),
@@ -281,13 +304,11 @@ namespace Protostar
 			};
 		}
 
-#define JSONDEPTHSTENCILOPDESCSTENCILFAILOP			"stencil_fail_op"
-#define JSONDEPTHSTENCILOPDESCSTENCILDEPTHFAILOP	"stencil_depth_fail_op"
-#define JSONDEPTHSTENCILOPDESCSTENCILPASSOP			"stencil_Pass_op"
-#define JSONDEPTHSTENCILOPDESCSTENCILFUNC			"stencil_func"
+
 
 		Json DepthStencilOpDescToJson(const D3D12_DEPTH_STENCILOP_DESC& _depthStencilOpDesc) const
 		{
+			using namespace JsonKeys;
 			return Json
 			{
 				{JSONDEPTHSTENCILOPDESCSTENCILFAILOP, _depthStencilOpDesc.StencilFailOp},
@@ -299,6 +320,7 @@ namespace Protostar
 
 		D3D12_DEPTH_STENCILOP_DESC DepthStencilOpDescFromJson(const Json& _json) const
 		{
+			using namespace JsonKeys;
 			return D3D12_DEPTH_STENCILOP_DESC
 			{
 				(D3D12_STENCIL_OP)_json[JSONDEPTHSTENCILOPDESCSTENCILFAILOP].get<u32>(),
@@ -307,52 +329,7 @@ namespace Protostar
 				(D3D12_COMPARISON_FUNC)_json[JSONDEPTHSTENCILOPDESCSTENCILFUNC].get<u32>()
 			};
 		}
-	};
-
-
-#undef JSONINPUTELEDESCSEMNAME 
-#undef JSONINPUTELEDESCSEMIDX 
-#undef JSONINPUTELEDESCFORMAT 
-#undef JSONINPUTELEDESCINPUTSLOT 
-#undef JSONINPUTELEDESCALIGNEDBYTEOFFSET 
-#undef JSONINPUTELEDESCINPUTCLASSIFICATION 
-#undef JSONINPUTELEDESCINSTANCEDATASTEPRATE 
-#undef JSONBLENDDESCALPHATOCOVENABLE			
-#undef JSONBLENDDESCINDEPENDENTBLENDENABLE		
-#undef JSONBLENDDESCRENDERTARGETBLENDDESCS		
-#undef JSONRTBLENDDESCBLENDENABLE				
-#undef JSONRTBLENDDESCLOGICOPENABLE			
-#undef JSONRTBLENDDESCSRCBLEND					
-#undef JSONRTBLENDDESCDESTBLEND				
-#undef JSONRTBLENDDESCBLENDOP					
-#undef JSONRTBLENDDESCSRCBLENDALPHA			
-#undef JSONRTBLENDDESCDESTBLENDALPHA			
-#undef JSONRTBLENDDESCBLENDOPALPHA				
-#undef JSONRTBLENDDESCLOGICOP					
-#undef JSONRTBLENDDESCRTWRITEMASK				
-#undef JSONRASTERIZERDESCFILLMODE				
-#undef JSONRASTERIZERDESCCULLMODE				
-#undef JSONRASTERIZERDESCFRONTCOUNTERCLOCKWISE	
-#undef JSONRASTERIZERDESCDEPTHBIAS				
-#undef JSONRASTERIZERDESCDEPTHBIASCLAMP		
-#undef JSONRASTERIZERDESCSLOPESCALEDEPTHBIAS	
-#undef JSONRASTERIZERDESCDEPTHCLIPENABLE		
-#undef JSONRASTERIZERDESCMULTISAMPLEENABLE		
-#undef JSONRASTERIZERDESCANTIALIASEDLINEENABLE	
-#undef JSONRASTERIZERDESCFORCEDSAMPLECOUNT		
-#undef JSONRASTERIZERDESCCONSERVATIVERASTER	
-#undef JSONDEPTHSTENCILDESCDEPTHENABLE			
-#undef JSONDEPTHSTENCILDESCDEPTHWRITEMASK		
-#undef JSONDEPTHSTENCILDESCDEPTHFUNC			
-#undef JSONDEPTHSTENCILDESCSTENCILENABLE		
-#undef JSONDEPTHSTENCILDESCSTENCILREADMASK		
-#undef JSONDEPTHSTENCILDESCSTENCILWRITEMASK	
-#undef JSONDEPTHSTENCILDESCFRONTFACE			
-#undef JSONDEPTHSTENCILDESCBACKFACE			
-#undef JSONDEPTHSTENCILOPDESCSTENCILFAILOP		
-#undef JSONDEPTHSTENCILOPDESCSTENCILDEPTHFAILOP
-#undef JSONDEPTHSTENCILOPDESCSTENCILPASSOP		
-#undef JSONDEPTHSTENCILOPDESCSTENCILFUNC		
+	};	
 
 	struct SRendererCreationInfo
 	{
@@ -361,6 +338,46 @@ namespace Protostar
 		u32 Height;
 		bool bVSync;
 		void* WndHandle;
+
+		SRendererCreationInfo()
+			:RenderApi(ERenderAPIs::DX12)
+			,Width(-1)
+			,Height(-1)
+			,bVSync(false)
+			,WndHandle(nullptr)
+		{
+		}
+
+		SRendererCreationInfo(ERenderAPIs _renderApi, u32 _width, u32 _height, bool _bVsync, void* _wndHandle)
+			:RenderApi(_renderApi)
+			,Width(_width)
+			,Height(_height)
+			,bVSync(_bVsync)
+			,WndHandle(_wndHandle)
+		{
+		}
+
+		SRendererCreationInfo(const SRendererCreationInfo&) = default;
+
+		SRendererCreationInfo(SRendererCreationInfo&& _other) noexcept
+			:RenderApi(std::move(_other.RenderApi))
+			,Width(std::move(_other.Width))
+			,Height(std::move(_other.Height))
+			,bVSync(std::move(_other.bVSync))
+			,WndHandle(std::move(_other.WndHandle))
+		{
+			_other = SRendererCreationInfo();
+		}
+
+		SRendererCreationInfo& operator=(const SRendererCreationInfo& _other)
+		{
+			RenderApi = _other.RenderApi;
+			Width = _other.Width;
+			Height = _other.Height;
+			bVSync = _other.bVSync;
+			WndHandle = _other.WndHandle;
+			return *this;
+		}
 	};
 
 	struct SVertex
@@ -372,19 +389,17 @@ namespace Protostar
 
 	struct SMesh
 	{
-		SMesh()
-			: Vertices({})
-			, Indices({})
-		{
+		SMesh() = default;
 
+		SMesh(const SMesh& _other) = default;
+
+		SMesh(SMesh&& _other) noexcept
+			:Vertices(std::move(_other.Vertices))
+			,Indices(std::move(_other.Indices))
+		{
 		}
 
-		SMesh(const SMesh& _other)
-			: Vertices(_other.Vertices)
-			, Indices(_other.Indices)
-		{
-
-		}
+		SMesh& operator=(const SMesh&) = default;
 
 		std::vector<SVertex> Vertices;
 		std::vector<u32> Indices;
@@ -392,15 +407,15 @@ namespace Protostar
 
 	struct SWindowDimParams
 	{
-		SWindowDimParams() = default;
-
-		SWindowDimParams(const SWindowDimParams& _other)
-			: Width(_other.Width)
-			, Height(_other.Height)
-			, LeftTopCornerX(_other.LeftTopCornerX)
-			, LeftTopCornerY(_other.LeftTopCornerY)
+		SWindowDimParams()
+			:Width(-1)
+			,Height(-1)
+			,LeftTopCornerX(-1)
+			,LeftTopCornerY(-1)
 		{
-		}
+		};
+
+		SWindowDimParams(const SWindowDimParams& _other) = default;
 
 		SWindowDimParams(SWindowDimParams&& _other) noexcept
 			: Width(std::move(_other.Width))
@@ -408,14 +423,16 @@ namespace Protostar
 			, LeftTopCornerX(std::move(_other.LeftTopCornerX))
 			, LeftTopCornerY(std::move(_other.LeftTopCornerY))
 		{
+			_other = SWindowDimParams();
 		}
 
-		void operator=(const SWindowDimParams& _other)
+		SWindowDimParams& operator=(const SWindowDimParams& _other)
 		{
 			Width = _other.Width;
 			Height = _other.Height;
 			LeftTopCornerX = _other.LeftTopCornerX;
 			LeftTopCornerY = _other.LeftTopCornerY;
+			return *this;
 		}
 
 		s64 Width;

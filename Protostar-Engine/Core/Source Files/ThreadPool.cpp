@@ -25,7 +25,7 @@ namespace Protostar
 		}
 	}
 
-	CThreadPool::CThreadPool(const s32& _threadAmount)
+	CThreadPool::CThreadPool(const s32 _threadAmount)
 		:m_stopThreads(false)
 	{
 		m_threads = std::vector<CThread*>(_threadAmount);

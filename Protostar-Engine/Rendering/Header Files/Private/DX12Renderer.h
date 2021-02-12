@@ -13,8 +13,8 @@ namespace Protostar
 	{
 		ID3D12Resource* IndexBuffer;
 		ID3D12Resource* VertexBuffer;
-		s32 IndexBufferSize;
-		s32 VertexBufferSize;
+		u32 IndexBufferSize;
+		u32 VertexBufferSize;
 	};
 
 	struct SFrameContext
@@ -93,7 +93,7 @@ namespace Protostar
 		static const u32 s_frameCount = 3;
 
 	public:
-		DX12Renderer(const u32& _width, const u32& _height, const HWND& _hwnd, bool& _bVSync)
+		DX12Renderer(const u32 _width, const u32 _height, const HWND& _hwnd, bool& _bVSync)
 			:IRenderer(_width, _height, _hwnd, _bVSync)
 			, m_hwnd(HWND(_hwnd))
 			, m_swapChainWaitableObject(nullptr)
@@ -118,6 +118,9 @@ namespace Protostar
 			, m_frameIndex(0)
 			, m_fenceValue(0)
 			, m_windowSize(DirectX::XMFLOAT2(0, 0))
+			, m_vpVertexShader(nullptr)
+			, m_vpPixelShader(nullptr)
+			, m_vpPipelineState(nullptr)
 			, m_currentVertexBufferSize(0)
 			, m_currentIndexBufferSize(0)
 			, m_currentVtxBufferOffset(0)
@@ -134,7 +137,7 @@ namespace Protostar
 		}
 
 		virtual void OnCreate() override;
-		virtual void CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID) override;
+		virtual void CreateFontsTexture(unsigned char* _pixels, const s32 _width, const s32 _height, u64& _texID) override;
 		virtual void UpdateGuiDrawData(SGuiDrawData* _drawData);
 		virtual void AddDrawData(SDrawData* _drawData) override;
 		virtual void OnInit() override;
@@ -160,7 +163,7 @@ namespace Protostar
 		void InvalidateObjects();
 		void CreateRenderTarget();
 		void CleanupRenderTarget();
-		void ResizeSwapChain(HWND _hwnd, const u32& _width, const u32& _height);
+		void ResizeSwapChain(HWND _hwnd, const u32 _width, const u32 _height);
 
 		HWND m_hwnd;
 		HANDLE m_swapChainWaitableObject;

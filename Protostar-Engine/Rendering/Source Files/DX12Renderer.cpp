@@ -100,6 +100,7 @@ void Protostar::DX12Renderer::OnUpdate()
 			return;
 		}
 	}
+
 	if (frameResource->IndexBuffer == nullptr || frameResource->IndexBufferSize < m_totalIdxSize)
 	{
 		SafeRelease(frameResource->IndexBuffer);
@@ -153,19 +154,19 @@ void Protostar::DX12Renderer::OnUpdate()
 
 	for (const SGuiDrawList& drawList : m_guiDrawData->DrawLists)
 	{
-		m_currentVertexBufferSize += drawList.VertexBuffer.size() * vtx2DStride;
-		m_currentIndexBufferSize += drawList.IndexBuffer.size() * idxStride;
+		m_currentVertexBufferSize += u32(drawList.VertexBuffer.size()) * vtx2DStride;
+		m_currentIndexBufferSize += u32(drawList.IndexBuffer.size()) * idxStride;
 
 		memcpy(vtxDestination, drawList.VertexBuffer.data(), drawList.VertexBuffer.size() * vtx2DStride);
 		memcpy(idxDestination, drawList.IndexBuffer.data(), drawList.IndexBuffer.size() * idxStride);
 		vtxDestination += drawList.VertexBuffer.size();
 		idxDestination += drawList.IndexBuffer.size();
 
-		currentVtxOffset += drawList.VertexBuffer.size() * vtx2DStride;
-		currentIdxOffset += drawList.IndexBuffer.size() * idxStride;
+		currentVtxOffset += u32(drawList.VertexBuffer.size()) * vtx2DStride;
+		currentIdxOffset += u32(drawList.IndexBuffer.size()) * idxStride;
 
-		m_currentVertexBufferSize += drawList.VertexBuffer.size();
-		m_currentIndexBufferSize += drawList.IndexBuffer.size();
+		m_currentVertexBufferSize += u32(drawList.VertexBuffer.size());
+		m_currentIndexBufferSize += u32(drawList.IndexBuffer.size());
 	}
 
 	SVertex* vtx3DDestination = (SVertex*)vtxDestination;
@@ -213,11 +214,11 @@ void Protostar::DX12Renderer::OnUpdate()
 			}
 		}
 
-		vtxOffset += drawList.VertexBuffer.size();
-		idxOffset += drawList.IndexBuffer.size();
+		vtxOffset += u32(drawList.VertexBuffer.size());
+		idxOffset += u32(drawList.IndexBuffer.size());
 
-		m_currentVtxBufferOffset += drawList.VertexBuffer.size() * sizeof(S2DVert);
-		m_currentIdxBufferOffset += drawList.IndexBuffer.size() * sizeof(u16);
+		m_currentVtxBufferOffset += u32(drawList.VertexBuffer.size()) * sizeof(S2DVert);
+		m_currentIdxBufferOffset += u32(drawList.IndexBuffer.size()) * sizeof(u16);
 	}
 
 	for (SDrawData* drawData : m_drawDatas)
@@ -235,8 +236,8 @@ void Protostar::DX12Renderer::OnUpdate()
 				m_commandList->DrawIndexedInstanced(drawCmd.ElemCount, 1, 0, 0, 0);
 			}
 
-			m_currentVtxBufferOffset += drawList.VertexBuffer.size();
-			m_currentIdxBufferOffset += drawList.IndexBuffer.size();
+			m_currentVtxBufferOffset += u32(drawList.VertexBuffer.size());
+			m_currentIdxBufferOffset += u32(drawList.IndexBuffer.size());
 		}
 		delete drawData;
 		drawData = nullptr;
@@ -750,6 +751,7 @@ void Protostar::DX12Renderer::LoadVPAssets()
 		psoDesc.InputLayout = { inputElementDescs, 3 };
 		psoDesc.pRootSignature = m_rootSignature;
 		psoDesc.NodeMask = 1;
+		//TODO: to make the warning disappear I have to check the shaders properly. This might be done in another branch in the future and is not related to this branch.
 		psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vpVertexShader);
 		psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_vpPixelShader);
 		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
@@ -838,7 +840,7 @@ void Protostar::DX12Renderer::GetHandwareAdapter(IDXGIFactory1* _factory, Micros
 	_adapter = tempHardwareAdapter.Detach();
 }
 
-void Protostar::DX12Renderer::CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID)
+void Protostar::DX12Renderer::CreateFontsTexture(unsigned char* _pixels, const s32 _width, const s32 _height, u64& _texID)
 {
 	// Upload texture to graphics system
 	{
@@ -893,6 +895,7 @@ void Protostar::DX12Renderer::CreateFontsTexture(unsigned char* _pixels, const s
 		D3D12_RANGE range = { 0, uploadSize };
 		hr = uploadBuffer->Map(0, &range, &mapped);
 		THROW_IF_FAILED(hr);
+		//TODO This functions needs to get done in a more consistent way and therefore the warning here might just disappear
 		for (int y = 0; y < _height; y++)
 			memcpy((void*)((uintptr_t)mapped + y * uploadPitch), _pixels + y * _width * 4, _width * 4);
 		uploadBuffer->Unmap(0, &range);
@@ -1089,10 +1092,10 @@ void Protostar::DX12Renderer::SetupVPRenderState(SDrawData* _drawData, SFrameRes
 		float b = _drawData->DisplayPos.y + _drawData->DisplaySize.y;
 		float mvp[4][4] =
 		{
-			{1,		0.0f,			0.0f,			0.0f},
-			{0.0f,				1,		0.0f,			0.0f},
-			{0.0f,				0.0f,			1,			0.0f},
-			{0,		0,	0,			1.0f},
+			{1.0f,	0.0f,	0.0f,	0.0f},
+			{0.0f,	1.0f,	0.0f,	0.0f},
+			{0.0f,	0.0f,	1.0f,	0.0f},
+			{0.0f,	0.0f,	0.0f,	1.0f},
 		};
 		memcpy(&vertConstBuffer.MVP, mvp, sizeof(mvp));
 	}
@@ -1107,18 +1110,18 @@ void Protostar::DX12Renderer::SetupVPRenderState(SDrawData* _drawData, SFrameRes
 
 	m_commandList->RSSetViewports(1, &viewPort); //this needs more viewports since I want to make my editor viewport work here
 
-	u32 stride = sizeof(SVertex);
+	UINT stride = sizeof(SVertex);
 
 	D3D12_VERTEX_BUFFER_VIEW vtxBufferView = {};
 	vtxBufferView.BufferLocation = _frameResource->VertexBuffer->GetGPUVirtualAddress() + m_currentVtxBufferOffset;
-	vtxBufferView.SizeInBytes = _drawData->DrawLists[0].VertexBuffer.size() * stride;
+	vtxBufferView.SizeInBytes = UINT(_drawData->DrawLists[0].VertexBuffer.size()) * stride;
 	vtxBufferView.StrideInBytes = stride;
 
 	m_commandList->IASetVertexBuffers(0, 1, &vtxBufferView); //This needs to get reworked to make the editor viewport work
 
 	D3D12_INDEX_BUFFER_VIEW idxBufferView = {};
 	idxBufferView.BufferLocation = _frameResource->IndexBuffer->GetGPUVirtualAddress() + m_currentIdxBufferOffset;
-	idxBufferView.SizeInBytes = _drawData->DrawLists[0].IndexBuffer.size() * sizeof(u16);
+	idxBufferView.SizeInBytes = UINT(_drawData->DrawLists[0].IndexBuffer.size()) * sizeof(u16);
 	idxBufferView.Format = DXGI_FORMAT_R16_UINT;
 
 	m_commandList->IASetIndexBuffer(&idxBufferView);
@@ -1172,7 +1175,7 @@ void Protostar::DX12Renderer::CleanupRenderTarget()
 	}
 }
 
-void Protostar::DX12Renderer::ResizeSwapChain(HWND _hwnd, const u32& _width, const u32& _height)
+void Protostar::DX12Renderer::ResizeSwapChain(HWND _hwnd, const u32 _width, const u32 _height)
 {
 	DXGI_SWAP_CHAIN_DESC1 desc = {};
 	m_swapChain->GetDesc1(&desc);

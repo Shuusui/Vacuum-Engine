@@ -38,14 +38,9 @@ namespace Protostar
 			Path = _json[JSONMESHPATH].get<std::string>();
 		}
 
-		SModel(const SModel& _other)
-			:Guid(_other.Guid)
-			,Name(_other.Name)
-			,Path(_other.Path)
-			,MeshData(_other.MeshData)
-		{
+		SModel(const SModel&) = default;
 
-		}
+		SModel& operator=(const SModel&) = default;
 
 		Json ToJson() const
 		{

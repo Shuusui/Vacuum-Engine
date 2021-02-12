@@ -106,7 +106,7 @@ bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
 		return false;
 	}
 
-	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)s_app->m_mainWindowDim.Width, (u32)s_app->m_mainWindowDim.Height, s_app->m_bLastVSyncState, CMainWindow::GetWindowHandle()->GetHwnd() });
+	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)s_app->m_mainWindowDim.Width, (u32)s_app->m_mainWindowDim.Height, s_app->m_bLastVSyncState, reinterpret_cast<void*>(CMainWindow::GetWindowHandle()->GetHwnd()) });
 
 	s_app->LoadProjects();
 	if (projectGuid.IsValid())
