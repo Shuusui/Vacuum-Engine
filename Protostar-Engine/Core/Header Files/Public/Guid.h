@@ -1,6 +1,5 @@
 #pragma once
 
-
 #pragma region Includes
 
 #pragma region Internal Includes
@@ -14,7 +13,6 @@
 #pragma endregion External Includes
 
 #pragma endregion Includes
-
 
 
 namespace Protostar
