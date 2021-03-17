@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseComponent.h"
 #include "Guid.h"
+#include "GlobalMacros.h"
 
 #define JSONMESHCOMPGUID "guid"
 #define JSONMESHCOMPMODELGUID "model_guid"
@@ -56,10 +57,12 @@ namespace Protostar
 		}
 
 	private:
+		PROPERTY()
 		SGuid m_guid;
+		PROPERTY()
 		SGuid m_modelGuid;
 	};
 }
 
 #undef JSONMESHCOMPGUID
-#undef JSONMESHCOMPMODELGUID
+#undef JSONMESHCOMPMODELGUID    

@@ -3,16 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using ProtostarPrebuildTool.Generator;
 
 namespace ProtostarPrebuildTool
 {
-    public class StaticallyGeneratedFiles
+    public static class StaticallyGeneratedFiles
     {
-        static public void GenerateFiles()
+        private static List<FileGenerator> FileGenerators;
+
+        static StaticallyGeneratedFiles()
         {
-            HeaderFileGenerator macroHeaderFileGenerator = new HeaderFileGenerator(@"E:\Repositories\Protostar-Engine\intermediate\PrebuildMacros.generated.h", SharedDefinitions.GetAllMacroDefinitions(), 3);
-            macroHeaderFileGenerator.GenerateFile();
+            FileGenerators = new List<FileGenerator>();
+            FileGenerators.Add(new MacroFileGenerator(SharedDefinitions.GetGeneratedFilesDir(), "PreBuildMacros", SharedDefinitions.GetAllMacroDefinitions(), 3));
+        }
+        public static void GenerateFiles()
+        {
+            foreach (FileGenerator fileGenerator in FileGenerators)
+            {
+                fileGenerator.GenerateFile();
+            }
         }
     }
 }

@@ -4,6 +4,7 @@
 
 #pragma region Internal Includes
 #include "GlobalDefs.h"
+#include "GlobalMacros.h"
 #pragma endregion Internal Includes
 
 #pragma region External Includes
@@ -26,12 +27,17 @@ namespace Protostar
 	};
 
 	//this is just unreal engine like implementation of a GUID which uses windows provided Guid function to create it but uses own functions for make it usable as keys for maps etc. 
+	STRUCT()
 	struct SGuid
 	{
 	public:
+		PROPERTY()
 		u32 A;
+		PROPERTY()
 		u32 B;
+		PROPERTY()
 		u32 C;
+		PROPERTY()
 		u32 D;
 
 		SGuid()

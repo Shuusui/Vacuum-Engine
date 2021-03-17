@@ -9,20 +9,24 @@ namespace ProtostarPrebuildTool.Generator
 {
     public class HeaderFileGenerator : FileGenerator
     {
-        public HeaderFileGenerator(string _filePath, string[] _customLines = null, int _offset = 0)
-            :base(_filePath, _customLines, _offset)
+        public HeaderFileGenerator(string _filePath, string _fileName, string[] _customLines = null, int _offset = 1)
+            :base(Path.Combine(_filePath, _fileName + ".generated.h"), _customLines, _offset)
         {
-            m_staticLinesOfCode.Insert(0, "#pragma once");
-        }
-        public void GenerateFile()
-        {
-            using(StreamWriter streamWriter = new StreamWriter(m_filePath))
+            string[] linesOfCode = new string[]
             {
-                foreach(string s in m_staticLinesOfCode)
-                {
-                    streamWriter.WriteLineAsync(s);
-                }
+                "#pragma once",
+                "", 
+                "namespace Protostar", 
+                "{",
+                "}"
+            };
+
+            m_staticLinesOfCode.InsertRange(0, linesOfCode);
+            for(int i = 0; i < linesOfCode.Length; ++i)
+            {
+                m_setLinesOfCode.Add(i);
             }
+            m_lineStart = 4;
         }
     }
 }
