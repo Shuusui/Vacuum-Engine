@@ -9,26 +9,29 @@ namespace ProtostarPrebuildTool.Parsing
 {
     public class HeaderFileReader
     {
-        private List<MacroReader> m_generatedMacroCodes;
+        private List<ObjectReader> m_generatedMacroCodes;
         public HeaderFileReader(string _filePath)
         {
+            m_generatedMacroCodes = new List<ObjectReader>();
             using (StreamReader reader = new StreamReader(_filePath))
             {
+                MetaReader metaReader = new MetaReader();
                 while (reader.Peek() >= 0)
                 {
                     string line = reader.ReadLine();
+                    Metadata metadata = new Metadata();
 
-                    if (line.Contains(SharedDefinitions.s_structMacro))
+                    if(metaReader.ContainsMetaKeyword(line))
                     {
-                        StructReader structReader = new StructReader();
+                        metaReader.ReadMetadata(line, reader, metadata);
+                    }
+
+                    if (line.Contains(SharedDefinitions.s_objectMacro))
+                    {
+                        ObjectReader structReader = new ObjectReader(metadata);
                         structReader.ReadName(reader);
                         structReader.ReadMacroContent(reader);
                         m_generatedMacroCodes.Add(structReader);
-                    }
-
-                    if (line.Contains(SharedDefinitions.s_classMacro))
-                    {
-
                     }
                 }
             }

@@ -7,26 +7,63 @@ using System.IO;
 
 namespace ProtostarPrebuildTool.Parsing
 {
-    public class StructReader : MacroReader
+    public struct Property
     {
-        public override bool ReadName(in StreamReader _streamReader)
+        public string Name;
+    }
+
+    public class ObjectReader
+    {
+        public ObjectReader(Metadata _metadata)
+        {
+            m_currentMetadata = _metadata;
+        }
+
+        private Metadata m_currentMetadata;
+        public List<Property> m_properties { get; set; }
+        public string m_name { get; set; }
+        public bool ReadName(in StreamReader _streamReader)
         {
             string line = "";
 
             int indexOf = -1;
             string cppStruct = new string("struct");
-            while(indexOf == -1)
+            string cppClass = new string("class");
+            bool bIsStruct = false;
+            if (line.Contains(cppStruct))
             {
-                line = _streamReader.ReadLine();
-                indexOf = line.IndexOf(cppStruct);
-                if(_streamReader.Peek() < 0)
+                while (indexOf == -1)
                 {
-                    return false;
+                    line = _streamReader.ReadLine();
+                    indexOf = line.IndexOf(cppStruct);
+                    if (_streamReader.Peek() < 0)
+                    {
+                        return false;
+                    }
                 }
+                bIsStruct = true;
             }
-            int startStruct = indexOf + cppStruct.Length + 1;
-            StringBuilder sb = new StringBuilder(line.Length - startStruct);
-            for (int i = startStruct; i < line.Length; ++i)
+            else if (line.Contains(cppClass))
+            {
+                while (indexOf == -1)
+                {
+                    line = _streamReader.ReadLine();
+                    indexOf = line.IndexOf(cppClass);
+                    if(_streamReader.Peek() < 0)
+                    {
+                        return false;
+                    }
+                }
+                bIsStruct = false;
+            }
+            else 
+            {
+                return false;
+            }
+
+            int startObject = bIsStruct ? indexOf + cppStruct.Length + 1 : indexOf + cppClass.Length + 1;
+            StringBuilder sb = new StringBuilder(line.Length - startObject);
+            for (int i = startObject; i < line.Length; ++i)
             {
                 sb.Append(line[i]);
             }
@@ -34,7 +71,7 @@ namespace ProtostarPrebuildTool.Parsing
             return true;
         }
 
-        public override void ReadMacroContent(in StreamReader _streamReader)
+        public void ReadMacroContent(in StreamReader _streamReader)
         {
             string line;
             while (_streamReader.Peek() >= 0)

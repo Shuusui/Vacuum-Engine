@@ -27,7 +27,7 @@ namespace Protostar
 	};
 
 	//this is just unreal engine like implementation of a GUID which uses windows provided Guid function to create it but uses own functions for make it usable as keys for maps etc. 
-	STRUCT()
+	OBJECT()
 	struct SGuid
 	{
 	public:

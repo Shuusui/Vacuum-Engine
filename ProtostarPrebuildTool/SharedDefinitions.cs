@@ -14,16 +14,14 @@ namespace ProtostarPrebuildTool
         private static readonly string s_generatedFilesDir = Path.Combine(s_rootDir, "intermediate", "Project", "GeneratedFiles");
         private static readonly string s_macroDeclaration = "#define ";
         public static readonly string s_propertyMacro = s_macroDeclaration + "PROPERTY()";
-        public static readonly string s_structMacro = s_macroDeclaration + "STRUCT()";
-        public static readonly string s_classMacro = s_macroDeclaration + "CLASS()";
+        public static readonly string s_objectMacro = s_macroDeclaration + "OBJECT()";
 
         public static string[] GetAllMacroDefinitions()
         {
             return new string[]
             {
                 s_propertyMacro,
-                s_structMacro,
-                s_classMacro
+                s_objectMacro
             };
         }
         public static string GetGeneratedFilesDir()
