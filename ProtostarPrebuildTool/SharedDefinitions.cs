@@ -13,8 +13,17 @@ namespace ProtostarPrebuildTool
         private static readonly string s_rootDir = s_currentDir.Replace(@"bin\Debug", "").Replace(@"ProtostarPrebuildTool", "");
         private static readonly string s_generatedFilesDir = Path.Combine(s_rootDir, "intermediate", "Project", "GeneratedFiles");
         private static readonly string s_macroDeclaration = "#define ";
-        public static readonly string s_propertyMacro = s_macroDeclaration + "PROPERTY()";
-        public static readonly string s_objectMacro = s_macroDeclaration + "OBJECT()";
+        private static readonly string s_macroBody = "(...)";
+        public static readonly string s_editorSourceDir = Path.Combine(s_rootDir, "Protostar-Editor");
+        public static readonly string s_engineSourceDir = Path.Combine(s_rootDir, "Protostar-Engine");
+        public static readonly string s_propertyDeclarationName = "PSPROPERTY";
+        public static readonly string s_objectDeclarationName = "PSOBJECT";
+        public static readonly string s_propertyDeclaration = s_propertyDeclarationName + "(";
+        public static readonly string s_objectDeclaration = s_objectDeclarationName + "(";
+        public static readonly string s_propertMacroWithoutBody = s_macroDeclaration + s_propertyDeclarationName;
+        public static readonly string s_objectMacroWithoutBody = s_macroDeclaration + s_objectDeclarationName;
+        public static readonly string s_propertyMacro = s_macroDeclaration + s_propertyDeclarationName + s_macroBody;
+        public static readonly string s_objectMacro = s_macroDeclaration + s_objectDeclarationName + s_macroBody;
 
         public static string[] GetAllMacroDefinitions()
         {

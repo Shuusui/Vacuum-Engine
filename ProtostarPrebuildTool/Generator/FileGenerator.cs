@@ -13,23 +13,25 @@ namespace ProtostarPrebuildTool.Generator
         protected List<string> m_dynamicLinesOfCode;
         protected HashSet<int> m_setLinesOfCode;
         protected string m_filePath;
-        protected int m_lineStart;
 
         public FileGenerator(string _filePath, string[] _customLines, int _offset)
         {
             m_filePath = _filePath;
-
-            m_staticLinesOfCode = new List<string>(new string[_offset + _customLines.Length]);
-            m_staticLinesOfCode.InsertRange(_offset, _customLines);
-
             m_dynamicLinesOfCode = new List<string>();
-
             m_setLinesOfCode = new HashSet<int>();
-            for(int i = 0; i < _customLines.Length; ++i)
+            if (_customLines != null)
             {
-                m_setLinesOfCode.Add(_offset + i);
+                m_staticLinesOfCode = new List<string>(new string[_offset + _customLines.Length]);
+                m_staticLinesOfCode.InsertRange(_offset, _customLines);
+                for (int i = 0; i < _customLines.Length; ++i)
+                {
+                    m_setLinesOfCode.Add(_offset + i);
+                }
             }
-
+            else
+            {
+                m_staticLinesOfCode = new List<string>(new string[_offset]);
+            }
         }
 
         /*
@@ -63,7 +65,7 @@ namespace ProtostarPrebuildTool.Generator
          * @param _code The code to write to the line 
          * @return If the _offset is already contained it will return false, true otherwise
          */
-        public bool InsertDynamicLineOfCode(int _line, string _code)
+        protected bool InsertDynamicLineOfCode(int _line, string _code)
         {
             if (m_setLinesOfCode.Contains(_line))
             {
@@ -83,7 +85,7 @@ namespace ProtostarPrebuildTool.Generator
          * @param _code The lines of code to insert to the list.
          * @return If the _offset is already contained it will return false, true otherwise
          */
-        public bool InsertDynamicLinesOfCode(int _offset, string[] _code)
+        protected bool InsertDynamicLinesOfCode(int _offset, string[] _code)
         {
             if (m_setLinesOfCode.Contains(_offset))
             {

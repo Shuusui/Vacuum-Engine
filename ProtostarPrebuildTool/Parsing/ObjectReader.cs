@@ -14,14 +14,13 @@ namespace ProtostarPrebuildTool.Parsing
 
     public class ObjectReader
     {
-        public ObjectReader(Metadata _metadata)
-        {
-            m_currentMetadata = _metadata;
-        }
-
-        private Metadata m_currentMetadata;
         public List<Property> m_properties { get; set; }
         public string m_name { get; set; }
+        public Metadatas m_metadatas;
+        public ObjectReader(Metadatas _metadatas)
+        {
+            m_metadatas = _metadatas;
+        }
         public bool ReadName(in StreamReader _streamReader)
         {
             string line = "";
@@ -77,7 +76,7 @@ namespace ProtostarPrebuildTool.Parsing
             while (_streamReader.Peek() >= 0)
             {
                 line = _streamReader.ReadLine();
-                if (line.Contains("{"))
+                if (line.Contains(Util.GetOpeningBracket()))
                 {
                     break;
                 }
@@ -85,19 +84,19 @@ namespace ProtostarPrebuildTool.Parsing
             while(_streamReader.Peek() >= 0)
             {
                 line = _streamReader.ReadLine();
-                if(line.Contains("}"))
+                if(line.Contains(Util.GetClosingBracket()))
                 {
                     break;
                 }
 
                 if(line.Contains(SharedDefinitions.s_propertyMacro))
                 {
-                    GeneratePropertyCode(line, _streamReader);
+                    ReadProperty(line, _streamReader);
                 }
             }
         }
 
-        private void GeneratePropertyCode(string _currentLine, in StreamReader _streamReader)
+        private void ReadProperty(string _currentLine, in StreamReader _streamReader)
         {
             _currentLine = _streamReader.ReadLine();
             int indexAfterFirstWord = GetIndexAfterFirstWord(_currentLine);

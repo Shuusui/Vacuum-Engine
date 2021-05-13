@@ -15,7 +15,7 @@ namespace ProtostarPrebuildTool
         static StaticallyGeneratedFiles()
         {
             FileGenerators = new List<FileGenerator>();
-            FileGenerators.Add(new MacroFileGenerator(SharedDefinitions.GetGeneratedFilesDir(), "PreBuildMacros", SharedDefinitions.GetAllMacroDefinitions(), 3));
+            FileGenerators.Add(new MacroFileGenerator(SharedDefinitions.GetGeneratedFilesDir(), "PreBuildMacros", SharedDefinitions.GetAllMacroDefinitions(), 2));
         }
         public static void GenerateFiles()
         {

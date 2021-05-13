@@ -12,13 +12,88 @@ namespace ProtostarPrebuildTool.Parsing
     {
         NAMESPACE,
     }
-    public struct NamespaceMetadata
+    public abstract class Metadata
     {
-        public List<string> Namespaces;
+        public CodeBodyRange Range;
+        public bool HasOwnBody { get; set; }
+
+        protected Metadata()
+        {
+            Range = new CodeBodyRange(-1, -1);
+            HasOwnBody = false;
+        }
+        abstract public string[] GetLinesOfCode();
     }
-    public class Metadata
+    public class NamespaceMetadata : Metadata
     {
-        public List<NamespaceMetadata> NamepsaceMetadata;
+        public NamespaceMetadata()
+            :base()
+        {
+            HasOwnBody = true;
+        }
+        public List<string> Namespaces = new List<string>();
+
+        public override string[] GetLinesOfCode()
+        {
+            if (Namespaces.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder("namespace ");
+                foreach (string ns in Namespaces)
+                {
+                    sb.Append(ns);
+                    if (ns != Namespaces.Last())
+                    {
+                        sb.Append("::");
+                        continue;
+                    }
+                }
+                return new string[]
+                    {
+                        sb.ToString(),
+                        Util.GetClosingBracket(),
+                        Util.GetClosingBracket()
+                    };
+            }
+            return new string[]
+                {
+                    Util.GetOpeningBracket(),
+                    Util.GetClosingBracket()
+                };
+        }
+    }
+    public class Metadatas
+    {
+        public List<Metadata> MetadataList = new List<Metadata>();
+        public bool IsNextOpeningBracketForMetadata()
+        {
+            if(MetadataList.Count <= 0)
+            {
+                return false;
+            }
+            Metadata last = MetadataList.Last();
+            return last.Range.Start == -1 && last.HasOwnBody;
+        }
+        public bool IsNextClosingBracketForMetadata()
+        {
+            if (MetadataList.Count <= 0)
+            {
+                return false;
+            }
+            Metadata last = MetadataList.Last();
+            return last.Range.End == -1 && last.HasOwnBody;
+        }
+        public void SetStartRange(int _startLine)
+        {
+            MetadataList.Last().Range.Start = _startLine;
+        }
+        public void SetEndRange(int _endLine)
+        {
+            MetadataList.Last().Range.End = _endLine;
+        }
+        public void RemoveLastMetadata()
+        {
+            MetadataList.RemoveAt(MetadataList.Count - 1);
+        }
     }
     public class MetaReader
     {
@@ -49,16 +124,24 @@ namespace ProtostarPrebuildTool.Parsing
             return indexOf + m_nextMetadataToRead.ToString().Length + 1;
         }
 
-        public void ReadMetadata(string _line, in StreamReader _streamReader, in Metadata _metadata)
+        public void ReadMetadata(string _line, in StreamReader _streamReader, in Metadatas _metadata)
         {
             switch(m_nextMetadataToRead)
             {
                 case MetadataType.NAMESPACE:
                     NamespaceMetadata nsMetadata = new NamespaceMetadata();
                     string metadataName = MetadataType.NAMESPACE.ToString().ToLower();
+                    if(Util.IsStringInLineCommented(_line, metadataName))
+                    {
+                        return;
+                    }
                     int startMetadata = GetMetadataStartIndex(_line, metadataName);
+                    if(startMetadata == -1)
+                    {
+                        return;
+                    }
                     ReadNamespaces(startMetadata, _line, nsMetadata);
-                    _metadata.NamepsaceMetadata.Add(nsMetadata);
+                    _metadata.MetadataList.Add(nsMetadata);
                     break;
                 default:
                     Debug.Assert(true, "Unrecognized metadata keyword");

@@ -9,32 +9,79 @@ namespace ProtostarPrebuildTool.Parsing
 {
     public class HeaderFileReader
     {
-        private List<ObjectReader> m_generatedMacroCodes;
+#pragma warning disable 0649
+        public readonly List<ObjectReader> m_readObjects;
+#pragma warning restore 0649
+        public string m_fileName;
         public HeaderFileReader(string _filePath)
         {
-            m_generatedMacroCodes = new List<ObjectReader>();
+            m_fileName = Path.GetFileNameWithoutExtension(_filePath);
+            m_readObjects = new List<ObjectReader>();
+            Metadatas metadatas = new Metadatas();
+
             using (StreamReader reader = new StreamReader(_filePath))
             {
                 MetaReader metaReader = new MetaReader();
+                bool bIsInMultiLineComment = false;
+                int lineIndex = 0;
                 while (reader.Peek() >= 0)
                 {
                     string line = reader.ReadLine();
-                    Metadata metadata = new Metadata();
-
+                    if(bIsInMultiLineComment)
+                    {
+                        if(Util.ContainsMultiLineCommentEnd(line))
+                        {
+                            bIsInMultiLineComment = false;
+                            if(!Util.IsContentAfterMultiLineCommentEnd(line))
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(Util.ContainsMultiLineCommentStart(line))
+                        {
+                            bIsInMultiLineComment = true;
+                            if(!Util.IsContentBeforeMultiLineCommentStart(line))
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    //TODO: Needs to consider inner brackets inside namespaces. 
+                    if(Util.ContainsOpeningBracket(line) && metadatas.IsNextOpeningBracketForMetadata()) 
+                    {
+                        metadatas.SetStartRange(lineIndex);
+                        NamespaceMetadata nsMetadata = (NamespaceMetadata)metadatas.MetadataList.Last();
+                        if (nsMetadata.Namespaces.Last() == "Protostar")
+                        {
+                            Console.WriteLine(nsMetadata.Namespaces.Last());
+                        }
+                    }
+                    if(Util.ContainsClosingBracket(line) && metadatas.IsNextClosingBracketForMetadata())
+                    {
+                        metadatas.SetEndRange(lineIndex);
+                        metadatas.RemoveLastMetadata();
+                    }
                     if(metaReader.ContainsMetaKeyword(line))
                     {
-                        metaReader.ReadMetadata(line, reader, metadata);
+                        metaReader.ReadMetadata(line, reader, metadatas);
                     }
-
-                    if (line.Contains(SharedDefinitions.s_objectMacro))
+                    if (line.Contains(SharedDefinitions.s_objectDeclaration))
                     {
-                        ObjectReader structReader = new ObjectReader(metadata);
-                        structReader.ReadName(reader);
-                        structReader.ReadMacroContent(reader);
-                        m_generatedMacroCodes.Add(structReader);
+                        ObjectReader objectReader = new ObjectReader(metadatas);
+                        objectReader.ReadName(reader);
+                        objectReader.ReadMacroContent(reader);
+                        m_readObjects.Add(objectReader);
                     }
+                    lineIndex++;
                 }
             }
+        }
+        public bool HasData()
+        {
+            return m_readObjects.Count > 0;
         }
     }
 }
