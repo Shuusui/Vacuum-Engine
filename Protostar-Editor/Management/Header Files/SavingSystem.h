@@ -1,7 +1,7 @@
 #pragma once
-#include <unordered_set>
-#include <vector>
 #include "ECS\Header Files\BaseObject.h"
+import <vector>;
+import <unordered_set>;
 
 namespace Protostar
 {

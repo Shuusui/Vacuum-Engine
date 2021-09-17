@@ -1,5 +1,5 @@
 #pragma once
-#include <queue>
+import <queue>;
 
 namespace Protostar
 {

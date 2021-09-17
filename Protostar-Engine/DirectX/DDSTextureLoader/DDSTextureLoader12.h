@@ -20,7 +20,7 @@
 
 #include <cstdint>
 #include <memory>
-#include <vector>
+import <vector>;
 
 
 namespace DirectX

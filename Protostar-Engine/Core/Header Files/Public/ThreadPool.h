@@ -3,14 +3,14 @@
 #include "..\Private\BaseJob.h"
 #include "Log.h"
 #include "GlobalDefs.h"
-#include <thread>
-#include <vector>
-#include <future>
-#include <functional>
-#include <queue>
-#include <unordered_map>
-#include <condition_variable>
-#include <mutex>
+import <queue>;
+import <unordered_map>;
+import <condition_variable>;
+import <functional>;
+import <mutex>;
+import <thread>;
+import <future>;
+import <vector>;
 
 namespace Protostar
 {

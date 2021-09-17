@@ -4,7 +4,7 @@
 #include "ECS\Components\Header Files\TransformComponent.h"
 #include "ECS\Components\Header Files\MeshComponent.h"
 #include "Json.h"
-#include <fstream>
+import <fstream>;
 
 const char* JSONENTITYNAME = "name";
 const char* JSONENTITYGUID = "guid";

@@ -1,8 +1,8 @@
 #pragma once
-#include <filesystem>
-#include <functional>
-#include <fstream>
 #include "FileTreeObject.h"
+import <filesystem>;
+import <functional>;
+import <fstream>;
 
 namespace Protostar
 {

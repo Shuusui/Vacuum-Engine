@@ -1,12 +1,13 @@
-#include <string>
-#include <filesystem>
-#include <unordered_map>
-#include <vector>
+#pragma once
 #include "SharedStructs.h"
 #include "GlobalDefs.h"
 #include "Guid.h"
 #include "Project.h"
-#include <functional>
+import <string>;
+import <filesystem>;
+import <unordered_map>;
+import <functional>;
+import <vector>;
 
 
 namespace Protostar

@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace Protostar
 {
 	enum class ERenderAPIs

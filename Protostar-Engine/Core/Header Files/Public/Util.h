@@ -1,10 +1,11 @@
 #pragma once
-#include <string>
-#include <Windows.h>
-#include <strsafe.h>
 
 #include "GlobalDefs.h"
 #include "GlobalConstants.h"
+
+import <string>;
+#include <Windows.h>
+#include <strsafe.h>
 
 namespace Protostar
 {

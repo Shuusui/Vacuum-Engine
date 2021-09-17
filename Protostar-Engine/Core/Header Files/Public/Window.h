@@ -6,11 +6,11 @@
 #pragma endregion //Internal Includes
 #pragma region External Includes
 #include <Windows.h>
-#include <utility>
-#include <string>
-#include <functional>
-#include <unordered_map>
-#include <vector>
+import <utility>;
+import <string>;
+import <functional>;
+import <unordered_map>;
+import <vector>;
 #pragma endregion //External Includes
 
 

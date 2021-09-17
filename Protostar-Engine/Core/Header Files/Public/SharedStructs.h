@@ -1,7 +1,4 @@
 #pragma once
-#include <utility>
-#include <vector>
-#include <algorithm>
 
 #include "GlobalDefs.h"
 #include "SharedEnums.h"
@@ -9,6 +6,10 @@
 #include "d3d12.h"
 #include "Json.h"
 #include "Guid.h"
+
+import <utility>;
+import <vector>;
+import <algorithm>;
 
 namespace Protostar
 {

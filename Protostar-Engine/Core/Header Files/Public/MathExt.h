@@ -1,8 +1,8 @@
 #pragma once
-#include <limits>
-#include <cmath>
 #include "GlobalDefs.h"
 #include "Windows.h"
+import <limits>;
+import <cmath>;
 
 #ifdef min
 #undef min 

@@ -1,6 +1,6 @@
 #include "..\Header Files\BaseObject.h"
 #include "GlobalDefs.h"
-#include <atomic>
+import <atomic>;
 
 #if defined(_DEBUG)
 static std::atomic_int64_t s_ObjectCounter = 0;

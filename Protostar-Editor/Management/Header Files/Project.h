@@ -1,6 +1,4 @@
 #pragma once
-#include <filesystem>
-#include <unordered_map>
 #include "Guid.h"
 #include "Json.h"
 #include "ECS\Header Files\Scene.h"
@@ -8,6 +6,8 @@
 #include "ECS\Entities\Header Files\BaseEntity.h"
 #include "SavingSystem.h"
 #include "Log.h"
+import <filesystem>;
+import <unordered_map>;
 
 namespace Protostar
 {

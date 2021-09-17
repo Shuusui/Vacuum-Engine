@@ -32,7 +32,7 @@
 #include <cstdint>
 #include <fstream>
 #include <string>
-#include <vector>
+import <vector>;
 #include <unordered_map>
 
 #include <DirectXMath.h>

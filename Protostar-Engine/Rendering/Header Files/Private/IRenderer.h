@@ -1,7 +1,7 @@
 #pragma once
 #include "GlobalDefs.h"
 #include <filesystem>
-#include <vector>
+import <vector>;
 #include <d3d12.h>
 #include <functional>
 

@@ -1,12 +1,12 @@
 #include "..\Header Files\EntityEditor.h"
 #include "imgui.h"
-#include <string>
 #include "ECS\Entities\Header Files\BaseEntity.h"
 #include "ECS\Header Files\ECSManager.h"
 #include "ECS\Components\Header Files\TransformComponent.h"
 #include "ECS\Components\Header Files\MeshComponent.h"
 #include "SavingSystem.h"
 #include "MeshManager.h"
+import <string>;
 
 Protostar::CEntityEditor* Protostar::CEntityEditor::s_entityEditor = nullptr;
 

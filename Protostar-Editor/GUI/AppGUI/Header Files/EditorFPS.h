@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace Protostar
 {
 	class CEditorFPS

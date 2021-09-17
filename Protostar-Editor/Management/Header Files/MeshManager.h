@@ -1,11 +1,12 @@
 #pragma once
 #include "Guid.h"
-#include <filesystem>
-#include <unordered_map>
-#include <unordered_set>
 #include "Json.h"
 #include "Utilities\WaveFrontReader.h"
 #include "SharedStructs.h"
+
+import <filesystem>;
+import <unordered_map>;
+import <unordered_set>;
 
 #define JSONMESHGUID "guid"
 #define JSONMESHNAME "name"

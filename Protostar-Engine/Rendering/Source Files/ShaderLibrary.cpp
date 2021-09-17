@@ -1,8 +1,9 @@
 #include "..\Header Files\Public\ShaderLibrary.h"
 
 #include <d3dcompiler.h>
-#include <unordered_set>
-#include <fstream>
+
+import <unordered_set>;
+import <fstream>;
 
 #define JSONVERTEXSHADERMAP "vertex_shader_map"
 #define JSONPIXELSHADERMAP "pixel_shader_map"

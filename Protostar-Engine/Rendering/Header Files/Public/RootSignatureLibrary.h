@@ -1,9 +1,10 @@
 #pragma once
 #include "d3d12.h"
 #include "Guid.h"
-#include <unordered_map>
-#include <filesystem>
 #include "Json.h"
+
+import <unordered_map>;
+import <filesystem>;
 
 #define JSONROOTNAME "name"
 #define JSONSAMPLERDESCS "sampler_descs"

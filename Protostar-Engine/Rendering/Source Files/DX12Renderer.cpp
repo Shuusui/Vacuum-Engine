@@ -7,7 +7,7 @@
 #pragma region External Includes
 #include <d3d12sdklayers.h>
 #include <d3dcompiler.h>
-#include <functional>
+import <functional>;
 #pragma endregion //External Includes
 
 using namespace Microsoft::WRL;

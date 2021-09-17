@@ -1,5 +1,4 @@
 #include <Windows.h>
-#include <iostream>
 #include "Console.h"
 #include "Guid.h"
 #include "Log.h"
@@ -16,6 +15,7 @@
 #include "GUI.h"
 #include "Timer.h"
 #include "ECS\Header Files\ECSManager.h"
+import <iostream>;
 
 s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ LPSTR _lpCmdLine, _In_ s32 _nShowCmd)
 {

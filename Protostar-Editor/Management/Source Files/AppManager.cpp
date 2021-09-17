@@ -8,7 +8,7 @@
 #pragma endregion //Internal Includes
 
 #pragma region External Includes
-#include <fstream>
+import <fstream>;
 #include <windows.h>
 #pragma endregion //External Includes
 

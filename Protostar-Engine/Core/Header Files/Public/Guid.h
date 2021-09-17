@@ -9,8 +9,8 @@
 
 #pragma region External Includes
 #include <Windows.h>
-#include <system_error>
-#include <sstream>
+import <system_error>;
+import <sstream>;
 #pragma endregion External Includes
 
 #pragma endregion Includes

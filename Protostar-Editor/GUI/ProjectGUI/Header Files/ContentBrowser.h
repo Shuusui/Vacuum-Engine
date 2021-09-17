@@ -1,9 +1,9 @@
 #pragma once
-#include <filesystem>
-#include <unordered_map>
 #include "Filesystem/FileTreeObject.h"
 #include "ShaderLibrary.h"
 #include "Guid.h"
+import <filesystem>;
+import <unordered_map>;
 
 namespace Protostar
 {

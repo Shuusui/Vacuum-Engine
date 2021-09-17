@@ -1,8 +1,8 @@
 #pragma once
-#include <vector>
 #include "BaseObject.h"
 #include "..\Entities\Header Files\BaseEntity.h"
-#include <filesystem>
+import <filesystem>;
+import <vector>;
 
 namespace Protostar
 {

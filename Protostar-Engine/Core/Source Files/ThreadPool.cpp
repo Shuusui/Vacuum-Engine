@@ -3,7 +3,7 @@
 #pragma region Internal Includes 
 #pragma endregion //Internal Includes
 #pragma region External Includes
-#include <functional>
+import <functional>;
 #pragma endregion //External Includes
 
 namespace Protostar

@@ -2,10 +2,11 @@
 #include "..\Private\IRenderer.h"
 #include "..\Private\DX12Renderer.h"
 #include "SharedStructs.h"
-#include <filesystem>
-#include <vector>
 #include <d3d12.h>
-#include <functional>
+
+import <filesystem>;
+import <vector>;
+import <functional>;
 
 namespace Protostar
 {

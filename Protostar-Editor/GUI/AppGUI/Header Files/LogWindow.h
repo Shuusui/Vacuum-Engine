@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+import <vector>;
 #include <string>
 #include "Guid.h"
 

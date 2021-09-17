@@ -1,9 +1,10 @@
 #pragma once
-#include <unordered_map>
-#include <filesystem>
 #include "Guid.h"
 #include <d3d12.h>
 #include "SharedStructs.h"
+
+import <unordered_map>;
+import <filesystem>;
 
 namespace Protostar
 {

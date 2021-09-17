@@ -100,6 +100,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\Protostar-Engine\DirectX\;$(SolutionDir)Protostar-Engine\Core\;$(SolutionDir)Protostar-Editor\GUI\Header Files\;$(SolutionDir)Protostar-Editor\ImGui\Header Files\Public\;$(SolutionDir)Protostar-Editor\Management\Header Files\;$(SolutionDir)Protostar-Engine\Core\Header Files\Public; $(SolutionDir)Protostar-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
+      <CompileAs>CompileAsCppModuleInternalPartition</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,6 +120,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Engine\Core\HeaderFiles\Public;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>true</EnableModules>
+      <CompileAs>CompileAsCppModuleInternalPartition</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

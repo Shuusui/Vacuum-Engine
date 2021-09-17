@@ -5,7 +5,8 @@
 #include "Json.h"
 #include "ShaderLibrary.h"
 #include "RootSignatureLibrary.h"
-#include <fstream>
+
+import <fstream>;
 
 Protostar::CPSOLibrary* Protostar::CPSOLibrary::s_psoLibrary = nullptr;
 

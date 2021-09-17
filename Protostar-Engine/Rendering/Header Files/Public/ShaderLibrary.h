@@ -1,11 +1,12 @@
 #pragma once
-#include <unordered_map>
-#include <filesystem>
-#include <optional>
 #include "Guid.h"
 #include "Json.h"
 #include "..\Private\DXHelper.h"
 #include "Filesystem\Filesystem.h"
+
+import <unordered_map>;
+import <filesystem>;
+import <optional>;
 
 namespace Protostar
 {

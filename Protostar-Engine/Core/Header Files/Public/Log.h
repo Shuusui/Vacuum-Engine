@@ -9,9 +9,9 @@
 #pragma endregion Internal Includes
 
 #pragma region External Includes
-#include <string>
-#include <unordered_map>
-#include <mutex>
+import <string>;
+import <unordered_map>;
+import <mutex>;
 #pragma endregion External Includes
 
 #pragma endregion Includes

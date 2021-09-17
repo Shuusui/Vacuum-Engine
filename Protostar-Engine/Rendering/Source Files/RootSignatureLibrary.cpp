@@ -2,7 +2,7 @@
 #include "Log.h"
 #include "DXHelper.h"
 #include "RendererManager.h"
-#include <fstream>
+import <fstream>;
 
 Protostar::CRootSignatureLibrary* Protostar::CRootSignatureLibrary::s_rootSignatureLib = nullptr;
 

@@ -1,7 +1,7 @@
 #include "..\Header Files\Scene.h"
-#include <fstream>
 #include "Json.h"
 #include "Log.h"
+import <fstream>;
 
 const char* JSONSCENENAME = "name";
 const char* JSONSCENEGUID = "guid";

@@ -3,8 +3,8 @@
 #include <Windows.h>
 #include <d3d12.h>
 #include "GlobalDefs.h"
-#include <filesystem>
 #include "RendererManager.h"
+import <filesystem>;
 
 namespace Protostar
 {

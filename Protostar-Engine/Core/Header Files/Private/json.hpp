@@ -44,7 +44,7 @@ SOFTWARE.
 #include <numeric> // accumulate
 #include <string> // string, stoi, to_string
 #include <utility> // declval, forward, move, pair, swap
-#include <vector> // vector
+import <vector>; // vector
 
 // #include <nlohmann/adl_serializer.hpp>
 
@@ -2876,7 +2876,7 @@ using is_detected_convertible =
 #include <map> // map
 #include <memory> // allocator
 #include <string> // string
-#include <vector> // vector
+import <vector>; // vector
 
 /*!
 @brief namespace for Niels Lohmann
@@ -3812,7 +3812,7 @@ constexpr const auto& from_json = detail::static_const<detail::from_json_fn>::va
 #include <type_traits> // is_same, is_constructible, is_floating_point, is_enum, underlying_type
 #include <utility> // move, forward, declval, pair
 #include <valarray> // valarray
-#include <vector> // vector
+import <vector>; // vector
 
 // #include <nlohmann/detail/iterators/iteration_proxy.hpp>
 
@@ -5180,7 +5180,7 @@ class span_input_adapter
 #include <cstddef>
 #include <string> // string
 #include <utility> // move
-#include <vector> // vector
+import <vector>; // vector
 
 // #include <nlohmann/detail/exceptions.hpp>
 
@@ -5884,7 +5884,7 @@ class json_sax_acceptor
 #include <initializer_list> // initializer_list
 #include <string> // char_traits, string
 #include <utility> // move
-#include <vector> // vector
+import <vector>; // vector
 
 // #include <nlohmann/detail/input/input_adapters.hpp>
 
@@ -10109,7 +10109,7 @@ class binary_reader
 #include <functional> // function
 #include <string> // string
 #include <utility> // move
-#include <vector> // vector
+import <vector>; // vector
 
 // #include <nlohmann/detail/exceptions.hpp>
 
@@ -11539,7 +11539,7 @@ class json_reverse_iterator : public std::reverse_iterator<Base>
 #include <numeric> // accumulate
 #include <string> // string
 #include <utility> // move
-#include <vector> // vector
+import <vector>; // vector
 
 // #include <nlohmann/detail/exceptions.hpp>
 
@@ -12620,7 +12620,7 @@ class json_ref
 #include <memory> // shared_ptr, make_shared
 #include <ostream> // basic_ostream
 #include <string> // basic_string
-#include <vector> // vector
+import <vector>; // vector
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
@@ -16393,7 +16393,7 @@ class serializer
 #include <functional> // less
 #include <memory> // allocator
 #include <utility> // pair
-#include <vector> // vector
+import <vector>; // vector
 
 namespace nlohmann
 {
