@@ -16,7 +16,6 @@ Protostar::CBaseEntity::CBaseEntity(const std::string& _name)
 	,m_entity(CECSManager::CreateEntity())
 {
 	CEntityManager::GetHandle()->RegisterEntity(this);
-
 }
 
 Protostar::CBaseEntity::CBaseEntity(const std::filesystem::path& _path)
