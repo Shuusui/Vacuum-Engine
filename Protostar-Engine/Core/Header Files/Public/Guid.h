@@ -168,27 +168,27 @@ namespace Protostar
 
 			if (A <= 0xFFFFFFF)
 			{
-				aStream << L'0';
+				aStream << '0';
 			}
 
 			if (bFirst <= 0xFFF)
 			{
-				bFirstStream << L'0';
+				bFirstStream << '0';
 			}
 
 			if (bSecond <= 0xFFF)
 			{
-				bSecondStream << L'0';
+				bSecondStream << '0';
 			}
 
 			if (cFirst < 0xFFF)
 			{
-				cStream << L'0';
+				cStream << '0';
 			}
 
 			if (dTemp < 0xFFFFFFFFFFF)
 			{
-				dStream << L'0';
+				dStream << '0';
 			}
 
 			aStream << std::hex << A;
