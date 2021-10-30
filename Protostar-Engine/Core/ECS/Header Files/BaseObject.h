@@ -38,7 +38,7 @@ namespace Protostar
 
 		std::string GetObjectClassName() const
 		{
-			m_className;
+			return m_className;
 		}
 
 		std::string GetObjectName() const
