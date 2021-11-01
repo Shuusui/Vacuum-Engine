@@ -111,6 +111,10 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 
 		if (D3DCompileFromFile(shaderInfo.ShaderPath.wstring().c_str(), nullptr, nullptr, "vs_main", "vs_5_0", 0, 0, &vertexShader, &errorBlob) != S_OK)
 		{
+			if (!errorBlob)
+			{
+				continue;
+			}
 			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
 			SafeRelease(vertexShader);
 			SafeRelease(errorBlob);
@@ -137,6 +141,10 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 
 		if (D3DCompileFromFile(shaderInfo.ShaderPath.wstring().c_str(), nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pixelShader, &errorBlob) != S_OK)
 		{
+			if (!errorBlob)
+			{
+				continue;
+			}
 			PE_LOG(std::string((char*)errorBlob->GetBufferPointer()).c_str());
 			SafeRelease(pixelShader);
 			SafeRelease(errorBlob);
