@@ -7,19 +7,19 @@
 #include "RootSignatureLibrary.h"
 #include <fstream>
 
-Protostar::CPSOLibrary* Protostar::CPSOLibrary::s_psoLibrary = nullptr;
+Protostar::PPSOLibrary* Protostar::PPSOLibrary::s_psoLibrary = nullptr;
 
 
-void Protostar::CPSOLibrary::Create(const std::filesystem::path& _projectPath)
+void Protostar::PPSOLibrary::Create(const std::filesystem::path& _projectPath)
 {
 	if (s_psoLibrary)
 	{
 		return;
 	}
-	s_psoLibrary = new CPSOLibrary(_projectPath);
+	s_psoLibrary = new PPSOLibrary(_projectPath);
 }
 
-void Protostar::CPSOLibrary::Destroy()
+void Protostar::PPSOLibrary::Destroy()
 {
 	if (s_psoLibrary)
 	{
@@ -28,11 +28,11 @@ void Protostar::CPSOLibrary::Destroy()
 	}
 }
 
-Protostar::CPSOLibrary::~CPSOLibrary()
+Protostar::PPSOLibrary::~PPSOLibrary()
 {
 }
 
-Protostar::SGuid Protostar::CPSOLibrary::CreatePSO(const SPSOInfo& _psoInfo)
+Protostar::PGuid Protostar::PPSOLibrary::CreatePSO(const PPSOInfo& _psoInfo)
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
 	psoDesc.InputLayout = {_psoInfo.InputElementDescs.data(), (UINT)_psoInfo.InputElementDescs.size()};
@@ -50,26 +50,26 @@ Protostar::SGuid Protostar::CPSOLibrary::CreatePSO(const SPSOInfo& _psoInfo)
 	psoDesc.SampleDesc.Count = 1;
 	psoDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
 
-	if (!CRendererManager::CreatePSO(&psoDesc, (void**)_psoInfo.PipelineState))
+	if (!PRendererManager::CreatePSO(&psoDesc, (void**)_psoInfo.PipelineState))
 	{
-		return SGuid();
+		return PGuid();
 	}
-	SGuid guid = SGuid::NewGuid();
+	PGuid guid = PGuid::NewGuid();
 	m_PSOs.insert(std::make_pair(guid, _psoInfo));
 	return guid;
 }
 
-void Protostar::CPSOLibrary::Load()
+void Protostar::PPSOLibrary::Load()
 {
-	Json json = {};
+	PJson json = {};
 	std::ifstream iniFile(m_psoLibraryIniPath);
 	iniFile >> json;
-	CRootSignatureLibrary* rootSignatureLib = CRootSignatureLibrary::GetHandle();
-	CShaderLibrary* shaderLib = CShaderLibrary::GetHandle();
+	PRootSignatureLibrary* rootSignatureLib = PRootSignatureLibrary::GetHandle();
+	PShaderLibrary* shaderLib = PShaderLibrary::GetHandle();
 
 	for (const auto& [guid, psoInfoJson] : json.items())
 	{
-		SPSOInfo psoInfo = {};
+		PPSOInfo psoInfo = {};
 		psoInfo.FromJson(psoInfoJson);
 
 		psoInfo.RootSignature.second = rootSignatureLib->GetRootInfo(psoInfo.RootSignature.first).RootSignature;
@@ -80,9 +80,9 @@ void Protostar::CPSOLibrary::Load()
 	}
 }
 
-void Protostar::CPSOLibrary::Save()
+void Protostar::PPSOLibrary::Save()
 {
-	Json json = {};
+	PJson json = {};
 
 	for (auto& [guid, psoInfo] : m_PSOs)
 	{
@@ -96,12 +96,12 @@ void Protostar::CPSOLibrary::Save()
 	iniFile.close();
 }
 
-void Protostar::CPSOLibrary::CreateDefaultPSO()
+void Protostar::PPSOLibrary::CreateDefaultPSO()
 {
 
 }
 
-Protostar::CPSOLibrary::CPSOLibrary(const std::filesystem::path& _projectPath)
+Protostar::PPSOLibrary::PPSOLibrary(const std::filesystem::path& _projectPath)
 	:m_projectPath(_projectPath)
 	,m_projectConfigPath(_projectPath / "Configs")
 	,m_psoLibraryIniPath(m_projectConfigPath / "psolibrary.ini")

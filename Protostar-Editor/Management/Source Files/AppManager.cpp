@@ -13,7 +13,7 @@
 #pragma endregion //External Includes
 
 
-Protostar::CAppManager* Protostar::CAppManager::s_app = nullptr;
+Protostar::PAppManager* Protostar::PAppManager::s_app = nullptr;
 
 const char* JSONHEIGHT = "height";
 const char* JSONWIDTH = "width";
@@ -22,11 +22,11 @@ const char* JSONY = "y";
 const char* JSONCURRPROJGUID = "current_project_guid";
 const char* JSONVSYNC = "vsync";
 
-bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
+bool Protostar::PAppManager::InitApp(const HINSTANCE& _hInstance)
 {
 	if (!s_app)
 	{
-		s_app = new CAppManager();
+		s_app = new PAppManager();
 	}
 
 	PE_LOG("Initialize app");
@@ -45,10 +45,10 @@ bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
 	s_app->m_appPaths.ProjectsDir = s_app->m_appPaths.RootDir / L"Projects";
 	s_app->m_appConfigPath = s_app->m_appPaths.ConfigDir / L"app.config";
 
-	SGuid projectGuid = {};
+	PGuid projectGuid = {};
 	if (std::filesystem::exists(s_app->m_appConfigPath))
 	{
-		Json json = {};
+		PJson json = {};
 		std::ifstream appConfig(s_app->m_appConfigPath);
 		appConfig >> json;
 		if (json.contains(JSONHEIGHT))
@@ -86,7 +86,7 @@ bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
 
 	std::string errorMsg = {};
 
-	SWindowInfo windowInfo = {};
+	PWindowInfo windowInfo = {};
 	windowInfo.ClassParams.ClassName = TEXT("Protostar Engine window");
 	windowInfo.ClassParams.HInstance = _hInstance;
 	windowInfo.ClassParams.BackgroundColor = CreateSolidBrush(RGB(1, 1, 1));
@@ -99,14 +99,14 @@ bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
 	windowInfo.CreationParams.LpParam = nullptr;
 	windowInfo.DimParams = s_app->m_mainWindowDim;
 
-	CMainWindow::InitWindow(windowInfo);
-	if (!CMainWindow::Create(errorMsg))
+	PMainWindow::InitWindow(windowInfo);
+	if (!PMainWindow::Create(errorMsg))
 	{
 		PE_LOG(errorMsg.c_str());
 		return false;
 	}
 
-	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)s_app->m_mainWindowDim.Width, (u32)s_app->m_mainWindowDim.Height, s_app->m_bLastVSyncState, reinterpret_cast<void*>(CMainWindow::GetWindowHandle()->GetHwnd()) });
+	PRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)s_app->m_mainWindowDim.Width, (u32)s_app->m_mainWindowDim.Height, s_app->m_bLastVSyncState, reinterpret_cast<void*>(PMainWindow::GetWindowHandle()->GetHwnd()) });
 
 	s_app->LoadProjects();
 	if (projectGuid.IsValid())
@@ -116,9 +116,9 @@ bool Protostar::CAppManager::InitApp(const HINSTANCE& _hInstance)
 	return true;
 }
 
-void Protostar::CAppManager::Destroy()
+void Protostar::PAppManager::Destroy()
 {
-	CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
+	PMainWindow* mainWindow = PMainWindow::GetWindowHandle();
 	if (mainWindow)
 	{
 		s_app->m_mainWindowDim = mainWindow->GetCurrentDim();
@@ -130,13 +130,13 @@ void Protostar::CAppManager::Destroy()
 	}
 
 	SWindowDimParams wndDim = s_app->m_mainWindowDim;
-	Json json = 
+	PJson json = 
 	{
 		{JSONHEIGHT, wndDim.Height}, 
 		{JSONWIDTH, wndDim.Width},
 		{JSONX, wndDim.LeftTopCornerX}, 
 		{JSONY, wndDim.LeftTopCornerY},
-		{JSONCURRPROJGUID, s_app->m_currentProject ? s_app->m_currentProject->GetGuid().ToString() : SGuid().ToString()},
+		{JSONCURRPROJGUID, s_app->m_currentProject ? s_app->m_currentProject->GetGuid().ToString() : PGuid().ToString()},
 		{JSONVSYNC, s_app->m_bLastVSyncState}
 	};
 
@@ -150,34 +150,34 @@ void Protostar::CAppManager::Destroy()
 	}
 }
 
-Protostar::CAppManager* Protostar::CAppManager::GetAppHandle()
+Protostar::PAppManager* Protostar::PAppManager::GetAppHandle()
 {
 	return s_app;
 }
 
-Protostar::SWindowDimParams Protostar::CAppManager::GetInitWindowDimParams()
+Protostar::SWindowDimParams Protostar::PAppManager::GetInitWindowDimParams()
 {
 	return s_app->m_mainWindowDim;
 }
 
-Protostar::SAppPaths Protostar::CAppManager::GetAppPaths()
+Protostar::PAppPaths Protostar::PAppManager::GetAppPaths()
 {
 	return s_app->m_appPaths;
 }
 
-void Protostar::CAppManager::LoadProject(CProject* _project)
+void Protostar::PAppManager::LoadProject(PProject* _project)
 {
 	if (!_project)
 	{
 		return;
 	}
-	CProject* oldProject = m_currentProject;
+	PProject* oldProject = m_currentProject;
 	if (oldProject)
 	{
 		PE_LOG_F("Unload project: %s", oldProject->GetName().c_str());
 	}
 	m_currentProject = _project;
-	for (const std::function<void(CProject*, CProject*)>& func : m_registeredOnLoadProjectCallbacks)
+	for (const std::function<void(PProject*, PProject*)>& func : m_registeredOnLoadProjectCallbacks)
 	{
 		func(oldProject, _project);
 	}
@@ -185,9 +185,9 @@ void Protostar::CAppManager::LoadProject(CProject* _project)
 	PE_LOG_F("Load project: %s", _project->GetName().c_str());
 }
 
-void Protostar::CAppManager::LoadRecentProject(const SGuid& _projectGuid)
+void Protostar::PAppManager::LoadRecentProject(const PGuid& _projectGuid)
 {
-	for (CProject* project : m_projects)
+	for (PProject* project : m_projects)
 	{
 		if (project->GetGuid() == _projectGuid)
 		{
@@ -198,19 +198,19 @@ void Protostar::CAppManager::LoadRecentProject(const SGuid& _projectGuid)
 	}
 }
 
-void Protostar::CAppManager::LoadProjects()
+void Protostar::PAppManager::LoadProjects()
 {
 	for (const std::filesystem::path& projectPath : std::filesystem::directory_iterator(m_appPaths.ProjectsDir))
 	{
-		CProject* project = new CProject(projectPath);
+		PProject* project = new PProject(projectPath);
 		m_projects.push_back(project);
 		PE_LOG_F("Found project: %s", project->GetName().c_str());
 	}
 }
 
-Protostar::CAppManager::~CAppManager()
+Protostar::PAppManager::~PAppManager()
 {
-	for (CProject* project : m_projects)
+	for (PProject* project : m_projects)
 	{
 		if (!project)
 		{
@@ -221,9 +221,9 @@ Protostar::CAppManager::~CAppManager()
 	}
 }
 
-Protostar::CAppManager::CAppManager()
+Protostar::PAppManager::PAppManager()
 	:m_mainWindowDim(SWindowDimParams())
-	,m_appPaths(SAppPaths())
+	,m_appPaths(PAppPaths())
 	,m_appConfigPath(std::filesystem::path())
 	,m_currentProject(nullptr)
 	,m_bLastVSyncState(false)

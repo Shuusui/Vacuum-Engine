@@ -11,14 +11,14 @@ namespace Protostar
 	{
 	public:
 		CMeshComponent()
-			:CBaseComponent("Mesh Component", Json())
-			, m_guid(SGuid::NewGuid())
-			, m_modelGuid(SGuid())
+			:CBaseComponent("Mesh Component",PJson())
+			, m_guid(PGuid::NewGuid())
+			, m_modelGuid(PGuid())
 		{
 
 		}
 
-		CMeshComponent(const Json& _json)
+		CMeshComponent(const PJson& _json)
 			:CBaseComponent("Mesh Component", _json)
 		{
 			m_jsonObject = _json;
@@ -35,29 +35,29 @@ namespace Protostar
 			};
 		}
 
-		SGuid GetGuid() const
+		PGuid GetGuid() const
 		{
 			return m_guid;
 		}
 
-		SGuid GetModelGuid() const
+		PGuid GetModelGuid() const
 		{
 			return m_modelGuid;
 		}
 
-		void SetGuid(const SGuid& _guid)
+		void SetGuid(const PGuid& _guid)
 		{
 			m_guid = _guid;
 		}
 
-		void SetModelGuid(const SGuid& _guid)
+		void SetModelGuid(const PGuid& _guid)
 		{
 			m_modelGuid = _guid;
 		}
 
 	private:
-		SGuid m_guid;
-		SGuid m_modelGuid;
+		PGuid m_guid;
+		PGuid m_modelGuid;
 	};
 }
 

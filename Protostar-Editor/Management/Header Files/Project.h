@@ -11,7 +11,7 @@
 
 namespace Protostar
 {
-	struct SProjectPaths
+	struct PProjectPaths
 	{
 		std::filesystem::path ConfigDir;
 		std::filesystem::path ProjectDir;
@@ -23,13 +23,13 @@ namespace Protostar
 		std::filesystem::path EntitiesDir;
 	};
 
-	class CProject
+	class PProject
 	{
 	public:
-		CProject(const std::filesystem::path& _projectPath);
-		~CProject();
+		PProject(const std::filesystem::path& _projectPath);
+		~PProject();
 
-		SGuid GetGuid() const 
+		PGuid GetGuid() const 
 		{
 			return m_guid;
 		}
@@ -39,38 +39,38 @@ namespace Protostar
 			return m_name;
 		}
 
-		SProjectPaths GetProjectPaths() const 
+		PProjectPaths GetProjectPaths() const 
 		{
 			return m_projectPaths;
 		}
 
-		std::unordered_set<CScene*> GetScenes() const 
+		std::unordered_set<PScene*> GetScenes() const 
 		{
 			return m_scenes;
 		}
 
-		CScene* GetCurrentScene() const
+		PScene* GetCurrentScene() const
 		{
 			return m_currentScene;
 		}
 
 		void CreateScene(const std::string& _name)
 		{
-			CScene* newScene = new CScene(_name);
+			PScene* newScene = new PScene(_name);
 			newScene->SetObjectPath(m_projectPaths.ScenesDir / (_name + ".pescene"));
 			m_scenes.insert(newScene);
-			CSavingSystem::GetHandle()->RegisterDirtyObject(newScene);
+			PSavingSystem::GetHandle()->RegisterDirtyObject(newScene);
 		}
 
 		void CreateEntity(const std::string& _name)
 		{
-			CBaseEntity* newEntity = new CBaseEntity(_name);
+			PBaseEntity* newEntity = new PBaseEntity(_name);
 			newEntity->SetObjectPath(m_projectPaths.EntitiesDir / (_name + ".peentity"));
 			CEntityManager::GetHandle()->RegisterEntity(newEntity);
-			CSavingSystem::GetHandle()->RegisterDirtyObject(newEntity);
+			PSavingSystem::GetHandle()->RegisterDirtyObject(newEntity);
 		}
 
-		void LoadScene(CScene* _scene)
+		void LoadScene(PScene* _scene)
 		{
 			if (m_currentScene)
 			{
@@ -81,7 +81,7 @@ namespace Protostar
 			PE_LOG_F("Load scene %s", _scene->GetObjectName().c_str());
 		}
 
-		void DeleteScene(CScene* _scene)
+		void DeleteScene(PScene* _scene)
 		{
 			m_scenes.erase(_scene);
 			if (m_currentScene == _scene)
@@ -94,11 +94,11 @@ namespace Protostar
 		}
 
 	private:
-		SGuid m_guid;
-		CScene* m_currentScene;
-		std::unordered_set<CScene*> m_scenes;
+		PGuid m_guid;
+		PScene* m_currentScene;
+		std::unordered_set<PScene*> m_scenes;
 		std::string m_name;
-		SProjectPaths m_projectPaths;
+		PProjectPaths m_projectPaths;
 		//std::unordered_map<std::string, SShaderInfo> m_shaders;
 	};
 }

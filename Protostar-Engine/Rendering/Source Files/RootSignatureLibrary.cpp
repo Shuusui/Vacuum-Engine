@@ -4,21 +4,21 @@
 #include "RendererManager.h"
 #include <fstream>
 
-Protostar::CRootSignatureLibrary* Protostar::CRootSignatureLibrary::s_rootSignatureLib = nullptr;
+Protostar::PRootSignatureLibrary* Protostar::PRootSignatureLibrary::s_rootSignatureLib = nullptr;
 
 #define JSONROOTINFO "info"
 
-void Protostar::CRootSignatureLibrary::Create(const std::filesystem::path& _projectPath)
+void Protostar::PRootSignatureLibrary::Create(const std::filesystem::path& _projectPath)
 {
 	if (s_rootSignatureLib)
 	{
 		return;
 	}
 
-	s_rootSignatureLib = new CRootSignatureLibrary(_projectPath);
+	s_rootSignatureLib = new PRootSignatureLibrary(_projectPath);
 }
 
-void Protostar::CRootSignatureLibrary::Destroy()
+void Protostar::PRootSignatureLibrary::Destroy()
 {
 	if (s_rootSignatureLib)
 	{
@@ -27,12 +27,12 @@ void Protostar::CRootSignatureLibrary::Destroy()
 	}
 }
 
-Protostar::CRootSignatureLibrary* Protostar::CRootSignatureLibrary::GetHandle()
+Protostar::PRootSignatureLibrary* Protostar::PRootSignatureLibrary::GetHandle()
 {
 	return s_rootSignatureLib;
 }
 
-bool Protostar::CRootSignatureLibrary::CreateRootSignature(const SSamplerInfo& _info)
+bool Protostar::PRootSignatureLibrary::CreateRootSignature(const PSamplerInfo& _info)
 {
 	ID3D12RootSignature* rootSignature = nullptr;
 
@@ -43,17 +43,17 @@ bool Protostar::CRootSignatureLibrary::CreateRootSignature(const SSamplerInfo& _
 		return false;
 	}
 
-	if (!CRendererManager::CreateRootSignature(blob, (void**)&rootSignature))
+	if (!PRendererManager::CreateRootSignature(blob, (void**)&rootSignature))
 	{
 		return false;
 	}
 
-	m_rootInfos.insert(std::make_pair(SGuid::NewGuid(), SRootInfo{_info, rootSignature}));
+	m_rootInfos.insert(std::make_pair(PGuid::NewGuid(), PRootInfo{_info, rootSignature}));
 
 	return true;
 }
 
-Protostar::CRootSignatureLibrary::~CRootSignatureLibrary()
+Protostar::PRootSignatureLibrary::~PRootSignatureLibrary()
 {
 	if (!m_rootInfos.empty())
 	{
@@ -61,7 +61,7 @@ Protostar::CRootSignatureLibrary::~CRootSignatureLibrary()
 	}
 }
 
-Protostar::CRootSignatureLibrary::CRootSignatureLibrary(const std::filesystem::path& _projectPath)
+Protostar::PRootSignatureLibrary::PRootSignatureLibrary(const std::filesystem::path& _projectPath)
 	: m_projectPath(_projectPath)
 	, m_rootSignatureLibIniPath(_projectPath / "Configs" / "rootsignaturelib.ini")
 	, m_rootInfos({})
@@ -72,9 +72,9 @@ Protostar::CRootSignatureLibrary::CRootSignatureLibrary(const std::filesystem::p
 	}
 }
 
-void Protostar::CRootSignatureLibrary::Save()
+void Protostar::PRootSignatureLibrary::Save()
 {
-	Json json = {};
+	PJson json = {};
 
 	for (const auto& [guid, rootInfo] : m_rootInfos)
 	{
@@ -87,23 +87,23 @@ void Protostar::CRootSignatureLibrary::Save()
 	iniFile.close();
 }
 
-void Protostar::CRootSignatureLibrary::Load()
+void Protostar::PRootSignatureLibrary::Load()
 {
-	Json json = {};
+	PJson json = {};
 
 	std::ifstream iniFile(m_rootSignatureLibIniPath);
 	iniFile >> json;
 
 	for (const auto& [guid, rootInfoJson] : json.items())
 	{
-		SRootInfo rootInfo = {};
+		PRootInfo rootInfo = {};
 		rootInfo.Info.FromJson(rootInfoJson);
 		ID3DBlob* blob = nullptr;
 		if (!SerializeRootSignature(rootInfo.Info.SamplerDescs, blob))
 		{
 			continue;
 		}
-		if (!CRendererManager::CreateRootSignature(blob, (void**)&rootInfo.RootSignature))
+		if (!PRendererManager::CreateRootSignature(blob, (void**)&rootInfo.RootSignature))
 		{
 			continue;
 		}
@@ -112,7 +112,7 @@ void Protostar::CRootSignatureLibrary::Load()
 	}
 }
 
-bool Protostar::CRootSignatureLibrary::SerializeRootSignature(const std::vector<D3D12_STATIC_SAMPLER_DESC>& _descs, ID3DBlob*& _blob)
+bool Protostar::PRootSignatureLibrary::SerializeRootSignature(const std::vector<D3D12_STATIC_SAMPLER_DESC>& _descs, ID3DBlob*& _blob)
 {
 	D3D12_DESCRIPTOR_RANGE descRange = {};
 	descRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;

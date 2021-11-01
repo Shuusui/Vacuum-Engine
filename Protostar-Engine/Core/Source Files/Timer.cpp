@@ -1,19 +1,19 @@
 #include "..\Header Files\Public\Timer.h"
 
-Protostar::CTimer* Protostar::CTimer::s_timer = nullptr;
+Protostar::PTimer* Protostar::PTimer::s_timer = nullptr;
 
-bool Protostar::CTimer::Create()
+bool Protostar::PTimer::Create()
 {
 	if (s_timer)
 	{
 		return false;
 	}
-	s_timer = new CTimer();
+	s_timer = new PTimer();
 	s_timer->Init();
 	return true;
 }
 
-s64 Protostar::CTimer::GetTicksPerSecond()
+s64 Protostar::PTimer::GetTicksPerSecond()
 {
 	if (!s_timer)
 	{
@@ -22,7 +22,7 @@ s64 Protostar::CTimer::GetTicksPerSecond()
 	return s_timer->m_ticksPerSecond;
 }
 
-s64 Protostar::CTimer::GetTime()
+s64 Protostar::PTimer::GetTime()
 {
 	if (!s_timer)
 	{
@@ -31,7 +31,7 @@ s64 Protostar::CTimer::GetTime()
 	return s_timer->m_time;
 }
 
-float Protostar::CTimer::GetDeltaSeconds()
+float Protostar::PTimer::GetDeltaSeconds()
 {
 	if (!s_timer)
 	{
@@ -40,7 +40,7 @@ float Protostar::CTimer::GetDeltaSeconds()
 	return s_timer->m_deltaSeconds;
 }
 
-void Protostar::CTimer::OnUpdate()
+void Protostar::PTimer::OnUpdate()
 {
 	if (s_timer)
 	{
@@ -48,18 +48,18 @@ void Protostar::CTimer::OnUpdate()
 	}
 }
 
-Protostar::CTimer::CTimer()
+Protostar::PTimer::PTimer()
 	:m_ticksPerSecond(0)
 	,m_time(0)
 	,m_deltaSeconds(0.0f)
 {
 }
 
-Protostar::CTimer::~CTimer()
+Protostar::PTimer::~PTimer()
 {
 }
 
-void Protostar::CTimer::Update()
+void Protostar::PTimer::Update()
 {
 	s64 currentTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
@@ -67,7 +67,7 @@ void Protostar::CTimer::Update()
 	m_time = currentTime;
 }
 
-bool Protostar::CTimer::Init()
+bool Protostar::PTimer::Init()
 {
 
 	if (!QueryPerformanceCounter((LARGE_INTEGER*)&m_time))

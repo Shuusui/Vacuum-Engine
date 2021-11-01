@@ -9,16 +9,16 @@
 #include "Log.h"
 #include "RendererManager.h"
 
-Protostar::CGUI* Protostar::CGUI::s_gui = nullptr;
+Protostar::PGUI* Protostar::PGUI::s_gui = nullptr;
 
-bool Protostar::CGUI::Init(HWND _hwnd)
+bool Protostar::PGUI::Init(HWND _hwnd)
 {
 	if (s_gui)
 	{
 		return false;
 	}
 
-	s_gui = new CGUI(_hwnd);
+	s_gui = new PGUI(_hwnd);
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
@@ -52,7 +52,7 @@ bool Protostar::CGUI::Init(HWND _hwnd)
 	io.KeyMap[ImGuiKey_Z] = 'Z';
 
 	
-	CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
+	PMainWindow* mainWindow = PMainWindow::GetWindowHandle();
 	auto updateDisplaySize = [mainWindow](HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)->s32 {
 		if (!mainWindow)
 		{
@@ -68,35 +68,35 @@ bool Protostar::CGUI::Init(HWND _hwnd)
 	updateDisplaySize(nullptr, 0, 0, 0);
 
 	mainWindow->RegisterCallbackForWMEvents(WM_EXITSIZEMOVE, updateDisplaySize);
-	mainWindow->RegisterCallbackForWMEvents(WM_LBUTTONDOWN, &Protostar::CGUI::OnLButtonDown);
-	mainWindow->RegisterCallbackForWMEvents(WM_RBUTTONDOWN, &Protostar::CGUI::OnRButtonDown);
-	mainWindow->RegisterCallbackForWMEvents(WM_LBUTTONUP, &Protostar::CGUI::OnLButtonUp);
-	mainWindow->RegisterCallbackForWMEvents(WM_RBUTTONUP, &Protostar::CGUI::OnRButtonUp);
-	mainWindow->RegisterCallbackForWMEvents(WM_SETCURSOR, &Protostar::CGUI::OnSetCursor);
-	mainWindow->RegisterCallbackForWMEvents(WM_KEYDOWN, &Protostar::CGUI::OnKeyDown);
-	mainWindow->RegisterCallbackForWMEvents(WM_KEYUP, &Protostar::CGUI::OnKeyUp);
-	mainWindow->RegisterCallbackForWMEvents(WM_CHAR, &Protostar::CGUI::OnChar);
-	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEWHEEL, &Protostar::CGUI::OnMouseWheel);
-	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEHWHEEL, &Protostar::CGUI::OnMouseHWheel);
+	mainWindow->RegisterCallbackForWMEvents(WM_LBUTTONDOWN, &Protostar::PGUI::OnLButtonDown);
+	mainWindow->RegisterCallbackForWMEvents(WM_RBUTTONDOWN, &Protostar::PGUI::OnRButtonDown);
+	mainWindow->RegisterCallbackForWMEvents(WM_LBUTTONUP, &Protostar::PGUI::OnLButtonUp);
+	mainWindow->RegisterCallbackForWMEvents(WM_RBUTTONUP, &Protostar::PGUI::OnRButtonUp);
+	mainWindow->RegisterCallbackForWMEvents(WM_SETCURSOR, &Protostar::PGUI::OnSetCursor);
+	mainWindow->RegisterCallbackForWMEvents(WM_KEYDOWN, &Protostar::PGUI::OnKeyDown);
+	mainWindow->RegisterCallbackForWMEvents(WM_KEYUP, &Protostar::PGUI::OnKeyUp);
+	mainWindow->RegisterCallbackForWMEvents(WM_CHAR, &Protostar::PGUI::OnChar);
+	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEWHEEL, &Protostar::PGUI::OnMouseWheel);
+	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEHWHEEL, &Protostar::PGUI::OnMouseHWheel);
 
-	CRendererManager::RegisterAfterResizeCallback(&Protostar::CGUI::OnUpdateFontTexture);
+	PRendererManager::RegisterAfterResizeCallback(&Protostar::PGUI::OnUpdateFontTexture);
 
 	s_gui->LoadGUIIniFile();
 
-	s_gui->m_appMenuBar = new CAppMenuBar();
-	CProjectGUI::OnCreate();
+	s_gui->m_appMenuBar = new PAppMenuBar();
+	PProjectGUI::OnCreate();
 
 	return true;
 }
 
-void Protostar::CGUI::NewFrame()
+void Protostar::PGUI::NewFrame()
 {
 
 	ImGuiIO& io = ImGui::GetIO();
 
 	IM_ASSERT(io.Fonts->IsBuilt() && "Font atlas not built! It is generally built by the renderer back-end. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().");
 
-	io.DeltaTime = CTimer::GetDeltaSeconds();
+	io.DeltaTime = PTimer::GetDeltaSeconds();
 
 	io.KeyCtrl = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
 	io.KeyShift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
@@ -117,7 +117,7 @@ void Protostar::CGUI::NewFrame()
 	s_gui->RenderGUIElements();
 }
 
-void Protostar::CGUI::Render()
+void Protostar::PGUI::Render()
 {
 
 	ImGui::Render();
@@ -162,10 +162,10 @@ void Protostar::CGUI::Render()
 		drawData->DrawLists.push_back(drawList);
 	}
 
-	CRendererManager::UpdateGuiDrawData(drawData);
+	PRendererManager::UpdateGuiDrawData(drawData);
 }
 
-void Protostar::CGUI::SetCaptureIfNotSet(HWND _hwnd)
+void Protostar::PGUI::SetCaptureIfNotSet(HWND _hwnd)
 {
 	if (!ImGui::IsAnyMouseDown() && GetCapture() == nullptr)
 	{
@@ -173,7 +173,7 @@ void Protostar::CGUI::SetCaptureIfNotSet(HWND _hwnd)
 	}
 }
 
-void Protostar::CGUI::ReleaseCaptureIfSet(HWND _hwnd)
+void Protostar::PGUI::ReleaseCaptureIfSet(HWND _hwnd)
 {
 	if (!ImGui::IsAnyMouseDown() && GetCapture() == _hwnd)
 	{
@@ -181,7 +181,7 @@ void Protostar::CGUI::ReleaseCaptureIfSet(HWND _hwnd)
 	}
 }
 
-s32 Protostar::CGUI::OnLButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnLButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	SetCaptureIfNotSet(_hwnd);
@@ -189,7 +189,7 @@ s32 Protostar::CGUI::OnLButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM 
 	return 0;
 }
 
-s32 Protostar::CGUI::OnRButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnRButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	SetCaptureIfNotSet(_hwnd);
@@ -197,7 +197,7 @@ s32 Protostar::CGUI::OnRButtonDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM 
 	return 0;
 }
 
-s32 Protostar::CGUI::OnLButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnLButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseDown[0] = false;
@@ -205,7 +205,7 @@ s32 Protostar::CGUI::OnLButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _l
 	return 0;
 }
 
-s32 Protostar::CGUI::OnRButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnRButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseDown[1] = false;
@@ -213,7 +213,7 @@ s32 Protostar::CGUI::OnRButtonUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _l
 	return 0;
 }
 
-s32 Protostar::CGUI::OnSetCursor(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnSetCursor(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	if (LOWORD(_lParam) == HTCLIENT && s_gui->UpdateMouseCursor())
 	{
@@ -222,7 +222,7 @@ s32 Protostar::CGUI::OnSetCursor(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _l
 	return 0;
 }
 
-s32 Protostar::CGUI::OnKeyDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnKeyDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	if (_wParam < 256)
 	{
@@ -232,7 +232,7 @@ s32 Protostar::CGUI::OnKeyDown(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lPa
 	return 0;
 }
 
-s32 Protostar::CGUI::OnKeyUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnKeyUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	if (_wParam < 256)
 	{
@@ -242,7 +242,7 @@ s32 Protostar::CGUI::OnKeyUp(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lPara
 	return 0;
 }
 
-s32 Protostar::CGUI::OnChar(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnChar(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	if (_wParam > 0 && _wParam < 0x10000)
 	{
@@ -252,21 +252,21 @@ s32 Protostar::CGUI::OnChar(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam
 	return 0;
 }
 
-s32 Protostar::CGUI::OnMouseWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnMouseWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseWheel += (float)GET_WHEEL_DELTA_WPARAM(_wParam) / (float)WHEEL_DELTA;
 	return 0;
 }
 
-s32 Protostar::CGUI::OnMouseHWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+s32 Protostar::PGUI::OnMouseHWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.MouseWheelH += (float)GET_WHEEL_DELTA_WPARAM(_wParam) / (float)WHEEL_DELTA;
 	return 0;
 }
 
-void Protostar::CGUI::OnUpdateFontTexture(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
+void Protostar::PGUI::OnUpdateFontTexture(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->TexID = nullptr;
@@ -276,11 +276,11 @@ void Protostar::CGUI::OnUpdateFontTexture(HWND _hwnd, u32 _msg, WPARAM _wParam, 
 	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
 	u64 texID = 0;
-	CRendererManager::CreateFontsTexture(pixels, width, height, texID);
+	PRendererManager::CreateFontsTexture(pixels, width, height, texID);
 	io.Fonts->TexID = (void*)texID;
 }
 
-void Protostar::CGUI::Destroy()
+void Protostar::PGUI::Destroy()
 {
 	ImGui::DestroyContext();
 	if (s_gui)
@@ -290,12 +290,12 @@ void Protostar::CGUI::Destroy()
 	}
 }
 
-Protostar::SGUIInfo& Protostar::CGUI::GetGUIInfo()
+Protostar::PGUIInfo& Protostar::PGUI::GetGUIInfo()
 {
 	return s_gui->m_guiInfo;
 }
 
-Protostar::CGUI::~CGUI()
+Protostar::PGUI::~PGUI()
 {
 	if (!std::filesystem::exists(m_guiIniPath))
 	{
@@ -303,14 +303,14 @@ Protostar::CGUI::~CGUI()
 	}
 
 	std::ofstream appGuiIniFile(m_guiIniFilePath, std::ios::trunc);
-	Json json;
+	PJson json;
 	json["open_console"] = m_guiInfo.bOpenConsole;
 	json["open_content_browser"] = m_guiInfo.bOpenContentBrowser;
 	json["open_editor_fps"] = m_guiInfo.bOpenEditorFPS;
 	appGuiIniFile << json.dump();
 }
 
-void Protostar::CGUI::UpdateMousePos()
+void Protostar::PGUI::UpdateMousePos()
 {
 	ImGuiIO& io = ImGui::GetIO();
 
@@ -335,7 +335,7 @@ void Protostar::CGUI::UpdateMousePos()
 	}
 }
 
-bool Protostar::CGUI::UpdateMouseCursor()
+bool Protostar::PGUI::UpdateMouseCursor()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange)
@@ -368,15 +368,15 @@ bool Protostar::CGUI::UpdateMouseCursor()
 	return true;
 }
 
-void Protostar::CGUI::RenderGUIElements()
+void Protostar::PGUI::RenderGUIElements()
 {
 	m_appMenuBar->OnRender();
-	CProjectGUI::GetProjectGUIHandle()->OnRender();
+	PProjectGUI::GetProjectGUIHandle()->OnRender();
 }
 
-void Protostar::CGUI::LoadGUIIniFile()
+void Protostar::PGUI::LoadGUIIniFile()
 {
-	SAppPaths appPaths = CAppManager::GetAppPaths();
+	PAppPaths appPaths = PAppManager::GetAppPaths();
 	m_guiIniPath =  appPaths.ConfigDir / "GUI";
 	m_guiIniFilePath = m_guiIniPath / "appgui.ini";
 	if (!std::filesystem::exists(m_guiIniFilePath))
@@ -385,23 +385,23 @@ void Protostar::CGUI::LoadGUIIniFile()
 	}
 
 	std::ifstream appGuiIniFile(m_guiIniFilePath);
-	Json json;
+	PJson json;
 	appGuiIniFile >> json;
 	m_guiInfo.bOpenConsole = json["open_console"].get<bool>();
 	m_guiInfo.bOpenContentBrowser = json["open_content_browser"].get<bool>();
 	m_guiInfo.bOpenEditorFPS = json["open_editor_fps"].get<bool>();
 }
 
-void Protostar::CGUI::CreateAppMenuBar()
+void Protostar::PGUI::CreateAppMenuBar()
 {
 	if (m_appMenuBar)
 	{
 		return;
 	}
-	m_appMenuBar = new CAppMenuBar();
+	m_appMenuBar = new PAppMenuBar();
 }
 
-void Protostar::CGUI::DestroyAppMenuBar()
+void Protostar::PGUI::DestroyAppMenuBar()
 {
 	if (m_appMenuBar)
 	{
@@ -410,12 +410,12 @@ void Protostar::CGUI::DestroyAppMenuBar()
 	}
 }
 
-void Protostar::CGUI::CreateProjectGUI()
+void Protostar::PGUI::CreateProjectGUI()
 {
-	CProjectGUI::OnCreate();
+	PProjectGUI::OnCreate();
 }
 
-void Protostar::CGUI::DestroyProjectGUI()
+void Protostar::PGUI::DestroyProjectGUI()
 {
-	CProjectGUI::OnDestroy();
+	PProjectGUI::OnDestroy();
 }

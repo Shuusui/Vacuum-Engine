@@ -3,11 +3,11 @@
 
 namespace Protostar
 {
-	class CEditorFPS
+	class PEditorFPS
 	{
 	public:
-		CEditorFPS();
-		~CEditorFPS();
+		PEditorFPS();
+		~PEditorFPS();
 		void OnRender();
 	private:
 

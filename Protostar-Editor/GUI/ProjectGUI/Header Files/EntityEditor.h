@@ -3,25 +3,25 @@
 
 namespace Protostar
 {
-	class CBaseEntity;
+	class PBaseEntity;
 
-	class CEntityEditor
+	class PEntityEditor
 	{
 	public: 
-		static CEntityEditor* OnCreate();
-		CEntityEditor()
+		static PEntityEditor* OnCreate();
+		PEntityEditor()
 			:m_entity(nullptr)
 			,m_bEntityEditorOpen(false)
 		{
 
 		}
-		void OpenEditor(CBaseEntity* _entity);
+		void OpenEditor(PBaseEntity* _entity);
 		void OnRender();
 		void CloseEditor();
 	private:
-		static CEntityEditor* s_entityEditor;
+		static PEntityEditor* s_entityEditor;
 
-		CBaseEntity* m_entity;
+		PBaseEntity* m_entity;
 		bool m_bEntityEditorOpen;
 	};
 }

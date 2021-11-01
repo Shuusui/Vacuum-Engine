@@ -7,18 +7,18 @@
 
 namespace Protostar
 {
-	class CProject;
+	class PProject;
 
-	class CContentBrowser
+	class PContentBrowser
 	{
 	public:
-		CContentBrowser(CProject* _project);
+		PContentBrowser(PProject* _project);
 		void OnRender();
 
 	private:
 		void DisplayContextMenu();
 		void ManageShaderPaths();
-		void DisplayRecursiveShaderTrees(const STreeObject<SShaderComplement>& _subTree);
+		void DisplayRecursiveShaderTrees(const PTreeObject<PShaderComplement>& _subTree);
 		void ManageModelPaths();
 		void ManageScenePaths();
 		void ShowEntities();
@@ -27,11 +27,11 @@ namespace Protostar
 		void CheckPaths();
 		void InitSceneTreeNode();
 
-		CProject* m_project;
-		class CMeshManager* m_meshManager;
+		PProject* m_project;
+		class PMeshManager* m_meshManager;
 		bool m_bDelKeyPressedThisFrame;
 		bool m_bRefresh;
-		std::unordered_map<class CScene*, bool> m_scenes;
-		std::unordered_map<class CBaseEntity*, bool> m_entities;
+		std::unordered_map<class PScene*, bool> m_scenes;
+		std::unordered_map<class PBaseEntity*, bool> m_entities;
 	};
 }

@@ -25,7 +25,7 @@ using namespace Microsoft::WRL;
 
 void Protostar::DX12Renderer::OnCreate()
 {
-	CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
+	PMainWindow* mainWindow = PMainWindow::GetWindowHandle();
 	if (!mainWindow)
 	{
 		return;

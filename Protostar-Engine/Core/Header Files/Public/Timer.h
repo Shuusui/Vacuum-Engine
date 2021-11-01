@@ -4,7 +4,7 @@
 
 namespace Protostar
 {
-	class CTimer
+	class PTimer
 	{
 	public:
 		static bool Create();
@@ -12,12 +12,12 @@ namespace Protostar
 		static s64 GetTime();
 		static float GetDeltaSeconds();
 		static void OnUpdate();
-		CTimer();
-		~CTimer();
+		PTimer();
+		~PTimer();
 		void Update();
 		bool Init();
 	private:
-		static CTimer* s_timer;
+		static PTimer* s_timer;
 
 		s64 m_ticksPerSecond;
 		s64 m_time;

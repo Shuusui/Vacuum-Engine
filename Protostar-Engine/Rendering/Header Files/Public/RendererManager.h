@@ -9,7 +9,7 @@
 
 namespace Protostar
 {
-	class CRendererManager
+	class PRendererManager
 	{
 	public:
 		static void Create(const SRendererCreationInfo& _info);
@@ -30,7 +30,7 @@ namespace Protostar
 		}
 		
 	private:
-		CRendererManager(const SRendererCreationInfo& _info)
+		PRendererManager(const SRendererCreationInfo& _info)
 			:m_renderer(nullptr)
 			,m_bVSync(_info.bVSync)
 		{
@@ -42,7 +42,7 @@ namespace Protostar
 				break;
 			}
 		}
-		static CRendererManager* s_rendererManager;
+		static PRendererManager* s_rendererManager;
 		IRenderer* m_renderer;
 		bool m_bVSync;
 	};

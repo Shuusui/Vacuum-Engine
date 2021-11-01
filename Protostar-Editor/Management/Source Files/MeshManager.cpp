@@ -4,19 +4,19 @@
 
 #define JSONMESHMAP "mesh_map"
 
-Protostar::CMeshManager* Protostar::CMeshManager::s_meshManager = nullptr;
+Protostar::PMeshManager* Protostar::PMeshManager::s_meshManager = nullptr;
 
-void Protostar::CMeshManager::OnCreate(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath)
+void Protostar::PMeshManager::OnCreate(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath)
 {
 	if (s_meshManager)
 	{
 		delete s_meshManager;
 		s_meshManager = nullptr;
 	}
-	s_meshManager = new CMeshManager(_meshesPath, _configsPath);
+	s_meshManager = new PMeshManager(_meshesPath, _configsPath);
 }
 
-void Protostar::CMeshManager::OnDestroy()
+void Protostar::PMeshManager::OnDestroy()
 {
 	if (s_meshManager)
 	{
@@ -25,7 +25,7 @@ void Protostar::CMeshManager::OnDestroy()
 	}
 }
 
-void Protostar::CMeshManager::Load()
+void Protostar::PMeshManager::Load()
 {
 	WaveFrontReader<u32> wfReader = WaveFrontReader<u32>();
 	std::unordered_set<std::string> alreadyFoundMeshes = {};
@@ -33,13 +33,13 @@ void Protostar::CMeshManager::Load()
 	{
 		std::ifstream configFile(m_configFilePath);
 
-		Json json = {};
+		PJson json = {};
 		configFile >> json;
 
-		Json meshMapJson = json[JSONMESHMAP].get<Json>();
+		PJson meshMapJson = json[JSONMESHMAP].get<PJson>();
 		for (auto& [key, value] : meshMapJson.items())
 		{
-			SModel model = SModel(value);
+			PModel model = PModel(value);
 			alreadyFoundMeshes.insert(model.Name);
 			wfReader.Clear();
 			wfReader.Load(model.Path.wstring().c_str());
@@ -69,7 +69,7 @@ void Protostar::CMeshManager::Load()
 		{
 			continue;
 		}
-		SModel model = SModel(meshPath);
+		PModel model = PModel(meshPath);
 		wfReader.Clear();
 		wfReader.Load(meshPath.wstring().c_str());
 		model.MeshData.Vertices = std::move(wfReader.vertices);
@@ -79,10 +79,10 @@ void Protostar::CMeshManager::Load()
 	}
 }
 
-void Protostar::CMeshManager::Save()
+void Protostar::PMeshManager::Save()
 {
-	Json json = {};
-	Json meshMapJson = {}; 
+	PJson json = {};
+	PJson meshMapJson = {}; 
 
 	for (const auto& [key, value] : m_meshes)
 	{
@@ -95,12 +95,12 @@ void Protostar::CMeshManager::Save()
 	configFile << json.dump();
 }
 
-Protostar::CMeshManager::~CMeshManager()
+Protostar::PMeshManager::~PMeshManager()
 {
 	Save();
 }
 
-Protostar::CMeshManager::CMeshManager(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath)
+Protostar::PMeshManager::PMeshManager(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath)
 	:m_meshesPath(_meshesPath)
 	,m_configsPath(_configsPath)
 	,m_configFilePath(m_configsPath / "meshmanager.ini")

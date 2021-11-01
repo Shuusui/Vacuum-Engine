@@ -5,37 +5,37 @@
 #include "Timer.h"
 #include "RendererManager.h"
 
-Protostar::CEditorFPS::CEditorFPS()
+Protostar::PEditorFPS::PEditorFPS()
 {
 }
 
-Protostar::CEditorFPS::~CEditorFPS()
+Protostar::PEditorFPS::~PEditorFPS()
 {
 }
 
-void Protostar::CEditorFPS::OnRender()
+void Protostar::PEditorFPS::OnRender()
 {
-	if (!CGUI::GetGUIInfo().bOpenEditorFPS)
+	if (!PGUI::GetGUIInfo().bOpenEditorFPS)
 	{
 		return;
 	}
 
-	CAppManager* appManager = CAppManager::GetAppHandle();
+	PAppManager* appManager = PAppManager::GetAppHandle();
 	SWindowDimParams wndDim = appManager->GetInitWindowDimParams();
 	float x = (float)wndDim.Width - 200;
 	float y = (float)wndDim.Height * .1f;
 	ImGui::SetNextWindowSize(ImVec2(160.0f, 80.0f), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
 
-	if (!ImGui::Begin("Editor FPS", &CGUI::GetGUIInfo().bOpenEditorFPS))
+	if (!ImGui::Begin("Editor FPS", &PGUI::GetGUIInfo().bOpenEditorFPS))
 	{
 		ImGui::End();
 		return;
 	}
 
-	ImGui::Checkbox("VSync", &CRendererManager::GetVSync());
+	ImGui::Checkbox("VSync", &PRendererManager::GetVSync());
 
-	ImGui::Text("%.3f ms/frame", CTimer::GetDeltaSeconds());
+	ImGui::Text("%.3f ms/frame", PTimer::GetDeltaSeconds());
 	ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 
 

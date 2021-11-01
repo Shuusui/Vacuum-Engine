@@ -4,22 +4,22 @@
 
 namespace Protostar
 {
-	class CBaseComponent : public CBaseObject
+	class CBaseComponent : public PBaseObject
 	{
 	public: 
-		CBaseComponent(const std::string& _name, const Json& _json)
-			:CBaseObject(_name)
+		CBaseComponent(const std::string& _name, const PJson& _json)
+			:PBaseObject(_name)
 			,m_jsonObject(_json)
 		{
 		}
 
-		Json GetJsonObject() const
+		PJson GetJsonObject() const
 		{
 			return m_jsonObject;
 		}
 
 		virtual void OnSave() = 0;
 	protected:
-		Json m_jsonObject;
+		PJson m_jsonObject;
 	};
 }

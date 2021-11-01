@@ -16,11 +16,11 @@
 
 namespace Protostar
 {
-	struct SWindowClassParams
+	struct PWindowClassParams
 	{
-		SWindowClassParams() = default;
+		PWindowClassParams() = default;
 
-		SWindowClassParams(const SWindowClassParams& _other)
+		PWindowClassParams(const PWindowClassParams& _other)
 			:Style(_other.Style)
 			,HInstance(_other.HInstance)
 			,ClassName(_other.ClassName)
@@ -28,7 +28,7 @@ namespace Protostar
 		{
 		}
 
-		SWindowClassParams(SWindowClassParams&& _other) noexcept
+		PWindowClassParams(PWindowClassParams&& _other) noexcept
 			:Style(std::move(_other.Style))
 			, HInstance(_other.HInstance)
 			, ClassName(std::move(_other.ClassName))
@@ -45,11 +45,11 @@ namespace Protostar
 
 	};
 
-	struct SWindowCreationParams
+	struct PWindowCreationParams
 	{
-		SWindowCreationParams() = default;
+		PWindowCreationParams() = default;
 
-		SWindowCreationParams(const SWindowCreationParams& _other)
+		PWindowCreationParams(const PWindowCreationParams& _other)
 			:DwExStyle(_other.DwExStyle)
 			,DwStyle(_other.DwStyle)
 			,WindowName(_other.WindowName)
@@ -59,7 +59,7 @@ namespace Protostar
 		{
 		}
 
-		SWindowCreationParams(SWindowCreationParams&& _other) noexcept
+		PWindowCreationParams(PWindowCreationParams&& _other) noexcept
 			:DwExStyle(std::move(_other.DwExStyle))
 			, DwStyle(std::move(_other.DwStyle))
 			, WindowName(std::move(_other.WindowName))
@@ -80,33 +80,33 @@ namespace Protostar
 		LPVOID LpParam;
 	};
 
-	struct SWindowInfo
+	struct PWindowInfo
 	{
-		SWindowInfo() = default;
+		PWindowInfo() = default;
 
-		SWindowInfo(const SWindowInfo& _other)
+		PWindowInfo(const PWindowInfo& _other)
 			:ClassParams(_other.ClassParams)
 			,DimParams(_other.DimParams)
 			,CreationParams(_other.CreationParams)
 		{
 		}
 
-		SWindowInfo(SWindowInfo&& _other) noexcept
+		PWindowInfo(PWindowInfo&& _other) noexcept
 			:ClassParams(std::move(_other.ClassParams))
 			,DimParams(std::move(_other.DimParams))
 			,CreationParams(std::move(_other.CreationParams))
 		{
 		}
 
-		SWindowClassParams ClassParams;
+		PWindowClassParams ClassParams;
 		SWindowDimParams DimParams;
-		SWindowCreationParams CreationParams;
+		PWindowCreationParams CreationParams;
 	};
 
-	class CMainWindow
+	class PMainWindow
 	{
 	public:
-		static void InitWindow(const SWindowInfo& _windowInfo);
+		static void InitWindow(const PWindowInfo& _windowInfo);
 
 		static bool Create(std::string& _errorMsg);
 
@@ -114,7 +114,7 @@ namespace Protostar
 
 		static bool RunWindow(MSG& _msg);
 
-		static CMainWindow* GetWindowHandle();
+		static PMainWindow* GetWindowHandle();
 
 		void UpdateWindowPos(const s32 _x, const s32 _y);
 
@@ -129,7 +129,7 @@ namespace Protostar
 		SWindowDimParams GetCurrentDim() const;
 
 	private:
-		CMainWindow(const SWindowInfo& _windowInfo)
+		PMainWindow(const PWindowInfo& _windowInfo)
 			:m_windowInfo(_windowInfo)
 			,m_wndHandle(nullptr)
 		{
@@ -150,9 +150,9 @@ namespace Protostar
 			};
 		}
 
-		SWindowInfo m_windowInfo;
+		PWindowInfo m_windowInfo;
 		HWND m_wndHandle;
-		static CMainWindow* s_mainWindow;
+		static PMainWindow* s_mainWindow;
 		std::unordered_map<u32, std::vector<std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>>> m_wmEventMap;
 	};
 }

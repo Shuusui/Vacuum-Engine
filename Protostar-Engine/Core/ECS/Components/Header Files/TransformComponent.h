@@ -19,18 +19,18 @@ namespace Protostar
 	{
 	public:
 		CTransformComponent()
-			:CBaseComponent("Transform Component", Json())
+			:CBaseComponent("Transform Component",PJson())
 			,m_transformationMatrix(DirectX::XMMatrixIdentity())
 		{
 		}
 
-		CTransformComponent(const Json& _json)
+		CTransformComponent(const PJson& _json)
 			:CBaseComponent("Transform Component", _json)
 			,m_transformationMatrix(DirectX::XMMATRIX(
-			RowFromJson(_json[JSONROW0].get<Json>()), 
-			RowFromJson(_json[JSONROW1].get<Json>()),
-			RowFromJson(_json[JSONROW2].get<Json>()),
-			RowFromJson(_json[JSONROW3].get<Json>())))
+			RowFromJson(_json[JSONROW0].get<PJson>()), 
+			RowFromJson(_json[JSONROW1].get<PJson>()),
+			RowFromJson(_json[JSONROW2].get<PJson>()),
+			RowFromJson(_json[JSONROW3].get<PJson>())))
 		{
 		}
 
@@ -209,9 +209,9 @@ namespace Protostar
 		}
 
 	private:
-		Json RowToJson(const DirectX::XMVECTOR& _row) const
+		PJson RowToJson(const DirectX::XMVECTOR& _row) const
 		{
-			return Json
+			return PJson
 			{
 				{JSON0, _row.m128_f32[0]},
 				{JSON1, _row.m128_f32[1]},
@@ -220,7 +220,7 @@ namespace Protostar
 			};
 		}
 
-		DirectX::XMVECTOR RowFromJson(const Json& _json) const
+		DirectX::XMVECTOR RowFromJson(const PJson& _json) const
 		{
 			return DirectX::XMVECTOR
 			{
@@ -235,12 +235,12 @@ namespace Protostar
 	};
 }
 
-#undef JSONROW0 
-#undef JSONROW1 
-#undef JSONROW2 
-#undef JSONROW3 
+#undef JSONROW0
+#undef JSONROW1
+#undef JSONROW2
+#undef JSONROW3
 
-#undef JSON0 
-#undef JSON1 
-#undef JSON2 
-#undef JSON3 
+#undef JSON0
+#undef JSON1
+#undef JSON2
+#undef JSON3

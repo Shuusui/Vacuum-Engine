@@ -23,18 +23,18 @@
 
 namespace Protostar
 {
-	struct SSamplerInfo
+	struct PSamplerInfo
 	{
 		std::string Name;
 		std::vector<D3D12_STATIC_SAMPLER_DESC> SamplerDescs;
 
-		Json ToJson() const
+		PJson ToJson() const
 		{
-			Json json = {};
+			PJson json = {};
 
 			json[JSONROOTNAME] = Name.c_str();
 
-			std::vector<Json> samplerDescJsons = {};
+			std::vector<PJson> samplerDescJsons = {};
 
 			for (const D3D12_STATIC_SAMPLER_DESC& samplerDesc : SamplerDescs)
 			{
@@ -45,17 +45,17 @@ namespace Protostar
 			return json;
 		}
 
-		void FromJson(const Json& _json)
+		void FromJson(const PJson& _json)
 		{
 			Name = _json[JSONROOTNAME].get<std::string>();
-			for (const Json& json : _json[JSONSAMPLERDESCS].get<std::vector<Json>>())
+			for (const PJson& json : _json[JSONSAMPLERDESCS].get<std::vector<PJson>>())
 			{
 				SamplerDescs.push_back(JsonToSamplerDesc(json));
 			}
 		}
 
 	private: 
-		D3D12_STATIC_SAMPLER_DESC JsonToSamplerDesc(const Json& _json) const
+		D3D12_STATIC_SAMPLER_DESC JsonToSamplerDesc(const PJson& _json) const
 		{
 			return D3D12_STATIC_SAMPLER_DESC
 			{
@@ -74,9 +74,9 @@ namespace Protostar
 				(D3D12_SHADER_VISIBILITY)_json[JSONSAMPLERDESCSHADERVISIBILITY].get<u32>()
 			};
 		}
-		Json SamplerDescToJson(const D3D12_STATIC_SAMPLER_DESC& _desc) const
+		PJson SamplerDescToJson(const D3D12_STATIC_SAMPLER_DESC& _desc) const
 		{
-			return Json
+			return PJson
 			{
 				{JSONSAMPLERDESCU, _desc.AddressU},
 				{JSONSAMPLERDESCV, _desc.AddressV},
@@ -95,40 +95,40 @@ namespace Protostar
 		}
 	};
 
-	struct SRootInfo
+	struct PRootInfo
 	{
-		SSamplerInfo Info;
+		PSamplerInfo Info;
 		ID3D12RootSignature* RootSignature;
 	};
 
-	class CRootSignatureLibrary
+	class PRootSignatureLibrary
 	{
 	public:
 		static void Create(const std::filesystem::path& _projectPath);
 		static void Destroy();
-		static CRootSignatureLibrary* GetHandle();
+		static PRootSignatureLibrary* GetHandle();
 
-		bool CreateRootSignature(const SSamplerInfo& _info);
-		std::unordered_map<SGuid, SRootInfo> GetRootInfos() const
+		bool CreateRootSignature(const PSamplerInfo& _info);
+		std::unordered_map<PGuid, PRootInfo> GetRootInfos() const
 		{
 			return m_rootInfos;
 		}
-		SRootInfo GetRootInfo(const SGuid& _guid) const
+		PRootInfo GetRootInfo(const PGuid& _guid) const
 		{
 			return m_rootInfos.at(_guid);
 		}
 
-		~CRootSignatureLibrary();
+		~PRootSignatureLibrary();
 	private:
-		CRootSignatureLibrary(const std::filesystem::path& _projectPath);
+		PRootSignatureLibrary(const std::filesystem::path& _projectPath);
 		void Save();
 		void Load();
 		bool SerializeRootSignature(const std::vector<D3D12_STATIC_SAMPLER_DESC>& _descs, ID3DBlob*& _blob);
 
-		static CRootSignatureLibrary* s_rootSignatureLib;
+		static PRootSignatureLibrary* s_rootSignatureLib;
 		std::filesystem::path m_projectPath;
 		std::filesystem::path m_rootSignatureLibIniPath;
-		std::unordered_map<SGuid, SRootInfo> m_rootInfos;
+		std::unordered_map<PGuid, PRootInfo> m_rootInfos;
 	};
 }
 

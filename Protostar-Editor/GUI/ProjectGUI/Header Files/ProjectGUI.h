@@ -3,21 +3,21 @@
 
 namespace Protostar
 {
-	class CProjectGUI
+	class PProjectGUI
 	{
 	public:
 		static void OnCreate();
 		static void OnDestroy();
-		static CProjectGUI* GetProjectGUIHandle()
+		static PProjectGUI* GetProjectGUIHandle()
 		{
 			return s_projectGUI;
 		}
-		~CProjectGUI();
+		~PProjectGUI();
 		void OnRender();
 		void RenderViewport();
 		void RenderCreateSceneWindow();
 		void RenderCreateEntityWindow();
-		class CEntityEditor* GetEntityEditorHandle()
+		class PEntityEditor* GetEntityEditorHandle()
 		{
 			return m_entityEditor;
 		}
@@ -35,14 +35,14 @@ namespace Protostar
 		void ToggleContentBrowser();
 
 	private:
-		CProjectGUI();
+		PProjectGUI();
 
-		static CProjectGUI* s_projectGUI;
+		static PProjectGUI* s_projectGUI;
 
-		class CProject* m_currentProject;
-		class CSavingSystem* m_savingSystem;
-		class CContentBrowser* m_contentBrowser;
-		class CEntityEditor* m_entityEditor;
+		class PProject* m_currentProject;
+		class PSavingSystem* m_savingSystem;
+		class PContentBrowser* m_contentBrowser;
+		class PEntityEditor* m_entityEditor;
 		size_t m_setProjectFuncIndex;
 		bool m_bShowCreateSceneWindow;
 		bool m_bShowCreateEntityWindow;

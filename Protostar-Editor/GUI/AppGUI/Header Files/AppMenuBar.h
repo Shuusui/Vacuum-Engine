@@ -3,19 +3,19 @@
 
 namespace Protostar
 {
-	class CAppMenuBar 
+	class PAppMenuBar 
 	{
 	public:
-		CAppMenuBar();
-		~CAppMenuBar();
+		PAppMenuBar();
+		~PAppMenuBar();
 		void OnRender();
 		void ShowSaveWindow();
 	private:
-		class CLogWindow* m_logWindow;
-		class CEditorFPS* m_editorFPS;
+		class PLogWindow* m_logWindow;
+		class PEditorFPS* m_editorFPS;
 
 		bool m_bShowSaveWindow;
-		std::unordered_map<class CBaseObject*, bool> m_dirtyObjects;
+		std::unordered_map<class PBaseObject*, bool> m_dirtyObjects;
 
 	};
 }

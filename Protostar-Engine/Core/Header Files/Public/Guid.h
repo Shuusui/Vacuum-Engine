@@ -28,7 +28,7 @@ namespace Protostar
 	};
 
 	//this is just unreal engine like implementation of a GUID which uses windows provided Guid function to create it but uses own functions for make it usable as keys for maps etc. 
-	struct SGuid
+	struct PGuid
 	{
 	public:
 		u32 A;
@@ -36,7 +36,7 @@ namespace Protostar
 		u32 C;
 		u32 D;
 
-		SGuid()
+		PGuid()
 			: A(0)
 			, B(0)
 			, C(0)
@@ -44,7 +44,7 @@ namespace Protostar
 		{
 		}
 
-		SGuid(const std::string& _guidStr, const EGuidFormats _format = EGuidFormats::Digits)
+		PGuid(const std::string& _guidStr, const EGuidFormats _format = EGuidFormats::Digits)
 			: A(0)
 			, B(0)
 			, C(0)
@@ -119,7 +119,7 @@ namespace Protostar
 			C |= cFirst << 16;
 		}
 
-		SGuid(const SGuid& _other)
+		PGuid(const PGuid& _other)
 			: A(_other.A)
 			, B(_other.B)
 			, C(_other.C)
@@ -127,7 +127,7 @@ namespace Protostar
 		{
 		}
 
-		SGuid(SGuid&& _other) noexcept
+		PGuid(PGuid&& _other) noexcept
 			: A(std::move(_other.A))
 			, B(std::move(_other.B))
 			, C(std::move(_other.C))
@@ -216,18 +216,18 @@ namespace Protostar
 			return resultStream.str();
 		}
 
-		static SGuid NewGuid()
+		static PGuid NewGuid()
 		{
-			SGuid returnGuid;
+			PGuid returnGuid;
 			HRESULT result = CoCreateGuid((GUID*)&returnGuid);
 			if (result != S_OK)
 			{
-				return SGuid();
+				return PGuid();
 			}
 			return returnGuid;
 		}
 
-		void operator=(const SGuid& _other)
+		void operator=(const PGuid& _other)
 		{
 			A = _other.A;
 			B = _other.B;
@@ -235,7 +235,7 @@ namespace Protostar
 			D = _other.D;
 		}
 
-		void operator=(SGuid&& _other) noexcept
+		void operator=(PGuid&& _other) noexcept
 		{
 			A = std::move(_other.A);
 			B = std::move(_other.B);
@@ -243,17 +243,17 @@ namespace Protostar
 			D = std::move(_other.D);
 		}
 
-		friend bool operator==(const SGuid& _first, const SGuid& _second)
+		friend bool operator==(const PGuid& _first, const PGuid& _second)
 		{
 			return ((_first.A ^ _second.A) | (_first.B ^ _second.B) | (_first.C ^ _second.C) | (_first.D ^ _second.D)) == 0;
 		}
 
-		friend bool operator!=(const SGuid& _first, const SGuid& _second)
+		friend bool operator!=(const PGuid& _first, const PGuid& _second)
 		{
 			return ((_first.A ^ _second.A) | (_first.B ^ _second.B) | (_first.C ^ _second.C)| (_first.D ^ _second.D)) != 0;
 		}
 
-		friend bool operator <(const SGuid& _first, const SGuid& _second)
+		friend bool operator <(const PGuid& _first, const PGuid& _second)
 		{
 			return	((_first.A < _second.A) ? true : ((_first.A > _second.A)? false :
 					((_first.B < _second.B) ? true : ((_first.B > _second.B)? false : 
@@ -268,9 +268,9 @@ namespace Protostar
 }
 namespace std
 {
-	template<> struct hash<Protostar::SGuid>
+	template<> struct hash<Protostar::PGuid>
 	{
-		size_t operator()(Protostar::SGuid _guid) const
+		size_t operator()(Protostar::PGuid _guid) const
 		{
 			const u64* guidPtr = reinterpret_cast<const u64*>(&_guid);
 			hash<u64> hash;

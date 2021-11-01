@@ -11,16 +11,16 @@ const char* JSONENTITYGUID = "guid";
 const char* JSONTRANSFORM = "transform";
 const char* JSONMESH = "mesh";
 
-Protostar::CBaseEntity::CBaseEntity(const std::string& _name)
-	:CBaseObject(_name)
+Protostar::PBaseEntity::PBaseEntity(const std::string& _name)
+	:PBaseObject(_name)
 	,m_entity(CECSManager::CreateEntity())
 {
 	CEntityManager::GetHandle()->RegisterEntity(this);
 
 }
 
-Protostar::CBaseEntity::CBaseEntity(const std::filesystem::path& _path)
-	:CBaseObject(std::string())
+Protostar::PBaseEntity::PBaseEntity(const std::filesystem::path& _path)
+	:PBaseObject(std::string())
 	,m_entity(CECSManager::CreateEntity())
 {
 	m_objectPath = _path;
@@ -28,11 +28,11 @@ Protostar::CBaseEntity::CBaseEntity(const std::filesystem::path& _path)
 	CEntityManager::GetHandle()->RegisterEntity(this);
 }
 
-Protostar::CBaseEntity::~CBaseEntity()
+Protostar::PBaseEntity::~PBaseEntity()
 {
 }
 
-void Protostar::CBaseEntity::OnSave()
+void Protostar::PBaseEntity::OnSave()
 {
 
 	entt::registry& registry = CECSManager::GetRegistry();
@@ -46,7 +46,7 @@ void Protostar::CBaseEntity::OnSave()
 	}
 	std::ofstream objectFile(m_objectPath, std::ios::trunc);
 
-	Json json =
+	PJson json =
 	{
 		{JSONENTITYNAME, m_objectName},
 		{JSONENTITYGUID, m_guid.ToString()}
@@ -69,11 +69,11 @@ void Protostar::CBaseEntity::OnSave()
 	objectFile << json.dump();
 }
 
-void Protostar::CBaseEntity::LoadData()
+void Protostar::PBaseEntity::LoadData()
 {
 	std::ifstream objectFile(m_objectPath);
 
-	Json json = {};
+	PJson json= {};
 	objectFile >> json;
 
 	m_objectName = json[JSONENTITYNAME].get<std::string>();
@@ -81,7 +81,7 @@ void Protostar::CBaseEntity::LoadData()
 	entt::registry& registry = CECSManager::GetRegistry();
 	if (json.contains(JSONTRANSFORM))
 	{
-		Json jsonTransform = json[JSONTRANSFORM].get<Json>();
+		PJson jsonTransform = json[JSONTRANSFORM].get<PJson>();
 		CTransformComponent transform = CTransformComponent(jsonTransform);
 		CTransformComponent& blankTransform = registry.emplace<CTransformComponent>(m_entity);
 		blankTransform = transform;
@@ -89,7 +89,7 @@ void Protostar::CBaseEntity::LoadData()
 
 	if (json.contains(JSONMESH))
 	{
-		Json jsonMesh = json[JSONMESH].get<Json>();
+		PJson jsonMesh = json[JSONMESH].get<PJson>();
 		CMeshComponent meshComp = CMeshComponent(jsonMesh);
 		CMeshComponent& blankMeshComp = registry.emplace<CMeshComponent>(m_entity);
 		blankMeshComp = meshComp;

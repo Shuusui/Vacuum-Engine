@@ -8,7 +8,7 @@
 #include "SavingSystem.h"
 #include "MeshManager.h"
 
-Protostar::CEntityEditor* Protostar::CEntityEditor::s_entityEditor = nullptr;
+Protostar::PEntityEditor* Protostar::PEntityEditor::s_entityEditor = nullptr;
 
 enum class ESelected
 {
@@ -17,23 +17,23 @@ enum class ESelected
 	Mesh
 };
 
-Protostar::CEntityEditor* Protostar::CEntityEditor::OnCreate()
+Protostar::PEntityEditor* Protostar::PEntityEditor::OnCreate()
 {
 	if (s_entityEditor)
 	{
 		return s_entityEditor;
 	}
 
-	return s_entityEditor = new CEntityEditor();
+	return s_entityEditor = new PEntityEditor();
 }
 
-void Protostar::CEntityEditor::OpenEditor(CBaseEntity* _entity)
+void Protostar::PEntityEditor::OpenEditor(PBaseEntity* _entity)
 {
 	m_entity = _entity;
 	m_bEntityEditorOpen = true;
 }
 
-void Protostar::CEntityEditor::OnRender()
+void Protostar::PEntityEditor::OnRender()
 {
 	if (!m_entity || !m_bEntityEditorOpen)
 	{
@@ -62,7 +62,7 @@ void Protostar::CEntityEditor::OnRender()
 		if (ImGui::InputText("Name", textBuf, IM_ARRAYSIZE(textBuf)))
 		{
 			m_entity->SetObjectName(textBuf);
-			CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+			PSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
 		}
 
 		if (registry.has<CTransformComponent>(entity))
@@ -89,7 +89,7 @@ void Protostar::CEntityEditor::OnRender()
 				{
 					selected = ESelected::Transform;
 					registry.emplace<CTransformComponent>(entity);
-					CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+					PSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
 				}
 			}
 			if (!registry.has<CMeshComponent>(entity))
@@ -98,7 +98,7 @@ void Protostar::CEntityEditor::OnRender()
 				{
 					selected = ESelected::Mesh;
 					registry.emplace<CMeshComponent>(entity);
-					CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+					PSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
 				}
 			}
 			ImGui::EndCombo();
@@ -144,7 +144,7 @@ void Protostar::CEntityEditor::OnRender()
 
 					if (bShouldSave)
 					{
-						CSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
+						PSavingSystem::GetHandle()->RegisterDirtyObject(m_entity);
 					}
 				}
 				break;
@@ -156,10 +156,10 @@ void Protostar::CEntityEditor::OnRender()
 					ImGui::SameLine();
 					ImGui::Text(meshComp.GetGuid().ToString().c_str());
 
-					CMeshManager* meshManager = CMeshManager::GetHandle();
+					PMeshManager* meshManager = PMeshManager::GetHandle();
 					if (meshComp.GetModelGuid().IsValid())
 					{
-						SModel modelData = meshManager->GetModelData(meshComp.GetModelGuid());
+						PModel modelData = meshManager->GetModelData(meshComp.GetModelGuid());
 						ImGui::Text("Model: ");
 						ImGui::SameLine();
 						ImGui::Text(modelData.Name.c_str());
@@ -187,7 +187,7 @@ void Protostar::CEntityEditor::OnRender()
 	ImGui::End();
 }
 
-void Protostar::CEntityEditor::CloseEditor()
+void Protostar::PEntityEditor::CloseEditor()
 {
 	m_entity = nullptr;
 }
