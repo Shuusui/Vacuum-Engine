@@ -4,12 +4,12 @@
 
 namespace Protostar
 {
-	class CBaseEntity : public CBaseObject
+	class PBaseEntity : public PBaseObject
 	{
 	public:
-		CBaseEntity(const std::string& _name);
-		CBaseEntity(const std::filesystem::path& _path);
-		virtual ~CBaseEntity();
+		PBaseEntity(const std::string& _name);
+		PBaseEntity(const std::filesystem::path& _path);
+		virtual ~PBaseEntity();
 		virtual void OnSave() override;
 		void LoadData();
 		entt::entity& GetEntity()

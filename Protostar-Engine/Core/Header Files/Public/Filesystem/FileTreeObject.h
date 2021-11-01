@@ -4,17 +4,17 @@
 namespace Protostar
 {
 	template<typename T>
-	struct STreeNode
+	struct PTreeNode
 	{
 		std::filesystem::path Path;
 		T Asset;
 	};
 
 	template<typename T>
-	struct STreeObject
+	struct PTreeObject
 	{
 		std::filesystem::path Path;
-		std::vector<STreeObject<T>> SubDirs;
-		std::vector<STreeNode<T>> Nodes;
+		std::vector<PTreeObject<T>> SubDirs;
+		std::vector<PTreeNode<T>> Nodes;
 	};
 }

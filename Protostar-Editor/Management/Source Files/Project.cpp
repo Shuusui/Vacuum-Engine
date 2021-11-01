@@ -9,11 +9,11 @@
 #include "RootSignatureLibrary.h"
 #include "PSOLibrary.h"
 
-const char* JSONNAME = "name";
-const char* JSONGUID = "guid";
-const char* JSONMOSTRECENTSCENEGUID = "most_recent_scene_guid";
+const char*PJsonNAME = "name";
+const char*PJsonGUID = "guid";
+const char*PJsonMOSTRECENTSCENEGUID = "most_recent_scene_guid";
 
-Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
+Protostar::PProject::PProject(const std::filesystem::path& _projectPath)
 	:m_guid(SGuid())
 	,m_currentScene(nullptr)
 	,m_name(std::string())
@@ -29,15 +29,15 @@ Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 	m_projectPaths.EntitiesDir = m_projectPaths.ContentDir / "Entities";
 
 	CShaderLibrary::Create(_projectPath);
-	CRootSignatureLibrary::Create(_projectPath);
+	PRootSignatureLibrary::Create(_projectPath);
 	CPSOLibrary::Create(_projectPath);
 
 	std::ifstream projectFile(m_projectPaths.ProjectFilePath);
-	Json json = {};
-	projectFile >> json;
-	m_name = json[JSONNAME].get<std::string>();
-	m_guid = json[JSONGUID].get<std::string>();
-	SGuid mostRecentSceneGuid = json[JSONMOSTRECENTSCENEGUID].get<std::string>();
+	PJsonPJson = {};
+	projectFile >>PJson;
+	m_name =PJson[JSONNAME].get<std::string>();
+	m_guid =PJson[JSONGUID].get<std::string>();
+	PGuid mostRecentSceneGuid =PJson[JSONMOSTRECENTSCENEGUID].get<std::string>();
 
 	if (!std::filesystem::exists(m_projectPaths.ScenesDir))
 	{
@@ -51,7 +51,7 @@ Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 
 	for (const std::filesystem::path& scenePath : std::filesystem::directory_iterator(m_projectPaths.ScenesDir))
 	{
-		CScene* scene = new CScene(scenePath);
+		PScene* scene = new PScene(scenePath);
 		m_scenes.insert(scene);
 		if (scene->GetGuid() != mostRecentSceneGuid)
 		{
@@ -62,23 +62,23 @@ Protostar::CProject::CProject(const std::filesystem::path& _projectPath)
 
 	for (const std::filesystem::path& entityPath : std::filesystem::directory_iterator(m_projectPaths.EntitiesDir))
 	{
-		CBaseEntity* entity = new CBaseEntity(entityPath);
+		PBaseEntity* entity = new PBaseEntity(entityPath);
 	}
 
-	CMeshManager::OnCreate(m_projectPaths.ModelsDir, m_projectPaths.ConfigDir);
+	PMeshManager::OnCreate(m_projectPaths.ModelsDir, m_projectPaths.ConfigDir);
 }
 
-Protostar::CProject::~CProject()
+Protostar::PProject::~PProject()
 {
-	Json json = {};
+	PJsonPJson = {};
 	json[JSONNAME] = m_name;
 	json[JSONGUID] = m_guid.ToString();
-	json[JSONMOSTRECENTSCENEGUID] = m_currentScene ? m_currentScene->GetGuid().ToString() :SGuid().ToString();
+	json[JSONMOSTRECENTSCENEGUID] = m_currentScene ? m_currentScene->GetGuid().ToString() :PGuid().ToString();
 
 	std::ofstream projectFile(m_projectPaths.ProjectFilePath, std::ios::trunc);
-	projectFile << json.dump();
+	projectFile <<PJson.dump();
 
-	for (CScene* scene : m_scenes)
+	for (PScene* scene : m_scenes)
 	{
 		if (!scene)
 		{
@@ -87,7 +87,7 @@ Protostar::CProject::~CProject()
 		delete scene;
 		scene = nullptr;
 	}
-	CMeshManager::OnDestroy();
+	PMeshManager::OnDestroy();
 	CShaderLibrary::Destroy();
-	CRootSignatureLibrary::Destroy();
+	PRootSignatureLibrary::Destroy();
 }

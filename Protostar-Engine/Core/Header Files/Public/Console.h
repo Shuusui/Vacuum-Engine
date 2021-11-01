@@ -5,25 +5,25 @@
 
 namespace Protostar
 {
-	struct SConsoleInfo
+	struct PConsoleInfo
 	{
 		COORD ConsolePos;
 		HANDLE ConsoleHandle;
 
-		SConsoleInfo()
+		PConsoleInfo()
 			: ConsolePos({ 0,0 })
 			, ConsoleHandle(nullptr)
 		{
 		}
 
-		SConsoleInfo(const SConsoleInfo& _other)
+		PConsoleInfo(const PConsoleInfo& _other)
 			: ConsolePos(_other.ConsolePos)
 			, ConsoleHandle(_other.ConsoleHandle)
 		{
 
 		}
 
-		SConsoleInfo(SConsoleInfo&& _other) noexcept
+		PConsoleInfo(PConsoleInfo&& _other) noexcept
 			: ConsolePos(std::move(_other.ConsolePos))
 			, ConsoleHandle(std::move(_other.ConsoleHandle))
 		{
@@ -33,12 +33,12 @@ namespace Protostar
 
 	};
 
-	struct SConsoleHandles
+	struct PConsoleHandles
 	{
-		SConsoleInfo InputConInfo;
-		SConsoleInfo OutputConInfo;
-		SConsoleInfo ErrorConInfo;
-		SGuid HandlesGuid;
+		PConsoleInfo InputConInfo;
+		PConsoleInfo OutputConInfo;
+		PConsoleInfo ErrorConInfo;
+		PGuid HandlesGuid;
 	};
 
 	/**
@@ -46,18 +46,18 @@ namespace Protostar
 		* @param _outHandles A reference to the Console handles struct with some info in it.
 		* @return Returns true if everything was successful, false otherwise
 		*/
-	static bool AllocateConsole(SConsoleHandles& _outHandles)
+	static bool AllocateConsole(PConsoleHandles& _outHandles)
 	{
 		bool success = AllocConsole();
 				
 		_outHandles.InputConInfo.ConsoleHandle = GetStdHandle(STD_INPUT_HANDLE);
 		_outHandles.OutputConInfo.ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		_outHandles.ErrorConInfo.ConsoleHandle = GetStdHandle(STD_ERROR_HANDLE);
-		_outHandles.HandlesGuid = SGuid::NewGuid();
+		_outHandles.HandlesGuid = PGuid::NewGuid();
 		return success && _outHandles.InputConInfo.ConsoleHandle && _outHandles.OutputConInfo.ConsoleHandle && _outHandles.ErrorConInfo.ConsoleHandle;
 	}
 
-	static bool DeallocateConsole(SConsoleHandles& _handles)
+	static bool DeallocateConsole(PConsoleHandles& _handles)
 	{
 		FreeConsole();
 

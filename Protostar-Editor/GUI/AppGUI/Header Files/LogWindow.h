@@ -5,17 +5,17 @@
 
 namespace Protostar
 {
-	class CLogWindow
+	class PLogWindow
 	{
 	public: 
-		CLogWindow();
-		~CLogWindow();
+		PLogWindow();
+		~PLogWindow();
 		void OnRender();
 	private:
 		void RegisterToLog();
-		std::vector<std::pair<struct SColor, std::string>> m_logBuffer;
+		std::vector<std::pair<struct PColor, std::string>> m_logBuffer;
 		size_t m_lastFrameVectorSize;
-		SGuid m_guid;
+		PGuid m_guid;
 		bool m_bStopScroll;
 	};
 }

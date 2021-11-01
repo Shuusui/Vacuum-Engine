@@ -18,28 +18,28 @@
 
 #define LOGFORMAT(LOG) Protostar::Printf("%s[%i] | %s", __FUNCTION__, __LINE__, LOG)
 
-#define PE_LOG(LOG) CLog::Log(LOGFORMAT(LOG))
-#define PE_LOG_F(LOG, ...) CLog::Log(Protostar::Printf(LOGFORMAT(LOG), __VA_ARGS__))
-#define PE_DEBUG_LOG(LOG) CLog::LogDebugString(LOGFORMAT(LOG))
-#define PE_DEBUG_LOG_F(LOG, ...) CLog::LogDebugString(Protostar::Printf(LOGFORMAT(LOG), __VA_ARGS__))
+#define PE_LOG(LOG) PLog::Log(LOGFORMAT(LOG))
+#define PE_LOG_F(LOG, ...) PLog::Log(Protostar::Printf(LOGFORMAT(LOG), __VA_ARGS__))
+#define PE_DEBUG_LOG(LOG) PLog::LogDebugString(LOGFORMAT(LOG))
+#define PE_DEBUG_LOG_F(LOG, ...) PLog::LogDebugString(Protostar::Printf(LOGFORMAT(LOG), __VA_ARGS__))
 
 namespace Protostar
 {
-	struct SConsoleInfo;
+	struct PConsoleInfo;
 
-	struct SLogInfo
+	struct PLogInfo
 	{
 		std::string& String;
-		SGuid* HandleGuids;
+		PGuid* HandleGuids;
 		size_t HandleAmount;
 	};
 
-	struct SColor
+	struct PColor
 	{
 		float Color[4];
 	};
 
-	class CLog
+	class PLog
 	{
 	public:
 		/**
@@ -54,13 +54,13 @@ namespace Protostar
 		* @param _handleGuid The guid of the handle to call it
 		* @param _outputHandle The actual output handle where the log system will log to
 		*/
-		static void RegisterHandle(const SGuid& _handleGuid, const SConsoleInfo& _outputInfo);
+		static void RegisterHandle(const PGuid& _handleGuid, const PConsoleInfo& _outputInfo);
 
-		static void RegisterBuffer(const SGuid& _bufGuid, std::vector<std::pair<SColor, std::string>>* buf);
+		static void RegisterBuffer(const PGuid& _bufGuid, std::vector<std::pair<PColor, std::string>>* buf);
 
-		static void RemoveBuffer(const SGuid& _bufGuid);
+		static void RemoveBuffer(const PGuid& _bufGuid);
 
-		static bool IsBufRegistered(const SGuid& _bufGuid);
+		static bool IsBufRegistered(const PGuid& _bufGuid);
 
 		/**
 		* Logs to all registered console handles
@@ -78,13 +78,13 @@ namespace Protostar
 		* @param _handleGuid The guid of the handle to log to
 		* @param _logString The string to log
 		*/
-		static void Log(const SGuid& _handleGuid, const std::string& _logString);
+		static void Log(const PGuid& _handleGuid, const std::string& _logString);
 
 		/**
 		* Clears the screen of the guid with the handle
 		* @param _handleGuid The Guid of the handle to clear
 		*/
-		static void ClearLog(const SGuid& _handleGuid);
+		static void ClearLog(const PGuid& _handleGuid);
 
 		/**
 		* Log to all registered handles with the guids 
@@ -92,7 +92,7 @@ namespace Protostar
 		* @param _handleGuidAmount The amount of guids the handles to log to
 		* @param _logString The string to log
 		*/
-		static void Log(SGuid* _handleGuids, const size_t _handleGuidAmount, const std::string& _logString);
+		static void Log(PGuid* _handleGuids, const size_t _handleGuidAmount, const std::string& _logString);
 
 #if defined(_DEBUG)
 		/**
@@ -107,29 +107,29 @@ namespace Protostar
 		* @param _handleGuids The guids of the handles to clear
 		* @param _handleGuidAmount The amount of guids the handles to clear
 		*/
-		static void ClearLog(SGuid* _handleGuids, const size_t _handleGuidAmount);
+		static void ClearLog(PGuid* _handleGuids, const size_t _handleGuidAmount);
 	private:
-		CLog() = default;
+		PLog() = default;
 
 		/**
 		* Actually does the log to the handle
 		* @param _handle The handle to log to
 		* @param _logString The string to log
 		*/
-		static void LogToHandle(SConsoleInfo& _info, const std::string& _logString);
+		static void LogToHandle(PConsoleInfo& _info, const std::string& _logString);
 
 		/**
 		* Actually clears the handle
 		* @param _handle The handle to clear
 		*/
-		static void ClearLogHandle(SConsoleInfo& _info);
+		static void ClearLogHandle(PConsoleInfo& _info);
 
-		static CLog* s_logHandle;
+		static PLog* s_logHandle;
 
-		std::unordered_map<SGuid, SConsoleInfo> m_logInfos;
-		std::unordered_map<SGuid, std::vector<std::pair<SColor, std::string>>*> m_logBuffer;
+		std::unordered_map<PGuid, PConsoleInfo> m_logInfos;
+		std::unordered_map<PGuid, std::vector<std::pair<PColor, std::string>>*> m_logBuffer;
 
-		std::vector<std::pair<SColor, std::string>> m_buffer;
+		std::vector<std::pair<PColor, std::string>> m_buffer;
 
 		std::mutex m_logMutex;
 	};

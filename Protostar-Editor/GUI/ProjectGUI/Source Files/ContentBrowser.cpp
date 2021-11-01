@@ -8,7 +8,7 @@
 #include "AppManager.h"
 #include "Log.h"
 
-Protostar::CContentBrowser::CContentBrowser(CProject* _project)
+Protostar::PContentBrowser::PContentBrowser(PProject* _project)
 	:m_project(_project)
 	,m_meshManager(nullptr)
 	,m_bDelKeyPressedThisFrame(false)
@@ -22,17 +22,17 @@ Protostar::CContentBrowser::CContentBrowser(CProject* _project)
 	}
 
 	CheckPaths();
-	m_meshManager = CMeshManager::GetHandle();
+	m_meshManager = PMeshManager::GetHandle();
 }
 
-void Protostar::CContentBrowser::OnRender()
+void Protostar::PContentBrowser::OnRender()
 {
-	if (!CGUI::GetGUIInfo().bOpenContentBrowser)
+	if (!PGUI::GetGUIInfo().bOpenContentBrowser)
 	{
 		return;
 	}
 
-	CAppManager* appManager = CAppManager::GetAppHandle();
+	PAppManager* appManager = PAppManager::GetAppHandle();
 	if (!appManager)
 	{
 		return;
@@ -46,7 +46,7 @@ void Protostar::CContentBrowser::OnRender()
 	ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
 
-	if (!ImGui::Begin("Content Browser", &CGUI::GetGUIInfo().bOpenContentBrowser, ImGuiWindowFlags_MenuBar))
+	if (!ImGui::Begin("Content Browser", &PGUI::GetGUIInfo().bOpenContentBrowser, ImGuiWindowFlags_MenuBar))
 	{
 		ImGui::End();
 		return;
@@ -62,7 +62,7 @@ void Protostar::CContentBrowser::OnRender()
 		ImGui::EndMenuBar();
 	}
 
-	CProject* currentProject = appManager->GetCurrentProject();
+	PProject* currentProject = appManager->GetCurrentProject();
 	if (!m_project && !currentProject)
 	{
 		ImGui::End();
@@ -71,7 +71,7 @@ void Protostar::CContentBrowser::OnRender()
 	if (!m_project)
 	{
 		m_project = currentProject;
-		m_meshManager = CMeshManager::GetHandle();
+		m_meshManager = PMeshManager::GetHandle();
 	}
 
 	if (currentProject != m_project)
@@ -109,13 +109,13 @@ void Protostar::CContentBrowser::OnRender()
 	m_bRefresh = false;
 }
 
-void Protostar::CContentBrowser::DisplayContextMenu()
+void Protostar::PContentBrowser::DisplayContextMenu()
 {
 	if (ImGui::BeginPopupContextWindow(nullptr, ImGuiPopupFlags_MouseButtonRight | ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_NoOpenOverExistingPopup))
 	{
 		if (ImGui::MenuItem("Create new scene"))
 		{
-			if (CProjectGUI* projectGUI = CProjectGUI::GetProjectGUIHandle())
+			if (PProjectGUI* projectGUI = PProjectGUI::GetProjectGUIHandle())
 			{
 				projectGUI->SetShowCreateSceneWindow(true);
 			}
@@ -123,7 +123,7 @@ void Protostar::CContentBrowser::DisplayContextMenu()
 
 		if (ImGui::MenuItem("Create new entity"))
 		{
-			if (CProjectGUI* projectGUI = CProjectGUI::GetProjectGUIHandle())
+			if (PProjectGUI* projectGUI = PProjectGUI::GetProjectGUIHandle())
 			{
 				projectGUI->SetShowCreateEntityWindow(true);
 			}
@@ -133,7 +133,7 @@ void Protostar::CContentBrowser::DisplayContextMenu()
 	}
 }
 
-void Protostar::CContentBrowser::ManageShaderPaths()
+void Protostar::PContentBrowser::ManageShaderPaths()
 {
 	if (!ImGui::TreeNode("Shaders"))
 	{
@@ -142,7 +142,7 @@ void Protostar::CContentBrowser::ManageShaderPaths()
 
 	CShaderLibrary* shaderLibray = CShaderLibrary::GetHandle();
 
-	STreeObject<SShaderComplement> shaderComplements = shaderLibray->GetShaderComplements();
+	PTreeObject<SShaderComplement> shaderComplements = shaderLibray->GetShaderComplements();
 
 	DisplayRecursiveShaderTrees(shaderComplements);
 	
@@ -150,9 +150,9 @@ void Protostar::CContentBrowser::ManageShaderPaths()
 	ImGui::TreePop();
 }
 
-void Protostar::CContentBrowser::DisplayRecursiveShaderTrees(const STreeObject<SShaderComplement>& _subTree)
+void Protostar::PContentBrowser::DisplayRecursiveShaderTrees(const PTreeObject<SShaderComplement>& _subTree)
 {
-	for (const STreeObject<SShaderComplement>& subTree : _subTree.SubDirs)
+	for (const PTreeObject<SShaderComplement>& subTree : _subTree.SubDirs)
 	{
 		if (!ImGui::TreeNode(subTree.Path.filename().string().c_str()))
 		{
@@ -161,7 +161,7 @@ void Protostar::CContentBrowser::DisplayRecursiveShaderTrees(const STreeObject<S
 
 		DisplayRecursiveShaderTrees(subTree);
 
-		for (const STreeNode<SShaderComplement>& treeNode : subTree.Nodes)
+		for (const PTreeNode<SShaderComplement>& treeNode : subTree.Nodes)
 		{
 			if (treeNode.Asset.VertexShaderInfo.has_value())
 			{
@@ -178,14 +178,14 @@ void Protostar::CContentBrowser::DisplayRecursiveShaderTrees(const STreeObject<S
 	}
 }
 
-void Protostar::CContentBrowser::ManageModelPaths()
+void Protostar::PContentBrowser::ManageModelPaths()
 {
 	if (!ImGui::TreeNode("Models"))
 	{
 		return;
 	}
 
-	std::unordered_map<SGuid, SModel> models = m_meshManager->GetMeshes();
+	std::unordered_map<PGuid, PModel> models = m_meshManager->GetMeshes();
 	std::unordered_set<std::string> modelPaths = m_meshManager->GetMeshPaths();
 
 	for (const std::filesystem::path& modelPath : std::filesystem::directory_iterator(m_project->GetProjectPaths().ModelsDir))
@@ -222,7 +222,7 @@ void Protostar::CContentBrowser::ManageModelPaths()
 	ImGui::TreePop();
 }
 
-void Protostar::CContentBrowser::ManageScenePaths()
+void Protostar::PContentBrowser::ManageScenePaths()
 {
 	static bool bIsInitialized = false;
 	if (!ImGui::TreeNode("Scenes"))
@@ -274,7 +274,7 @@ void Protostar::CContentBrowser::ManageScenePaths()
 	ImGui::TreePop();
 }
 
-void Protostar::CContentBrowser::ShowEntities()
+void Protostar::PContentBrowser::ShowEntities()
 {
 	static bool bIsInitialized = false;
 	if (!ImGui::TreeNode("Entities"))
@@ -290,7 +290,7 @@ void Protostar::CContentBrowser::ShowEntities()
 
 	if (!bIsInitialized)
 	{
-		for (CBaseEntity* entity : CEntityManager::GetHandle()->GetEntities())
+		for (PBaseEntity* entity : CEntityManager::GetHandle()->GetEntities())
 		{
 			m_entities.insert(std::make_pair(entity, false));
 		}
@@ -305,7 +305,7 @@ void Protostar::CContentBrowser::ShowEntities()
 		{
 			if (ImGui::Button("Open entity editor"))
 			{
-				CProjectGUI::GetProjectGUIHandle()->GetEntityEditorHandle()->OpenEditor(key);
+				PProjectGUI::GetProjectGUIHandle()->GetEntityEditorHandle()->OpenEditor(key);
 			}
 			ImGui::EndPopup();
 		}
@@ -314,7 +314,7 @@ void Protostar::CContentBrowser::ShowEntities()
 	ImGui::TreePop();
 }
 
-void Protostar::CContentBrowser::RenderComponents()
+void Protostar::PContentBrowser::RenderComponents()
 {
 	if (!ImGui::TreeNode("Components"))
 	{
@@ -324,7 +324,7 @@ void Protostar::CContentBrowser::RenderComponents()
 	ImGui::TreePop();
 }
 
-void Protostar::CContentBrowser::CheckPaths()
+void Protostar::PContentBrowser::CheckPaths()
 {
 	if (!std::filesystem::exists(m_project->GetProjectPaths().ShaderDir))
 	{
@@ -342,10 +342,10 @@ void Protostar::CContentBrowser::CheckPaths()
 	}
 }
 
-void Protostar::CContentBrowser::InitSceneTreeNode()
+void Protostar::PContentBrowser::InitSceneTreeNode()
 {
 	m_scenes.clear();
-	for (CScene* scene : m_project->GetScenes())
+	for (PScene* scene : m_project->GetScenes())
 	{
 		m_scenes.insert(std::make_pair(scene, false));
 	}

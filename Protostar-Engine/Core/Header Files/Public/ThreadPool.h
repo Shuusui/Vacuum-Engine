@@ -18,14 +18,14 @@ namespace Protostar
 	* Derived class of CBaseJob which will implement basic implementation of the std::package_task to bind functions to it. 
 	* Derive from it further to implement more custom and advanced threads with custom execute functions.
 	*/
-	class CJob : public CBaseJob
+	class PJob : public PBaseJob
 	{
 	public:
 
 		/**
 		* Default constructor
 		*/
-		CJob()
+		PJob()
 		{
 
 		};
@@ -37,33 +37,33 @@ namespace Protostar
 		{
 		}
 
-		virtual ~CJob() override
+		virtual ~PJob() override
 		{
 		}
 	private:
 	};
 
-	class CThread
+	class PThread
 	{
 	public:
 
 		/**
 		* Deleted cause it's unnecessary and maybe gets accidentally called
 		*/
-		CThread() = delete;
+		PThread() = delete;
 
 		/**
 		* The only constructor needed to construct the object
 		* @param _threadIndex The index of the thread in the owners container
 		* @param _owner The owner of this thread. In this case the CThreadPool object
 		*/
-		CThread(const s32 _threadIndex, class CThreadPool* _owner, std::condition_variable& _semaphore, std::atomic_bool& _stopThread)
+		PThread(const s32 _threadIndex, class PThreadPool* _owner, std::condition_variable& _semaphore, std::atomic_bool& _stopThread)
 			:m_threadIndex(_threadIndex)
 			,m_owner(_owner)
 			,m_currentJob(nullptr)
 			,m_semaphore(_semaphore)
 			,m_stopThread(_stopThread)
-			,m_thread(std::bind(&CThread::WorkerRun, this))
+			,m_thread(std::bind(&PThread::WorkerRun, this))
 		{
 		}
 
@@ -71,7 +71,7 @@ namespace Protostar
 		* move constructor
 		* @param _other The object which should get moved into this
 		*/
-		CThread(CThread&& _other) noexcept
+		PThread(PThread&& _other) noexcept
 			:m_threadIndex(std::move(_other.m_threadIndex))
 			,m_owner(std::move(_other.m_owner))
 			,m_currentJob(std::move(_other.m_currentJob))
@@ -87,7 +87,7 @@ namespace Protostar
 		/**
 		* Destructor which joins the thread to the overlying thread if it's joinable.
 		*/
-		~CThread()
+		~PThread()
 		{
 			if (m_thread.joinable())
 			{
@@ -109,42 +109,42 @@ namespace Protostar
 		void WorkerRun();
 
 		s32 m_threadIndex;
-		class CThreadPool* m_owner;
-		CBaseJob* m_currentJob;
+		class PThreadPool* m_owner;
+		PBaseJob* m_currentJob;
 		std::condition_variable& m_semaphore;
 		std::atomic_bool& m_stopThread;
 		std::thread m_thread;
 	};
 
-	class CThreadPool
+	class PThreadPool
 	{
 	public:
 		/**
 		* No default constructor, Threadpool can only get initialized with an amount of threads to create
 		*/
-		CThreadPool() = delete;
+		PThreadPool() = delete;
 
 		/**
 		* The only constructor which will create the amount of screenshots get passed
 		* @param The amount of threads to create
 		*/
-		CThreadPool(const s32 _threadAmount);
+		PThreadPool(const s32 _threadAmount);
 
 		/**
 		* Destructor which will join all threads and delete them
 		*/
-		~CThreadPool();
+		~PThreadPool();
 
 		/**
 		* Queue a new job to the threadpool which will get processed
 		*/
-		void QueueJob(CBaseJob* _jobToQueue);
+		void QueueJob(PBaseJob* _jobToQueue);
 
 		/**
 		* Function which will get called from the internal thread to dequeue the threadpool
 		* @return The first job in queue
 		*/
-		CBaseJob* DequeueJob();
+		PBaseJob* DequeueJob();
 
 		/**
 		* Does the threadpool currently has jobs queued? (threadsafe)
@@ -164,9 +164,9 @@ namespace Protostar
 		*/
 		bool StopThreads();
 	private:
-		std::vector<CThread*> m_threads;
+		std::vector<PThread*> m_threads;
 		s32 m_threadAmount;
-		std::queue<CBaseJob*> m_jobQueue;
+		std::queue<PBaseJob*> m_jobQueue;
 		std::mutex m_queueLock;
 		std::condition_variable m_semaphore;
 		std::atomic_bool m_stopThreads;

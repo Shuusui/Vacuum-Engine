@@ -6,23 +6,23 @@
 
 namespace Protostar
 {
-	class CScene : public CBaseObject
+	class PScene : public PBaseObject
 	{
 	public: 
-		CScene(const std::string& _name)
-			:CBaseObject(_name)
+		PScene(const std::string& _name)
+			:PBaseObject(_name)
 		{
 		}
 
-		CScene(const std::filesystem::path& _scenePath);
+		PScene(const std::filesystem::path& _scenePath);
 
 		virtual void OnSave() override;
 		void RenderActiveCamera();
-		void SetActiveCamera(CBaseEntity* _cameraEntity);
+		void SetActiveCamera(PBaseEntity* _cameraEntity);
 		void Delete();
 	private:
 		void LoadData();
-		std::vector<CBaseEntity*> m_entities;
-		CBaseEntity* m_cameraEntity;
+		std::vector<PBaseEntity*> m_entities;
+		PBaseEntity* m_cameraEntity;
 	};
 }

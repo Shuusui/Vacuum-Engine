@@ -11,9 +11,9 @@
 
 namespace Protostar
 {
-	struct SAppPaths
+	struct PAppPaths
 	{
-		SAppPaths()
+		PAppPaths()
 			:RootDir(std::filesystem::path())
 			,ConfigDir(std::filesystem::path())
 			,ProjectsDir(std::filesystem::path())
@@ -25,15 +25,15 @@ namespace Protostar
 		std::filesystem::path ProjectsDir;
 	};
 
-	class CAppManager
+	class PAppManager
 	{
 	public:
 		static bool InitApp(const HINSTANCE& _hInstance);
 		static void Destroy();
-		static CAppManager* GetAppHandle();
+		static PAppManager* GetAppHandle();
 
 		static SWindowDimParams GetInitWindowDimParams();
-		static SAppPaths GetAppPaths();
+		static PAppPaths GetAppPaths();
 
 		static void SetLastVSyncState(const bool& bVSyncState)
 		{
@@ -53,19 +53,19 @@ namespace Protostar
 			return s_app->m_bLastVSyncState;
 		}
 
-		void LoadProject(CProject* _project);
+		void LoadProject(PProject* _project);
 
-		std::vector<CProject*> GetProjects() const 
+		std::vector<PProject*> GetProjects() const 
 		{
 			return m_projects;
 		}
 
-		CProject* GetCurrentProject() const 
+		PProject* GetCurrentProject() const 
 		{
 			return m_currentProject;
 		}
 
-		size_t RegisterOnLoadProjectCallback(const std::function<void(CProject*, CProject*)>& _onLoadCallback)
+		size_t RegisterOnLoadProjectCallback(const std::function<void(PProject*, PProject*)>& _onLoadCallback)
 		{
 			m_registeredOnLoadProjectCallbacks.push_back(_onLoadCallback);
 			return m_registeredOnLoadProjectCallbacks.size() - 1;
@@ -75,19 +75,19 @@ namespace Protostar
 			m_registeredOnLoadProjectCallbacks.erase(m_registeredOnLoadProjectCallbacks.begin() + _callbackIndex);
 		}
 
-		~CAppManager();
+		~PAppManager();
 	private:
-		CAppManager();
-		void LoadRecentProject(const SGuid& _projectGuid);
+		PAppManager();
+		void LoadRecentProject(const PGuid& _projectGuid);
 		void LoadProjects();
 		
-		static CAppManager* s_app;
+		static PAppManager* s_app;
 		SWindowDimParams m_mainWindowDim;
-		SAppPaths m_appPaths;
+		PAppPaths m_appPaths;
 		std::filesystem::path m_appConfigPath;
-		CProject* m_currentProject;
-		std::vector<CProject*> m_projects;
-		std::vector<std::function<void(CProject*, CProject*)>> m_registeredOnLoadProjectCallbacks;
+		PProject* m_currentProject;
+		std::vector<PProject*> m_projects;
+		std::vector<std::function<void(PProject*, PProject*)>> m_registeredOnLoadProjectCallbacks;
 		bool m_bLastVSyncState;
 	};
 }

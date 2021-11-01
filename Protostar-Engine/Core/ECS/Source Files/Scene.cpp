@@ -6,30 +6,30 @@
 const char* JSONSCENENAME = "name";
 const char* JSONSCENEGUID = "guid";
 
-Protostar::CScene::CScene(const std::filesystem::path& _scenePath)
-	:CBaseObject("")
+Protostar::PScene::PScene(const std::filesystem::path& _scenePath)
+	:PBaseObject("")
 	,m_cameraEntity(nullptr)
 {
 	m_objectPath = _scenePath;
 	LoadData();
 }
 
-void Protostar::CScene::LoadData()
+void Protostar::PScene::LoadData()
 {
 	std::ifstream objectFile(m_objectPath);
 
-	Json json = {};
+	PJson json = {};
 	objectFile >> json;
 
 	m_objectName = json[JSONSCENENAME].get<std::string>();
 	m_guid = json[JSONSCENEGUID].get<std::string>();
 }
 
-void Protostar::CScene::OnSave()
+void Protostar::PScene::OnSave()
 {
 	std::ofstream objectFile(m_objectPath, std::ios::trunc);
 
-	Json json = 
+	PJson json =
 	{
 		{JSONSCENENAME , m_objectName},
 		{JSONSCENEGUID, m_guid.ToString()}
@@ -38,7 +38,7 @@ void Protostar::CScene::OnSave()
 	objectFile << json.dump();
 }
 
-void Protostar::CScene::RenderActiveCamera()
+void Protostar::PScene::RenderActiveCamera()
 {
 	if (!m_cameraEntity)
 	{
@@ -47,12 +47,12 @@ void Protostar::CScene::RenderActiveCamera()
 	}
 }
 
-void Protostar::CScene::SetActiveCamera(CBaseEntity* _cameraEntity)
+void Protostar::PScene::SetActiveCamera(PBaseEntity* _cameraEntity)
 {
 	m_cameraEntity = _cameraEntity;
 }
 
-void Protostar::CScene::Delete()
+void Protostar::PScene::Delete()
 {
 	std::filesystem::remove(m_objectPath);
 }

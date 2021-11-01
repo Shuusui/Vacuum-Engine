@@ -5,24 +5,24 @@
 
 namespace Protostar
 {
-	class CSavingSystem
+	class PSavingSystem
 	{
 	public:
 		static void OnCreate();
 		static void OnDestroy();
-		static CSavingSystem* GetHandle()
+		static PSavingSystem* GetHandle()
 		{
 			return s_savingSystem;
 		}
 
-		void RegisterDirtyObject(CBaseObject* _object)
+		void RegisterDirtyObject(PBaseObject* _object)
 		{
 			m_dirtyObjects.insert(_object);
 		}
 
 		void SaveAllDirtyObjects()
 		{
-			for (CBaseObject* dirtyObject : m_dirtyObjects)
+			for (PBaseObject* dirtyObject : m_dirtyObjects)
 			{
 				if (!dirtyObject)
 				{
@@ -38,9 +38,9 @@ namespace Protostar
 			return m_dirtyObjects.size() > 0;
 		}
 
-		void SaveDirtyObjects(const std::vector<CBaseObject*>& _objectsToSave)
+		void SaveDirtyObjects(const std::vector<PBaseObject*>& _objectsToSave)
 		{
-			for (CBaseObject* objectToSave : _objectsToSave)
+			for (PBaseObject* objectToSave : _objectsToSave)
 			{
 				if (!objectToSave)
 				{
@@ -51,12 +51,12 @@ namespace Protostar
 			}
 		}
 
-		std::unordered_set<CBaseObject*> GetDirtyObjects() const
+		std::unordered_set<PBaseObject*> GetDirtyObjects() const
 		{
 			return m_dirtyObjects;
 		}
 	private:
-		static CSavingSystem* s_savingSystem;
-		std::unordered_set<CBaseObject*> m_dirtyObjects;
+		static PSavingSystem* s_savingSystem;
+		std::unordered_set<PBaseObject*> m_dirtyObjects;
 	};
 }

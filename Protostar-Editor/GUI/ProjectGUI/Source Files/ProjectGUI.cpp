@@ -10,14 +10,14 @@
 #include "RendererManager.h"
 #include "MeshManager.h"
 
-Protostar::CProjectGUI* Protostar::CProjectGUI::s_projectGUI = nullptr;
+Protostar::PProjectGUI* Protostar::PProjectGUI::s_projectGUI = nullptr;
 
-void Protostar::CProjectGUI::ToggleContentBrowser()
+void Protostar::PProjectGUI::ToggleContentBrowser()
 {
-	CGUI::SetOpenContentBrowser(!CGUI::GetGUIInfo().bOpenContentBrowser);
+	PGUI::SetOpenContentBrowser(!PGUI::GetGUIInfo().bOpenContentBrowser);
 }
 
-Protostar::CProjectGUI::CProjectGUI()
+Protostar::PProjectGUI::PProjectGUI()
 	:m_currentProject(nullptr)
 	,m_savingSystem(nullptr)
 	,m_contentBrowser(nullptr)
@@ -26,7 +26,7 @@ Protostar::CProjectGUI::CProjectGUI()
 	,m_bShowCreateSceneWindow(false)
 {
 	memset(m_newSceneName, 0, sizeof(m_newSceneName));
-	CAppManager* appManager = CAppManager::GetAppHandle();
+	PAppManager* appManager = PAppManager::GetAppHandle();
 	if (!appManager)
 	{
 		return;
@@ -40,29 +40,29 @@ Protostar::CProjectGUI::CProjectGUI()
 			m_currentProject = _newProject;
 		});
 
-	CProject* currentProject = appManager->GetCurrentProject();
+	PProject* currentProject = appManager->GetCurrentProject();
 	if (!currentProject)
 	{
 		return;
 	}
 	m_currentProject = currentProject;
-	m_savingSystem = CSavingSystem::GetHandle();
+	m_savingSystem = PSavingSystem::GetHandle();
 
-	m_contentBrowser = new CContentBrowser(CAppManager::GetAppHandle()->GetCurrentProject());
+	m_contentBrowser = new PContentBrowser(PAppManager::GetAppHandle()->GetCurrentProject());
 
-	m_entityEditor = CEntityEditor::OnCreate();
+	m_entityEditor = PEntityEditor::OnCreate();
 }
 
-void Protostar::CProjectGUI::OnCreate()
+void Protostar::PProjectGUI::OnCreate()
 {
 	if (s_projectGUI)
 	{
 		return;
 	}
-	s_projectGUI = new CProjectGUI();
+	s_projectGUI = new PProjectGUI();
 }
 
-void Protostar::CProjectGUI::OnDestroy()
+void Protostar::PProjectGUI::OnDestroy()
 {
 	if (s_projectGUI)
 	{
@@ -71,12 +71,12 @@ void Protostar::CProjectGUI::OnDestroy()
 	}
 }
 
-Protostar::CProjectGUI::~CProjectGUI()
+Protostar::PProjectGUI::~PProjectGUI()
 {
-	CAppManager::GetAppHandle()->RemoveOnLoadProjectCallback(m_setProjectFuncIndex);
+	PAppManager::GetAppHandle()->RemoveOnLoadProjectCallback(m_setProjectFuncIndex);
 }
 
-void Protostar::CProjectGUI::OnRender()
+void Protostar::PProjectGUI::OnRender()
 {
 	if (!s_projectGUI)
 	{
@@ -85,14 +85,14 @@ void Protostar::CProjectGUI::OnRender()
 
 	if (!m_currentProject)
 	{
-		m_currentProject = CAppManager::GetAppHandle()->GetCurrentProject();
+		m_currentProject = PAppManager::GetAppHandle()->GetCurrentProject();
 		if(!m_currentProject)
 		{
 			return;
 		}
 	}
 
-	if (m_contentBrowser && CGUI::GetGUIInfo().bOpenContentBrowser)
+	if (m_contentBrowser && PGUI::GetGUIInfo().bOpenContentBrowser)
 	{
 		m_contentBrowser->OnRender();
 	}
@@ -108,7 +108,7 @@ void Protostar::CProjectGUI::OnRender()
 	RenderCreateEntityWindow();
 }
 
-void Protostar::CProjectGUI::RenderViewport()
+void Protostar::PProjectGUI::RenderViewport()
 {
 	std::string wndLable = m_currentProject->GetCurrentScene() ? PRINTF("%s (%s)", m_currentProject->GetName().c_str(), m_currentProject->GetCurrentScene()->GetObjectName().c_str()).c_str() : m_currentProject->GetName();
 
@@ -124,9 +124,9 @@ void Protostar::CProjectGUI::RenderViewport()
 	ImVec2 viewportPos = ImGui::GetWindowPos();
 	ImVec2 viewportSize = ImGui::GetWindowSize();
 	viewportPos.y += ImGui::GetFrameHeight();
-	CMeshManager* meshManager = CMeshManager::GetHandle();
-	std::unordered_map<SGuid, SModel> meshes = meshManager->GetMeshes();
-	SModel currentModel = {};
+	PMeshManager* meshManager = PMeshManager::GetHandle();
+	std::unordered_map<PGuid, PModel> meshes = meshManager->GetMeshes();
+	PModel currentModel = {};
 	for (const auto& [guid, model] : meshes)
 	{
 		currentModel = model;
@@ -159,7 +159,7 @@ void Protostar::CProjectGUI::RenderViewport()
 	ImGui::End();
 }
 
-void Protostar::CProjectGUI::RenderCreateSceneWindow()
+void Protostar::PProjectGUI::RenderCreateSceneWindow()
 {
 	if (!m_bShowCreateSceneWindow)
 	{
@@ -184,7 +184,7 @@ void Protostar::CProjectGUI::RenderCreateSceneWindow()
 	ImGui::End();
 }
 
-void Protostar::CProjectGUI::RenderCreateEntityWindow()
+void Protostar::PProjectGUI::RenderCreateEntityWindow()
 {
 	if (!m_bShowCreateEntityWindow)
 	{

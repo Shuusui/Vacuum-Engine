@@ -68,12 +68,12 @@ namespace Protostar
 	}
 
 
-	struct SPSOInfo
+	struct PPSOInfo
 	{
 		std::vector<D3D12_INPUT_ELEMENT_DESC> InputElementDescs;
-		std::pair<SGuid, ID3D12RootSignature*> RootSignature;
-		std::pair<SGuid, ID3DBlob*> VertexShader;
-		std::pair<SGuid, ID3DBlob*> PixelShader;
+		std::pair<PGuid, ID3D12RootSignature*> RootSignature;
+		std::pair<PGuid, ID3DBlob*> VertexShader;
+		std::pair<PGuid, ID3DBlob*> PixelShader;
 		u32 NodeMask;
 		D3D12_BLEND_DESC BlendDesc;
 		D3D12_RASTERIZER_DESC RasterizerDesc;
@@ -81,9 +81,9 @@ namespace Protostar
 		ID3D12PipelineState** PipelineState;
 
 
-		Json ToJson() const
+		PJson ToJson() const
 		{
-			std::vector<Json> inputDescsJson = {};
+			std::vector<PJson> inputDescsJson = {};
 			for (const D3D12_INPUT_ELEMENT_DESC& inputElemendDesc : InputElementDescs)
 			{
 				inputDescsJson.push_back(InputElementDescToJson(inputElemendDesc));
@@ -91,7 +91,7 @@ namespace Protostar
 
 			using namespace JsonKeys;
 
-			return Json
+			return PJson
 			{
 				{JSONPSOINFOINPUTELEDESCS, inputDescsJson},
 				{JSONPSOINFOROOTSIGNATUREGUID, RootSignature.first.ToString()}, 
@@ -104,10 +104,10 @@ namespace Protostar
 			};
 		}
 
-		void FromJson(const Json& _json)
+		void FromJson(const PJson& _json)
 		{
 			using namespace JsonKeys;
-			for (const Json& json : _json[JSONPSOINFOINPUTELEDESCS].get<std::vector<Json>>())
+			for (const PJson& json : _json[JSONPSOINFOINPUTELEDESCS].get<std::vector<PJson>>())
 			{
 				InputElementDescs.push_back(InputElementDescFromJson(json));
 			}
@@ -115,16 +115,16 @@ namespace Protostar
 			VertexShader = std::make_pair(_json[JSONPSOINFOVTXSHADERGUID].get<std::string>(), nullptr);
 			PixelShader = std::make_pair(_json[JSONPSOINFOPIXELSHADERGUID].get<std::string>(), nullptr);
 			NodeMask = _json[JSONPSOINFONODEMASK].get<u32>();
-			BlendDesc = BlendDescFromJson(_json[JSONPSOINFOBLENDDESC].get<Json>());
-			RasterizerDesc = RasterizerDescFromJson(_json[JSONPSOINFORASTERIZERDESC].get<Json>());
-			DepthStencilDesc = DepthStencilDescFromJson(_json[JSONPSOINFODEPTHSTENCILDESC].get<Json>());
+			BlendDesc = BlendDescFromJson(_json[JSONPSOINFOBLENDDESC].get<PJson>());
+			RasterizerDesc = RasterizerDescFromJson(_json[JSONPSOINFORASTERIZERDESC].get<PJson>());
+			DepthStencilDesc = DepthStencilDescFromJson(_json[JSONPSOINFODEPTHSTENCILDESC].get<PJson>());
 		}
 
 	private:
-		Json InputElementDescToJson(const D3D12_INPUT_ELEMENT_DESC& _inputDesc) const
+		PJson InputElementDescToJson(const D3D12_INPUT_ELEMENT_DESC& _inputDesc) const
 		{
 			using namespace JsonKeys;
-			return Json
+			return PJson
 			{
 				{JSONINPUTELEDESCSEMNAME, _inputDesc.SemanticName}, 
 				{JSONINPUTELEDESCSEMIDX, _inputDesc.SemanticIndex}, 
@@ -136,7 +136,7 @@ namespace Protostar
 			};
 		}
 
-		D3D12_INPUT_ELEMENT_DESC InputElementDescFromJson(const Json& _json) const
+		D3D12_INPUT_ELEMENT_DESC InputElementDescFromJson(const PJson& _json) const
 		{
 			using namespace JsonKeys;
 			std::string descName = _json[JSONINPUTELEDESCSEMNAME].get<std::string>();
@@ -156,9 +156,9 @@ namespace Protostar
 
 
 
-		Json BlendDescToJson(const D3D12_BLEND_DESC& _blendDesc) const
+		PJson BlendDescToJson(const D3D12_BLEND_DESC& _blendDesc) const
 		{
-			Json rtBlendDescs[8] = 
+			PJson rtBlendDescs[8] = 
 			{
 				RTBlendDescToJson(_blendDesc.RenderTarget[0]),
 				RTBlendDescToJson(_blendDesc.RenderTarget[1]),
@@ -170,7 +170,7 @@ namespace Protostar
 				RTBlendDescToJson(_blendDesc.RenderTarget[7])
 			};
 			using namespace JsonKeys;
-			return Json 
+			return PJson 
 			{
 				{JSONBLENDDESCALPHATOCOVENABLE, _blendDesc.AlphaToCoverageEnable}, 
 				{JSONBLENDDESCINDEPENDENTBLENDENABLE, _blendDesc.IndependentBlendEnable},
@@ -178,11 +178,11 @@ namespace Protostar
 			};
 		}
 
-		D3D12_BLEND_DESC BlendDescFromJson(const Json& _json) const
+		D3D12_BLEND_DESC BlendDescFromJson(const PJson& _json) const
 		{
 			using namespace JsonKeys;
 			D3D12_BLEND_DESC blendDesc = {};
-			for (s32 i = 0; i < _json[JSONBLENDDESCRENDERTARGETBLENDDESCS].get<std::vector<Json>>().size(); ++i)
+			for (s32 i = 0; i < _json[JSONBLENDDESCRENDERTARGETBLENDDESCS].get<std::vector<PJson>>().size(); ++i)
 			{
 				blendDesc.RenderTarget[i] = RTBlendDescFromJson(_json[i]);
 			}
@@ -195,10 +195,10 @@ namespace Protostar
 
 
 
-		Json RTBlendDescToJson(const D3D12_RENDER_TARGET_BLEND_DESC& _rtBlendDesc) const
+		PJson RTBlendDescToJson(const D3D12_RENDER_TARGET_BLEND_DESC& _rtBlendDesc) const
 		{
 			using namespace JsonKeys;
-			return Json
+			return PJson
 			{
 				{JSONRTBLENDDESCBLENDENABLE, _rtBlendDesc.BlendEnable},
 				{JSONRTBLENDDESCLOGICOPENABLE, _rtBlendDesc.LogicOpEnable}, 
@@ -212,7 +212,7 @@ namespace Protostar
 			};
 		}
 
-		D3D12_RENDER_TARGET_BLEND_DESC RTBlendDescFromJson(const Json& _json) const
+		D3D12_RENDER_TARGET_BLEND_DESC RTBlendDescFromJson(const PJson& _json) const
 		{
 			using namespace JsonKeys;
 			return D3D12_RENDER_TARGET_BLEND_DESC
@@ -232,10 +232,10 @@ namespace Protostar
 
 
 
-		Json RasterizerDescToJson(const D3D12_RASTERIZER_DESC& _rasterizerDesc) const
+		PJson RasterizerDescToJson(const D3D12_RASTERIZER_DESC& _rasterizerDesc) const
 		{
 			using namespace JsonKeys;
-			return Json
+			return PJson
 			{
 				{JSONRASTERIZERDESCFILLMODE, _rasterizerDesc.FillMode},
 				{JSONRASTERIZERDESCCULLMODE, _rasterizerDesc.CullMode},
@@ -251,7 +251,7 @@ namespace Protostar
 			};
 		}
 
-		D3D12_RASTERIZER_DESC RasterizerDescFromJson(const Json& _json) const
+		D3D12_RASTERIZER_DESC RasterizerDescFromJson(const PJson& _json) const
 		{
 			using namespace JsonKeys;
 			return D3D12_RASTERIZER_DESC
@@ -272,10 +272,10 @@ namespace Protostar
 
 
 
-		Json DepthStencilDescToJson(const D3D12_DEPTH_STENCIL_DESC& _depthStencilDesc) const
+		PJson DepthStencilDescToJson(const D3D12_DEPTH_STENCIL_DESC& _depthStencilDesc) const
 		{
 			using namespace JsonKeys;
-			return Json
+			return PJson
 			{
 				{JSONDEPTHSTENCILDESCDEPTHENABLE, _depthStencilDesc.DepthEnable},
 				{JSONDEPTHSTENCILDESCDEPTHWRITEMASK, _depthStencilDesc.DepthWriteMask},
@@ -288,7 +288,7 @@ namespace Protostar
 			};
 		}
 
-		D3D12_DEPTH_STENCIL_DESC DepthStencilDescFromJson(const Json& _json) const 
+		D3D12_DEPTH_STENCIL_DESC DepthStencilDescFromJson(const PJson& _json) const 
 		{
 			using namespace JsonKeys;
 			return D3D12_DEPTH_STENCIL_DESC
@@ -299,17 +299,17 @@ namespace Protostar
 				_json[JSONDEPTHSTENCILDESCSTENCILENABLE].get<bool>(),
 				_json[JSONDEPTHSTENCILDESCSTENCILREADMASK].get<u8>(),
 				_json[JSONDEPTHSTENCILDESCSTENCILWRITEMASK].get<u8>(),
-				DepthStencilOpDescFromJson(_json[JSONDEPTHSTENCILDESCFRONTFACE].get<Json>()),
-				DepthStencilOpDescFromJson(_json[JSONDEPTHSTENCILDESCBACKFACE].get<Json>())
+				DepthStencilOpDescFromJson(_json[JSONDEPTHSTENCILDESCFRONTFACE].get<PJson>()),
+				DepthStencilOpDescFromJson(_json[JSONDEPTHSTENCILDESCBACKFACE].get<PJson>())
 			};
 		}
 
 
 
-		Json DepthStencilOpDescToJson(const D3D12_DEPTH_STENCILOP_DESC& _depthStencilOpDesc) const
+		PJson DepthStencilOpDescToJson(const D3D12_DEPTH_STENCILOP_DESC& _depthStencilOpDesc) const
 		{
 			using namespace JsonKeys;
-			return Json
+			return PJson
 			{
 				{JSONDEPTHSTENCILOPDESCSTENCILFAILOP, _depthStencilOpDesc.StencilFailOp},
 				{JSONDEPTHSTENCILOPDESCSTENCILDEPTHFAILOP, _depthStencilOpDesc.StencilDepthFailOp},
@@ -318,7 +318,7 @@ namespace Protostar
 			};
 		}
 
-		D3D12_DEPTH_STENCILOP_DESC DepthStencilOpDescFromJson(const Json& _json) const
+		D3D12_DEPTH_STENCILOP_DESC DepthStencilOpDescFromJson(const PJson& _json) const
 		{
 			using namespace JsonKeys;
 			return D3D12_DEPTH_STENCILOP_DESC

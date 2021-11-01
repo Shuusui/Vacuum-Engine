@@ -1,17 +1,17 @@
 #include "..\Header Files\SavingSystem.h"
 
-Protostar::CSavingSystem* Protostar::CSavingSystem::s_savingSystem = nullptr;
+Protostar::PSavingSystem* Protostar::PSavingSystem::s_savingSystem = nullptr;
 
-void Protostar::CSavingSystem::OnCreate()
+void Protostar::PSavingSystem::OnCreate()
 {
 	if (s_savingSystem)
 	{
 		return;
 	}
-	s_savingSystem = new CSavingSystem();
+	s_savingSystem = new PSavingSystem();
 }
 
-void Protostar::CSavingSystem::OnDestroy()
+void Protostar::PSavingSystem::OnDestroy()
 {
 	if (s_savingSystem)
 	{

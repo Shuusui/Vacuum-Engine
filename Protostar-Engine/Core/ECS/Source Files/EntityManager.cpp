@@ -12,12 +12,12 @@ void Protostar::CEntityManager::CreateEntityManager()
 	s_entityManager = new CEntityManager();
 }
 
-void Protostar::CEntityManager::RegisterEntity(CBaseEntity* _entity)
+void Protostar::CEntityManager::RegisterEntity(PBaseEntity* _entity)
 {
 	m_entities.push_back(_entity);
 }
 
-std::vector<Protostar::CBaseEntity*> Protostar::CEntityManager::GetEntities() const
+std::vector<Protostar::PBaseEntity*> Protostar::CEntityManager::GetEntities() const
 {
 	return m_entities;
 }

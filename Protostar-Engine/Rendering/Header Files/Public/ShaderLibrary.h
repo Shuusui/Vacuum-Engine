@@ -52,7 +52,7 @@ namespace Protostar
 
 		void Save();
 
-		Json ShaderInfoAsJson(const SShaderInfo& _shaderInfo) const;
+		PJson ShaderInfoAsJson(const SShaderInfo& _shaderInfo) const;
 
 		void LoadShaderJson();
 		void LoadShaders(const std::filesystem::path& _shadersDirPath);
@@ -61,21 +61,21 @@ namespace Protostar
 		bool LoadPixelShader(const std::filesystem::path& _shaderPath);
 		bool LoadCombinedShader(const std::filesystem::path& _shaderPath);
 
-		void UnloadVertexShader(const SGuid& _guid);
-		void UnloadPixelShader(const SGuid& _guid);
-		void UnloadShader(const SGuid& _guid);
+		void UnloadVertexShader(const PGuid& _guid);
+		void UnloadPixelShader(const PGuid& _guid);
+		void UnloadShader(const PGuid& _guid);
 
-		bool ContainsVertexShader(const SGuid& _guid) const;
-		bool ContainsPixelShader(const SGuid& _guid) const;
-		bool ContainsShader(const SGuid& _guid) const;
+		bool ContainsVertexShader(const PGuid& _guid) const;
+		bool ContainsPixelShader(const PGuid& _guid) const;
+		bool ContainsShader(const PGuid& _guid) const;
 
-		SShaderInfo GetVertexShaderInfo(const SGuid& _guid) const;
-		SShaderInfo GetPixelShaderInfo(const SGuid& _guid) const;
+		SShaderInfo GetVertexShaderInfo(const PGuid& _guid) const;
+		SShaderInfo GetPixelShaderInfo(const PGuid& _guid) const;
 		/**
 		 * returns a pair of shaderinfos where the first is vertex shader and the second is the pixel shader
 		 */
-		SShaderComplement GetShaderInfos(const SGuid& _guid) const;
-		STreeObject<SShaderComplement> GetShaderComplements() const;
+		SShaderComplement GetShaderInfos(const PGuid& _guid) const;
+		PTreeObject<SShaderComplement> GetShaderComplements() const;
 	private:
 		CShaderLibrary(const std::filesystem::path& _projectPath);
 
@@ -85,12 +85,12 @@ namespace Protostar
 		std::filesystem::path m_shadersPath;
 		std::filesystem::path m_shaderLibConfigPath;
 
-		STreeObject<SShaderComplement> m_fileTree;
+		PTreeObject<SShaderComplement> m_fileTree;
 
-		std::unordered_map<SGuid, SShaderInfo> m_vertexShaders;
-		std::unordered_map<SGuid, SShaderInfo> m_pixelShaders;
+		std::unordered_map<PGuid, SShaderInfo> m_vertexShaders;
+		std::unordered_map<PGuid, SShaderInfo> m_pixelShaders;
 
-		std::unordered_map<std::string, SGuid> m_vertexShaderNames;
-		std::unordered_map<std::string, SGuid> m_pixelShaderNames;
+		std::unordered_map<std::string, PGuid> m_vertexShaderNames;
+		std::unordered_map<std::string, PGuid> m_pixelShaderNames;
 	};
 }

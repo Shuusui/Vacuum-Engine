@@ -3,54 +3,54 @@
 
 namespace Protostar
 {
-	CLog* CLog::s_logHandle = nullptr;
+	PLog* PLog::s_logHandle = nullptr;
 
-	bool CLog::Init(std::string& _errorMsg)
+	bool PLog::Init(std::string& _errorMsg)
 	{
 		if (s_logHandle)
 		{
 			_errorMsg = "Log handle is already initialized";
 			return false;
 		}
-		s_logHandle = new CLog();
+		s_logHandle = new PLog();
 		return true;
 	}
 
-	void CLog::RegisterHandle(const SGuid& _handleGuid, const SConsoleInfo& _outputInfo)
+	void PLog::RegisterHandle(const PGuid& _handleGuid, const PConsoleInfo& _outputInfo)
 	{
 		s_logHandle->m_logMutex.lock();
 		s_logHandle->m_logInfos.insert(std::make_pair(_handleGuid, _outputInfo));
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::RegisterBuffer(const SGuid& _bufGuid, std::vector<std::pair<SColor, std::string>>* buf)
+	void PLog::RegisterBuffer(const PGuid& _bufGuid, std::vector<std::pair<PColor, std::string>>* buf)
 	{
 		*buf = s_logHandle->m_buffer;
 		s_logHandle->m_logBuffer.insert(std::make_pair(_bufGuid, buf));
 	}
 
-	void CLog::RemoveBuffer(const SGuid& _bufGuid)
+	void PLog::RemoveBuffer(const PGuid& _bufGuid)
 	{
 		s_logHandle->m_logBuffer.erase(_bufGuid);
 	}
 
-	bool CLog::IsBufRegistered(const SGuid& _bufGuid)
+	bool PLog::IsBufRegistered(const PGuid& _bufGuid)
 	{
 		return s_logHandle->m_logBuffer.find(_bufGuid) == s_logHandle->m_logBuffer.end();
 	}
 
-	void CLog::Log(const std::string& _logString)
+	void PLog::Log(const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
-		s_logHandle->m_buffer.push_back(std::make_pair(SColor{1.0f, 0.4f, 0.8f, 1.0f}, _logString));
-		for (std::pair<const SGuid, SConsoleInfo>& handlePair : s_logHandle->m_logInfos)
+		s_logHandle->m_buffer.push_back(std::make_pair(PColor{1.0f, 0.4f, 0.8f, 1.0f}, _logString));
+		for (std::pair<const PGuid, PConsoleInfo>& handlePair : s_logHandle->m_logInfos)
 		{
 			LogToHandle(handlePair.second, _logString);
 		}
 
-		for (const std::pair<SGuid, std::vector<std::pair<SColor, std::string>>*>& bufPair : s_logHandle->m_logBuffer)
+		for (const std::pair<PGuid, std::vector<std::pair<PColor, std::string>>*>& bufPair : s_logHandle->m_logBuffer)
 		{
-			SColor color = { 1.0f, 0.4f, 0.8f, 1.0f };
+			PColor color = { 1.0f, 0.4f, 0.8f, 1.0f };
 			bufPair.second->push_back(std::make_pair(color, _logString));
 		}
 
@@ -60,31 +60,31 @@ namespace Protostar
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::ClearAllLogs()
+	void PLog::ClearAllLogs()
 	{
 		s_logHandle->m_logMutex.lock();
-		for (std::pair<const SGuid, SConsoleInfo>& handlePair : s_logHandle->m_logInfos)
+		for (std::pair<const PGuid, PConsoleInfo>& handlePair : s_logHandle->m_logInfos)
 		{
 			ClearLogHandle(handlePair.second);
 		}
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::Log(const SGuid& _handleGuid, const std::string& _logString)
+	void PLog::Log(const PGuid& _handleGuid, const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
 		LogToHandle(s_logHandle->m_logInfos.at(_handleGuid), _logString);
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::ClearLog(const SGuid& _handleGuid)
+	void PLog::ClearLog(const PGuid& _handleGuid)
 	{
 		s_logHandle->m_logMutex.lock();
 		ClearLogHandle(s_logHandle->m_logInfos.at(_handleGuid));
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::Log(SGuid* _handleGuids, const size_t _handleGuidAmount, const std::string& _logString)
+	void PLog::Log(PGuid* _handleGuids, const size_t _handleGuidAmount, const std::string& _logString)
 	{
 		s_logHandle->m_logMutex.lock();
 		for (s32 i = 0; i < _handleGuidAmount; ++i)
@@ -94,13 +94,13 @@ namespace Protostar
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::LogDebugString(const std::string& _logString)
+	void PLog::LogDebugString(const std::string& _logString)
 	{
 		OutputDebugStringA(_logString.c_str());
 		OutputDebugStringA("\n");
 	}
 
-	void CLog::ClearLog(SGuid* _handleGuids, const size_t _handleGuidAmount)
+	void PLog::ClearLog(PGuid* _handleGuids, const size_t _handleGuidAmount)
 	{
 		s_logHandle->m_logMutex.lock();
 		for (s32 i = 0; i < _handleGuidAmount; ++i)
@@ -110,7 +110,7 @@ namespace Protostar
 		s_logHandle->m_logMutex.unlock();
 	}
 
-	void CLog::LogToHandle(SConsoleInfo& _info, const std::string& _logString)
+	void PLog::LogToHandle(PConsoleInfo& _info, const std::string& _logString)
 	{
 		if (!_info.ConsoleHandle)
 		{
@@ -140,7 +140,7 @@ namespace Protostar
 		OutputDebugStringA("\n");
 	}
 
-	void CLog::ClearLogHandle(SConsoleInfo& _info)
+	void PLog::ClearLogHandle(PConsoleInfo& _info)
 	{
 		if (!_info.ConsoleHandle)
 		{

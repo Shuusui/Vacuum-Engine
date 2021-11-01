@@ -4,31 +4,31 @@
 #include "AppManager.h"
 #include "GUI.h"
 
-Protostar::CLogWindow::CLogWindow()
-	:m_logBuffer(std::vector<std::pair<SColor, std::string>>())
-	,m_guid(SGuid::NewGuid())
+Protostar::PLogWindow::PLogWindow()
+	:m_logBuffer(std::vector<std::pair<PColor, std::string>>())
+	,m_guid(PGuid::NewGuid())
 	,m_lastFrameVectorSize(0)
 	,m_bStopScroll(false)
 {
 	RegisterToLog();
 }
 
-Protostar::CLogWindow::~CLogWindow()
+Protostar::PLogWindow::~PLogWindow()
 {
-	if (CLog::IsBufRegistered(m_guid))
+	if (PLog::IsBufRegistered(m_guid))
 	{
-		CLog::RemoveBuffer(m_guid);
+		PLog::RemoveBuffer(m_guid);
 	}
 }
 
-void Protostar::CLogWindow::OnRender()
+void Protostar::PLogWindow::OnRender()
 {
-	if (!CGUI::GetGUIInfo().bOpenConsole)
+	if (!PGUI::GetGUIInfo().bOpenConsole)
 	{
 		return;
 	}
 
-	CAppManager* appManager = CAppManager::GetAppHandle();
+	PAppManager* appManager = PAppManager::GetAppHandle();
 	SWindowDimParams wndDim = appManager->GetInitWindowDimParams();
 	float width = (float)wndDim.Width - 40;
 	float height = (float)wndDim.Height * .15f;
@@ -37,11 +37,11 @@ void Protostar::CLogWindow::OnRender()
 	ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
 
-	if (!ImGui::Begin("Log", &CGUI::GetGUIInfo().bOpenConsole))
+	if (!ImGui::Begin("Log", &PGUI::GetGUIInfo().bOpenConsole))
 	{ 
-		if (CLog::IsBufRegistered(m_guid))
+		if (PLog::IsBufRegistered(m_guid))
 		{
-			CLog::RemoveBuffer(m_guid);
+			PLog::RemoveBuffer(m_guid);
 		}
 
 		ImGui::End();
@@ -61,7 +61,7 @@ void Protostar::CLogWindow::OnRender()
 		m_lastFrameVectorSize = m_logBuffer.size();
 		bScroll = true;
 	}
-	for (const std::pair<SColor, std::string>& bufInformation : m_logBuffer)
+	for (const std::pair<PColor, std::string>& bufInformation : m_logBuffer)
 	{
 		ImGui::TextColored(ImVec4(bufInformation.first.Color[0], bufInformation.first.Color[1], bufInformation.first.Color[2], bufInformation.first.Color[3]), bufInformation.second.c_str());
 		if (bScroll)
@@ -72,7 +72,7 @@ void Protostar::CLogWindow::OnRender()
 	ImGui::End();
 }
 
-void Protostar::CLogWindow::RegisterToLog()
+void Protostar::PLogWindow::RegisterToLog()
 {
-	CLog::RegisterBuffer(m_guid, &m_logBuffer);
+	PLog::RegisterBuffer(m_guid, &m_logBuffer);
 }

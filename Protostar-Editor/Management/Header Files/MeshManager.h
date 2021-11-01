@@ -13,10 +13,10 @@
 
 namespace Protostar
 {
-	struct SModel
+	struct PModel
 	{
-		SModel()
-			:Guid(SGuid())
+		PModel()
+			:Guid(PGuid())
 			,Name(std::string())
 			,Path(std::filesystem::path())
 			,MeshData(SMesh())
@@ -24,50 +24,50 @@ namespace Protostar
 
 		}
 
-		SModel(const std::filesystem::path& _path)
-			:Guid(SGuid::NewGuid())
+		PModel(const std::filesystem::path& _path)
+			:Guid(PGuid::NewGuid())
 			,Name(_path.filename().string())
 			,Path(_path)
 		{
 		}
 
-		SModel(const Json& _json)
+		PModel(const PJson& _json)
 		{
 			Guid = _json[JSONMESHGUID].get<std::string>();
 			Name = _json[JSONMESHNAME].get<std::string>();
 			Path = _json[JSONMESHPATH].get<std::string>();
 		}
 
-		SModel(const SModel&) = default;
+		PModel(const PModel&) = default;
 
-		SModel& operator=(const SModel&) = default;
+		PModel& operator=(const PModel&) = default;
 
-		Json ToJson() const
+		PJson ToJson() const
 		{
-			return Json{
+			return PJson{
 				{JSONMESHGUID, Guid.ToString()},
 				{JSONMESHNAME, Name},
 				{JSONMESHPATH, Path.string()}
 			};
 		}
 
-		SGuid Guid;
+		PGuid Guid;
 		std::string Name;
 		std::filesystem::path Path;
 		SMesh MeshData;
 	};
 
-	class CMeshManager
+	class PMeshManager
 	{
 	public: 
 		static void OnCreate(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath);
 		static void OnDestroy();
-		static CMeshManager* GetHandle()
+		static PMeshManager* GetHandle()
 		{
 			return s_meshManager;
 		}
 
-		std::unordered_map<SGuid, SModel> GetMeshes() const
+		std::unordered_map<PGuid, PModel> GetMeshes() const
 		{
 			return m_meshes;
 		}
@@ -77,18 +77,18 @@ namespace Protostar
 			return m_meshPaths;
 		}
 
-		SModel GetModelData(const SGuid& _guid)
+		PModel GetModelData(const PGuid& _guid)
 		{
 			return m_meshes[_guid];
 		}
 
 		void RegisterModel(const std::filesystem::path& _modelPath)
 		{
-			m_meshes.insert(std::make_pair(SGuid::NewGuid(), SModel(_modelPath)));
+			m_meshes.insert(std::make_pair(PGuid::NewGuid(), PModel(_modelPath)));
 			m_meshPaths.insert(_modelPath.string());
 		}
 
-		void UnregisterModel(const SGuid& _guid, const std::string& _modelPath)
+		void UnregisterModel(const PGuid& _guid, const std::string& _modelPath)
 		{
 			m_meshes.erase(_guid);
 			m_meshPaths.erase(_modelPath);
@@ -96,15 +96,15 @@ namespace Protostar
 
 		void Load();
 		void Save();
-		~CMeshManager();
+		~PMeshManager();
 	private:
-		CMeshManager(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath);
+		PMeshManager(const std::filesystem::path& _meshesPath, const std::filesystem::path& _configsPath);
 
-		static CMeshManager* s_meshManager;
+		static PMeshManager* s_meshManager;
 		std::filesystem::path m_meshesPath;
 		std::filesystem::path m_configsPath;
 		std::filesystem::path m_configFilePath;
-		std::unordered_map<SGuid, SModel> m_meshes;
+		std::unordered_map<PGuid, PModel> m_meshes;
 		std::unordered_set<std::string> m_meshPaths;
 	};
 }

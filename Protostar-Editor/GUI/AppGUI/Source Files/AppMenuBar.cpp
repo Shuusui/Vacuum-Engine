@@ -10,27 +10,27 @@
 #include "SavingSystem.h"
 #include "ECS\Header Files\BaseObject.h"
 
-Protostar::CAppMenuBar::CAppMenuBar()
+Protostar::PAppMenuBar::PAppMenuBar()
 	:m_logWindow(nullptr)
 	,m_editorFPS(nullptr)
 	,m_bShowSaveWindow(false)
-	,m_dirtyObjects(std::unordered_map<CBaseObject*, bool>())
+	,m_dirtyObjects(std::unordered_map<PBaseObject*, bool>())
 {
-	if (CGUI::GetGUIInfo().bOpenConsole)
+	if (PGUI::GetGUIInfo().bOpenConsole)
 	{
-		m_logWindow = new CLogWindow();
+		m_logWindow = new PLogWindow();
 	}
-	if (CGUI::GetGUIInfo().bOpenEditorFPS)
+	if (PGUI::GetGUIInfo().bOpenEditorFPS)
 	{
-		m_editorFPS = new CEditorFPS();
+		m_editorFPS = new PEditorFPS();
 	}
 }
 
-Protostar::CAppMenuBar::~CAppMenuBar()
+Protostar::PAppMenuBar::~PAppMenuBar()
 {
 }
 
-void Protostar::CAppMenuBar::OnRender()
+void Protostar::PAppMenuBar::OnRender()
 {
 
 	if (!ImGui::BeginMainMenuBar())
@@ -40,10 +40,10 @@ void Protostar::CAppMenuBar::OnRender()
 
 	if(ImGui::BeginMenu("App"))
 	{
-		CAppManager* appManager = CAppManager::GetAppHandle();
+		PAppManager* appManager = PAppManager::GetAppHandle();
 		if (ImGui::BeginMenu("Open"))
 		{
-			for (CProject* project : appManager->GetProjects())
+			for (PProject* project : appManager->GetProjects())
 			{
 				if (ImGui::MenuItem(project->GetName().c_str()))
 				{
@@ -56,28 +56,28 @@ void Protostar::CAppMenuBar::OnRender()
 		{
 			if (!m_logWindow)
 			{
-				m_logWindow = new CLogWindow();
+				m_logWindow = new PLogWindow();
 			}
-			CGUI::SetOpenLog(!CGUI::GetGUIInfo().bOpenConsole);
+			PGUI::SetOpenLog(!PGUI::GetGUIInfo().bOpenConsole);
 		}
 
-		if (ImGui::MenuItem("Save...", "CTRL+S", false, CSavingSystem::GetHandle()->HasDirtyObjects()))
+		if (ImGui::MenuItem("Save...", "CTRL+S", false, PSavingSystem::GetHandle()->HasDirtyObjects()))
 		{
 			m_bShowSaveWindow = !m_bShowSaveWindow;			
 		}
 
-		if (ImGui::MenuItem("Save all", "CTRL+SHIFT+S", false, CSavingSystem::GetHandle()->HasDirtyObjects()))
+		if (ImGui::MenuItem("Save all", "CTRL+SHIFT+S", false, PSavingSystem::GetHandle()->HasDirtyObjects()))
 		{
-			CSavingSystem::GetHandle()->SaveAllDirtyObjects();
+			PSavingSystem::GetHandle()->SaveAllDirtyObjects();
 		}
 
 		ImGui::Separator();
 
 		if(ImGui::MenuItem("Content Browser"))
 		{
-			if (CProject* currentProject = appManager->GetCurrentProject())
+			if (PProject* currentProject = appManager->GetCurrentProject())
 			{
-				CProjectGUI::GetProjectGUIHandle()->ToggleContentBrowser();
+				PProjectGUI::GetProjectGUIHandle()->ToggleContentBrowser();
 			}
 		}
 
@@ -90,9 +90,9 @@ void Protostar::CAppMenuBar::OnRender()
 		{
 			if (!m_editorFPS)
 			{
-				m_editorFPS = new CEditorFPS();
+				m_editorFPS = new PEditorFPS();
 			}
-			CGUI::SetOpenEditorFPS(!CGUI::GetGUIInfo().bOpenEditorFPS);
+			PGUI::SetOpenEditorFPS(!PGUI::GetGUIInfo().bOpenEditorFPS);
 		}
 		ImGui::EndMenu();
 	}
@@ -121,7 +121,7 @@ void Protostar::CAppMenuBar::OnRender()
 	{
 		if (!io.KeysDown[VK_CONTROL] && !io.KeysDown[0x53])
 		{
-			if (CSavingSystem::GetHandle()->HasDirtyObjects())
+			if (PSavingSystem::GetHandle()->HasDirtyObjects())
 			{
 				m_bShowSaveWindow = !m_bShowSaveWindow;
 			}
@@ -139,7 +139,7 @@ void Protostar::CAppMenuBar::OnRender()
 	{
 		if (!io.KeysDown[VK_CONTROL] && !io.KeysDown[VK_SHIFT] && !io.KeysDown[0x53])
 		{
-			CSavingSystem::GetHandle()->SaveAllDirtyObjects();
+			PSavingSystem::GetHandle()->SaveAllDirtyObjects();
 			bCtrlShiftAndSPressedLastFrame = false;
 		}
 	}
@@ -148,7 +148,7 @@ void Protostar::CAppMenuBar::OnRender()
 
 }
 
-void Protostar::CAppMenuBar::ShowSaveWindow()
+void Protostar::PAppMenuBar::ShowSaveWindow()
 {
 	static bool bIsInitialized = false;
 	if (!m_bShowSaveWindow)
@@ -159,7 +159,7 @@ void Protostar::CAppMenuBar::ShowSaveWindow()
 
 	if (!bIsInitialized)
 	{
-		for (CBaseObject* dirtyObject : CSavingSystem::GetHandle()->GetDirtyObjects())
+		for (PBaseObject* dirtyObject : PSavingSystem::GetHandle()->GetDirtyObjects())
 		{
 			m_dirtyObjects.insert(std::make_pair(dirtyObject, true));
 		}
@@ -208,7 +208,7 @@ void Protostar::CAppMenuBar::ShowSaveWindow()
 
 		if (ImGui::Button("Ok"))
 		{
-			std::vector<CBaseObject*> objectsToSave = {};
+			std::vector<PBaseObject*> objectsToSave = {};
 			for (auto& [key, value] : m_dirtyObjects)
 			{
 				if (value)
@@ -216,7 +216,7 @@ void Protostar::CAppMenuBar::ShowSaveWindow()
 					objectsToSave.push_back(key);
 				}
 			}
-			CSavingSystem::GetHandle()->SaveDirtyObjects(objectsToSave);
+			PSavingSystem::GetHandle()->SaveDirtyObjects(objectsToSave);
 
 			ImGui::CloseCurrentPopup();
 			m_bShowSaveWindow = false;

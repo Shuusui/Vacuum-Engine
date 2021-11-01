@@ -8,21 +8,21 @@
 
 namespace Protostar
 {
-	struct SGUIInfo
+	struct PGUIInfo
 	{
 		bool bOpenConsole;
 		bool bOpenContentBrowser;
 		bool bOpenEditorFPS;
 	};
 
-	class CGUI
+	class PGUI
 	{
 	public:
 		static bool Init(HWND _hwnd);
 		static void NewFrame();
 		static void Render();
 		static void Destroy();
-		static SGUIInfo& GetGUIInfo();
+		static PGUIInfo& GetGUIInfo();
 
 		static void SetOpenLog(const bool& _bConsoleOpen)
 		{
@@ -39,7 +39,7 @@ namespace Protostar
 			s_gui->m_guiInfo.bOpenEditorFPS = _bOpenEditorFPS;
 		}
 
-		~CGUI();
+		~PGUI();
 
 		void CreateAppMenuBar();
 		void DestroyAppMenuBar();
@@ -69,7 +69,7 @@ namespace Protostar
 		static s32 OnMouseHWheel(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
 		static void OnUpdateFontTexture(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
 
-		CGUI(HWND _hwnd)
+		PGUI(HWND _hwnd)
 			:m_hwnd(_hwnd)
 			,m_lastMouseCursor(ImGuiMouseCursor_COUNT)
 			,m_appMenuBar(nullptr)
@@ -78,13 +78,13 @@ namespace Protostar
 
 		}
 
-		static CGUI* s_gui;
+		static PGUI* s_gui;
 
 		HWND m_hwnd;
 		ImGuiMouseCursor m_lastMouseCursor;
-		class CAppMenuBar* m_appMenuBar;
+		class PAppMenuBar* m_appMenuBar;
 		std::filesystem::path m_guiIniFilePath;
 		std::filesystem::path m_guiIniPath;
-		SGUIInfo m_guiInfo;
+		PGUIInfo m_guiInfo;
 	};
 }

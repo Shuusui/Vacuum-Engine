@@ -7,20 +7,20 @@ namespace Protostar
 		* A n-1 thread safe queue (n contributor, 1 substractor)
 		*/
 	template<typename T>
-	class CNOQueue
+	class PNOQueue
 	{
 	public:
-		CNOQueue()
+		PNOQueue()
 			: m_queue()
 		{
 		}
 
-		CNOQueue(const CNOQueue& _other)
+		PNOQueue(const PNOQueue& _other)
 			: m_queue(_other.m_queue)
 		{
 		}
 
-		CNOQueue(CNOQueue&& _other)
+		PNOQueue(PNOQueue&& _other)
 			: m_queue(std::move(_other.m_queue))
 		{
 		}

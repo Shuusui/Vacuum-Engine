@@ -56,9 +56,9 @@ void Protostar::CShaderLibrary::Destroy()
 
 void Protostar::CShaderLibrary::Save()
 {
-	Json json = {};
-	Json vertexShaderMapJson = {};
-	Json pixelShaderMapJson = {};
+	PJson json = {};
+	PJson vertexShaderMapJson = {};
+	PJson pixelShaderMapJson = {};
 
 	for (const auto& [guid, shaderInfo] : m_vertexShaders)
 	{
@@ -77,9 +77,9 @@ void Protostar::CShaderLibrary::Save()
 	configFile << json.dump();
 }
 
-Json Protostar::CShaderLibrary::ShaderInfoAsJson(const SShaderInfo& _shaderInfo) const
+PJson Protostar::CShaderLibrary::ShaderInfoAsJson(const SShaderInfo& _shaderInfo) const
 {
-	return Json{
+	return PJson{
 		{JSONSHADERINFONAME,_shaderInfo.Name},
 		{JSONSHADERINFOPATH, _shaderInfo.ShaderPath.string()}, 
 	};
@@ -89,17 +89,17 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 {
 	std::ifstream configFile(m_shaderLibConfigPath);
 
-	Json json = {};
+	PJson json = {};
 	configFile >> json;
 
 	ID3DBlob* vertexShader = nullptr;
 	ID3DBlob* pixelShader = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
-	Json vertexShaderMapJson = json[JSONVERTEXSHADERMAP].get<Json>();
+	PJson vertexShaderMapJson = json[JSONVERTEXSHADERMAP].get<PJson>();
 	for (const auto& [guid, shaderInfoJson] : vertexShaderMapJson.items())
 	{
-		SGuid shaderGuid = SGuid(guid);
+		PGuid shaderGuid = PGuid(guid);
 		if (!shaderGuid.IsValid())
 		{
 			 continue;
@@ -126,10 +126,10 @@ void Protostar::CShaderLibrary::LoadShaderJson()
 		m_vertexShaderNames.insert(std::make_pair(shaderInfo.Name, shaderGuid));
 	}
 
-	Json pixelShaderMapJson = json[JSONPIXELSHADERMAP].get<Json>();
+	PJson pixelShaderMapJson = json[JSONPIXELSHADERMAP].get<PJson>();
 	for (const auto& [guid, shaderInfoJson] : pixelShaderMapJson.items())
 	{
-		SGuid shaderGuid = SGuid(guid);
+		PGuid shaderGuid = PGuid(guid);
 		if (!shaderGuid.IsValid())
 		{
 			continue;
@@ -182,13 +182,13 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 	ID3DBlob* pixelShader = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 
-	m_fileTree = CFilesystem::GenerateFileTree<SShaderComplement>(_shadersDirPath, [this](const std::filesystem::path& _path, STreeNode<SShaderComplement>& _treeNode)->bool
+	m_fileTree = PFilesystem::GenerateFileTree<SShaderComplement>(_shadersDirPath, [this](const std::filesystem::path& _path, PTreeNode<SShaderComplement>& _treeNode)->bool
 		{
 			std::string filename = _path.filename().string();
 
 			SShaderComplement complement = {};
 
-			if (CFilesystem::HasParentDir(_path, "Vertex"))
+			if (PFilesystem::HasParentDir(_path, "Vertex"))
 			{
 				if (m_vertexShaderNames.find(filename) != m_vertexShaderNames.end())
 				{
@@ -207,7 +207,7 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 				return true;
 			}
 
-			if (CFilesystem::HasParentDir(_path, "Pixel"))
+			if (PFilesystem::HasParentDir(_path, "Pixel"))
 			{
 				if (m_pixelShaderNames.find(filename) != m_pixelShaderNames.end())
 				{
@@ -226,7 +226,7 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 				return true;
 			}
 
-			if (CFilesystem::HasParentDir(_path, "Combined"))
+			if (PFilesystem::HasParentDir(_path, "Combined"))
 			{
 				auto vertexShaderIterator = m_vertexShaderNames.find(filename);
 				auto pixelShaderIterator = m_pixelShaderNames.find(filename);
@@ -240,7 +240,7 @@ void Protostar::CShaderLibrary::LoadShaders(const std::filesystem::path& _shader
 					return false;
 				}
 
-				SGuid combinedShaderGuid = SGuid::NewGuid();
+				PGuid combinedShaderGuid = PGuid::NewGuid();
 
 				if (bVtxShaderExists)
 				{
@@ -325,7 +325,7 @@ bool Protostar::CShaderLibrary::LoadVertexShader(const std::filesystem::path& _s
 		shaderInfo.Shader = vertexShader;
 		shaderInfo.ShaderPath = _shaderPath;
 
-		SGuid shaderGuid = SGuid::NewGuid();
+		PGuid shaderGuid = PGuid::NewGuid();
 
 		if (m_pixelShaderNames.find(filename) != m_pixelShaderNames.end())
 		{
@@ -359,7 +359,7 @@ bool Protostar::CShaderLibrary::LoadPixelShader(const std::filesystem::path& _sh
 		shaderInfo.Shader = pixelShader;
 		shaderInfo.ShaderPath = _shaderPath;
 
-		SGuid shaderGuid = SGuid::NewGuid();
+		PGuid shaderGuid = PGuid::NewGuid();
 
 		if (m_vertexShaderNames.find(shaderInfo.Name) != m_vertexShaderNames.end())
 		{
@@ -420,34 +420,34 @@ bool Protostar::CShaderLibrary::LoadCombinedShader(const std::filesystem::path& 
 	shaderInfo.Shader = vertexShader;
 	shaderInfo.ShaderPath = _shaderPath;
 
-	m_vertexShaders.insert(std::make_pair(SGuid::NewGuid(), shaderInfo));
+	m_vertexShaders.insert(std::make_pair(PGuid::NewGuid(), shaderInfo));
 
 	shaderInfo = {};
 	shaderInfo.Name = filename;
 	shaderInfo.Shader = pixelShader;
 	shaderInfo.ShaderPath = _shaderPath;
 
-	m_pixelShaders.insert(std::make_pair(SGuid::NewGuid(), shaderInfo));
+	m_pixelShaders.insert(std::make_pair(PGuid::NewGuid(), shaderInfo));
 
 	SafeRelease(errorBlob);
 	return true;
 }
 
-void Protostar::CShaderLibrary::UnloadVertexShader(const SGuid& _guid)
+void Protostar::CShaderLibrary::UnloadVertexShader(const PGuid& _guid)
 {
 	SShaderInfo shaderInfo =  m_vertexShaders.at(_guid);
 	SafeRelease(shaderInfo.Shader);
 	m_vertexShaders.erase(_guid);
 }
 
-void Protostar::CShaderLibrary::UnloadPixelShader(const SGuid& _guid)
+void Protostar::CShaderLibrary::UnloadPixelShader(const PGuid& _guid)
 {
 	SShaderInfo shaderInfo = m_pixelShaders.at(_guid);
 	SafeRelease(shaderInfo.Shader);
 	m_pixelShaders.erase(_guid);
 }
 
-void Protostar::CShaderLibrary::UnloadShader(const SGuid& _guid)
+void Protostar::CShaderLibrary::UnloadShader(const PGuid& _guid)
 {
 	SShaderInfo shaderInfo = m_vertexShaders.at(_guid);
 	SafeRelease(shaderInfo.Shader);
@@ -458,37 +458,37 @@ void Protostar::CShaderLibrary::UnloadShader(const SGuid& _guid)
 	m_pixelShaders.erase(_guid);
 }
 
-bool Protostar::CShaderLibrary::ContainsVertexShader(const SGuid& _guid) const
+bool Protostar::CShaderLibrary::ContainsVertexShader(const PGuid& _guid) const
 {
 	return m_vertexShaders.find(_guid) != m_vertexShaders.end();
 }
 
-bool Protostar::CShaderLibrary::ContainsPixelShader(const SGuid& _guid) const
+bool Protostar::CShaderLibrary::ContainsPixelShader(const PGuid& _guid) const
 {
 	return m_pixelShaders.find(_guid) != m_pixelShaders.end();
 }
 
-bool Protostar::CShaderLibrary::ContainsShader(const SGuid& _guid) const
+bool Protostar::CShaderLibrary::ContainsShader(const PGuid& _guid) const
 {
 	return (m_vertexShaders.find(_guid) != m_vertexShaders.end()) || (m_pixelShaders.find(_guid) != m_pixelShaders.end());
 }
 
-Protostar::SShaderInfo Protostar::CShaderLibrary::GetVertexShaderInfo(const SGuid& _guid) const
+Protostar::SShaderInfo Protostar::CShaderLibrary::GetVertexShaderInfo(const PGuid& _guid) const
 {
 	return m_vertexShaders.at(_guid);
 }
 
-Protostar::SShaderInfo Protostar::CShaderLibrary::GetPixelShaderInfo(const SGuid& _guid) const
+Protostar::SShaderInfo Protostar::CShaderLibrary::GetPixelShaderInfo(const PGuid& _guid) const
 {
 	return m_pixelShaders.at(_guid);
 }
 
-Protostar::SShaderComplement Protostar::CShaderLibrary::GetShaderInfos(const SGuid& _guid) const
+Protostar::SShaderComplement Protostar::CShaderLibrary::GetShaderInfos(const PGuid& _guid) const
 {
 	return SShaderComplement{m_vertexShaders.at(_guid), m_pixelShaders.at(_guid)};
 }
 
-Protostar::STreeObject<Protostar::SShaderComplement> Protostar::CShaderLibrary::GetShaderComplements() const
+Protostar::PTreeObject<Protostar::SShaderComplement> Protostar::CShaderLibrary::GetShaderComplements() const
 {
 	return m_fileTree;
 }

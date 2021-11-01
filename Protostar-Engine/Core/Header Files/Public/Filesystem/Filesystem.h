@@ -6,13 +6,13 @@
 
 namespace Protostar
 {
-	class CFilesystem
+	class PFilesystem
 	{
 	public:
 		template<typename T>
-		static STreeObject<T> GenerateFileTree(const std::filesystem::path& _basePath, const std::function<bool(const std::filesystem::path&, STreeNode<T>&)>& _predicate = {}, const std::vector<std::filesystem::path>& _exts = {})
+		static PTreeObject<T> GenerateFileTree(const std::filesystem::path& _basePath, const std::function<bool(const std::filesystem::path&, PTreeNode<T>&)>& _predicate = {}, const std::vector<std::filesystem::path>& _exts = {})
 		{
-			STreeObject<T> treeObject = STreeObject<T>();
+			PTreeObject<T> treeObject = PTreeObject<T>();
 			treeObject.Path = _basePath;
 
 			if (!_predicate)
@@ -25,7 +25,7 @@ namespace Protostar
 			{
 				if (std::filesystem::is_directory(path))
 				{
-					STreeObject<T> subTree = STreeObject<T>();
+					PTreeObject<T> subTree = PTreeObject<T>();
 					subTree.Path = path;
 					FillTreeObject(subTree, path, _predicate, _exts);
 					treeObject.SubDirs.push_back(subTree);
@@ -42,7 +42,7 @@ namespace Protostar
 
 				if (_predicate)
 				{
-					STreeNode<T> node = {};
+					PTreeNode<T> node = {};
 					node.Path = path;
 					if (_predicate(path, node))
 					{
@@ -71,13 +71,13 @@ namespace Protostar
 
 	private:
 		template<typename T>
-		static void FillTreeObject(STreeObject<T>& _treeObj, const std::filesystem::path& _path, const std::function<bool(const std::filesystem::path&, STreeNode<T>&)>& _predicate, const std::vector<std::filesystem::path>& _exts)
+		static void FillTreeObject(PTreeObject<T>& _treeObj, const std::filesystem::path& _path, const std::function<bool(const std::filesystem::path&, PTreeNode<T>&)>& _predicate, const std::vector<std::filesystem::path>& _exts)
 		{
 			for (const std::filesystem::path& path : std::filesystem::directory_iterator(_path))
 			{
 				if(std::filesystem::is_directory(path))
 				{
-					STreeObject<T> subTree = STreeObject<T>();
+					PTreeObject<T> subTree = PTreeObject<T>();
 					subTree.Path = path;
 					FillTreeObject(subTree, path, _predicate, _exts);
 					_treeObj.SubDirs.push_back(subTree);
@@ -92,7 +92,7 @@ namespace Protostar
 					}
 				}
 
-				STreeNode<T> node = {};
+				PTreeNode<T> node = {};
 				node.Path = path;
 				if (_predicate(path, node))
 				{

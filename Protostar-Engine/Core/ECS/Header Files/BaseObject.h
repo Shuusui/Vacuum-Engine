@@ -4,11 +4,11 @@
 
 namespace Protostar
 {
-	class CBaseObject
+	class PBaseObject
 	{
 	public:
-		CBaseObject(const std::string& _objectName);
-		virtual ~CBaseObject();
+		PBaseObject(const std::string& _objectName);
+		virtual ~PBaseObject();
 		virtual void Update(float _deltaseconds) {};
 		virtual void OnSave() = 0;
 
@@ -17,7 +17,7 @@ namespace Protostar
 			m_objectPath = _objectPath;
 		}
 
-		SGuid GetGuid() const
+		PGuid GetGuid() const
 		{
 			return m_guid;
 		}
@@ -49,7 +49,7 @@ namespace Protostar
 	protected:
 		std::filesystem::path m_objectPath;
 		std::filesystem::path m_oldPath;
-		SGuid m_guid;
+		PGuid m_guid;
 		std::string m_objectName;
 		std::string m_oldName;
 	private: 

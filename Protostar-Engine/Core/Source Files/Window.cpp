@@ -10,7 +10,7 @@
 
 namespace Protostar
 {
-	CMainWindow* CMainWindow::s_mainWindow = nullptr;
+	PMainWindow* PMainWindow::s_mainWindow = nullptr;
 
 	LRESULT CALLBACK WindowProc(
 		HWND _hwnd,
@@ -18,7 +18,7 @@ namespace Protostar
 		WPARAM _wParam,
 		LPARAM _lParam)
 	{
-		CMainWindow* mainWindow = CMainWindow::GetWindowHandle();
+		PMainWindow* mainWindow = PMainWindow::GetWindowHandle();
 		s32 returnValue = 0;
 		
 		switch (_msg)
@@ -330,16 +330,16 @@ namespace Protostar
 		return DefWindowProc(_hwnd, _msg, _wParam, _lParam);
 	}
 
-	void CMainWindow::InitWindow(const SWindowInfo& _windowInfo)
+	void PMainWindow::InitWindow(const PWindowInfo& _windowInfo)
 	{
 		if (s_mainWindow)
 		{
 			return;
 		}
-		s_mainWindow = new CMainWindow(_windowInfo);
+		s_mainWindow = new PMainWindow(_windowInfo);
 	}
 
-	bool CMainWindow::Create(std::string& _errorMsg)
+	bool PMainWindow::Create(std::string& _errorMsg)
 	{
 		WNDCLASSEX wndClass = {};
 		wndClass.cbSize = sizeof(WNDCLASSEX);
@@ -384,13 +384,13 @@ namespace Protostar
 		return true;
 	}
 
-	void CMainWindow::ShowAndUpdate(const s32 _nCmdShow)
+	void PMainWindow::ShowAndUpdate(const s32 _nCmdShow)
 	{
 		ShowWindow(s_mainWindow->m_wndHandle, _nCmdShow);
 		UpdateWindow(s_mainWindow->m_wndHandle);
 	}
 
-	bool CMainWindow::RunWindow(MSG& _msg)
+	bool PMainWindow::RunWindow(MSG& _msg)
 	{
 		if (PeekMessage(&_msg, nullptr, 0, 0, PM_REMOVE))
 		{
@@ -401,39 +401,39 @@ namespace Protostar
 		return false;
 	}
 
-	CMainWindow* CMainWindow::GetWindowHandle()
+	PMainWindow* PMainWindow::GetWindowHandle()
 	{
 		return s_mainWindow;
 	}
 
-	void CMainWindow::UpdateWindowPos(const s32 _x, const s32 _y)
+	void PMainWindow::UpdateWindowPos(const s32 _x, const s32 _y)
 	{
 		m_windowInfo.DimParams.LeftTopCornerX = _x;
 		m_windowInfo.DimParams.LeftTopCornerY = _y;
 	}
 
-	void CMainWindow::UpdateWindowSize(const s32 _width, const s32 _height)
+	void PMainWindow::UpdateWindowSize(const s32 _width, const s32 _height)
 	{
 		m_windowInfo.DimParams.Width = _width;
 		m_windowInfo.DimParams.Height = _height;
 	}
 
-	void CMainWindow::RegisterCallbackForWMEvents(const u32 _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func)
+	void PMainWindow::RegisterCallbackForWMEvents(const u32 _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func)
 	{
 		m_wmEventMap[_wmEvent].push_back(_func);
 	}
 
-	std::vector<std::function<s32(HWND, u32, WPARAM, LPARAM)>>& CMainWindow::GetWMFunctions(u32 _wmEvent) const
+	std::vector<std::function<s32(HWND, u32, WPARAM, LPARAM)>>& PMainWindow::GetWMFunctions(u32 _wmEvent) const
 	{
 		return s_mainWindow->m_wmEventMap[_wmEvent];
 	}
 
-	HWND CMainWindow::GetHwnd() const
+	HWND PMainWindow::GetHwnd() const
 	{
 		return m_wndHandle;
 	}
 
-	SWindowDimParams CMainWindow::GetCurrentDim() const 
+	SWindowDimParams PMainWindow::GetCurrentDim() const 
 	{
 		return m_windowInfo.DimParams;
 	}

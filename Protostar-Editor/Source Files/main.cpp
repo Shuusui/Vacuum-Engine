@@ -21,13 +21,13 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 {
 	using namespace Protostar;
 
-	CTimer::Create();
+	PTimer::Create();
 
-	SGuid guid = SGuid::NewGuid();
+	PGuid guid = PGuid::NewGuid();
 	std::string guidStr = guid.ToString();
 
 	std::string errorMsg = {};
-	if (!CLog::Init(errorMsg))
+	if (!PLog::Init(errorMsg))
 	{
 #if defined(_DEBUG)
 		PE_DEBUG_LOG(errorMsg);
@@ -36,21 +36,21 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 	}
 	CECSManager::CreateECS();
 
-	if (!CAppManager::InitApp(_hInstance))
+	if (!PAppManager::InitApp(_hInstance))
 	{
 		return -1;
 	}
 
-	CSavingSystem::OnCreate();
+	PSavingSystem::OnCreate();
 
-	CAppManager* appMgrHandle = CAppManager::GetAppHandle();
+	PAppManager* appMgrHandle = PAppManager::GetAppHandle();
 
-	CThreadPool* threadPool = new CThreadPool(std::thread::hardware_concurrency());
+	PThreadPool* threadPool = new PThreadPool(std::thread::hardware_concurrency());
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
-	CGUI::Init(CMainWindow::GetWindowHandle()->GetHwnd());
+	PGUI::Init(PMainWindow::GetWindowHandle()->GetHwnd());
 
 	ImGuiIO& io = ImGui::GetIO();
 	unsigned char* pixels;
@@ -60,7 +60,7 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 	CRendererManager::CreateFontsTexture(pixels, width, height, texID);
 	io.Fonts->TexID = (void*)texID;
 
-	CMainWindow::ShowAndUpdate(_nShowCmd);
+	PMainWindow::ShowAndUpdate(_nShowCmd);
 
 	ImGui::StyleColorsDark();
 
@@ -68,22 +68,22 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{
-		if (CMainWindow::RunWindow(msg))
+		if (PMainWindow::RunWindow(msg))
 		{
 			continue;
 		}
-		CTimer::OnUpdate();
-		CGUI::NewFrame();
+		PTimer::OnUpdate();
+		PGUI::NewFrame();
 
 		CRendererManager::PrepareRendering();
-		CGUI::Render();
+		PGUI::Render();
 		CRendererManager::OnUpdate();
 		CRendererManager::OnRender();
 	}
-	CAppManager::SetLastVSyncState(CRendererManager::GetVSync());
+	PAppManager::SetLastVSyncState(CRendererManager::GetVSync());
 	CRendererManager::Destroy();
-	CGUI::Destroy();
-	CAppManager::Destroy();
+	PGUI::Destroy();
+	PAppManager::Destroy();
 
 	delete threadPool;
 

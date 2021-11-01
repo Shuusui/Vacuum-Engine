@@ -18,14 +18,14 @@ namespace Protostar
 		static void Destroy();
 
 		~CPSOLibrary();
-		SGuid CreatePSO(const SPSOInfo& _psoInfo);
+		PGuid CreatePSO(const PPSOInfo& _psoInfo);
 	private:
 		void Load();
 		void Save();
 		void CreateDefaultPSO();
 		static CPSOLibrary* s_psoLibrary;
 		CPSOLibrary(const std::filesystem::path& _projectPath);
-		std::unordered_map<SGuid, SPSOInfo> m_PSOs;
+		std::unordered_map<PGuid, PPSOInfo> m_PSOs;
 		std::filesystem::path m_projectPath;
 		std::filesystem::path m_projectConfigPath;
 		std::filesystem::path m_psoLibraryIniPath;
