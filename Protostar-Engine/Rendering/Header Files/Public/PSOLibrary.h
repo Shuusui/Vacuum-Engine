@@ -7,24 +7,24 @@
 
 namespace Protostar
 {
-	class CPSOLibrary
+	class PPSOLibrary
 	{
 	public:
 		static void Create(const std::filesystem::path& _projectPath);
-		static CPSOLibrary* GetHandle()
+		static PPSOLibrary* GetHandle()
 		{
 			return s_psoLibrary;
 		}
 		static void Destroy();
 
-		~CPSOLibrary();
+		~PPSOLibrary();
 		PGuid CreatePSO(const PPSOInfo& _psoInfo);
 	private:
 		void Load();
 		void Save();
 		void CreateDefaultPSO();
-		static CPSOLibrary* s_psoLibrary;
-		CPSOLibrary(const std::filesystem::path& _projectPath);
+		static PPSOLibrary* s_psoLibrary;
+		PPSOLibrary(const std::filesystem::path& _projectPath);
 		std::unordered_map<PGuid, PPSOInfo> m_PSOs;
 		std::filesystem::path m_projectPath;
 		std::filesystem::path m_projectConfigPath;
