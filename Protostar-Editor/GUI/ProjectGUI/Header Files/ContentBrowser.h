@@ -18,7 +18,7 @@ namespace Protostar
 	private:
 		void DisplayContextMenu();
 		void ManageShaderPaths();
-		void DisplayRecursiveShaderTrees(const PTreeObject<SShaderComplement>& _subTree);
+		void DisplayRecursiveShaderTrees(const PTreeObject<PShaderComplement>& _subTree);
 		void ManageModelPaths();
 		void ManageScenePaths();
 		void ShowEntities();

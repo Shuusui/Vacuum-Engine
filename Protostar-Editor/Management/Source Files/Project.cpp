@@ -9,15 +9,15 @@
 #include "RootSignatureLibrary.h"
 #include "PSOLibrary.h"
 
-const char*PJsonNAME = "name";
-const char*PJsonGUID = "guid";
-const char*PJsonMOSTRECENTSCENEGUID = "most_recent_scene_guid";
+const char* JSONNAME = "name";
+const char* JSONGUID = "guid";
+const char* JSONMOSTRECENTSCENEGUID = "most_recent_scene_guid";
 
 Protostar::PProject::PProject(const std::filesystem::path& _projectPath)
-	:m_guid(SGuid())
+	:m_guid(PGuid())
 	,m_currentScene(nullptr)
 	,m_name(std::string())
-	,m_projectPaths(SProjectPaths())
+	,m_projectPaths(PProjectPaths())
 {
 	m_projectPaths.ProjectDir = _projectPath;
 	m_projectPaths.ConfigDir = _projectPath / "Configs";
@@ -28,16 +28,16 @@ Protostar::PProject::PProject(const std::filesystem::path& _projectPath)
 	m_projectPaths.ScenesDir = m_projectPaths.ContentDir / "Scenes";
 	m_projectPaths.EntitiesDir = m_projectPaths.ContentDir / "Entities";
 
-	CShaderLibrary::Create(_projectPath);
+	PShaderLibrary::Create(_projectPath);
 	PRootSignatureLibrary::Create(_projectPath);
-	CPSOLibrary::Create(_projectPath);
+	PPSOLibrary::Create(_projectPath);
 
 	std::ifstream projectFile(m_projectPaths.ProjectFilePath);
-	PJsonPJson = {};
-	projectFile >>PJson;
-	m_name =PJson[JSONNAME].get<std::string>();
-	m_guid =PJson[JSONGUID].get<std::string>();
-	PGuid mostRecentSceneGuid =PJson[JSONMOSTRECENTSCENEGUID].get<std::string>();
+	PJson json = {};
+	projectFile >> json;
+	m_name = json[JSONNAME].get<std::string>();
+	m_guid = json[JSONGUID].get<std::string>();
+	PGuid mostRecentSceneGuid = json[JSONMOSTRECENTSCENEGUID].get<std::string>();
 
 	if (!std::filesystem::exists(m_projectPaths.ScenesDir))
 	{
@@ -70,13 +70,13 @@ Protostar::PProject::PProject(const std::filesystem::path& _projectPath)
 
 Protostar::PProject::~PProject()
 {
-	PJsonPJson = {};
+	PJson json = {};
 	json[JSONNAME] = m_name;
 	json[JSONGUID] = m_guid.ToString();
 	json[JSONMOSTRECENTSCENEGUID] = m_currentScene ? m_currentScene->GetGuid().ToString() :PGuid().ToString();
 
 	std::ofstream projectFile(m_projectPaths.ProjectFilePath, std::ios::trunc);
-	projectFile <<PJson.dump();
+	projectFile << json.dump();
 
 	for (PScene* scene : m_scenes)
 	{
@@ -88,6 +88,6 @@ Protostar::PProject::~PProject()
 		scene = nullptr;
 	}
 	PMeshManager::OnDestroy();
-	CShaderLibrary::Destroy();
+	PShaderLibrary::Destroy();
 	PRootSignatureLibrary::Destroy();
 }

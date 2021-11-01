@@ -43,7 +43,7 @@ bool Protostar::PRootSignatureLibrary::CreateRootSignature(const PSamplerInfo& _
 		return false;
 	}
 
-	if (!CRendererManager::CreateRootSignature(blob, (void**)&rootSignature))
+	if (!PRendererManager::CreateRootSignature(blob, (void**)&rootSignature))
 	{
 		return false;
 	}
@@ -103,7 +103,7 @@ void Protostar::PRootSignatureLibrary::Load()
 		{
 			continue;
 		}
-		if (!CRendererManager::CreateRootSignature(blob, (void**)&rootInfo.RootSignature))
+		if (!PRendererManager::CreateRootSignature(blob, (void**)&rootInfo.RootSignature))
 		{
 			continue;
 		}

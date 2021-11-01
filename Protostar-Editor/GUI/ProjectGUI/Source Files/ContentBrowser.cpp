@@ -140,9 +140,9 @@ void Protostar::PContentBrowser::ManageShaderPaths()
 		return;
 	}
 
-	CShaderLibrary* shaderLibray = CShaderLibrary::GetHandle();
+	PShaderLibrary* shaderLibray = PShaderLibrary::GetHandle();
 
-	PTreeObject<SShaderComplement> shaderComplements = shaderLibray->GetShaderComplements();
+	PTreeObject<PShaderComplement> shaderComplements = shaderLibray->GetShaderComplements();
 
 	DisplayRecursiveShaderTrees(shaderComplements);
 	
@@ -150,9 +150,9 @@ void Protostar::PContentBrowser::ManageShaderPaths()
 	ImGui::TreePop();
 }
 
-void Protostar::PContentBrowser::DisplayRecursiveShaderTrees(const PTreeObject<SShaderComplement>& _subTree)
+void Protostar::PContentBrowser::DisplayRecursiveShaderTrees(const PTreeObject<PShaderComplement>& _subTree)
 {
-	for (const PTreeObject<SShaderComplement>& subTree : _subTree.SubDirs)
+	for (const PTreeObject<PShaderComplement>& subTree : _subTree.SubDirs)
 	{
 		if (!ImGui::TreeNode(subTree.Path.filename().string().c_str()))
 		{
@@ -161,7 +161,7 @@ void Protostar::PContentBrowser::DisplayRecursiveShaderTrees(const PTreeObject<S
 
 		DisplayRecursiveShaderTrees(subTree);
 
-		for (const PTreeNode<SShaderComplement>& treeNode : subTree.Nodes)
+		for (const PTreeNode<PShaderComplement>& treeNode : subTree.Nodes)
 		{
 			if (treeNode.Asset.VertexShaderInfo.has_value())
 			{

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <unordered_set>
 
-#definePJsonMESHMAP "mesh_map"
+#define JSONMESHMAP "mesh_map"
 
 Protostar::PMeshManager* Protostar::PMeshManager::s_meshManager = nullptr;
 
@@ -33,10 +33,10 @@ void Protostar::PMeshManager::Load()
 	{
 		std::ifstream configFile(m_configFilePath);
 
-		PJsonPJson = {};
-		configFile >>PJson;
+		PJson json = {};
+		configFile >> json;
 
-		PJson meshMapJson =PJson[JSONMESHMAP].get<PJson>();
+		PJson meshMapJson = json[JSONMESHMAP].get<PJson>();
 		for (auto& [key, value] : meshMapJson.items())
 		{
 			PModel model = PModel(value);
@@ -81,7 +81,7 @@ void Protostar::PMeshManager::Load()
 
 void Protostar::PMeshManager::Save()
 {
-	PJsonPJson = {};
+	PJson json = {};
 	PJson meshMapJson = {}; 
 
 	for (const auto& [key, value] : m_meshes)
@@ -92,7 +92,7 @@ void Protostar::PMeshManager::Save()
 
 	std::ofstream configFile(m_configFilePath, std::ios::trunc);
 
-	configFile <<PJson.dump();
+	configFile << json.dump();
 }
 
 Protostar::PMeshManager::~PMeshManager()
@@ -108,4 +108,4 @@ Protostar::PMeshManager::PMeshManager(const std::filesystem::path& _meshesPath, 
 	Load();
 }
 
-#undefPJsonMESHMAP
+#undef JSONMESHMAP

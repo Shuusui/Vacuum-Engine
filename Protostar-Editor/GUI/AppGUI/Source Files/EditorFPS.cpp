@@ -33,7 +33,7 @@ void Protostar::PEditorFPS::OnRender()
 		return;
 	}
 
-	ImGui::Checkbox("VSync", &CRendererManager::GetVSync());
+	ImGui::Checkbox("VSync", &PRendererManager::GetVSync());
 
 	ImGui::Text("%.3f ms/frame", PTimer::GetDeltaSeconds());
 	ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);

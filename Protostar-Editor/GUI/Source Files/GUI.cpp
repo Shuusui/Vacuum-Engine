@@ -79,7 +79,7 @@ bool Protostar::PGUI::Init(HWND _hwnd)
 	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEWHEEL, &Protostar::PGUI::OnMouseWheel);
 	mainWindow->RegisterCallbackForWMEvents(WM_MOUSEHWHEEL, &Protostar::PGUI::OnMouseHWheel);
 
-	CRendererManager::RegisterAfterResizeCallback(&Protostar::PGUI::OnUpdateFontTexture);
+	PRendererManager::RegisterAfterResizeCallback(&Protostar::PGUI::OnUpdateFontTexture);
 
 	s_gui->LoadGUIIniFile();
 
@@ -162,7 +162,7 @@ void Protostar::PGUI::Render()
 		drawData->DrawLists.push_back(drawList);
 	}
 
-	CRendererManager::UpdateGuiDrawData(drawData);
+	PRendererManager::UpdateGuiDrawData(drawData);
 }
 
 void Protostar::PGUI::SetCaptureIfNotSet(HWND _hwnd)
@@ -276,7 +276,7 @@ void Protostar::PGUI::OnUpdateFontTexture(HWND _hwnd, u32 _msg, WPARAM _wParam, 
 	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
 	u64 texID = 0;
-	CRendererManager::CreateFontsTexture(pixels, width, height, texID);
+	PRendererManager::CreateFontsTexture(pixels, width, height, texID);
 	io.Fonts->TexID = (void*)texID;
 }
 
@@ -303,11 +303,11 @@ Protostar::PGUI::~PGUI()
 	}
 
 	std::ofstream appGuiIniFile(m_guiIniFilePath, std::ios::trunc);
-	PJsonPJson;
+	PJson json;
 	json["open_console"] = m_guiInfo.bOpenConsole;
 	json["open_content_browser"] = m_guiInfo.bOpenContentBrowser;
 	json["open_editor_fps"] = m_guiInfo.bOpenEditorFPS;
-	appGuiIniFile <<PJson.dump();
+	appGuiIniFile << json.dump();
 }
 
 void Protostar::PGUI::UpdateMousePos()
@@ -385,11 +385,11 @@ void Protostar::PGUI::LoadGUIIniFile()
 	}
 
 	std::ifstream appGuiIniFile(m_guiIniFilePath);
-	PJsonPJson;
-	appGuiIniFile >>PJson;
-	m_guiInfo.bOpenConsole =PJson["open_console"].get<bool>();
-	m_guiInfo.bOpenContentBrowser =PJson["open_content_browser"].get<bool>();
-	m_guiInfo.bOpenEditorFPS =PJson["open_editor_fps"].get<bool>();
+	PJson json;
+	appGuiIniFile >> json;
+	m_guiInfo.bOpenConsole = json["open_console"].get<bool>();
+	m_guiInfo.bOpenContentBrowser = json["open_content_browser"].get<bool>();
+	m_guiInfo.bOpenEditorFPS = json["open_editor_fps"].get<bool>();
 }
 
 void Protostar::PGUI::CreateAppMenuBar()

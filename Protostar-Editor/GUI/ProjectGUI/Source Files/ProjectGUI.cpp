@@ -31,7 +31,7 @@ Protostar::PProjectGUI::PProjectGUI()
 	{
 		return;
 	}
-	m_setProjectFuncIndex = appManager->RegisterOnLoadProjectCallback([this](CProject* _oldProject, CProject* _newProject)->void
+	m_setProjectFuncIndex = appManager->RegisterOnLoadProjectCallback([this](PProject* _oldProject, PProject* _newProject)->void
 		{
 			if (!_newProject)
 			{
@@ -154,7 +154,7 @@ void Protostar::PProjectGUI::RenderViewport()
 	drawList.DrawCmds = std::vector<SDrawCmd>{drawCmd};
 	drawData->DrawLists = std::vector<SDrawList>{drawList};
 
-	CRendererManager::AddDrawData(drawData);
+	PRendererManager::AddDrawData(drawData);
 
 	ImGui::End();
 }

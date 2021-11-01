@@ -1,52 +1,52 @@
 #include "..\Header Files\Public\RendererManager.h"
 
-Protostar::CRendererManager* Protostar::CRendererManager::s_rendererManager = nullptr;
+Protostar::PRendererManager* Protostar::PRendererManager::s_rendererManager = nullptr;
 
-void Protostar::CRendererManager::Create(const SRendererCreationInfo& _info)
+void Protostar::PRendererManager::Create(const SRendererCreationInfo& _info)
 {
 	if (!s_rendererManager)
 	{
-		s_rendererManager = new CRendererManager(_info);
+		s_rendererManager = new PRendererManager(_info);
 	}
 }
 
-void Protostar::CRendererManager::CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID)
+void Protostar::PRendererManager::CreateFontsTexture(unsigned char* _pixels, const s32& _width, const s32& _height, u64& _texID)
 {
 	s_rendererManager->m_renderer->CreateFontsTexture(_pixels, _width, _height, _texID);
 }
 
-void Protostar::CRendererManager::PrepareRendering()
+void Protostar::PRendererManager::PrepareRendering()
 {
 	s_rendererManager->m_renderer->PrepareRendering();
 }
 
-void Protostar::CRendererManager::UpdateGuiDrawData(SGuiDrawData* _drawData)
+void Protostar::PRendererManager::UpdateGuiDrawData(SGuiDrawData* _drawData)
 {
 	s_rendererManager->m_renderer->UpdateGuiDrawData(_drawData);
 }
 
-void Protostar::CRendererManager::AddDrawData(SDrawData* _drawData)
+void Protostar::PRendererManager::AddDrawData(SDrawData* _drawData)
 {
 	s_rendererManager->m_renderer->AddDrawData(_drawData);
 }
 
-void Protostar::CRendererManager::OnInit(const std::vector<std::filesystem::path>& _shaderPaths)
+void Protostar::PRendererManager::OnInit(const std::vector<std::filesystem::path>& _shaderPaths)
 {
 	s_rendererManager->m_renderer->SetShaderPaths(_shaderPaths);
 	s_rendererManager->m_renderer->OnInit();
 }
 
-void Protostar::CRendererManager::OnUpdate()
+void Protostar::PRendererManager::OnUpdate()
 {
 	s_rendererManager->m_renderer->OnUpdate();
 }
 
-void Protostar::CRendererManager::OnRender()
+void Protostar::PRendererManager::OnRender()
 {
 	s_rendererManager->m_renderer->OnRender();
 }
 
-void Protostar::CRendererManager::Destroy()
+void Protostar::PRendererManager::Destroy()
 {
 	if (!s_rendererManager)
 	{
@@ -58,17 +58,17 @@ void Protostar::CRendererManager::Destroy()
 	s_rendererManager = nullptr;
 }
 
-void Protostar::CRendererManager::RegisterAfterResizeCallback(const std::function<void(HWND, u32, WPARAM, LPARAM)>& _func)
+void Protostar::PRendererManager::RegisterAfterResizeCallback(const std::function<void(HWND, u32, WPARAM, LPARAM)>& _func)
 {
 	s_rendererManager->m_renderer->RegisterAfterResizeCallback(_func);
 }
 
-bool Protostar::CRendererManager::CreateRootSignature(void* _blob, void** _rootSignature)
+bool Protostar::PRendererManager::CreateRootSignature(void* _blob, void** _rootSignature)
 {
 	return s_rendererManager->m_renderer->CreateRootSignature((ID3DBlob*)_blob, (ID3D12RootSignature**)_rootSignature);
 }
 
-bool Protostar::CRendererManager::CreatePSO(void* _desc, void** _pso)
+bool Protostar::PRendererManager::CreatePSO(void* _desc, void** _pso)
 {
 	return s_rendererManager->m_renderer->CreatePSO((D3D12_GRAPHICS_PIPELINE_STATE_DESC*)_desc, (ID3D12PipelineState**)_pso);
 }

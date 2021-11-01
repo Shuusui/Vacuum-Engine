@@ -15,12 +15,12 @@
 
 Protostar::PAppManager* Protostar::PAppManager::s_app = nullptr;
 
-const char*PJsonHEIGHT = "height";
-const char*PJsonWIDTH = "width";
-const char*PJsonX = "x";
-const char*PJsonY = "y";
-const char*PJsonCURRPROJGUID = "current_project_guid";
-const char*PJsonVSYNC = "vsync";
+const char* JSONHEIGHT = "height";
+const char* JSONWIDTH = "width";
+const char* JSONX = "x";
+const char* JSONY = "y";
+const char* JSONCURRPROJGUID = "current_project_guid";
+const char* JSONVSYNC = "vsync";
 
 bool Protostar::PAppManager::InitApp(const HINSTANCE& _hInstance)
 {
@@ -48,32 +48,32 @@ bool Protostar::PAppManager::InitApp(const HINSTANCE& _hInstance)
 	PGuid projectGuid = {};
 	if (std::filesystem::exists(s_app->m_appConfigPath))
 	{
-		PJsonPJson = {};
+		PJson json = {};
 		std::ifstream appConfig(s_app->m_appConfigPath);
-		appConfig >>PJson;
+		appConfig >> json;
 		if (json.contains(JSONHEIGHT))
 		{
-			s_app->m_mainWindowDim.Height =PJson[JSONHEIGHT].get<s64>();
+			s_app->m_mainWindowDim.Height = json[JSONHEIGHT].get<s64>();
 		}
 		if (json.contains(JSONWIDTH))
 		{
-			s_app->m_mainWindowDim.Width =PJson[JSONWIDTH].get<s64>();
+			s_app->m_mainWindowDim.Width = json[JSONWIDTH].get<s64>();
 		}
 		if (json.contains(JSONX))
 		{
-			s_app->m_mainWindowDim.LeftTopCornerX =PJson[JSONX].get<s32>();
+			s_app->m_mainWindowDim.LeftTopCornerX = json[JSONX].get<s32>();
 		}
 		if (json.contains(JSONY))
 		{
-			s_app->m_mainWindowDim.LeftTopCornerY =PJson[JSONY].get<s32>();
+			s_app->m_mainWindowDim.LeftTopCornerY = json[JSONY].get<s32>();
 		}
 		if (json.contains(JSONVSYNC))
 		{
-			s_app->m_bLastVSyncState =PJson[JSONVSYNC].get<bool>();
+			s_app->m_bLastVSyncState = json[JSONVSYNC].get<bool>();
 		}
 		if (json.contains(JSONCURRPROJGUID))
 		{
-			projectGuid =PJson[JSONCURRPROJGUID].get<std::string>();
+			projectGuid = json[JSONCURRPROJGUID].get<std::string>();
 		}
 	}
 	else
@@ -106,7 +106,7 @@ bool Protostar::PAppManager::InitApp(const HINSTANCE& _hInstance)
 		return false;
 	}
 
-	CRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)s_app->m_mainWindowDim.Width, (u32)s_app->m_mainWindowDim.Height, s_app->m_bLastVSyncState, reinterpret_cast<void*>(PMainWindow::GetWindowHandle()->GetHwnd()) });
+	PRendererManager::Create(SRendererCreationInfo{ ERenderAPIs::DX12, (u32)s_app->m_mainWindowDim.Width, (u32)s_app->m_mainWindowDim.Height, s_app->m_bLastVSyncState, reinterpret_cast<void*>(PMainWindow::GetWindowHandle()->GetHwnd()) });
 
 	s_app->LoadProjects();
 	if (projectGuid.IsValid())
@@ -130,7 +130,7 @@ void Protostar::PAppManager::Destroy()
 	}
 
 	SWindowDimParams wndDim = s_app->m_mainWindowDim;
-	PJsonPJson = 
+	PJson json = 
 	{
 		{JSONHEIGHT, wndDim.Height}, 
 		{JSONWIDTH, wndDim.Width},
@@ -141,7 +141,7 @@ void Protostar::PAppManager::Destroy()
 	};
 
 	std::ofstream appConfig(s_app->m_appConfigPath, std::ios::trunc);
-	appConfig <<PJson.dump();
+	appConfig << json.dump();
 
 	if (s_app)
 	{
@@ -223,7 +223,7 @@ Protostar::PAppManager::~PAppManager()
 
 Protostar::PAppManager::PAppManager()
 	:m_mainWindowDim(SWindowDimParams())
-	,m_appPaths(SAppPaths())
+	,m_appPaths(PAppPaths())
 	,m_appConfigPath(std::filesystem::path())
 	,m_currentProject(nullptr)
 	,m_bLastVSyncState(false)

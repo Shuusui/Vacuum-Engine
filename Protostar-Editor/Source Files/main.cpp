@@ -57,7 +57,7 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 	int width, height;
 	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 	u64 texID = 0;
-	CRendererManager::CreateFontsTexture(pixels, width, height, texID);
+	PRendererManager::CreateFontsTexture(pixels, width, height, texID);
 	io.Fonts->TexID = (void*)texID;
 
 	PMainWindow::ShowAndUpdate(_nShowCmd);
@@ -75,13 +75,13 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 		PTimer::OnUpdate();
 		PGUI::NewFrame();
 
-		CRendererManager::PrepareRendering();
+		PRendererManager::PrepareRendering();
 		PGUI::Render();
-		CRendererManager::OnUpdate();
-		CRendererManager::OnRender();
+		PRendererManager::OnUpdate();
+		PRendererManager::OnRender();
 	}
-	PAppManager::SetLastVSyncState(CRendererManager::GetVSync());
-	CRendererManager::Destroy();
+	PAppManager::SetLastVSyncState(PRendererManager::GetVSync());
+	PRendererManager::Destroy();
 	PGUI::Destroy();
 	PAppManager::Destroy();
 
