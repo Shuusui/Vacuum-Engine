@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include "SharedStructs.h"
-#include "GlobalDefs.h"
+#include "GlobalDefinitions.h"
 #include "Guid.h"
 #include "Project.h"
 #include <functional>

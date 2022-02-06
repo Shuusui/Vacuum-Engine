@@ -1,4 +1,6 @@
-#pragma once
+#ifndef APPMENUBAR_H
+#define APPMENUBAR_H
+
 #include <unordered_map>
 
 namespace Protostar
@@ -19,3 +21,4 @@ namespace Protostar
 
 	};
 }
+#endif //APPMENUBAR_H

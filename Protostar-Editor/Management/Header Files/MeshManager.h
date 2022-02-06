@@ -1,15 +1,12 @@
-#pragma once
+#ifndef MESHMANAGER_H
+#define MESHMANAGER_H
+
 #include "Guid.h"
 #include <filesystem>
 #include <unordered_map>
 #include <unordered_set>
 #include "Json.h"
-#include "Utilities\WaveFrontReader.h"
 #include "SharedStructs.h"
-
-#define JSONMESHGUID "guid"
-#define JSONMESHNAME "name"
-#define JSONMESHPATH "path"
 
 namespace Protostar
 {
@@ -31,25 +28,11 @@ namespace Protostar
 		{
 		}
 
-		PModel(const PJson& _json)
-		{
-			Guid = _json[JSONMESHGUID].get<std::string>();
-			Name = _json[JSONMESHNAME].get<std::string>();
-			Path = _json[JSONMESHPATH].get<std::string>();
-		}
 
 		PModel(const PModel&) = default;
 
 		PModel& operator=(const PModel&) = default;
 
-		PJson ToJson() const
-		{
-			return PJson{
-				{JSONMESHGUID, Guid.ToString()},
-				{JSONMESHNAME, Name},
-				{JSONMESHPATH, Path.string()}
-			};
-		}
 
 		PGuid Guid;
 		std::string Name;
@@ -109,6 +92,4 @@ namespace Protostar
 	};
 }
 
-#undef JSONMESHGUID
-#undef JSONMESHNAME
-#undef JSONMESHPATH
+#endif //MESHMANAGER_H

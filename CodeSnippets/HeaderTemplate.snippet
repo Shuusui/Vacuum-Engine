@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Header template</Title>
+      <Author>JosaiProduction</Author>
+      <Description>Common header file for a class</Description>
+      <Shortcut>Header</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="Cpp">
+        <![CDATA[
+#ifndef $identifier$
+#define #identifier
+
+class $class$
+{
+  
+};
+
+#endif //$identifier
+                ]]>
+      </Code>
+      <Declarations>
+        <Literal>
+          <ID>identifier</ID>
+          <ToolTip>The identifier the include guard should use.</ToolTip>
+        </Literal>
+        <Literal>
+          <ID>class</ID>
+          <ToolTip>The class to create in the header file</ToolTip>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

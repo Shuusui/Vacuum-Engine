@@ -99,6 +99,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\Protostar-Engine\DirectX\;$(SolutionDir)Protostar-Engine\Core\;$(SolutionDir)Protostar-Editor\GUI\Header Files\;$(SolutionDir)Protostar-Editor\ImGui\Header Files\Public\;$(SolutionDir)Protostar-Editor\Management\Header Files\;$(SolutionDir)Protostar-Engine\Core\Header Files\Public; $(SolutionDir)Protostar-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,8 +117,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vacuum-Engine\Core\HeaderFiles\Public;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Protostar-Engine\DirectX\;$(SolutionDir)Protostar-Engine\Core\;$(SolutionDir)Protostar-Editor\GUI\Header Files\;$(SolutionDir)Protostar-Editor\ImGui\Header Files\Public\;$(SolutionDir)Protostar-Editor\Management\Header Files\;$(SolutionDir)Protostar-Engine\Core\Header Files\Public; $(SolutionDir)Protostar-Engine\Rendering\Header Files\Public;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef LOGWINDOW_H
+#define LOGWINDOW_H
+
 #include <vector>
 #include <string>
 #include "Guid.h"
@@ -19,3 +21,4 @@ namespace Protostar
 		bool m_bStopScroll;
 	};
 }
+#endif //LOGWINDOW_H
