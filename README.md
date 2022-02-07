@@ -1,2 +1,3 @@
 # Protostar-Engine
-My next try to create a base engine
+Just a quick demo made in few weeks after work time. I will have to rework most of them afterwards. 
+
