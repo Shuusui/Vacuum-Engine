@@ -1,5 +1,4 @@
-#ifndef FILESYSTEM_H
-#define FILESYSTEM_H
+#pragma once
 
 #include <filesystem>
 #include <functional>
@@ -116,4 +115,3 @@ namespace Protostar
 		}
 	};
 }
-#endif //FILESYSTEM_H

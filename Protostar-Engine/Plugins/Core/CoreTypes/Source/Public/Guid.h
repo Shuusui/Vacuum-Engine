@@ -1,5 +1,4 @@
-#ifndef GUID_H
-#define GUID_H
+#pragma once
 
 #include "GlobalDefinitions.h"
 
@@ -259,4 +258,3 @@ namespace std
 		}
 	};
 }
-#endif //GUID_H

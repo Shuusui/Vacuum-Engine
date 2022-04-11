@@ -1,5 +1,4 @@
-#ifndef FILETREEOBJECT_H
-#define FILETREEOBJECT_H
+#pragma once
 
 #include <filesystem>
 #include <vector>
@@ -21,4 +20,3 @@ namespace Protostar
 		std::vector<PTreeNode<T>> Nodes;
 	};
 }
-#endif //FILETREEOBJECT_H
