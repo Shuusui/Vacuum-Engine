@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{ea042b8e-f374-4be4-87f1-a03762bc8ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Header Files">
+      <UniqueIdentifier>{973802ce-ed8e-4935-95c6-74f0b158a051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Source Files">
+      <UniqueIdentifier>{1e886b04-ed6e-45f3-be1b-a01fb6ad42ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Header Files\Public">
+      <UniqueIdentifier>{0aef3cb2-b656-4122-9427-beb1b1024ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Header Files\Private">
+      <UniqueIdentifier>{f52cff61-e6e2-41ec-aacd-79f966ae803f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{59aaed8e-9d75-48d3-9b52-76512f856309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Header Files">
+      <UniqueIdentifier>{eb74b5c7-5994-41b1-826d-292606d8dab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\Source Files">
+      <UniqueIdentifier>{be9437db-eb40-4dd1-a83c-62a05ec0a25e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\AppGUI">
+      <UniqueIdentifier>{ed628af4-f369-41d6-8610-4c2767bd7f4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\AppGUI\Header Files">
+      <UniqueIdentifier>{4a5b1458-df41-4881-aca2-d6b95fc8b9c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\AppGUI\Source Files">
+      <UniqueIdentifier>{cc3f1b54-f148-40c9-a24f-68100642bbfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ProjectGUI">
+      <UniqueIdentifier>{a00e5fd9-59b3-4b53-b482-1fde10601e96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ProjectGUI\Header Files">
+      <UniqueIdentifier>{5033e321-57c3-4aea-9691-d6983947096a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ProjectGUI\Source Files">
+      <UniqueIdentifier>{04a11a80-feac-4076-8d0f-7ea4076d3b9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Management">
+      <UniqueIdentifier>{15a0385f-2bc0-4653-8d3e-be4eb18fef1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Management\Header Files">
+      <UniqueIdentifier>{aacc27da-9384-4162-9d19-1ce0e14f41f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Management\Source Files">
+      <UniqueIdentifier>{b7d1c312-38f1-4975-92d0-e85823e9ec67}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source Files\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\Source Files\imgui.cpp">
+      <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\Source Files\imgui_widgets.cpp">
+      <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\Source Files\imgui_draw.cpp">
+      <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Source Files\GUI.cpp">
+      <Filter>GUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\Source Files\imgui_demo.cpp">
+      <Filter>ImGui\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\AppGUI\Source Files\AppMenuBar.cpp">
+      <Filter>GUI\AppGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\ProjectGUI\Source Files\ProjectGUI.cpp">
+      <Filter>GUI\ProjectGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\AppGUI\Source Files\LogWindow.cpp">
+      <Filter>GUI\AppGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\ProjectGUI\Source Files\ContentBrowser.cpp">
+      <Filter>GUI\ProjectGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\AppGUI\Source Files\EditorFPS.cpp">
+      <Filter>GUI\AppGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Management\Source Files\AppManager.cpp">
+      <Filter>Management\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Management\Source Files\Project.cpp">
+      <Filter>Management\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Management\Source Files\SavingSystem.cpp">
+      <Filter>Management\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\ProjectGUI\Source Files\EntityEditor.cpp">
+      <Filter>GUI\ProjectGUI\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Management\Source Files\MeshManager.cpp">
+      <Filter>Management\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ImGui\Header Files\Private\imconfig.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imgui_internal.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imstb_textedit.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imstb_rectpack.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Private\imstb_truetype.h">
+      <Filter>ImGui\Header Files\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\Header Files\Public\imgui.h">
+      <Filter>ImGui\Header Files\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Header Files\GUI.h">
+      <Filter>GUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\AppGUI\Header Files\AppMenuBar.h">
+      <Filter>GUI\AppGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\ProjectGUI\Header Files\ProjectGUI.h">
+      <Filter>GUI\ProjectGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\AppGUI\Header Files\LogWindow.h">
+      <Filter>GUI\AppGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\ProjectGUI\Header Files\ContentBrowser.h">
+      <Filter>GUI\ProjectGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\AppGUI\Header Files\EditorFPS.h">
+      <Filter>GUI\AppGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management\Header Files\AppManager.h">
+      <Filter>Management\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management\Header Files\Project.h">
+      <Filter>Management\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management\Header Files\SavingSystem.h">
+      <Filter>Management\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\ProjectGUI\Header Files\EntityEditor.h">
+      <Filter>GUI\ProjectGUI\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Management\Header Files\MeshManager.h">
+      <Filter>Management\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

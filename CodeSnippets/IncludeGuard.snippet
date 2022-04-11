@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Include Guard</Title>
+          <Author>JosaiProduction</Author>
+          <Description>Usual include guard for header files</Description>
+            <Shortcut>Guard</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="Cpp">
+                <![CDATA[
+#ifndef $identifier$
+#define $identifier$
+
+#endif //$identifier$
+                ]]>
+            </Code>
+          <Declarations>
+            <Literal>
+              <ID>identifier</ID>
+              <ToolTip>The identifier the include guard should use.</ToolTip>
+            </Literal>
+          </Declarations>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
