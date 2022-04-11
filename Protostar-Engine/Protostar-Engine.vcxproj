@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -11,89 +11,231 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{99C3EB1F-016B-43C4-9BF8-BAF3B9E5FBB2}</ProjectGuid>
-    <RootNamespace>ProtostarEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.20348.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{C3A723DC-2BB9-19A5-2424-54C5212F3D09}</ProjectGuid>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <RootNamespace>Protostar-Engine</RootNamespace>
     <ProjectName>Protostar-Engine</ProjectName>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)intermediate\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>Protostar-Engine</TargetName>
+    <OutDir>..\bin\debug\protostar-engine\</OutDir>
+    <IntDir>..\intermediate\debug\protostar-engine\</IntDir>
+    <TargetExt>.dll</TargetExt>
+    <GenerateManifest>true</GenerateManifest>
+    <LinkIncremental>false</LinkIncremental>
+    <OutputFile>..\bin\debug\protostar-engine\Protostar-Engine.dll</OutputFile>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>Protostar-Engine</TargetName>
+    <OutDir>..\bin\release\protostar-engine\</OutDir>
+    <IntDir>..\intermediate\release\protostar-engine\</IntDir>
+    <TargetExt>.dll</TargetExt>
+    <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)intermediate\$(Configuration)\$(ProjectName)\</IntDir>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <OutputFile>..\bin\release\protostar-engine\Protostar-Engine.dll</OutputFile>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Protostar-Engine\DirectX;$(SolutionDir)Protostar-Engine\Core; $(SolutionDir)Protostar-Engine\Core\Header Files\Public;$(SolutionDir)Protostar-Engine\Rendering\Header Files\Private;$(SolutionDir)Protostar-Engine\Rendering\Header Files\Public;$(SolutionDir)Protostar-Engine\DirectX;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>Protostar-Engine_EXPORTS;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <BrowseInformation>false</BrowseInformation>
+      <CallingConvention>Cdecl</CallingConvention>
+      <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
+      <ProgramDatabaseFileName>..\intermediate\debug\protostar-engine\protostar-engine_compiler.pdb</ProgramDatabaseFileName>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>..\bin\debug\protostar-engine\Protostar-Engine.dll</OutputFile>
+      <ShowProgress>NotSet</ShowProgress>
+      <ProgramDatabaseFile>..\bin\debug\protostar-engine\protostar-engine.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapExports>false</MapExports>
+      <SwapRunFromCD>false</SwapRunFromCD>
+      <SwapRunFromNET>false</SwapRunFromNET>
+      <Driver>NotSet</Driver>
+      <OptimizeReferences>false</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <ProfileGuidedDatabase>
+      </ProfileGuidedDatabase>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <IgnoreEmbeddedIDL>false</IgnoreEmbeddedIDL>
+      <TypeLibraryResourceID>1</TypeLibraryResourceID>
+      <NoEntryPoint>false</NoEntryPoint>
+      <SetChecksum>false</SetChecksum>
+      <TurnOffAssemblyGeneration>false</TurnOffAssemblyGeneration>
+      <TargetMachine>MachineX64</TargetMachine>
+      <Profile>false</Profile>
+      <CLRImageType>Default</CLRImageType>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
+      <AdditionalDependencies>;%(AdditionalDependencies)</AdditionalDependencies>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
+      <LargeAddressAware>true</LargeAddressAware>
+      <MapFileName>..\bin\debug\protostar-engine\Protostar-Engine.map</MapFileName>
+      <ImportLibrary>..\bin\debug\protostar-engine\Protostar-Engine.lib</ImportLibrary>
     </Link>
-    <Lib>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/IGNORE:4006</AdditionalOptions>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Full</Optimization>
+      <PreprocessorDefinitions>NDEBUG;Protostar-Engine_EXPORTS;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Protostar-Engine\Core; $(SolutionDir)Protostar-Engine\Core\Header Files\Public;$(SolutionDir)Protostar-Engine\Rendering\Header Files\Private;$(SolutionDir)Protostar-Engine\Rendering\Header Files\Public;$(SolutionDir)Protostar-Engine\DirectX;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <BrowseInformation>false</BrowseInformation>
+      <CallingConvention>Cdecl</CallingConvention>
+      <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
+      <ProgramDatabaseFileName>..\intermediate\release\protostar-engine\protostar-engine_compiler.pdb</ProgramDatabaseFileName>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d12.lib;dxgi.lib;d3dcompiler.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\bin\release\protostar-engine\Protostar-Engine.dll</OutputFile>
+      <ShowProgress>NotSet</ShowProgress>
+      <ProgramDatabaseFile>..\bin\release\protostar-engine\protostar-engine.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapExports>false</MapExports>
+      <SwapRunFromCD>false</SwapRunFromCD>
+      <SwapRunFromNET>false</SwapRunFromNET>
+      <Driver>NotSet</Driver>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ProfileGuidedDatabase>
+      </ProfileGuidedDatabase>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <IgnoreEmbeddedIDL>false</IgnoreEmbeddedIDL>
+      <TypeLibraryResourceID>1</TypeLibraryResourceID>
+      <NoEntryPoint>false</NoEntryPoint>
+      <SetChecksum>false</SetChecksum>
+      <TurnOffAssemblyGeneration>false</TurnOffAssemblyGeneration>
+      <TargetMachine>MachineX64</TargetMachine>
+      <Profile>false</Profile>
+      <CLRImageType>Default</CLRImageType>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
+      <AdditionalDependencies>;%(AdditionalDependencies)</AdditionalDependencies>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
+      <LargeAddressAware>true</LargeAddressAware>
+      <MapFileName>..\bin\release\protostar-engine\Protostar-Engine.map</MapFileName>
+      <ImportLibrary>..\bin\release\protostar-engine\Protostar-Engine.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Private\main.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

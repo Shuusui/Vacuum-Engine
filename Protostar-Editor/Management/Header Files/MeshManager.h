@@ -1,5 +1,4 @@
-#ifndef MESHMANAGER_H
-#define MESHMANAGER_H
+#pragma once
 
 #include "Guid.h"
 #include <filesystem>
@@ -91,5 +90,3 @@ namespace Protostar
 		std::unordered_set<std::string> m_meshPaths;
 	};
 }
-
-#endif //MESHMANAGER_H

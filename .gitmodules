@@ -1,0 +1,3 @@
+[submodule "Programs/Sharpmake"]
+	path = Programs/Sharpmake
+	url = https://github.com/Shuusui/Sharpmake.git

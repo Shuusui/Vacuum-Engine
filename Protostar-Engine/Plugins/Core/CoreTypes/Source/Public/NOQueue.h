@@ -1,5 +1,4 @@
-#ifndef NOQUEUE_H
-#define NOQUEUE_H
+#pragma once
 
 #include <queue>
 
@@ -53,4 +52,3 @@ namespace Protostar
 	};
 }
 
-#endif //NOQUEUE_H

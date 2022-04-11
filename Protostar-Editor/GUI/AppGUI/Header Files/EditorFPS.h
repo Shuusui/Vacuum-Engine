@@ -1,5 +1,4 @@
-#ifndef EDITORFPS_H
-#define EDITORFPS_H
+#pragma once
 
 namespace Protostar
 {
@@ -13,4 +12,3 @@ namespace Protostar
 
 	};
 }
-#endif //EDITORFPS_H

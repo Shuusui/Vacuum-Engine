@@ -1,6 +1,4 @@
-#ifndef JSON_H
-#define JSON_H
-
+#pragma once
 
 
 //TODO: ThePJson.hpp file has still some warnings and I might address them later on. 
@@ -13,4 +11,3 @@
 #pragma warning(default : 26495)
 
 using PJson = nlohmann::json;
-#endif //JSON_H

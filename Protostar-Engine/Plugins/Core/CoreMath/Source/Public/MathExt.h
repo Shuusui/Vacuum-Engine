@@ -1,10 +1,7 @@
-#ifndef MATHEXT_H
-#define MATHEXT_H
+#pragma once
 
 #include <limits>
 #include <cmath>
-#include "GlobalDefinitions.h"
-#include "Windows.h"
 
 #ifdef min
 #undef min 
@@ -24,5 +21,3 @@ namespace Protostar
 #ifdef mindef
 #define min(a,b)	(((a) < (b)) ? (a) : (b))
 #endif
-
-#endif //MATHEXT_H
