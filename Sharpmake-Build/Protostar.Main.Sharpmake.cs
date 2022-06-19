@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -6,8 +7,7 @@ using System.Reflection;
 using Sharpmake;
 using static Sharpmake.Solution.Configuration;
 
-[module: Include("../Protostar-Engine/Plugins/*/*/Protostar.*.Sharpmake.cs")]
-[module: Include("../Protostar-Engine/Protostar.Engine.Sharpmake.cs")]
+[module: Include("../Protostar-Engine/Source/Modules/*/Protostar.*.Sharpmake.cs")]
 
 namespace Protostar
 {
@@ -28,6 +28,14 @@ namespace Protostar
         [Configure]
         public virtual void ConfigureAll(Configuration configuration, Target target)
         {
+            List<string> _filePaths = new List<string>(new string[] {"Protostar-Engine"});
+            if(!FindTypeFileName(Path.Combine(MainSolution.RootFolder, "Protostar-Engine"), ref _filePaths))
+            {
+                return;
+            }
+            _filePaths.RemoveAt(_filePaths.Count - 1);
+            configuration.SolutionFolder = Path.Combine(_filePaths.ToArray());
+
             configuration.IncludePaths.Add(Path.Combine("[project.SharpmakeCsPath]", "Source", "Public"));
             configuration.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP20);
             configuration.Options.Add(Options.Vc.Compiler.RTTI.Disable);
@@ -35,7 +43,31 @@ namespace Protostar
             configuration.Options.Add(Options.Vc.General.PlatformToolset.v143);
             configuration.IntermediatePath = Path.Combine(MainSolution.GeneralIntermediateFolder, target.Optimization.ToString(), Name);
             configuration.TargetPath = Path.Combine(MainSolution.GeneralOutputPathFolder, target.Optimization.ToString(), Name);
-            configuration.Defines.Add($"{Name}_EXPORTS");
+            configuration.Defines.Add($"{Name}_API");
+            configuration.ProjectPath = "[project.SharpmakeCsPath]";
+        }
+
+        private bool FindTypeFileName(string currentPath, ref List<string> filePaths)
+        {
+            string[] _files = Directory.GetFiles(currentPath, $"*.{GetType().Name}.*");
+            if(_files.Length > 0)
+            {
+                return true;
+            }
+
+            foreach(string _directory in Directory.GetDirectories(currentPath))
+            {
+                List<string> _tempList = new List<string>(filePaths)
+                {
+                    Path.GetFileName(_directory)
+                };
+                if (FindTypeFileName(_directory, ref _tempList))
+                {
+                    filePaths = _tempList;
+                    return true;
+                }    
+            }
+            return false;
         }
     }
 
@@ -44,15 +76,13 @@ namespace Protostar
     {
         public Module()
         {
-
         }
         public override void ConfigureAll(Configuration configuration, Target target)
         {
             base.ConfigureAll(configuration, target);
             configuration.Output = Configuration.OutputType.Dll;
-            configuration.SolutionFolder = $"/Protostar-Engine/Plugins/{PluginName}";
         }
-        protected string PluginName { get; set; }
+        protected string Category { get; set; }
     }
 
     [Generate]
@@ -127,7 +157,7 @@ namespace Protostar
                     DevEnvArgument = DevEnv.vs2022;
                     break;
                 default:
-                    throw new Exception("Protostar is only supporting Visual Studio 2022 yet");
+                    throw new Exception($"Protostar is not supporting Visual Studio {value}");
             }
         }
     }
@@ -138,7 +168,7 @@ namespace Protostar
         public static void SharpmakeMain(Arguments arguments)
         {
             CommandLine.ExecuteOnObject(CustomArguments);
-           
+            
             arguments.Generate<MainSolution>();
         }
     }

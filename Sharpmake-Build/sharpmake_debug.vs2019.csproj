@@ -46,30 +46,27 @@
   <ItemGroup>
     <Reference Include="Sharpmake">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Programs\Sharpmake\tmp\bin\debug\net472\Sharpmake.dll</HintPath>
+      <HintPath>..\Programs\Sharpmake\tmp\bin\release\net472\Sharpmake.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sharpmake.Generators">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Programs\Sharpmake\tmp\bin\debug\net472\Sharpmake.Generators.dll</HintPath>
+      <HintPath>..\Programs\Sharpmake\tmp\bin\release\net472\Sharpmake.Generators.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Protostar-Engine\Plugins\Core\CoreMain\Protostar.CoreMain.Sharpmake.cs">
+    <Compile Include="..\Protostar-Engine\Source\Modules\CoreMain\Protostar.CoreMain.Sharpmake.cs">
       <Link>CoreMain\Protostar.CoreMain.Sharpmake.cs</Link>
     </Compile>
-    <Compile Include="..\Protostar-Engine\Plugins\Core\CoreMath\Protostar.CoreMath.Sharpmake.cs">
+    <Compile Include="..\Protostar-Engine\Source\Modules\CoreMath\Protostar.CoreMath.Sharpmake.cs">
       <Link>CoreMath\Protostar.CoreMath.Sharpmake.cs</Link>
     </Compile>
-    <Compile Include="..\Protostar-Engine\Plugins\Core\CoreTypes\Protostar.CoreTypes.Sharpmake.cs">
+    <Compile Include="..\Protostar-Engine\Source\Modules\CoreTypes\Protostar.CoreTypes.Sharpmake.cs">
       <Link>CoreTypes\Protostar.CoreTypes.Sharpmake.cs</Link>
     </Compile>
-    <Compile Include="..\Protostar-Engine\Plugins\Core\FileSystem\Protostar.FileSystem.Sharpmake.cs">
+    <Compile Include="..\Protostar-Engine\Source\Modules\FileSystem\Protostar.FileSystem.Sharpmake.cs">
       <Link>FileSystem\Protostar.FileSystem.Sharpmake.cs</Link>
-    </Compile>
-    <Compile Include="..\Protostar-Engine\Protostar.Engine.Sharpmake.cs">
-      <Link>Protostar-Engine\Protostar.Engine.Sharpmake.cs</Link>
     </Compile>
     <Compile Include="Protostar.Main.Sharpmake.cs" />
   </ItemGroup>

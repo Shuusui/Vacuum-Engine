@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4A530A79-72AC-3311-A502-59E3BDCBF98E}</ProjectGuid>
+    <ProjectGuid>{618DF225-0551-6918-62E0-D8C97C0F614E}</ProjectGuid>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <RootNamespace>FileSystem</RootNamespace>
-    <ProjectName>FileSystem</ProjectName>
+    <RootNamespace>CoreMath</RootNamespace>
+    <ProjectName>CoreMath</ProjectName>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
@@ -44,23 +44,23 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>FileSystem</TargetName>
-    <OutDir>..\..\..\..\bin\debug\filesystem\</OutDir>
-    <IntDir>..\..\..\..\intermediate\debug\filesystem\</IntDir>
+    <TargetName>CoreMath</TargetName>
+    <OutDir>..\..\..\..\bin\debug\coremath\</OutDir>
+    <IntDir>..\..\..\..\intermediate\debug\coremath\</IntDir>
     <TargetExt>.dll</TargetExt>
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutputFile>..\..\..\..\bin\debug\filesystem\FileSystem.dll</OutputFile>
+    <OutputFile>..\..\..\..\bin\debug\coremath\CoreMath.dll</OutputFile>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>FileSystem</TargetName>
-    <OutDir>..\..\..\..\bin\release\filesystem\</OutDir>
-    <IntDir>..\..\..\..\intermediate\release\filesystem\</IntDir>
+    <TargetName>CoreMath</TargetName>
+    <OutDir>..\..\..\..\bin\release\coremath\</OutDir>
+    <IntDir>..\..\..\..\intermediate\release\coremath\</IntDir>
     <TargetExt>.dll</TargetExt>
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutputFile>..\..\..\..\bin\release\filesystem\FileSystem.dll</OutputFile>
+    <OutputFile>..\..\..\..\bin\release\coremath\CoreMath.dll</OutputFile>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -68,7 +68,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>FileSystem_EXPORTS;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CoreMath_API;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -110,15 +110,15 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
       <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
-      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\filesystem\filesystem_compiler.pdb</ProgramDatabaseFileName>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\coremath\coremath_compiler.pdb</ProgramDatabaseFileName>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>..\..\..\..\bin\debug\filesystem\FileSystem.dll</OutputFile>
+      <OutputFile>..\..\..\..\bin\debug\coremath\CoreMath.dll</OutputFile>
       <ShowProgress>NotSet</ShowProgress>
-      <ProgramDatabaseFile>..\..\..\..\bin\debug\filesystem\filesystem.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>..\..\..\..\bin\debug\coremath\coremath.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>false</MapExports>
       <SwapRunFromCD>false</SwapRunFromCD>
@@ -143,8 +143,8 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
-      <MapFileName>..\..\..\..\bin\debug\filesystem\FileSystem.map</MapFileName>
-      <ImportLibrary>..\..\..\..\bin\debug\filesystem\FileSystem.lib</ImportLibrary>
+      <MapFileName>..\..\..\..\bin\debug\coremath\CoreMath.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\debug\coremath\CoreMath.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,7 +152,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>FileSystem_EXPORTS;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CoreMath_API;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -194,15 +194,15 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
       <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
-      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\filesystem\filesystem_compiler.pdb</ProgramDatabaseFileName>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\coremath\coremath_compiler.pdb</ProgramDatabaseFileName>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>..\..\..\..\bin\release\filesystem\FileSystem.dll</OutputFile>
+      <OutputFile>..\..\..\..\bin\release\coremath\CoreMath.dll</OutputFile>
       <ShowProgress>NotSet</ShowProgress>
-      <ProgramDatabaseFile>..\..\..\..\bin\release\filesystem\filesystem.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>..\..\..\..\bin\release\coremath\coremath.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>false</MapExports>
       <SwapRunFromCD>false</SwapRunFromCD>
@@ -227,16 +227,14 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
-      <MapFileName>..\..\..\..\bin\release\filesystem\FileSystem.map</MapFileName>
-      <ImportLibrary>..\..\..\..\bin\release\filesystem\FileSystem.lib</ImportLibrary>
+      <MapFileName>..\..\..\..\bin\release\coremath\CoreMath.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\release\coremath\CoreMath.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Public\Filesystem.h" />
-    <ClInclude Include="Source\Public\FileTreeObject.h" />
+    <ClInclude Include="Source\Public\MathExt.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Private\FileTreeObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

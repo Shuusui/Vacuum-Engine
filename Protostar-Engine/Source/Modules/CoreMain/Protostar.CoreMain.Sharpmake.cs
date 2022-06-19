@@ -9,11 +9,6 @@ namespace Protostar
         public CoreMain()
         {
             SourceRootPath = Path.Combine("[project.SharpmakeCsPath]", "Source");
-            PluginName = "Core";
-        }
-        public override void ConfigureAll(Configuration configuration, Target target)
-        {
-            base.ConfigureAll(configuration, target);
         }
     }
 }
