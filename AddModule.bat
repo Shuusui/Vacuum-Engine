@@ -3,13 +3,12 @@ SETLOCAL EnableDelayedExpansion
 SET /P moduleType="Enter Module type (0 = Engine, 1 = Editor, 2 = Project): "
 SET /P moduleName="Enter Module name: "
 
-SET sharpmakeTextFilePath=%~dp0\Snippets\CodeSnippets\SharpmakeDefaultText.cs
+SET sharpmakeTextFilePath=%~dp0Snippets\CodeSnippets\SharpmakeDefaultText.cs
+ECHO !sharpmakeTextFilePath!
 
-FOR /F %%N IN  ('FIND "" /v /c ^< !sharpmakeTextFilePath!') DO SET  /A cnt=%%N
+FOR /F %%N IN  ('FIND "" /v /c ^< "!sharpmakeTextFilePath!"') DO SET  /A cnt=%%N
 
 SET /A lines[!cnt!]
-
-SET "str.="
 
 <!sharpmakeTextFilePath! (
 	FOR /L %%N IN (1 1 %cnt%) DO (
@@ -24,9 +23,6 @@ SET "str.="
 		ECHO !str.%%N!
 		)
 	)
-)
-FOR /L %%N IN (1 1 %cnt%) DO (
-	ECHO !str.[%%N]!
 )
 PAUSE
 
