@@ -4,9 +4,9 @@ using Sharpmake;
 namespace Protostar
 {
     [Generate]
-    public class {ModuleName} : Module
+    public class ECSCore : Module
     {
-        public {ModuleName}()
+        public ECSCore()
         {
             SourceRootPath = Path.Combine("[project.SharpmakeCsPath]", "Source");
         }

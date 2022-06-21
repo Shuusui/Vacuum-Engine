@@ -5,26 +5,29 @@ SET /P moduleName="Enter Module name: "
 
 SET sharpmakeTextFilePath=%~dp0Snippets\CodeSnippets\SharpmakeDefaultText.cs
 ECHO !sharpmakeTextFilePath!
+ECHO Create files for module type: !moduleType!
+SET "modulesPath="
+IF !moduleType!==0 (
+	SET modulesPath=%~dp0Protostar-Engine\Source\Modules\
+) 
+IF !moduleType!==1 (
+	SET modulesPath=%~dp0Protostar-Editor\Source\Modules\
+)
 
-ECHO Create files for module type: !moduleType! 
-PAUSE
-SET modulesPath=%~dp0Protostar-Engine\Source\Modules\
 SET modulePath=!modulesPath!!moduleName!
 ECHO try create !modulePath!
-PAUSE
 IF NOT EXIST !modulePath! mkdir !modulePath!
 SET moduleFilePath=!modulePath!\Protostar.!moduleName!.Sharpmake.cs
 IF EXIST !moduleFilePath! (
 	SET /P overWrite="Do you want to overwrite the existing sharpmake file? (Y/N)"
 	IF !overWrite!==Y (
+		DEL /Q "!moduleFilePath!"
 		CALL :createSharpmakeFile moduleFilePath
 	)
 ) ELSE (
 	CALL :createSharpmakeFile moduleFilePath
 )
 ECHO try create !moduleFilePath!
-
-
 
 SET sourcePath=!modulePath!\Source
 ECHO try create !sourcePath!
@@ -34,14 +37,32 @@ IF NOT EXIST !sourcePath! (
 ) ELSE (
 	ECHO Sourcepath already exists
 )
+
 SET privatePath=!sourcePath!\Private
 SET publicPath=!sourcePath!\Public
 ECHO try create !privatePath!
-IF NOT EXIST !privatePath! mkdir !privatePath!
+IF NOT EXIST !privatePath! (
+	mkdir !privatePath!
+	ECHO Private source path successfully created
+) ELSE (
+	ECHO Private source path already exists
+)
 ECHO try create !publicPath!
-IF NOT EXIST !publicPath! mkdir !publicPath!
+IF NOT EXIST !publicPath! ( 
+	mkdir !publicPath!
+	ECHO Public source path successfully created
+) ELSE (
+	ECHO Public source path already exists
+)
 
-PAUSE
+SET /P callBuildBatch="Do you want to run Build.bat? (Y/N)"
+
+IF !callBuildBatch!==Y (
+	CALL "Build.bat"
+) ELSE (
+	PAUSE
+)
+
 
 
 REM *********  strlen function *****************************

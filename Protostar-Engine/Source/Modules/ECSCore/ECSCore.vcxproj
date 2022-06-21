@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B1FA8CD1-0DD2-28E0-8294-0DEC91291C69}</ProjectGuid>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <RootNamespace>ECSCore</RootNamespace>
+    <ProjectName>ECSCore</ProjectName>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v143</PlatformToolset>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>ECSCore</TargetName>
+    <OutDir>..\..\..\..\bin\debug\ecscore\</OutDir>
+    <IntDir>..\..\..\..\intermediate\debug\ecscore\</IntDir>
+    <TargetExt>.dll</TargetExt>
+    <GenerateManifest>true</GenerateManifest>
+    <LinkIncremental>false</LinkIncremental>
+    <OutputFile>..\..\..\..\bin\debug\ecscore\ECSCore.dll</OutputFile>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>ECSCore</TargetName>
+    <OutDir>..\..\..\..\bin\release\ecscore\</OutDir>
+    <IntDir>..\..\..\..\intermediate\release\ecscore\</IntDir>
+    <TargetExt>.dll</TargetExt>
+    <GenerateManifest>true</GenerateManifest>
+    <LinkIncremental>false</LinkIncremental>
+    <OutputFile>..\..\..\..\bin\release\ecscore\ECSCore.dll</OutputFile>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>ECSCore_API;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <BrowseInformation>false</BrowseInformation>
+      <CallingConvention>Cdecl</CallingConvention>
+      <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\ecscore\ecscore_compiler.pdb</ProgramDatabaseFileName>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>..\..\..\..\bin\debug\ecscore\ECSCore.dll</OutputFile>
+      <ShowProgress>NotSet</ShowProgress>
+      <ProgramDatabaseFile>..\..\..\..\bin\debug\ecscore\ecscore.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapExports>false</MapExports>
+      <SwapRunFromCD>false</SwapRunFromCD>
+      <SwapRunFromNET>false</SwapRunFromNET>
+      <Driver>NotSet</Driver>
+      <OptimizeReferences>false</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <ProfileGuidedDatabase>
+      </ProfileGuidedDatabase>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <IgnoreEmbeddedIDL>false</IgnoreEmbeddedIDL>
+      <TypeLibraryResourceID>1</TypeLibraryResourceID>
+      <NoEntryPoint>false</NoEntryPoint>
+      <SetChecksum>false</SetChecksum>
+      <TurnOffAssemblyGeneration>false</TurnOffAssemblyGeneration>
+      <TargetMachine>MachineX64</TargetMachine>
+      <Profile>false</Profile>
+      <CLRImageType>Default</CLRImageType>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
+      <AdditionalDependencies>;%(AdditionalDependencies)</AdditionalDependencies>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
+      <LargeAddressAware>true</LargeAddressAware>
+      <MapFileName>..\..\..\..\bin\debug\ecscore\ECSCore.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\debug\ecscore\ECSCore.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Full</Optimization>
+      <PreprocessorDefinitions>ECSCore_API;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <BrowseInformation>false</BrowseInformation>
+      <CallingConvention>Cdecl</CallingConvention>
+      <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\ecscore\ecscore_compiler.pdb</ProgramDatabaseFileName>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>..\..\..\..\bin\release\ecscore\ECSCore.dll</OutputFile>
+      <ShowProgress>NotSet</ShowProgress>
+      <ProgramDatabaseFile>..\..\..\..\bin\release\ecscore\ecscore.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapExports>false</MapExports>
+      <SwapRunFromCD>false</SwapRunFromCD>
+      <SwapRunFromNET>false</SwapRunFromNET>
+      <Driver>NotSet</Driver>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ProfileGuidedDatabase>
+      </ProfileGuidedDatabase>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <IgnoreEmbeddedIDL>false</IgnoreEmbeddedIDL>
+      <TypeLibraryResourceID>1</TypeLibraryResourceID>
+      <NoEntryPoint>false</NoEntryPoint>
+      <SetChecksum>false</SetChecksum>
+      <TurnOffAssemblyGeneration>false</TurnOffAssemblyGeneration>
+      <TargetMachine>MachineX64</TargetMachine>
+      <Profile>false</Profile>
+      <CLRImageType>Default</CLRImageType>
+      <LinkErrorReporting>PromptImmediately</LinkErrorReporting>
+      <AdditionalDependencies>;%(AdditionalDependencies)</AdditionalDependencies>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
+      <LargeAddressAware>true</LargeAddressAware>
+      <MapFileName>..\..\..\..\bin\release\ecscore\ECSCore.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\release\ecscore\ECSCore.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Private\Entt\config\config.h" />
+    <ClInclude Include="Source\Private\Entt\config\version.h" />
+    <ClInclude Include="Source\Private\Entt\core\algorithm.hpp" />
+    <ClInclude Include="Source\Private\Entt\core\attribute.h" />
+    <ClInclude Include="Source\Private\Entt\core\family.hpp" />
+    <ClInclude Include="Source\Private\Entt\core\fwd.hpp" />
+    <ClInclude Include="Source\Private\Entt\core\hashed_string.hpp" />
+    <ClInclude Include="Source\Private\Entt\core\ident.hpp" />
+    <ClInclude Include="Source\Private\Entt\core\monostate.hpp" />
+    <ClInclude Include="Source\Private\Entt\core\type_info.hpp" />
+    <ClInclude Include="Source\Private\Entt\core\type_traits.hpp" />
+    <ClInclude Include="Source\Private\Entt\core\utility.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\actor.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\entity.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\fwd.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\group.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\handle.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\helper.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\observer.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\pool.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\registry.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\runtime_view.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\snapshot.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\sparse_set.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\storage.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\utility.hpp" />
+    <ClInclude Include="Source\Private\Entt\entity\view.hpp" />
+    <ClInclude Include="Source\Private\Entt\entt.hpp" />
+    <ClInclude Include="Source\Private\Entt\fwd.hpp" />
+    <ClInclude Include="Source\Private\Entt\locator\locator.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\container.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\ctx.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\factory.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\internal.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\meta.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\pointer.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\policy.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\range.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\resolve.hpp" />
+    <ClInclude Include="Source\Private\Entt\meta\type_traits.hpp" />
+    <ClInclude Include="Source\Private\Entt\platform\android-ndk-r17.hpp" />
+    <ClInclude Include="Source\Private\Entt\process\process.hpp" />
+    <ClInclude Include="Source\Private\Entt\process\scheduler.hpp" />
+    <ClInclude Include="Source\Private\Entt\resource\cache.hpp" />
+    <ClInclude Include="Source\Private\Entt\resource\fwd.hpp" />
+    <ClInclude Include="Source\Private\Entt\resource\handle.hpp" />
+    <ClInclude Include="Source\Private\Entt\resource\loader.hpp" />
+    <ClInclude Include="Source\Private\Entt\signal\delegate.hpp" />
+    <ClInclude Include="Source\Private\Entt\signal\dispatcher.hpp" />
+    <ClInclude Include="Source\Private\Entt\signal\emitter.hpp" />
+    <ClInclude Include="Source\Private\Entt\signal\fwd.hpp" />
+    <ClInclude Include="Source\Private\Entt\signal\sigh.hpp" />
+    <ClInclude Include="Source\Public\BaseObject.h" />
+    <ClInclude Include="Source\Public\Components\BaseComponent.h" />
+    <ClInclude Include="Source\Public\Components\CameraComponent.h" />
+    <ClInclude Include="Source\Public\Components\MeshComponent.h" />
+    <ClInclude Include="Source\Public\Components\TransformComponent.h" />
+    <ClInclude Include="Source\Public\ECSManager.h" />
+    <ClInclude Include="Source\Public\Entities\BaseEntity.h" />
+    <ClInclude Include="Source\Public\EntityManager.h" />
+    <ClInclude Include="Source\Public\Scene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Private\BaseObject.cpp" />
+    <ClCompile Include="Source\Private\ECSManager.cpp" />
+    <ClCompile Include="Source\Private\Entities\BaseEntity.cpp" />
+    <ClCompile Include="Source\Private\EntityManager.cpp" />
+    <ClCompile Include="Source\Private\Scene.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
