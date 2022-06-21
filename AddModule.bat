@@ -1,10 +1,8 @@
 @ECHO off
 SETLOCAL EnableDelayedExpansion
 SET /P moduleType="Enter Module type (0 = Engine, 1 = Editor, 2 = Project): "
-SET /P moduleName="Enter Module name: "
 
 SET sharpmakeTextFilePath=%~dp0Snippets\CodeSnippets\SharpmakeDefaultText.cs
-ECHO !sharpmakeTextFilePath!
 ECHO Create files for module type: !moduleType!
 SET "modulesPath="
 IF !moduleType!==0 (
@@ -13,6 +11,24 @@ IF !moduleType!==0 (
 IF !moduleType!==1 (
 	SET modulesPath=%~dp0Protostar-Editor\Source\Modules\
 )
+IF !moduleType!==2 (
+	::implement project based modules
+	ECHO Project based modules are currently not implemented.
+	PAUSE 
+	EXIT /b 1
+)
+
+SET /A checkRange=0
+IF !moduleType! GEQ 3 SET /A checkRange=1
+IF !moduleType! LSS 0  SET /A checkRange=1
+
+ IF !checkRange!==1 (
+	ECHO Module type !moduleType! not supported.
+	PAUSE
+	EXIT /b 1
+)
+
+SET /P moduleName="Enter Module name: "
 
 SET modulePath=!modulesPath!!moduleName!
 ECHO try create !modulePath!
@@ -61,6 +77,7 @@ IF !callBuildBatch!==Y (
 	CALL "Build.bat"
 ) ELSE (
 	PAUSE
+	EXIT /b %ERRORLEVEL%
 )
 
 
@@ -102,10 +119,8 @@ SET /A lines[!cnt!]
 		CALL :strlen len lines[%%N]
 		IF NOT !len!==0 (
 			CALL SET lines[%%N]=%%lines[%%N]:{ModuleName}=%moduleName%%%
-			ECHO !lines[%%N]!
 			ECHO !lines[%%N]!>>!moduleFilePath!
 		) ELSE (
-			ECHO.
 			ECHO.>>!moduleFilePath!
 		)
 	)
