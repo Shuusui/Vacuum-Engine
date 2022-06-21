@@ -8,6 +8,8 @@ using Sharpmake;
 using static Sharpmake.Solution.Configuration;
 
 [module: Include("../Protostar-Engine/Source/Modules/*/Protostar.*.Sharpmake.cs")]
+[module: Include("../Protostar-Engine-Test/Source/Modules/*/Protostar.*.Sharpmake.cs")]
+[module: Include("../Protostar-Editor/Source/Modules/*/Protostar.*.Sharpmake.cs")]
 
 namespace Protostar
 {
@@ -29,13 +31,17 @@ namespace Protostar
         public virtual void ConfigureAll(Configuration configuration, Target target)
         {
             List<string> _filePaths = new List<string>(new string[] {"Protostar-Engine"});
-            if(!FindTypeFileName(Path.Combine(MainSolution.RootFolder, "Protostar-Engine"), ref _filePaths))
+            if(FindTypeFileName(Path.Combine(MainSolution.RootFolder, "Protostar-Engine"), ref _filePaths))
             {
-                return;
+                _filePaths.RemoveAt(_filePaths.Count - 1);
+                configuration.SolutionFolder = Path.Combine(_filePaths.ToArray());
             }
-            _filePaths.RemoveAt(_filePaths.Count - 1);
-            configuration.SolutionFolder = Path.Combine(_filePaths.ToArray());
 
+            SetConfiguration(configuration, target);
+        }
+
+        private void SetConfiguration(Configuration configuration, Target target)
+        {
             configuration.IncludePaths.Add(Path.Combine("[project.SharpmakeCsPath]", "Source", "Public"));
             configuration.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP20);
             configuration.Options.Add(Options.Vc.Compiler.RTTI.Disable);
@@ -82,7 +88,6 @@ namespace Protostar
             base.ConfigureAll(configuration, target);
             configuration.Output = Configuration.OutputType.Dll;
         }
-        protected string Category { get; set; }
     }
 
     [Generate]

@@ -1,10 +1,15 @@
 @ECHO off
 SETLOCAL EnableDelayedExpansion
-SET /P moduleType="Enter Module type (0 = Engine, 1 = Editor, 2 = Project): "
+SET /P moduleType="Enter Module type (0 = Engine, 1 = Editor, 2 = Test, 3 = Project): "
+IF NOT DEFINED moduleType (
+	ECHO Module type is not defined 
+	GOTO :end
+)
 
 SET sharpmakeTextFilePath=%~dp0Snippets\CodeSnippets\SharpmakeDefaultText.cs
 ECHO Create files for module type: !moduleType!
 SET "modulesPath="
+
 IF !moduleType!==0 (
 	SET modulesPath=%~dp0Protostar-Engine\Source\Modules\
 ) 
@@ -12,23 +17,39 @@ IF !moduleType!==1 (
 	SET modulesPath=%~dp0Protostar-Editor\Source\Modules\
 )
 IF !moduleType!==2 (
+	SET modulesPath=%~dp0Protostar-Engine-Test\Source\Modules\
+)
+
+IF !moduleType!==3 (
 	::implement project based modules
 	ECHO Project based modules are currently not implemented.
-	PAUSE 
-	EXIT /b 1
+	GOTO :end
 )
 
 SET /A checkRange=0
-IF !moduleType! GEQ 3 SET /A checkRange=1
+IF !moduleType! GEQ 4 SET /A checkRange=1
 IF !moduleType! LSS 0  SET /A checkRange=1
 
- IF !checkRange!==1 (
+IF !checkRange!==1 (
 	ECHO Module type !moduleType! not supported.
-	PAUSE
-	EXIT /b 1
+	GOTO :end
 )
 
 SET /P moduleName="Enter Module name: "
+
+IF NOT DEFINED moduleName (
+	ECHO module name is not defined
+	IF !moduleType!==1 (
+		SET /P setEditorBaseModule="Attempt to create base module for editor. Do you want to continue?(Y/N)"
+		IF NOT !setEditorBaseModule!==Y (
+		ECHO Modulename is not set to a proper value
+		GOTO :end
+		)
+	) ELSE (
+		ECHO Modulename is not set to a proper value
+		GOTO :end
+	)
+)
 
 SET modulePath=!modulesPath!!moduleName!
 ECHO try create !modulePath!
@@ -75,12 +96,16 @@ SET /P callBuildBatch="Do you want to run Build.bat? (Y/N)"
 
 IF !callBuildBatch!==Y (
 	CALL "Build.bat"
-) ELSE (
-	PAUSE
 	EXIT /b %ERRORLEVEL%
 )
 
+PAUSE 
+EXIT /b %ERRORLEVEL%
 
+:end (
+	PAUSE
+	EXIT /b %ERRORLEVEL%
+)
 
 REM *********  strlen function *****************************
 :strlen <resultVar> <stringVar>
