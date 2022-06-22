@@ -6,7 +6,6 @@ IF NOT DEFINED moduleType (
 	GOTO :end
 )
 
-SET sharpmakeTextFilePath=%~dp0Snippets\CodeSnippets\SharpmakeDefaultText.cs
 ECHO Create files for module type: !moduleType!
 SET "modulesPath="
 
@@ -35,20 +34,18 @@ IF !checkRange!==1 (
 	GOTO :end
 )
 
+IF !moduleType!==1 (
+	SET /P setEditorBaseModule="Do you want to create a base module for the editor?(Y/N)"
+	IF !setEditorBaseModule!==Y (
+		CALL :createSharpmakeFile modulesFilePath 1 "Editor"
+	)
+)
+
 SET /P moduleName="Enter Module name: "
 
 IF NOT DEFINED moduleName (
 	ECHO module name is not defined
-	IF !moduleType!==1 (
-		SET /P setEditorBaseModule="Attempt to create base module for editor. Do you want to continue?(Y/N)"
-		IF NOT !setEditorBaseModule!==Y (
-		ECHO Modulename is not set to a proper value
-		GOTO :end
-		)
-	) ELSE (
-		ECHO Modulename is not set to a proper value
-		GOTO :end
-	)
+	GOTO :end
 )
 
 SET modulePath=!modulesPath!!moduleName!
@@ -59,10 +56,10 @@ IF EXIST !moduleFilePath! (
 	SET /P overWrite="Do you want to overwrite the existing sharpmake file? (Y/N)"
 	IF !overWrite!==Y (
 		DEL /Q "!moduleFilePath!"
-		CALL :createSharpmakeFile moduleFilePath
+		CALL :createSharpmakeFile moduleFilePath 0 moduleName
 	)
 ) ELSE (
-	CALL :createSharpmakeFile moduleFilePath
+	CALL :createSharpmakeFile moduleFilePath 0 moduleName
 )
 ECHO try create !moduleFilePath!
 
@@ -130,9 +127,27 @@ REM *********  strlen function *****************************
     exit /b
 )
 
-REM *********  createSharpmakeFile function *****************************
-:createSharpmakeFile <filePath>
-FOR /F %%N IN  ('FIND "" /v /c ^< "!sharpmakeTextFilePath!"') DO SET  /A cnt=%%N
+REM *********  createSharpmakeFile function *************************************************************
+REM ********* param 2 = 0: Module template, 1: Executing project template	*****************************
+:createSharpmakeFile <moduleFilePath> <moduleType> <moduleName>
+
+SETLOCAL EnableDelayedExpansion
+
+SET "sharpmakeTextFilePath="
+
+CALL :CASE_!%~2!
+
+IF EXIST !sharpmakeTextFilePath! (
+	SET /P overWrite="Do you want to overwrite the existing sharpmake file? (Y/N)"
+		IF !overWrite!==Y (
+			DEL /Q "!sharpmakeTextFilePath!"
+		)
+		ELSE (
+			GOTO :end
+		)
+	)
+
+FOR /F %%N IN  ('FIND "" /v /c ^< "!sharpmakeTextFilePath!"') DO SET /A cnt=%%N
 
 SET /A lines[!cnt!]
 
@@ -143,12 +158,24 @@ SET /A lines[!cnt!]
 		SET lines[%%N]=!str.%%N!
 		CALL :strlen len lines[%%N]
 		IF NOT !len!==0 (
-			CALL SET lines[%%N]=%%lines[%%N]:{ModuleName}=%moduleName%%%
-			ECHO !lines[%%N]!>>!moduleFilePath!
+			CALL SET lines[%%N]=%%lines[%%N]:{ModuleName}=!%~3!
+			ECHO !lines[%%N]!>>!%~1!
 		) ELSE (
-			ECHO.>>!moduleFilePath!
+			ECHO.>>!%~1!
 		)
 	)
 )
+
+:end 
+ENDLOCAL
+
 EXIT /b
 
+:CASE_0
+	SET sharpmakeTextFilePath=%~dp0Snippets\CodeSnippets\SharpmakeModuleTemplate.cs
+	GOTO CASE_END
+:CASE_1 
+	SET sharpmakeTextFilePath=%~dp0Snippets\CodeSnippets\SharpmakeExecutingTemplate.cs
+	GOTO CASE_END
+:CASE_END
+	GOTO :eof
