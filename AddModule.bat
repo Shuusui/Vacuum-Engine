@@ -34,39 +34,40 @@ IF !checkRange!==1 (
 	GOTO :end
 )
 
+SET /A moduleAlreadyCreated=0
+
+SET modulePath=
+
 IF !moduleType!==1 (
 	SET /P setEditorBaseModule="Do you want to create a base module for the editor?(Y/N)"
 	IF !setEditorBaseModule!==Y (
-		CALL :createSharpmakeFile modulesFilePath 1 "Editor"
+		SET sharpmakeFilePath=!modulesPath!\Protostar.Editor.Sharpmake.cs
+		CALL :createSharpmakeFile sharpmakeFilePath , 1 , "Editor"
+		SET /A moduleAlreadyCreated=1
+		SET modulePath=!modulesPath!
 	)
 )
 
-SET /P moduleName="Enter Module name: "
+IF !moduleAlreadyCreated!==0 (
+	SET /P moduleName="Enter Module name: "
 
-IF NOT DEFINED moduleName (
-	ECHO module name is not defined
-	GOTO :end
-)
-
-SET modulePath=!modulesPath!!moduleName!
-ECHO try create !modulePath!
-IF NOT EXIST !modulePath! mkdir !modulePath!
-SET moduleFilePath=!modulePath!\Protostar.!moduleName!.Sharpmake.cs
-IF EXIST !moduleFilePath! (
-	SET /P overWrite="Do you want to overwrite the existing sharpmake file? (Y/N)"
-	IF !overWrite!==Y (
-		DEL /Q "!moduleFilePath!"
-		CALL :createSharpmakeFile moduleFilePath 0 moduleName
+	IF NOT DEFINED moduleName (
+		ECHO module name is not defined
+		GOTO :end
 	)
-) ELSE (
+
+	SET modulePath=!modulesPath!!moduleName!
+	ECHO try create !modulePath!
+	IF NOT EXIST "!modulePath!" mkdir "!modulePath!"
+	SET moduleFilePath=!modulePath!\Protostar.!moduleName!.Sharpmake.cs
+	ECHO try create !moduleFilePath!
 	CALL :createSharpmakeFile moduleFilePath 0 moduleName
 )
-ECHO try create !moduleFilePath!
 
 SET sourcePath=!modulePath!\Source
 ECHO try create !sourcePath!
-IF NOT EXIST !sourcePath! (
-	mkdir !sourcePath!
+IF NOT EXIST "!sourcePath!" (
+	mkdir "!sourcePath!"
 	ECHO Sourcepath successfully created
 ) ELSE (
 	ECHO Sourcepath already exists
@@ -75,15 +76,15 @@ IF NOT EXIST !sourcePath! (
 SET privatePath=!sourcePath!\Private
 SET publicPath=!sourcePath!\Public
 ECHO try create !privatePath!
-IF NOT EXIST !privatePath! (
-	mkdir !privatePath!
+IF NOT EXIST "!privatePath!" (
+	mkdir "!privatePath!"
 	ECHO Private source path successfully created
 ) ELSE (
 	ECHO Private source path already exists
 )
 ECHO try create !publicPath!
-IF NOT EXIST !publicPath! ( 
-	mkdir !publicPath!
+IF NOT EXIST "!publicPath!" ( 
+	mkdir "!publicPath!"
 	ECHO Public source path successfully created
 ) ELSE (
 	ECHO Public source path already exists
@@ -134,6 +135,8 @@ REM ********* param 2 = 0: Module template, 1: Executing project template	******
 SETLOCAL EnableDelayedExpansion
 
 SET "sharpmakeTextFilePath="
+
+ECHO !%~2!
 
 CALL :CASE_!%~2!
 
