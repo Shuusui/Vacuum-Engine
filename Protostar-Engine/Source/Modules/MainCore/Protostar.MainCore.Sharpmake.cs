@@ -4,9 +4,9 @@ using Sharpmake;
 namespace Protostar
 {
     [Generate]
-    public class CoreTypes : Module
+    public class MainCore : Module
     {
-        public CoreTypes()
+        public MainCore()
         {
             SourceRootPath = Path.Combine("[project.SharpmakeCsPath]", "Source");
         }

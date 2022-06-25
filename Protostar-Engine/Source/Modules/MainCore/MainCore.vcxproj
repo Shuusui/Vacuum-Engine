@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{09A79D6D-1695-BC81-A58E-706B5C783151}</ProjectGuid>
+    <ProjectGuid>{AC2E2F9E-09FD-6243-0AA9-8E030604D096}</ProjectGuid>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <RootNamespace>CoreTypes</RootNamespace>
-    <ProjectName>CoreTypes</ProjectName>
+    <RootNamespace>MainCore</RootNamespace>
+    <ProjectName>MainCore</ProjectName>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
@@ -44,23 +44,23 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>CoreTypes</TargetName>
-    <OutDir>..\..\..\..\bin\debug\coretypes\</OutDir>
-    <IntDir>..\..\..\..\intermediate\debug\coretypes\</IntDir>
+    <TargetName>MainCore</TargetName>
+    <OutDir>..\..\..\..\bin\debug\maincore\</OutDir>
+    <IntDir>..\..\..\..\intermediate\debug\maincore\</IntDir>
     <TargetExt>.dll</TargetExt>
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutputFile>..\..\..\..\bin\debug\coretypes\CoreTypes.dll</OutputFile>
+    <OutputFile>..\..\..\..\bin\debug\maincore\MainCore.dll</OutputFile>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>CoreTypes</TargetName>
-    <OutDir>..\..\..\..\bin\release\coretypes\</OutDir>
-    <IntDir>..\..\..\..\intermediate\release\coretypes\</IntDir>
+    <TargetName>MainCore</TargetName>
+    <OutDir>..\..\..\..\bin\release\maincore\</OutDir>
+    <IntDir>..\..\..\..\intermediate\release\maincore\</IntDir>
     <TargetExt>.dll</TargetExt>
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutputFile>..\..\..\..\bin\release\coretypes\CoreTypes.dll</OutputFile>
+    <OutputFile>..\..\..\..\bin\release\maincore\MainCore.dll</OutputFile>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -68,7 +68,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CoreTypes_API;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MainCore_API;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -110,15 +110,15 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
       <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
-      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\coretypes\coretypes_compiler.pdb</ProgramDatabaseFileName>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\maincore\maincore_compiler.pdb</ProgramDatabaseFileName>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>..\..\..\..\bin\debug\coretypes\CoreTypes.dll</OutputFile>
+      <OutputFile>..\..\..\..\bin\debug\maincore\MainCore.dll</OutputFile>
       <ShowProgress>NotSet</ShowProgress>
-      <ProgramDatabaseFile>..\..\..\..\bin\debug\coretypes\coretypes.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>..\..\..\..\bin\debug\maincore\maincore.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>false</MapExports>
       <SwapRunFromCD>false</SwapRunFromCD>
@@ -143,8 +143,8 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
-      <MapFileName>..\..\..\..\bin\debug\coretypes\CoreTypes.map</MapFileName>
-      <ImportLibrary>..\..\..\..\bin\debug\coretypes\CoreTypes.lib</ImportLibrary>
+      <MapFileName>..\..\..\..\bin\debug\maincore\MainCore.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\debug\maincore\MainCore.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,7 +152,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>CoreTypes_API;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MainCore_API;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -194,15 +194,15 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
       <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
-      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\coretypes\coretypes_compiler.pdb</ProgramDatabaseFileName>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\maincore\maincore_compiler.pdb</ProgramDatabaseFileName>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>..\..\..\..\bin\release\coretypes\CoreTypes.dll</OutputFile>
+      <OutputFile>..\..\..\..\bin\release\maincore\MainCore.dll</OutputFile>
       <ShowProgress>NotSet</ShowProgress>
-      <ProgramDatabaseFile>..\..\..\..\bin\release\coretypes\coretypes.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>..\..\..\..\bin\release\maincore\maincore.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>false</MapExports>
       <SwapRunFromCD>false</SwapRunFromCD>
@@ -227,18 +227,32 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
-      <MapFileName>..\..\..\..\bin\release\coretypes\CoreTypes.map</MapFileName>
-      <ImportLibrary>..\..\..\..\bin\release\coretypes\CoreTypes.lib</ImportLibrary>
+      <MapFileName>..\..\..\..\bin\release\maincore\MainCore.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\release\maincore\MainCore.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Private\BaseJob.h" />
     <ClInclude Include="Source\Private\json.hpp" />
+    <ClInclude Include="Source\Public\Console.h" />
+    <ClInclude Include="Source\Public\GlobalConstants.h" />
+    <ClInclude Include="Source\Public\GlobalDefinitions.h" />
+    <ClInclude Include="Source\Public\GlobalMacros.h" />
     <ClInclude Include="Source\Public\Guid.h" />
     <ClInclude Include="Source\Public\Json.h" />
+    <ClInclude Include="Source\Public\Log.h" />
     <ClInclude Include="Source\Public\NOQueue.h" />
+    <ClInclude Include="Source\Public\ThreadPool.h" />
+    <ClInclude Include="Source\Public\Timer.h" />
+    <ClInclude Include="Source\Public\Util.h" />
+    <ClInclude Include="Source\Public\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Private\Guid_Win.cpp" />
+    <ClCompile Include="Source\Private\Log.cpp" />
+    <ClCompile Include="Source\Private\ThreadPool.cpp" />
+    <ClCompile Include="Source\Private\Timer.cpp" />
+    <ClCompile Include="Source\Private\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

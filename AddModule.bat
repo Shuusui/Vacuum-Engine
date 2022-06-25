@@ -1,4 +1,7 @@
 @ECHO off
+
+:START
+
 SETLOCAL EnableDelayedExpansion
 SET /P moduleType="Enter Module type (0 = Engine, 1 = Editor, 2 = Test, 3 = Project): "
 IF NOT DEFINED moduleType (
@@ -42,7 +45,9 @@ IF !moduleType!==1 (
 	SET /P setEditorBaseModule="Do you want to create a base module for the editor?(Y/N)"
 	IF !setEditorBaseModule!==Y (
 		SET sharpmakeFilePath=!modulesPath!\Protostar.Editor.Sharpmake.cs
-		CALL :createSharpmakeFile sharpmakeFilePath , 1 , "Editor"
+		SET /A sharpmakeFileType=1
+		SET "sharpmakeFilename=Editor"
+		CALL :createSharpmakeFile sharpmakeFilePath, sharpmakeFileType, sharpmakeFilename
 		SET /A moduleAlreadyCreated=1
 		SET modulePath=!modulesPath!
 	)
@@ -60,8 +65,9 @@ IF !moduleAlreadyCreated!==0 (
 	ECHO try create !modulePath!
 	IF NOT EXIST "!modulePath!" mkdir "!modulePath!"
 	SET moduleFilePath=!modulePath!\Protostar.!moduleName!.Sharpmake.cs
+	SET /A sharpmakeFileType=0
 	ECHO try create !moduleFilePath!
-	CALL :createSharpmakeFile moduleFilePath 0 moduleName
+	CALL :createSharpmakeFile moduleFilePath sharpmakeFileType moduleName
 )
 
 SET sourcePath=!modulePath!\Source
@@ -90,6 +96,11 @@ IF NOT EXIST "!publicPath!" (
 	ECHO Public source path already exists
 )
 
+SET /P loop="Do you want to create another module? (Y/N)"
+IF !loop!==Y (
+	GOTO :START
+)
+
 SET /P callBuildBatch="Do you want to run Build.bat? (Y/N)"
 
 IF !callBuildBatch!==Y (
@@ -100,10 +111,16 @@ IF !callBuildBatch!==Y (
 PAUSE 
 EXIT /b %ERRORLEVEL%
 
-:end (
-	PAUSE
-	EXIT /b %ERRORLEVEL%
+EXIT /b
+
+:end
+SET /P restart="Do you want to restart process? (Y/N) "
+IF !restart!==Y (
+	GOTO :START
 )
+
+PAUSE
+EXIT /b %ERRORLEVEL%
 
 REM *********  strlen function *****************************
 :strlen <resultVar> <stringVar>
@@ -136,16 +153,13 @@ SETLOCAL EnableDelayedExpansion
 
 SET "sharpmakeTextFilePath="
 
-ECHO !%~2!
-
 CALL :CASE_!%~2!
 
-IF EXIST !sharpmakeTextFilePath! (
+IF EXIST !%~1! (
 	SET /P overWrite="Do you want to overwrite the existing sharpmake file? (Y/N)"
 		IF !overWrite!==Y (
-			DEL /Q "!sharpmakeTextFilePath!"
-		)
-		ELSE (
+			DEL /Q "!%~1!"
+		) ELSE (
 			GOTO :end
 		)
 	)
@@ -161,7 +175,7 @@ SET /A lines[!cnt!]
 		SET lines[%%N]=!str.%%N!
 		CALL :strlen len lines[%%N]
 		IF NOT !len!==0 (
-			CALL SET lines[%%N]=%%lines[%%N]:{ModuleName}=!%~3!
+			CALL SET lines[%%N]=%%lines[%%N]:{ModuleName}=!%~3!%%
 			ECHO !lines[%%N]!>>!%~1!
 		) ELSE (
 			ECHO.>>!%~1!

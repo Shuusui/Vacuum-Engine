@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="Source\Private\Guid_Win.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Log.cpp">
       <Filter>Private</Filter>
     </ClCompile>
@@ -18,6 +21,9 @@
     <ClInclude Include="Source\Private\BaseJob.h">
       <Filter>Private</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Private\json.hpp">
+      <Filter>Private</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Console.h">
       <Filter>Public</Filter>
     </ClInclude>
@@ -30,7 +36,16 @@
     <ClInclude Include="Source\Public\GlobalMacros.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Guid.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Json.h">
+      <Filter>Public</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Log.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\NOQueue.h">
       <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\ThreadPool.h">

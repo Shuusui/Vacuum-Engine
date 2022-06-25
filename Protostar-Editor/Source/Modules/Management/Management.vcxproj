@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{94589B42-D820-94E0-07B2-DB8B488C21F0}</ProjectGuid>
+    <ProjectGuid>{176FA8A3-2863-4B24-19B1-B7ED4DBF5566}</ProjectGuid>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <RootNamespace>CoreMain</RootNamespace>
-    <ProjectName>CoreMain</ProjectName>
+    <RootNamespace>Management</RootNamespace>
+    <ProjectName>Management</ProjectName>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
@@ -44,23 +44,23 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>CoreMain</TargetName>
-    <OutDir>..\..\..\..\bin\debug\coremain\</OutDir>
-    <IntDir>..\..\..\..\intermediate\debug\coremain\</IntDir>
+    <TargetName>Management</TargetName>
+    <OutDir>..\..\..\..\bin\debug\management\</OutDir>
+    <IntDir>..\..\..\..\intermediate\debug\management\</IntDir>
     <TargetExt>.dll</TargetExt>
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutputFile>..\..\..\..\bin\debug\coremain\CoreMain.dll</OutputFile>
+    <OutputFile>..\..\..\..\bin\debug\management\Management.dll</OutputFile>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>CoreMain</TargetName>
-    <OutDir>..\..\..\..\bin\release\coremain\</OutDir>
-    <IntDir>..\..\..\..\intermediate\release\coremain\</IntDir>
+    <TargetName>Management</TargetName>
+    <OutDir>..\..\..\..\bin\release\management\</OutDir>
+    <IntDir>..\..\..\..\intermediate\release\management\</IntDir>
     <TargetExt>.dll</TargetExt>
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutputFile>..\..\..\..\bin\release\coremain\CoreMain.dll</OutputFile>
+    <OutputFile>..\..\..\..\bin\release\management\Management.dll</OutputFile>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -68,7 +68,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CoreMain_API;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>Management_API;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -110,15 +110,15 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
       <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
-      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\coremain\coremain_compiler.pdb</ProgramDatabaseFileName>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\management\management_compiler.pdb</ProgramDatabaseFileName>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>..\..\..\..\bin\debug\coremain\CoreMain.dll</OutputFile>
+      <OutputFile>..\..\..\..\bin\debug\management\Management.dll</OutputFile>
       <ShowProgress>NotSet</ShowProgress>
-      <ProgramDatabaseFile>..\..\..\..\bin\debug\coremain\coremain.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>..\..\..\..\bin\debug\management\management.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>false</MapExports>
       <SwapRunFromCD>false</SwapRunFromCD>
@@ -143,8 +143,8 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
-      <MapFileName>..\..\..\..\bin\debug\coremain\CoreMain.map</MapFileName>
-      <ImportLibrary>..\..\..\..\bin\debug\coremain\CoreMain.lib</ImportLibrary>
+      <MapFileName>..\..\..\..\bin\debug\management\Management.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\debug\management\Management.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,7 +152,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>CoreMain_API;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>Management_API;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -194,15 +194,15 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
       <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
-      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\coremain\coremain_compiler.pdb</ProgramDatabaseFileName>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\management\management_compiler.pdb</ProgramDatabaseFileName>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>..\..\..\..\bin\release\coremain\CoreMain.dll</OutputFile>
+      <OutputFile>..\..\..\..\bin\release\management\Management.dll</OutputFile>
       <ShowProgress>NotSet</ShowProgress>
-      <ProgramDatabaseFile>..\..\..\..\bin\release\coremain\coremain.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>..\..\..\..\bin\release\management\management.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>false</MapExports>
       <SwapRunFromCD>false</SwapRunFromCD>
@@ -227,27 +227,13 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
-      <MapFileName>..\..\..\..\bin\release\coremain\CoreMain.map</MapFileName>
-      <ImportLibrary>..\..\..\..\bin\release\coremain\CoreMain.lib</ImportLibrary>
+      <MapFileName>..\..\..\..\bin\release\management\Management.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\release\management\Management.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Private\BaseJob.h" />
-    <ClInclude Include="Source\Public\Console.h" />
-    <ClInclude Include="Source\Public\GlobalConstants.h" />
-    <ClInclude Include="Source\Public\GlobalDefinitions.h" />
-    <ClInclude Include="Source\Public\GlobalMacros.h" />
-    <ClInclude Include="Source\Public\Log.h" />
-    <ClInclude Include="Source\Public\ThreadPool.h" />
-    <ClInclude Include="Source\Public\Timer.h" />
-    <ClInclude Include="Source\Public\Util.h" />
-    <ClInclude Include="Source\Public\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Private\Log.cpp" />
-    <ClCompile Include="Source\Private\ThreadPool.cpp" />
-    <ClCompile Include="Source\Private\Timer.cpp" />
-    <ClCompile Include="Source\Private\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
