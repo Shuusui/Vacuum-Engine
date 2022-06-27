@@ -7,7 +7,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>sharpmake_debug</RootNamespace>
     <AssemblyName>sharpmake_debug</AssemblyName>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -46,27 +46,45 @@
   <ItemGroup>
     <Reference Include="Sharpmake">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Programs\Sharpmake\tmp\bin\release\net472\Sharpmake.dll</HintPath>
+      <HintPath>Sharpmake.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sharpmake.Generators">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Programs\Sharpmake\tmp\bin\release\net472\Sharpmake.Generators.dll</HintPath>
+      <HintPath>Sharpmake.Generators.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Protostar-Engine\Source\Modules\CoreMain\Protostar.CoreMain.Sharpmake.cs">
-      <Link>CoreMain\Protostar.CoreMain.Sharpmake.cs</Link>
+    <Compile Include="..\Protostar-Editor\Source\Modules\GUI\Protostar.GUI.Sharpmake.cs">
+      <Link>GUI\Protostar.GUI.Sharpmake.cs</Link>
+    </Compile>
+    <Compile Include="..\Protostar-Editor\Source\Modules\ImGui\Protostar.ImGui.Sharpmake.cs">
+      <Link>ImGui\Protostar.ImGui.Sharpmake.cs</Link>
+    </Compile>
+    <Compile Include="..\Protostar-Editor\Source\Modules\Management\Protostar.Management.Sharpmake.cs">
+      <Link>Management\Protostar.Management.Sharpmake.cs</Link>
+    </Compile>
+    <Compile Include="..\Protostar-Editor\Source\Modules\Protostar.Editor.Sharpmake.cs">
+      <Link>Modules\Protostar.Editor.Sharpmake.cs</Link>
+    </Compile>
+    <Compile Include="..\Protostar-Engine-Test\Source\Modules\CoreMath_Test\Protostar.CoreMath_Test.Sharpmake.cs">
+      <Link>CoreMath_Test\Protostar.CoreMath_Test.Sharpmake.cs</Link>
     </Compile>
     <Compile Include="..\Protostar-Engine\Source\Modules\CoreMath\Protostar.CoreMath.Sharpmake.cs">
       <Link>CoreMath\Protostar.CoreMath.Sharpmake.cs</Link>
     </Compile>
-    <Compile Include="..\Protostar-Engine\Source\Modules\CoreTypes\Protostar.CoreTypes.Sharpmake.cs">
-      <Link>CoreTypes\Protostar.CoreTypes.Sharpmake.cs</Link>
+    <Compile Include="..\Protostar-Engine\Source\Modules\ECSCore\Protostar.ECSCore.Sharpmake.cs">
+      <Link>ECSCore\Protostar.ECSCore.Sharpmake.cs</Link>
     </Compile>
     <Compile Include="..\Protostar-Engine\Source\Modules\FileSystem\Protostar.FileSystem.Sharpmake.cs">
       <Link>FileSystem\Protostar.FileSystem.Sharpmake.cs</Link>
+    </Compile>
+    <Compile Include="..\Protostar-Engine\Source\Modules\MainCore\Protostar.MainCore.Sharpmake.cs">
+      <Link>MainCore\Protostar.MainCore.Sharpmake.cs</Link>
+    </Compile>
+    <Compile Include="..\Protostar-Engine\Source\Modules\RHI\Protostar.RHI.Sharpmake.cs">
+      <Link>RHI\Protostar.RHI.Sharpmake.cs</Link>
     </Compile>
     <Compile Include="Protostar.Main.Sharpmake.cs" />
   </ItemGroup>

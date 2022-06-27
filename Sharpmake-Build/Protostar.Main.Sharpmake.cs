@@ -9,37 +9,34 @@ using static Sharpmake.Solution.Configuration;
 
 [module: Include("../Protostar-Engine/Source/Modules/*/Protostar.*.Sharpmake.cs")]
 [module: Include("../Protostar-Engine-Test/Source/Modules/*/Protostar.*.Sharpmake.cs")]
+[module: Include("../Protostar-Editor/Source/Modules/Protostar.*.Sharpmake.cs")]
 [module: Include("../Protostar-Editor/Source/Modules/*/Protostar.*.Sharpmake.cs")]
 
 namespace Protostar
 {
-    [Generate]
     public abstract class BaseProject : Project
     {
         public BaseProject()
         {
             IsFileNameToLower = false;
             IsTargetFileNameToLower = false;
+            SourceRootPath = Path.Combine("[project.SharpmakeCsPath]", "Source");
             AddTargets(new Target(
-            Platform.win64,
-            Main.CustomArguments.DevEnvArgument,
-            Optimization.Debug | Optimization.Release,
-            OutputType.Dll));
+                Platform.win64,
+                Main.CustomArguments.DevEnvArgument,
+                Optimization.Debug | Optimization.Release,
+                OutputType.Dll));
         }
-
         [Configure]
         public virtual void ConfigureAll(Configuration configuration, Target target)
         {
-            List<string> _filePaths = new List<string>(new string[] {"Protostar-Engine"});
-            if(FindTypeFileName(Path.Combine(MainSolution.RootFolder, "Protostar-Engine"), ref _filePaths))
-            {
-                _filePaths.RemoveAt(_filePaths.Count - 1);
-                configuration.SolutionFolder = Path.Combine(_filePaths.ToArray());
-            }
+            AddSolutionFolders(configuration, "Protostar-Engine");
+            AddSolutionFolders(configuration, "Protostar-Engine-Test");
+            AddSolutionFolders(configuration, "Protostar-Editor");
+            AddSolutionFolders(configuration, "Projects");
 
             SetConfiguration(configuration, target);
         }
-
         private void SetConfiguration(Configuration configuration, Target target)
         {
             configuration.IncludePaths.Add(Path.Combine("[project.SharpmakeCsPath]", "Source", "Public"));
@@ -52,16 +49,25 @@ namespace Protostar
             configuration.Defines.Add($"{Name}_API");
             configuration.ProjectPath = "[project.SharpmakeCsPath]";
         }
-
+        private void AddSolutionFolders(Configuration configuration, string rootFolderName)
+        {
+            List<string> _filePaths = new List<string>(new string[] { rootFolderName });
+            if(FindTypeFileName(Path.Combine(MainSolution.RootFolder, rootFolderName), ref _filePaths))
+            {
+                configuration.SolutionFolder = Path.Combine(_filePaths.ToArray());
+            }
+        }
         private bool FindTypeFileName(string currentPath, ref List<string> filePaths)
         {
-            string[] _files = Directory.GetFiles(currentPath, $"*.{GetType().Name}.*");
+            string _searchPattern = $"Protostar.{GetType().Name}.Sharpmake.cs";
+            string[] _files = Directory.GetFiles(currentPath, _searchPattern);
             if(_files.Length > 0)
             {
+                filePaths.RemoveAt(filePaths.Count - 1);
                 return true;
             }
 
-            foreach(string _directory in Directory.GetDirectories(currentPath))
+            foreach (string _directory in Directory.GetDirectories(currentPath))
             {
                 List<string> _tempList = new List<string>(filePaths)
                 {
@@ -71,17 +77,16 @@ namespace Protostar
                 {
                     filePaths = _tempList;
                     return true;
-                }    
+                }
             }
             return false;
         }
     }
-
-    [Generate]
     public abstract class Module : BaseProject
     {
         public Module()
         {
+            
         }
         public override void ConfigureAll(Configuration configuration, Target target)
         {
@@ -89,8 +94,6 @@ namespace Protostar
             configuration.Output = Configuration.OutputType.Dll;
         }
     }
-
-    [Generate]
     public abstract class ExecutingProject : BaseProject
     {
         public override void ConfigureAll(Configuration configuration, Target target)
@@ -99,7 +102,6 @@ namespace Protostar
             configuration.Output = Configuration.OutputType.Exe;
         }
     }
-
     [Generate]
     public class MainSolution : Solution
     {
@@ -177,5 +179,4 @@ namespace Protostar
             arguments.Generate<MainSolution>();
         }
     }
-
 }

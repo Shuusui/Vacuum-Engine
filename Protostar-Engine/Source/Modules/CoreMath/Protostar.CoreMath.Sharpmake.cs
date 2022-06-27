@@ -8,7 +8,6 @@ namespace Protostar
     {
         public CoreMath()
         {
-            SourceRootPath = Path.Combine("[project.SharpmakeCsPath]", "Source");
         }
     }
 }

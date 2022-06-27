@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{CB6BC285-E997-E62D-D67D-ED650366B62A}</ProjectGuid>
+    <ProjectGuid>{7E6CF729-7895-EFF5-46BE-5AA1F696A5CD}</ProjectGuid>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <RootNamespace>Core</RootNamespace>
-    <ProjectName>Core</ProjectName>
+    <RootNamespace>CoreMath_Test</RootNamespace>
+    <ProjectName>CoreMath_Test</ProjectName>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
@@ -44,23 +44,23 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>Core</TargetName>
-    <OutDir>..\..\..\..\bin\debug\core\</OutDir>
-    <IntDir>..\..\..\..\intermediate\debug\core\</IntDir>
+    <TargetName>CoreMath_Test</TargetName>
+    <OutDir>..\..\..\..\bin\debug\coremath_test\</OutDir>
+    <IntDir>..\..\..\..\intermediate\debug\coremath_test\</IntDir>
     <TargetExt>.dll</TargetExt>
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutputFile>..\..\..\..\bin\debug\core\Core.dll</OutputFile>
+    <OutputFile>..\..\..\..\bin\debug\coremath_test\CoreMath_Test.dll</OutputFile>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>Core</TargetName>
-    <OutDir>..\..\..\..\bin\release\core\</OutDir>
-    <IntDir>..\..\..\..\intermediate\release\core\</IntDir>
+    <TargetName>CoreMath_Test</TargetName>
+    <OutDir>..\..\..\..\bin\release\coremath_test\</OutDir>
+    <IntDir>..\..\..\..\intermediate\release\coremath_test\</IntDir>
     <TargetExt>.dll</TargetExt>
     <GenerateManifest>true</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
-    <OutputFile>..\..\..\..\bin\release\core\Core.dll</OutputFile>
+    <OutputFile>..\..\..\..\bin\release\coremath_test\CoreMath_Test.dll</OutputFile>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -68,7 +68,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>Core_API;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CoreMath_Test_API;WIN64;_DEBUG;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -110,15 +110,15 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
       <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
-      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\core\core_compiler.pdb</ProgramDatabaseFileName>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\debug\coremath_test\coremath_test_compiler.pdb</ProgramDatabaseFileName>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>..\..\..\..\bin\debug\core\Core.dll</OutputFile>
+      <OutputFile>..\..\..\..\bin\debug\coremath_test\CoreMath_Test.dll</OutputFile>
       <ShowProgress>NotSet</ShowProgress>
-      <ProgramDatabaseFile>..\..\..\..\bin\debug\core\core.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>..\..\..\..\bin\debug\coremath_test\coremath_test.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>false</MapExports>
       <SwapRunFromCD>false</SwapRunFromCD>
@@ -143,8 +143,8 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
-      <MapFileName>..\..\..\..\bin\debug\core\Core.map</MapFileName>
-      <ImportLibrary>..\..\..\..\bin\debug\core\Core.lib</ImportLibrary>
+      <MapFileName>..\..\..\..\bin\debug\coremath_test\CoreMath_Test.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\debug\coremath_test\CoreMath_Test.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,7 +152,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>Core_API;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CoreMath_Test_API;NDEBUG;WIN64;_USRDLL;%(PreprocessorDefinitions);$(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source\public</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -194,15 +194,15 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>Default</CompileAs>
       <AdditionalOptions>/Zc:__cplusplus</AdditionalOptions>
-      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\core\core_compiler.pdb</ProgramDatabaseFileName>
+      <ProgramDatabaseFileName>..\..\..\..\intermediate\release\coremath_test\coremath_test_compiler.pdb</ProgramDatabaseFileName>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>..\..\..\..\bin\release\core\Core.dll</OutputFile>
+      <OutputFile>..\..\..\..\bin\release\coremath_test\CoreMath_Test.dll</OutputFile>
       <ShowProgress>NotSet</ShowProgress>
-      <ProgramDatabaseFile>..\..\..\..\bin\release\core\core.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>..\..\..\..\bin\release\coremath_test\coremath_test.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapExports>false</MapExports>
       <SwapRunFromCD>false</SwapRunFromCD>
@@ -227,8 +227,8 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries></IgnoreSpecificDefaultLibraries>
       <LargeAddressAware>true</LargeAddressAware>
-      <MapFileName>..\..\..\..\bin\release\core\Core.map</MapFileName>
-      <ImportLibrary>..\..\..\..\bin\release\core\Core.lib</ImportLibrary>
+      <MapFileName>..\..\..\..\bin\release\coremath_test\CoreMath_Test.map</MapFileName>
+      <ImportLibrary>..\..\..\..\bin\release\coremath_test\CoreMath_Test.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@ namespace Protostar
     {
         public RHI()
         {
-            SourceRootPath = Path.Combine("[project.SharpmakeCsPath]", "Source");
+            
         }
     }
 }

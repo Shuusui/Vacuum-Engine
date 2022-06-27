@@ -8,7 +8,6 @@ namespace Protostar
     {
         public ECSCore()
         {
-            SourceRootPath = Path.Combine("[project.SharpmakeCsPath]", "Source");
         }
     }
 }

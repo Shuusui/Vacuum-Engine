@@ -8,7 +8,6 @@ namespace Protostar
     {
         public ImGui()
         {
-            SourceRootPath = Path.Combine("[project.SharpmakeCsPath]", "Source");
         }
     }
 }
