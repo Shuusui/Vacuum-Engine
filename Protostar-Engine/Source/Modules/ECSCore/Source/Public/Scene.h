@@ -1,9 +1,8 @@
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
 #include <vector>
 #include "BaseObject.h"
-#include "..\Entities\Header Files\BaseEntity.h"
+#include "Entities\BaseEntity.h"
 #include <filesystem>
 
 namespace Protostar
@@ -28,4 +27,3 @@ namespace Protostar
 		PBaseEntity* m_cameraEntity;
 	};
 }
-#endif //SCENE_H

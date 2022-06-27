@@ -1,14 +1,8 @@
-#include "..\Header Files\Public\ShaderLibrary.h"
+#include "ShaderLibrary.h"
 
 #include <d3dcompiler.h>
 #include <unordered_set>
 #include <fstream>
-
-#define JSONVERTEXSHADERMAP "vertex_shader_map"
-#define JSONPIXELSHADERMAP "pixel_shader_map"
-
-#define JSONSHADERINFONAME "name"
-#define JSONSHADERINFOPATH "path"
 
 Protostar::PShaderLibrary* Protostar::PShaderLibrary::s_shaderLibrary = nullptr;
 
@@ -69,9 +63,6 @@ void Protostar::PShaderLibrary::Save()
 	{
 		pixelShaderMapJson[guid.ToString()] = ShaderInfoAsJson(shaderInfo);
 	}
-
-	json[JSONVERTEXSHADERMAP] = vertexShaderMapJson;
-	json[JSONPIXELSHADERMAP] = pixelShaderMapJson;
 
 	std::ofstream configFile(m_shaderLibConfigPath, std::ios::trunc);
 	configFile << json.dump();
@@ -492,11 +483,3 @@ Protostar::PTreeObject<Protostar::PShaderComplement> Protostar::PShaderLibrary::
 {
 	return m_fileTree;
 }
-
-
-
-#undef JSONVERTEXSHADERMAP
-#undef JSONPIXELSHADERMAP
-
-#undef JSONSHADERINFONAME
-#undef JSONSHADERINFOPATH

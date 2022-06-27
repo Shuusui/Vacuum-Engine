@@ -1,4 +1,4 @@
-#include "..\Header Files\Public\RendererManager.h"
+#include "RendererManager.h"
 
 Protostar::PRendererManager* Protostar::PRendererManager::s_rendererManager = nullptr;
 

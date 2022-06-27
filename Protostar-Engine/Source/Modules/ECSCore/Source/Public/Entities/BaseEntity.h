@@ -1,8 +1,7 @@
-#ifndef BASEENTITY_H
-#define BASEENTITY_H
+#pragma once
 
-#include "..\..\Header Files\BaseObject.h"
-#include "ECS\Entt\Header Files\entt.hpp"
+#include "BaseObject.h"
+#include "..\Private\Entt\entt.hpp"
 
 namespace Protostar
 {
@@ -22,4 +21,3 @@ namespace Protostar
 		entt::entity m_entity;
 	};
 }
-#endif //BASEENTITY_H

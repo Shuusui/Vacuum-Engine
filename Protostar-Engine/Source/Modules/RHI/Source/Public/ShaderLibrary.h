@@ -1,5 +1,4 @@
-#ifndef SHADERLIBRARY_H
-#define SHADERLIBRARY_H
+#pragma once
 
 #include <unordered_map>
 #include <filesystem>
@@ -96,4 +95,3 @@ namespace Protostar
 		std::unordered_map<std::string, PGuid> m_pixelShaderNames;
 	};
 }
-#endif //SHADERLIBRARY_H

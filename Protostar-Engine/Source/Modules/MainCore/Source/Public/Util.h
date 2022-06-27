@@ -13,7 +13,7 @@ namespace Protostar
 		* @param str The string which should get formatted to a wchar_t*
 		* @return The formatted wchar_t* if it was successful or nullptr
 		*/
-	static const char* ToString(const wchar_t* _wStr)
+	static const char* WideCharToChar(const wchar_t* _wStr)
 	{
 		size_t outSize = wcslen(_wStr) + 1;
 		char* outStr = new char[outSize];

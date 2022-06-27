@@ -1,4 +1,4 @@
-#include "..\Header Files\Public\PSOLibrary.h"
+#include "PSOLibrary.h"
 #include "d3dx12.h"
 #include "RendererManager.h"
 #include "DXHelper.h"

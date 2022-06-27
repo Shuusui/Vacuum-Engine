@@ -1,6 +1,5 @@
 #include "Timer.h"
 
-
 Protostar::PTimer* Protostar::PTimer::s_timer = nullptr;
 
 bool Protostar::PTimer::Create()

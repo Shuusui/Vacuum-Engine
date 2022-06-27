@@ -1,4 +1,4 @@
-#include "..\Header Files\Public\RootSignatureLibrary.h"
+#include "RootSignatureLibrary.h"
 #include "Log.h"
 #include "DXHelper.h"
 #include "RendererManager.h"

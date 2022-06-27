@@ -1,5 +1,4 @@
-#ifndef THREADPOOL_H
-#define THREADPOOL_H
+#pragma once
 
 #include "..\Private\BaseJob.h"
 #include "Log.h"
@@ -174,4 +173,3 @@ namespace Protostar
 		std::atomic_int32_t m_queueCount;
 	};
 }
-#endif //THREADPOOL_H

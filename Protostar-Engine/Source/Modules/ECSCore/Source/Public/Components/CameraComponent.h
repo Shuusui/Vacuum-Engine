@@ -1,5 +1,4 @@
-#ifndef CAMERACOMPONENT_H
-#define CAMERACOMPONENT_H
+#pragma once
 
 #include "BaseComponent.h"
 
@@ -19,4 +18,3 @@ namespace Protostar
 		}
 	};
 }
-#endif //CAMERACOMPONENT_H

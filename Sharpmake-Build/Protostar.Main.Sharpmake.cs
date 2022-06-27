@@ -30,6 +30,8 @@ namespace Protostar
         [Configure]
         public virtual void ConfigureAll(Configuration configuration, Target target)
         {
+            configuration.Options.Add(Sharpmake.Options.Vc.General.CharacterSet.Unicode);
+
             AddSolutionFolders(configuration, "Protostar-Engine");
             AddSolutionFolders(configuration, "Protostar-Engine-Test");
             AddSolutionFolders(configuration, "Protostar-Editor");

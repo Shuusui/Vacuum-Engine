@@ -1,8 +1,8 @@
-#include "..\Header Files\BaseEntity.h"
-#include "ECS\Header Files\ECSManager.h"
-#include "ECS\Header Files\EntityManager.h"
-#include "ECS\Components\Header Files\TransformComponent.h"
-#include "ECS\Components\Header Files\MeshComponent.h"
+#include "Entities\BaseEntity.h"
+#include "ECSManager.h"
+#include "EntityManager.h"
+#include "Components\TransformComponent.h"
+#include "Components\MeshComponent.h"
 #include "Json.h"
 #include <fstream>
 #include <filesystem>

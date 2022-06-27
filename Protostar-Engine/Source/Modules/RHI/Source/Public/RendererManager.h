@@ -1,5 +1,4 @@
-#ifndef RENDERERMANAGER_H
-#define RENDERERMANAGER_H
+#pragma once
 
 #include "..\Private\IRenderer.h"
 #include "..\Private\DX12Renderer.h"
@@ -51,4 +50,3 @@ namespace Protostar
 		bool m_bVSync;
 	};
 }
-#endif //RENDERERMANAGER_H

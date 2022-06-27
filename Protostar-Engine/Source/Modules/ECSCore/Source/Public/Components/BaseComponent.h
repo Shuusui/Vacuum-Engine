@@ -1,7 +1,6 @@
-#ifndef BASECOMPONENT_H
-#define BASECOMPONENT_H
+#pragma once
 
-#include "ECS\Header Files\BaseObject.h"
+#include "BaseObject.h"
 
 namespace Protostar
 {
@@ -17,4 +16,3 @@ namespace Protostar
 	protected:
 	};
 }
-#endif //BASECOMPONENT_H

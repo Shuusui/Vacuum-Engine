@@ -1,5 +1,4 @@
-#ifndef IRENDERER_H
-#define IRENDERER_H
+#pragma once
 
 #include "GlobalDefinitions.h"
 #include <filesystem>
@@ -49,4 +48,3 @@ namespace Protostar
 		bool& m_bVSync;
 	};
 }
-#endif //IRENDERER_H

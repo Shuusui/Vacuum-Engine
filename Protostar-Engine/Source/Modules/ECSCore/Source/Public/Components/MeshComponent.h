@@ -1,6 +1,4 @@
-#ifndef MESHCOMPONENT_H
-#define MESHCOMPONENT_H
-
+#pragma once
 
 #include "BaseComponent.h"
 #include "Guid.h"
@@ -48,4 +46,3 @@ namespace Protostar
 	};
 }
 
-#endif //MESHCOMPONENT_H

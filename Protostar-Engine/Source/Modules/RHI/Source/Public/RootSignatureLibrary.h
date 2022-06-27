@@ -1,5 +1,4 @@
-#ifndef ROOTSIGNATURELIBRARY_H
-#define ROOTSIGNATURELIBRARY_H
+#pragma once
 
 #include "d3d12.h"
 #include "Guid.h"
@@ -49,4 +48,3 @@ namespace Protostar
 		std::unordered_map<PGuid, PRootInfo> m_rootInfos;
 	};
 }
-#endif //ROOTSIGNATURELIBRARY_H

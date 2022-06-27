@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GlobalDefinitions.h"
-#include "SharedStructs.h"
 
 #include <Windows.h>
 #include <utility>
@@ -13,6 +12,42 @@
 
 namespace Protostar
 {
+	struct PWindowDimParams
+	{
+		PWindowDimParams()
+			:Width(-1)
+			, Height(-1)
+			, LeftTopCornerX(-1)
+			, LeftTopCornerY(-1)
+		{
+		};
+
+		PWindowDimParams(const PWindowDimParams& _other) = default;
+
+		PWindowDimParams(PWindowDimParams&& _other) noexcept
+			: Width(std::move(_other.Width))
+			, Height(std::move(_other.Height))
+			, LeftTopCornerX(std::move(_other.LeftTopCornerX))
+			, LeftTopCornerY(std::move(_other.LeftTopCornerY))
+		{
+			_other = PWindowDimParams();
+		}
+
+		PWindowDimParams& operator=(const PWindowDimParams& _other)
+		{
+			Width = _other.Width;
+			Height = _other.Height;
+			LeftTopCornerX = _other.LeftTopCornerX;
+			LeftTopCornerY = _other.LeftTopCornerY;
+			return *this;
+		}
+
+		s64 Width;
+		s64 Height;
+		s32 LeftTopCornerX;
+		s32 LeftTopCornerY;
+	};
+
 	struct PWindowClassParams
 	{
 		PWindowClassParams() = default;
@@ -96,9 +131,10 @@ namespace Protostar
 		}
 
 		PWindowClassParams ClassParams;
-		SWindowDimParams DimParams;
+		PWindowDimParams DimParams;
 		PWindowCreationParams CreationParams;
 	};
+
 
 	class PMainWindow
 	{
@@ -123,7 +159,7 @@ namespace Protostar
 
 		HWND GetHwnd() const;
 
-		SWindowDimParams GetCurrentDim() const;
+		PWindowDimParams GetCurrentDim() const;
 
 	private:
 		PMainWindow(const PWindowInfo& _windowInfo)

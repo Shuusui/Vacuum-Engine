@@ -1,5 +1,4 @@
-#ifndef PSOLIBRARY_H
-#define PSOLIBRARY_H
+#pragma once
 
 #include <unordered_map>
 #include <filesystem>
@@ -32,4 +31,3 @@ namespace Protostar
 		std::filesystem::path m_psoLibraryIniPath;
 	};
 }
-#endif //PSOLIBRARY_H

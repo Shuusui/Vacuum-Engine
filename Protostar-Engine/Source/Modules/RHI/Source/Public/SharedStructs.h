@@ -1,5 +1,4 @@
-#ifndef SHAREDSTRUCTS_H
-#define SHAREDSTRUCTS_H
+#pragma once
 
 #include <utility>
 #include <vector>
@@ -100,41 +99,4 @@ namespace Protostar
 		std::vector<SVertex> Vertices;
 		std::vector<u32> Indices;
 	};
-
-	struct SWindowDimParams
-	{
-		SWindowDimParams()
-			:Width(-1)
-			,Height(-1)
-			,LeftTopCornerX(-1)
-			,LeftTopCornerY(-1)
-		{
-		};
-
-		SWindowDimParams(const SWindowDimParams& _other) = default;
-
-		SWindowDimParams(SWindowDimParams&& _other) noexcept
-			: Width(std::move(_other.Width))
-			, Height(std::move(_other.Height))
-			, LeftTopCornerX(std::move(_other.LeftTopCornerX))
-			, LeftTopCornerY(std::move(_other.LeftTopCornerY))
-		{
-			_other = SWindowDimParams();
-		}
-
-		SWindowDimParams& operator=(const SWindowDimParams& _other)
-		{
-			Width = _other.Width;
-			Height = _other.Height;
-			LeftTopCornerX = _other.LeftTopCornerX;
-			LeftTopCornerY = _other.LeftTopCornerY;
-			return *this;
-		}
-
-		s64 Width;
-		s64 Height;
-		s32 LeftTopCornerX;
-		s32 LeftTopCornerY;
-	};
 }
-#endif //SHAREDSTRUCTS_H

@@ -1,4 +1,4 @@
-#include "..\Header Files\Scene.h"
+#include "Scene.h"
 #include <fstream>
 #include "Log.h"
 

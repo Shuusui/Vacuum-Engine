@@ -2,7 +2,6 @@
 
 #include "Log.h"
 #include "Util.h"
-#include "RendererManager.h"
 
 namespace Protostar
 {
@@ -429,7 +428,7 @@ namespace Protostar
 		return m_wndHandle;
 	}
 
-	SWindowDimParams PMainWindow::GetCurrentDim() const 
+	PWindowDimParams PMainWindow::GetCurrentDim() const 
 	{
 		return m_windowInfo.DimParams;
 	}

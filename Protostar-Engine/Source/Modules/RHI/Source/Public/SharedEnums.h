@@ -1,6 +1,4 @@
-#ifndef SHAREDENUMS_H
-#define SHAREDENUMS_H
-
+#pragma once
 
 namespace Protostar
 {
@@ -10,4 +8,3 @@ namespace Protostar
 		VULKAN
 	};
 }
-#endif //SHAREDENUMS_H

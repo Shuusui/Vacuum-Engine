@@ -1,7 +1,6 @@
-#ifndef ECSMANAGER_H
-#define ECSMANAGER_H
+#pragma once
 
-#include "ECS/Entt/Header Files/entt.hpp"
+#include "..\Private\Entt\entt.hpp"
 
 namespace Protostar
 {
@@ -22,4 +21,3 @@ namespace Protostar
 		entt::registry m_registry; 
 	};
 }
-#endif //ECSMANAGER_H

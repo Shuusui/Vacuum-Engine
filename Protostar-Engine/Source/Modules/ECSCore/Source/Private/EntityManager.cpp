@@ -1,5 +1,5 @@
-#include "..\Header Files\EntityManager.h"
-#include "ECS\Entities\Header Files\BaseEntity.h"
+#include "EntityManager.h"
+#include "Entities\BaseEntity.h"
 
 Protostar::CEntityManager* Protostar::CEntityManager::s_entityManager = nullptr;
 

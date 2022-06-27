@@ -1,4 +1,4 @@
-#include "..\Header Files\BaseObject.h"
+#include "BaseObject.h"
 #include "GlobalDefinitions.h"
 #include <atomic>
 

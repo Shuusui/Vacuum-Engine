@@ -1,9 +1,7 @@
-#ifndef TRANSFORMCOMPONENT_H
-#define TRANSFORMCOMPONENT_H
+#pragma once
 
 #include "BaseComponent.h"
 #include "MathExt.h"
-
 
 namespace Protostar
 {
@@ -17,9 +15,7 @@ namespace Protostar
 
 		virtual void OnSave() override
 		{
-
 		}
 	};
 }
 
-#endif //TRANSFORMCOMPONENT_H

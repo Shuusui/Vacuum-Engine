@@ -1,5 +1,4 @@
-#ifndef BASEOBJECT_H
-#define BASEOBJECT_H
+#pragma once
 
 #include "Guid.h"
 #include <filesystem>
@@ -58,4 +57,3 @@ namespace Protostar
 		std::string m_className;
 	};
 }
-#endif //BASEOBJECT_H

@@ -1,5 +1,4 @@
-#ifndef ENTITYMANAGER_H
-#define ENTITYMANAGER_H
+#pragma once
 
 #include <vector>
 
@@ -24,4 +23,3 @@ namespace Protostar
 		std::vector<PBaseEntity*> m_entities;
 	};
 }
-#endif //ENTITYMANAGER_H
