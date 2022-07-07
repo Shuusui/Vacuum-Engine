@@ -1,3 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Source\AppGUI\Private\AppMenuBar.cpp">
+      <Filter>AppGUI\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AppGUI\Private\EditorFPS.cpp">
+      <Filter>AppGUI\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AppGUI\Private\LogWindow.cpp">
+      <Filter>AppGUI\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\GUI.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ProjectGUI\Private\ContentBrowser.cpp">
+      <Filter>ProjectGUI\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ProjectGUI\Private\EntityEditor.cpp">
+      <Filter>ProjectGUI\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ProjectGUI\Private\ProjectGUI.cpp">
+      <Filter>ProjectGUI\Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\AppGUI\Public\AppMenuBar.h">
+      <Filter>AppGUI\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AppGUI\Public\EditorFPS.h">
+      <Filter>AppGUI\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AppGUI\Public\LogWindow.h">
+      <Filter>AppGUI\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ProjectGUI\Public\ContentBrowser.h">
+      <Filter>ProjectGUI\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ProjectGUI\Public\EntityEditor.h">
+      <Filter>ProjectGUI\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ProjectGUI\Public\ProjectGUI.h">
+      <Filter>ProjectGUI\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\GUI.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="AppGUI">
+      <UniqueIdentifier>{ff98aff4-38a4-f8e4-f58c-cdb6448a5229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppGUI\Private">
+      <UniqueIdentifier>{c9b1f3c5-4f4c-5b23-c942-fb8caab81714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AppGUI\Public">
+      <UniqueIdentifier>{1ed81ebf-b9ca-4046-2999-7f795274bc5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private">
+      <UniqueIdentifier>{2f08f947-80c3-62ca-d531-096aa1d110f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProjectGUI">
+      <UniqueIdentifier>{386dd5da-0d0d-55f2-0ec0-9d7a89541a74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProjectGUI\Private">
+      <UniqueIdentifier>{cd8d4f33-10f3-602e-097b-415a5192928e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProjectGUI\Public">
+      <UniqueIdentifier>{34861316-abda-f0e6-2d9b-0e0e71055bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public">
+      <UniqueIdentifier>{ed7b063d-2ffe-7746-470d-d6ccf64d05ed}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
 </Project>
