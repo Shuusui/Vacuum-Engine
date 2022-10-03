@@ -10,4 +10,4 @@
 #pragma warning(default : 28020)
 #pragma warning(default : 26495)
 
-using PJson = nlohmann::json;
+using Json = nlohmann::json;

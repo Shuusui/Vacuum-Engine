@@ -9,5 +9,10 @@ namespace Protostar
         public FileSystem()
         {
         }
+        public override void ConfigureAll(Configuration configuration, Target target)
+        {
+            base.ConfigureAll(configuration, target);
+            configuration.AddPublicDependency<MainCore>(target);
+        }
     }
 }

@@ -6,14 +6,19 @@
 #include "GlobalDefinitions.h"
 #include "GlobalConstants.h"
 
-namespace Protostar
+namespace Protostar::Core
 {
 	/**
 		* A const char* to wchar_t* formatting
 		* @param str The string which should get formatted to a wchar_t*
 		* @return The formatted wchar_t* if it was successful or nullptr
 		*/
-	static const char* WideCharToChar(const wchar_t* _wStr)
+		/**
+		* A const char* to wchar_t* formatting
+		* @param str The string which should get formatted to a wchar_t*
+		* @return The formatted wchar_t* if it was successful or nullptr
+		*/
+	inline static const char* WideCharToChar(const wchar_t* _wStr)
 	{
 		size_t outSize = wcslen(_wStr) + 1;
 		char* outStr = new char[outSize];
@@ -22,7 +27,7 @@ namespace Protostar
 	}
 
 	/**
-		* Printf formatting for a string 
+		* Printf formatting for a string
 		* @param _string The initial string which will get formatted
 		* @param ... The variadic params which should get inserted in the string
 		* @return The formatted string
@@ -30,7 +35,7 @@ namespace Protostar
 	template<typename... Args>
 	static std::string Printf(const std::string& _format, Args... args)
 	{
-		char tempStr[Print::PRINTF_SMALL_BUFFER_SIZE] = {};
+		char tempStr[PRINTF_SMALL_BUFFER_SIZE] = {};
 		const s32 writtenSize = std::snprintf(tempStr, 50, _format.c_str(), args...);
 		if (writtenSize > 0)
 		{
@@ -49,20 +54,24 @@ namespace Protostar
 	* Gets the last error as a string representative
 	* @return The error message of GetLastError() as std::wstring representative
 	*/
-	static std::wstring GetLastErrorString()
+	/**
+	* Gets the last error as a string representative
+	* @return The error message of GetLastError() as std::wstring representative
+	*/
+	inline static std::wstring GetLastErrorString()
 	{
 		LPVOID lpMsgBuf;
-		FormatMessage(	FORMAT_MESSAGE_ALLOCATE_BUFFER		|
-						FORMAT_MESSAGE_FROM_SYSTEM			|
-						FORMAT_MESSAGE_IGNORE_INSERTS		,
-						nullptr								,
-						GetLastError()						,
-						MAKELANGID(
-								LANG_NEUTRAL					,
-								SUBLANG_DEFAULT				),
-						(LPTSTR)&lpMsgBuf					,
-						NULL								,
-						nullptr								);
+		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			nullptr,
+			GetLastError(),
+			MAKELANGID(
+				LANG_NEUTRAL,
+				SUBLANG_DEFAULT),
+			(LPTSTR)&lpMsgBuf,
+			NULL,
+			nullptr);
 
 		return std::move((LPCTSTR)lpMsgBuf);
 	}

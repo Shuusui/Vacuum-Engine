@@ -28,38 +28,38 @@ TEST(MathExt_Test, FloatCompare)
 TEST(Guid_Test, Guid)
 {
 	using namespace Protostar;
-	PGuid guid = PGuid("d4d1e188312b43e2af7d972acecbd0fc");
+	Guid guid = Guid("d4d1e188312b43e2af7d972acecbd0fc");
 	EXPECT_TRUE(guid.IsValid());
 	EXPECT_STREQ("d4d1e188312b43e2af7d972acecbd0fc", guid.ToString().c_str());
 	EXPECT_STREQ("d4d1e188-312b-43e2-af7d-972acecbd0fc", guid.ToString(EGuidFormats::DigitsWithHyphens).c_str());
 	EXPECT_STREQ("{d4d1e188-312b-43e2-af7d-972acecbd0fc}", guid.ToString(EGuidFormats::DigitsWithHyphensInBraces).c_str());
 	EXPECT_STREQ("(d4d1e188-312b-43e2-af7d-972acecbd0fc)", guid.ToString(EGuidFormats::DigitsWithHyphensInParentheses).c_str());
 
-	guid = PGuid(guid.ToString(EGuidFormats::DigitsWithHyphens), EGuidFormats::DigitsWithHyphens);
+	guid = Guid(guid.ToString(EGuidFormats::DigitsWithHyphens), EGuidFormats::DigitsWithHyphens);
 	EXPECT_STREQ("d4d1e188312b43e2af7d972acecbd0fc", guid.ToString().c_str());
 	EXPECT_STREQ("d4d1e188-312b-43e2-af7d-972acecbd0fc", guid.ToString(EGuidFormats::DigitsWithHyphens).c_str());
 	EXPECT_STREQ("{d4d1e188-312b-43e2-af7d-972acecbd0fc}", guid.ToString(EGuidFormats::DigitsWithHyphensInBraces).c_str());
 	EXPECT_STREQ("(d4d1e188-312b-43e2-af7d-972acecbd0fc)", guid.ToString(EGuidFormats::DigitsWithHyphensInParentheses).c_str());
 
-	guid = PGuid(guid.ToString(EGuidFormats::DigitsWithHyphensInBraces), EGuidFormats::DigitsWithHyphensInBraces);
+	guid = Guid(guid.ToString(EGuidFormats::DigitsWithHyphensInBraces), EGuidFormats::DigitsWithHyphensInBraces);
 	EXPECT_STREQ("d4d1e188312b43e2af7d972acecbd0fc", guid.ToString().c_str());
 	EXPECT_STREQ("d4d1e188-312b-43e2-af7d-972acecbd0fc", guid.ToString(EGuidFormats::DigitsWithHyphens).c_str());
 	EXPECT_STREQ("{d4d1e188-312b-43e2-af7d-972acecbd0fc}", guid.ToString(EGuidFormats::DigitsWithHyphensInBraces).c_str());
 	EXPECT_STREQ("(d4d1e188-312b-43e2-af7d-972acecbd0fc)", guid.ToString(EGuidFormats::DigitsWithHyphensInParentheses).c_str());
 
-	guid = PGuid(guid.ToString(EGuidFormats::DigitsWithHyphensInParentheses), EGuidFormats::DigitsWithHyphensInParentheses);
+	guid = Guid(guid.ToString(EGuidFormats::DigitsWithHyphensInParentheses), EGuidFormats::DigitsWithHyphensInParentheses);
 	EXPECT_STREQ("d4d1e188312b43e2af7d972acecbd0fc", guid.ToString().c_str());
 	EXPECT_STREQ("d4d1e188-312b-43e2-af7d-972acecbd0fc", guid.ToString(EGuidFormats::DigitsWithHyphens).c_str());
 	EXPECT_STREQ("{d4d1e188-312b-43e2-af7d-972acecbd0fc}", guid.ToString(EGuidFormats::DigitsWithHyphensInBraces).c_str());
 	EXPECT_STREQ("(d4d1e188-312b-43e2-af7d-972acecbd0fc)", guid.ToString(EGuidFormats::DigitsWithHyphensInParentheses).c_str());
 	guid.Invalidate();
 	EXPECT_FALSE(guid.IsValid());
-	guid = PGuid::NewGuid();
+	guid = Guid::NewGuid();
 	EXPECT_TRUE(guid.IsValid());
-	PGuid guid2 = guid;
+	Guid guid2 = guid;
 	EXPECT_TRUE(guid == guid2);
 	EXPECT_FALSE(guid != guid2);
-	PGuid guid3 = PGuid::NewGuid();
+	Guid guid3 = Guid::NewGuid();
 	EXPECT_FALSE(guid == guid3);
 	EXPECT_TRUE(guid != guid3);
 }

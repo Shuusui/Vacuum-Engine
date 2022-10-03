@@ -1,19 +1,26 @@
 #pragma once
 
+#ifdef FILESYSTEM_LIBRARY
+	#define FILESYSTEM_API __declspec(dllexport)
+#else
+	#define FILESYSTEM_API __declspec(dllimport)
+#endif
+
 #include <filesystem>
 #include <functional>
 #include <fstream>
 #include "FileTreeObject.h"
+#include "Logger.h"
 
-namespace Protostar
+namespace Protostar::Core
 {
-	class PFilesystem
+	class FILESYSTEM_API Filesystem
 	{
 	public:
 		template<typename T>
-		static PTreeObject<T> GenerateFileTree(const std::filesystem::path& _basePath, const std::function<bool(const std::filesystem::path&, PTreeNode<T>&)>& _predicate = {}, const std::vector<std::filesystem::path>& _exts = {})
+		static TreeObject<T> GenerateFileTree(const std::filesystem::path& _basePath, const std::function<bool(const std::filesystem::path&, TreeNode<T>&)>& _predicate = {}, const std::vector<std::filesystem::path>& _exts = {})
 		{
-			PTreeObject<T> treeObject = PTreeObject<T>();
+			TreeObject<T> treeObject = TreeObject<T>();
 			treeObject.Path = _basePath;
 
 			if (!_predicate)
@@ -26,7 +33,7 @@ namespace Protostar
 			{
 				if (std::filesystem::is_directory(path))
 				{
-					PTreeObject<T> subTree = PTreeObject<T>();
+					TreeObject<T> subTree = TreeObject<T>();
 					subTree.Path = path;
 					FillTreeObject(subTree, path, _predicate, _exts);
 					treeObject.SubDirs.push_back(subTree);
@@ -43,7 +50,7 @@ namespace Protostar
 
 				if (_predicate)
 				{
-					PTreeNode<T> node = {};
+					TreeNode<T> node = {};
 					node.Path = path;
 					if (_predicate(path, node))
 					{
@@ -55,30 +62,17 @@ namespace Protostar
 			return treeObject;
 		}
 
-		static bool HasParentDir(const std::filesystem::path& _path, const std::filesystem::path& _parentDir)
-		{
-			if (!_path.has_parent_path() || _path == std::filesystem::current_path() || _path == _path.root_path())
-			{
-				return false;
-			}
-
-			std::filesystem::path parentPath = _path.parent_path();
-			if (parentPath.filename() != _parentDir)
-			{
-				return HasParentDir(parentPath, _parentDir);
-			}
-			return true;
-		}
+		static bool HasParentDir(const std::filesystem::path& _path, const std::filesystem::path& _parentDir);
 
 	private:
 		template<typename T>
-		static void FillTreeObject(PTreeObject<T>& _treeObj, const std::filesystem::path& _path, const std::function<bool(const std::filesystem::path&, PTreeNode<T>&)>& _predicate, const std::vector<std::filesystem::path>& _exts)
+		static void FillTreeObject(TreeObject<T>& _treeObj, const std::filesystem::path& _path, const std::function<bool(const std::filesystem::path&, TreeNode<T>&)>& _predicate, const std::vector<std::filesystem::path>& _exts)
 		{
 			for (const std::filesystem::path& path : std::filesystem::directory_iterator(_path))
 			{
 				if(std::filesystem::is_directory(path))
 				{
-					PTreeObject<T> subTree = PTreeObject<T>();
+					TreeObject<T> subTree = TreeObject<T>();
 					subTree.Path = path;
 					FillTreeObject(subTree, path, _predicate, _exts);
 					_treeObj.SubDirs.push_back(subTree);
@@ -93,7 +87,7 @@ namespace Protostar
 					}
 				}
 
-				PTreeNode<T> node = {};
+				TreeNode<T> node = {};
 				node.Path = path;
 				if (_predicate(path, node))
 				{
@@ -102,16 +96,6 @@ namespace Protostar
 			}
 		}
 
-		static bool CheckExtensions(const std::filesystem::path& _path, const std::vector<std::filesystem::path>& _exts)
-		{
-			for (const std::filesystem::path& ext : _exts)
-			{
-				if (_path.extension() != ext)
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+		static bool CheckExtensions(const std::filesystem::path& _path, const std::vector<std::filesystem::path>& _exts);
 	};
 }

@@ -11,92 +11,70 @@
 #include "Json.h"
 #include "Guid.h"
 
-namespace Protostar
+namespace Protostar::Core
 {
-	struct PPSOInfo
+	/*struct PPSOInfo
 	{
 		std::vector<D3D12_INPUT_ELEMENT_DESC> InputElementDescs;
-		std::pair<PGuid, ID3D12RootSignature*> RootSignature;
-		std::pair<PGuid, ID3DBlob*> VertexShader;
-		std::pair<PGuid, ID3DBlob*> PixelShader;
+		std::pair<Guid, ID3D12RootSignature*> RootSignature;
+		std::pair<Guid, ID3DBlob*> VertexShader;
+		std::pair<Guid, ID3DBlob*> PixelShader;
 		u32 NodeMask;
 		D3D12_BLEND_DESC BlendDesc;
 		D3D12_RASTERIZER_DESC RasterizerDesc;
 		D3D12_DEPTH_STENCIL_DESC DepthStencilDesc;
 		ID3D12PipelineState** PipelineState;
-	};	
+	};*/
 
-	struct SRendererCreationInfo
+	struct RendererCreationInfo
 	{
-		ERenderAPIs RenderApi;
-		u32 Width;
-		u32 Height;
+		RenderAPIs RenderApi;
+		s32 Width;
+		s32 Height;
 		bool bVSync;
 		void* WndHandle;
 
-		SRendererCreationInfo()
-			:RenderApi(ERenderAPIs::DX12)
-			,Width(-1)
-			,Height(-1)
-			,bVSync(false)
-			,WndHandle(nullptr)
+		RendererCreationInfo()
+			:RenderApi(RenderAPIs::DX12)
+			, Width(-1)
+			, Height(-1)
+			, bVSync(false)
+			, WndHandle(nullptr)
 		{
 		}
 
-		SRendererCreationInfo(ERenderAPIs _renderApi, u32 _width, u32 _height, bool _bVsync, void* _wndHandle)
+		RendererCreationInfo(RenderAPIs _renderApi, u32 _width, u32 _height, bool _bVsync, void* _wndHandle)
 			:RenderApi(_renderApi)
-			,Width(_width)
-			,Height(_height)
-			,bVSync(_bVsync)
-			,WndHandle(_wndHandle)
+			, Width(_width)
+			, Height(_height)
+			, bVSync(_bVsync)
+			, WndHandle(_wndHandle)
 		{
-		}
-
-		SRendererCreationInfo(const SRendererCreationInfo&) = default;
-
-		SRendererCreationInfo(SRendererCreationInfo&& _other) noexcept
-			:RenderApi(std::move(_other.RenderApi))
-			,Width(std::move(_other.Width))
-			,Height(std::move(_other.Height))
-			,bVSync(std::move(_other.bVSync))
-			,WndHandle(std::move(_other.WndHandle))
-		{
-			_other = SRendererCreationInfo();
-		}
-
-		SRendererCreationInfo& operator=(const SRendererCreationInfo& _other)
-		{
-			RenderApi = _other.RenderApi;
-			Width = _other.Width;
-			Height = _other.Height;
-			bVSync = _other.bVSync;
-			WndHandle = _other.WndHandle;
-			return *this;
 		}
 	};
 
-	struct SVertex
-	{
-		DirectX::XMFLOAT3 Position;
-		DirectX::XMFLOAT3 Normal;
-		DirectX::XMFLOAT2 TextureCoordinate;
-	};
+	//struct Vertex
+	//{
+	//	DirectX::XMFLOAT3 Position;
+	//	DirectX::XMFLOAT3 Normal;
+	//	DirectX::XMFLOAT2 TextureCoordinate;
+	//};
 
-	struct SMesh
-	{
-		SMesh() = default;
+	//struct Mesh
+	//{
+	//	Mesh() = default;
 
-		SMesh(const SMesh& _other) = default;
+	//	Mesh(const Mesh& _other) = default;
 
-		SMesh(SMesh&& _other) noexcept
-			:Vertices(std::move(_other.Vertices))
-			,Indices(std::move(_other.Indices))
-		{
-		}
+	//	Mesh(Mesh&& _other) noexcept
+	//		:Vertices(std::move(_other.Vertices))
+	//		, Indices(std::move(_other.Indices))
+	//	{
+	//	}
 
-		SMesh& operator=(const SMesh&) = default;
+	//	Mesh& operator=(const Mesh&) = default;
 
-		std::vector<SVertex> Vertices;
-		std::vector<u32> Indices;
-	};
+	//	std::vector<Vertex> Vertices;
+	//	std::vector<u32> Indices;
+	//};
 }

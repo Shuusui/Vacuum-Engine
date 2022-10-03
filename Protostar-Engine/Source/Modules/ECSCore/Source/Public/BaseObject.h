@@ -18,7 +18,7 @@ namespace Protostar
 			m_objectPath = _objectPath;
 		}
 
-		PGuid GetGuid() const
+		Guid GetGuid() const
 		{
 			return m_guid;
 		}
@@ -50,7 +50,7 @@ namespace Protostar
 	protected:
 		std::filesystem::path m_objectPath;
 		std::filesystem::path m_oldPath;
-		PGuid m_guid;
+		Guid m_guid;
 		std::string m_objectName;
 		std::string m_oldName;
 	private: 

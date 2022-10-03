@@ -1,25 +1,22 @@
 #pragma once
 
 #include "GlobalDefinitions.h"
+#include "MainCore.h"
 #include <ctime>
 
-namespace Protostar
+namespace Protostar::Core
 {
-	class PTimer
+	class MAINCORE_API Timer
 	{
 	public:
-		static bool Create();
-		static s64 GetTicksPerSecond();
-		static s64 GetTime();
-		static float GetDeltaSeconds();
-		static void OnUpdate();
-		PTimer();
+		Timer();
+		s64 GetTicksPerSecond() const;
+		s64 GetTime() const;
+		float GetDeltaSeconds() const;
 		void Update();
 	private:
-		static PTimer* s_timer;
-
-		clock_t m_ticksPerSecond;
-		clock_t m_time;
+		s64 m_ticksPerSecond;
+		s64 m_time;
 		float m_deltaSeconds;
 	};
 }

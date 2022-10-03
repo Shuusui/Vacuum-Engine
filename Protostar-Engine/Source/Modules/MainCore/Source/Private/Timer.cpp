@@ -1,64 +1,35 @@
 #include "Timer.h"
 
-Protostar::PTimer* Protostar::PTimer::s_timer = nullptr;
-
-bool Protostar::PTimer::Create()
+namespace Protostar::Core
 {
-	if (s_timer)
+	Timer::Timer()
+		:m_ticksPerSecond(0)
+		, m_time(std::clock())
+		, m_deltaSeconds(0.0f)
 	{
-		return false;
 	}
-	s_timer = new PTimer();
-	return true;
-}
 
-s64 Protostar::PTimer::GetTicksPerSecond()
-{
-	if (!s_timer)
+	s64 Timer::GetTicksPerSecond()  const
 	{
-		return -1;
+		return m_ticksPerSecond;
 	}
-	return s_timer->m_ticksPerSecond;
-}
 
-s64 Protostar::PTimer::GetTime()
-{
-	if (!s_timer)
+	s64 Timer::GetTime() const
 	{
-		return -1;
+		return m_time;
 	}
-	return s_timer->m_time;
-}
 
-float Protostar::PTimer::GetDeltaSeconds()
-{
-	if (!s_timer)
+	float Timer::GetDeltaSeconds() const
 	{
-		return -1.0f;
+		return m_deltaSeconds;
 	}
-	return s_timer->m_deltaSeconds;
-}
 
-void Protostar::PTimer::OnUpdate()
-{
-	if (s_timer)
+	void Timer::Update()
 	{
-		s_timer->Update();
+		s64 currentTime = std::clock();
+		s64 tickDiff = currentTime - m_time;
+		m_deltaSeconds = static_cast<float>(tickDiff) / CLOCKS_PER_SEC;
+		m_ticksPerSecond = static_cast<s64>(60 / m_deltaSeconds);
+		m_time = currentTime;
 	}
-}
-
-Protostar::PTimer::PTimer()
-	:m_ticksPerSecond(0)
-	,m_time(std::clock())
-	,m_deltaSeconds(0.0f)
-{
-}
-
-void Protostar::PTimer::Update()
-{
-	clock_t currentTime = std::clock();
-	clock_t tickDiff = currentTime - m_time;
-	m_deltaSeconds = static_cast<float>(tickDiff) / CLOCKS_PER_SEC;
-	m_ticksPerSecond = static_cast<clock_t>(60 / m_deltaSeconds);
-	m_time = currentTime;
 }

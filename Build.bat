@@ -1,2 +1,2 @@
-Sharpmake-Build\Sharpmake.Application.exe "/sources('Sharpmake-Build/Protostar.Main.Sharpmake.cs') /verbose /devenv(22)"
+Extern\Sharpmake\Build\Sharpmake.Application.exe "/sources('Protostar.Main.Sharpmake.cs') /verbose /devenv(22)"
 pause

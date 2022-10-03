@@ -7,7 +7,7 @@ static std::atomic_int64_t s_ObjectCounter(0);
 #endif
 
 Protostar::PBaseObject::PBaseObject(const std::string& _objectName)
-	:m_guid(PGuid::NewGuid())
+	:m_guid(Guid::NewGuid())
 	,m_objectName(_objectName)
 	,m_className(typeid(this).raw_name())
 

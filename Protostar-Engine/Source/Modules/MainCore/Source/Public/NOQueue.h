@@ -2,26 +2,26 @@
 
 #include <queue>
 
-namespace Protostar
+namespace Protostar::Core
 {
 	/**
-		* A n-1 thread safe queue (n contributor, 1 substractor)
-		*/
+	* A n-1 thread safe queue (n contributor, 1 substractor)
+	*/
 	template<typename T>
-	class PNOQueue
+	class NOQueue
 	{
 	public:
-		PNOQueue()
+		NOQueue()
 			: m_queue()
 		{
 		}
 
-		PNOQueue(const PNOQueue& _other)
+		NOQueue(const NOQueue& _other)
 			: m_queue(_other.m_queue)
 		{
 		}
 
-		PNOQueue(PNOQueue&& _other)
+		NOQueue(NOQueue&& _other)
 			: m_queue(std::move(_other.m_queue))
 		{
 		}

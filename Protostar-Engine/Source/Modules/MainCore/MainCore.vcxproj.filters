@@ -1,10 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="Source\Private\Guid.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Guid_Win.cpp">
       <Filter>Private</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Log.cpp">
+    <ClCompile Include="Source\Private\Logger.cpp">
       <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="Source\Private\ThreadPool.cpp">
@@ -13,7 +16,13 @@
     <ClCompile Include="Source\Private\Timer.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Util.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\Window.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\WindowManager.cpp">
       <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
@@ -23,9 +32,6 @@
     </ClInclude>
     <ClInclude Include="Source\Private\json.hpp">
       <Filter>Private</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Public\Console.h">
-      <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\GlobalConstants.h">
       <Filter>Public</Filter>
@@ -42,7 +48,10 @@
     <ClInclude Include="Source\Public\Json.h">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Log.h">
+    <ClInclude Include="Source\Public\Logger.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\MainCore.h">
       <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\NOQueue.h">
@@ -58,6 +67,9 @@
       <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\Window.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\WindowManager.h">
       <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>

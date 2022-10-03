@@ -2,7 +2,7 @@
 
 namespace Protostar
 {
-	enum class ERenderAPIs
+	enum class RenderAPIs
 	{
 		DX12,
 		VULKAN

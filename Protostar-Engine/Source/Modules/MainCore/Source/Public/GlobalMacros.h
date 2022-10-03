@@ -1,6 +1,6 @@
 #pragma once
 
-#define PRINTF(VALUE, ...) Protostar::Printf(VALUE, __VA_ARGS__)
+#define PRINTF(VALUE, ...) Protostar::Core::Printf(VALUE, __VA_ARGS__)
 
 
 #define WIDE1(x) L##x

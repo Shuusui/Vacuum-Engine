@@ -10,8 +10,8 @@ namespace Protostar
 	public:
 		CMeshComponent()
 			:CBaseComponent("Mesh Component")
-			, m_guid(PGuid::NewGuid())
-			, m_modelGuid(PGuid())
+			, m_guid(Guid::NewGuid())
+			, m_modelGuid(Guid())
 		{
 
 		}
@@ -20,29 +20,29 @@ namespace Protostar
 		{
 		}
 
-		PGuid GetGuid() const
+		Guid GetGuid() const
 		{
 			return m_guid;
 		}
 
-		PGuid GetModelGuid() const
+		Guid GetModelGuid() const
 		{
 			return m_modelGuid;
 		}
 
-		void SetGuid(const PGuid& _guid)
+		void SetGuid(const Guid& _guid)
 		{
 			m_guid = _guid;
 		}
 
-		void SetModelGuid(const PGuid& _guid)
+		void SetModelGuid(const Guid& _guid)
 		{
 			m_modelGuid = _guid;
 		}
 
 	private:
-		PGuid m_guid;
-		PGuid m_modelGuid;
+		Guid m_guid;
+		Guid m_modelGuid;
 	};
 }
 

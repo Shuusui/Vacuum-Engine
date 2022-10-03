@@ -4,15 +4,16 @@
 
 #ifdef _WIN
 #include "Windows.h"
-namespace Protostar
+
+namespace Protostar::Core
 {
-	PGuid PGuid::NewGuid()
+	Guid Guid::NewGuid()
 	{
-		PGuid returnGuid;
+		Guid returnGuid;
 		HRESULT result = CoCreateGuid((GUID*)&returnGuid);
 		if (result != S_OK)
 		{
-			return PGuid();
+			return Guid();
 		}
 		return returnGuid;
 	}

@@ -1,50 +1,49 @@
 #pragma once
 
-#include "d3d12.h"
 #include "Guid.h"
 #include <unordered_map>
 #include <filesystem>
 #include "Json.h"
 
 
-namespace Protostar
+namespace Protostar::Core
 {
-	struct PSamplerInfo
-	{
-		std::string Name;
-		std::vector<D3D12_STATIC_SAMPLER_DESC> SamplerDescs;
-	};
+	//struct SamplerInfo
+	//{
+	//	std::string Name;
+	//	std::vector<D3D12_STATIC_SAMPLER_DESC> SamplerDescs;
+	//};
 
-	struct PRootInfo
-	{
-		PSamplerInfo Info;
-		ID3D12RootSignature* RootSignature;
-	};
+	//struct RootInfo
+	//{
+	//	SamplerInfo Info;
+	//	ID3D12RootSignature* RootSignature;
+	//};
 
-	class PRootSignatureLibrary
-	{
-	public:
-		static void Create(const std::filesystem::path& _projectPath);
-		static void Destroy();
-		static PRootSignatureLibrary* GetHandle();
+	//class RootSignatureLibrary
+	//{
+	//public:
+	//	static void Create(const std::filesystem::path& _projectPath);
+	//	static void Destroy();
+	//	static RootSignatureLibrary* GetHandle();
 
-		bool CreateRootSignature(const PSamplerInfo& _info);
+	//	bool CreateRootSignature(const SamplerInfo& _info);
 
-		PRootInfo GetRootInfo(const PGuid& _guid) const
-		{
-			return m_rootInfos.at(_guid);
-		}
+	//	RootInfo GetRootInfo(const Guid& _guid) const
+	//	{
+	//		return m_rootInfos.at(_guid);
+	//	}
 
-		~PRootSignatureLibrary();
-	private:
-		PRootSignatureLibrary(const std::filesystem::path& _projectPath);
-		void Save();
-		void Load();
-		bool SerializeRootSignature(const std::vector<D3D12_STATIC_SAMPLER_DESC>& _descs, ID3DBlob*& _blob);
+	//	~RootSignatureLibrary();
+	//private:
+	//	RootSignatureLibrary(const std::filesystem::path& _projectPath);
+	//	void Save();
+	//	void Load();
+	//	bool SerializeRootSignature(const std::vector<D3D12_STATIC_SAMPLER_DESC>& _descs, ID3DBlob*& _blob);
 
-		static PRootSignatureLibrary* s_rootSignatureLib;
-		std::filesystem::path m_projectPath;
-		std::filesystem::path m_rootSignatureLibIniPath;
-		std::unordered_map<PGuid, PRootInfo> m_rootInfos;
-	};
+	//	static RootSignatureLibrary* s_rootSignatureLib;
+	//	std::filesystem::path m_projectPath;
+	//	std::filesystem::path m_rootSignatureLibIniPath;
+	//	std::unordered_map<Guid, RootInfo> m_rootInfos;
+	//};
 }

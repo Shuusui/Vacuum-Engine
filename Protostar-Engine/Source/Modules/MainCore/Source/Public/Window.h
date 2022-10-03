@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GlobalDefinitions.h"
+#include "MainCore.h"
 
 #include <Windows.h>
 #include <utility>
@@ -9,165 +10,72 @@
 #include <unordered_map>
 #include <vector>
 
-
-namespace Protostar
+namespace Protostar::Core
 {
-	struct PWindowDimParams
+	struct MAINCORE_API WindowDimParams
 	{
-		PWindowDimParams()
-			:Width(-1)
-			, Height(-1)
-			, LeftTopCornerX(-1)
-			, LeftTopCornerY(-1)
-		{
-		};
-
-		PWindowDimParams(const PWindowDimParams& _other) = default;
-
-		PWindowDimParams(PWindowDimParams&& _other) noexcept
-			: Width(std::move(_other.Width))
-			, Height(std::move(_other.Height))
-			, LeftTopCornerX(std::move(_other.LeftTopCornerX))
-			, LeftTopCornerY(std::move(_other.LeftTopCornerY))
-		{
-			_other = PWindowDimParams();
-		}
-
-		PWindowDimParams& operator=(const PWindowDimParams& _other)
-		{
-			Width = _other.Width;
-			Height = _other.Height;
-			LeftTopCornerX = _other.LeftTopCornerX;
-			LeftTopCornerY = _other.LeftTopCornerY;
-			return *this;
-		}
-
 		s64 Width;
 		s64 Height;
 		s32 LeftTopCornerX;
 		s32 LeftTopCornerY;
 	};
 
-	struct PWindowClassParams
+	struct MAINCORE_API WindowClassParams
 	{
-		PWindowClassParams() = default;
-
-		PWindowClassParams(const PWindowClassParams& _other)
-			:Style(_other.Style)
-			,HInstance(_other.HInstance)
-			,ClassName(_other.ClassName)
-			,BackgroundColor(_other.BackgroundColor)
-		{
-		}
-
-		PWindowClassParams(PWindowClassParams&& _other) noexcept
-			:Style(std::move(_other.Style))
-			, HInstance(_other.HInstance)
-			, ClassName(std::move(_other.ClassName))
-			, BackgroundColor(std::move(_other.BackgroundColor))
-		{
-			_other.HInstance = nullptr;
-		}
-
-		UINT Style;
-		HINSTANCE HInstance;
 		LPCWSTR ClassName;
+		HINSTANCE HInstance;
 		HBRUSH BackgroundColor;
-
-
+		u32 Style;
 	};
 
-	struct PWindowCreationParams
+	struct MAINCORE_API WindowCreationParams
 	{
-		PWindowCreationParams() = default;
-
-		PWindowCreationParams(const PWindowCreationParams& _other)
-			:DwExStyle(_other.DwExStyle)
-			,DwStyle(_other.DwStyle)
-			,WindowName(_other.WindowName)
-			,ParentWindow(_other.ParentWindow)
-			,Menu(_other.Menu)
-			,LpParam(_other.LpParam)
-		{
-		}
-
-		PWindowCreationParams(PWindowCreationParams&& _other) noexcept
-			:DwExStyle(std::move(_other.DwExStyle))
-			, DwStyle(std::move(_other.DwStyle))
-			, WindowName(std::move(_other.WindowName))
-			, ParentWindow(std::move(_other.ParentWindow))
-			, Menu(std::move(_other.Menu))
-			, LpParam(std::move(_other.LpParam))
-		{
-			_other.ParentWindow = nullptr;
-			_other.Menu = nullptr;
-			_other.LpParam = nullptr;
-		}
-
-		DWORD DwExStyle;
-		DWORD DwStyle;
 		LPCWSTR WindowName;
+		u64 DwExStyle;
+		u64 DwStyle;
 		HWND ParentWindow;
 		HMENU Menu;
 		LPVOID LpParam;
 	};
 
-	struct PWindowInfo
+	struct MAINCORE_API WindowInfo
 	{
-		PWindowInfo() = default;
-
-		PWindowInfo(const PWindowInfo& _other)
-			:ClassParams(_other.ClassParams)
-			,DimParams(_other.DimParams)
-			,CreationParams(_other.CreationParams)
-		{
-		}
-
-		PWindowInfo(PWindowInfo&& _other) noexcept
-			:ClassParams(std::move(_other.ClassParams))
-			,DimParams(std::move(_other.DimParams))
-			,CreationParams(std::move(_other.CreationParams))
-		{
-		}
-
-		PWindowClassParams ClassParams;
-		PWindowDimParams DimParams;
-		PWindowCreationParams CreationParams;
+		WindowClassParams ClassParams;
+		WindowDimParams DimParams;
+		WindowCreationParams CreationParams;
 	};
 
-
-	class PMainWindow
+	class MAINCORE_API Window
 	{
 	public:
-		static void InitWindow(const PWindowInfo& _windowInfo);
+		void ShowWindow(const s32 _nCmdShow);
 
-		static bool Create(std::string& _errorMsg);
+		void UpdateWindow();
 
-		static void ShowAndUpdate(const s32 _nCmdShow);
-
-		static bool RunWindow(MSG& _msg);
-
-		static PMainWindow* GetWindowHandle();
+		bool Run(MSG& _msg);
 
 		void UpdateWindowPos(const s32 _x, const s32 _y);
 
 		void UpdateWindowSize(const s32 _width, const s32 _height);
 
-		void RegisterCallbackForWMEvents(const u32 _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func);
+		void RegisterEventCallback(const u32 _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func);
 
-		std::vector<std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>>& GetWMFunctions(u32 _wmEvent) const;
+		HWND GetWindowHandle() const;
 
-		HWND GetHwnd() const;
+		WindowDimParams GetCurrentDim() const;
 
-		PWindowDimParams GetCurrentDim() const;
-
-	private:
-		PMainWindow(const PWindowInfo& _windowInfo)
-			:m_windowInfo(_windowInfo)
-			,m_wndHandle(nullptr)
+		const std::vector<std::function<s32(HWND, u32, WPARAM, LPARAM)>>& GetEventFunctions(u32 _eventKey) const
 		{
-			m_wmEventMap = {
-				{WM_EXITSIZEMOVE, {}}, 
+			return m_eventMap.at(_eventKey);
+		}
+	private:
+		friend class WindowManager;
+
+		Window(const WindowInfo& _windowInfo)
+			: m_windowInfo(_windowInfo)
+			, m_wndHandle(nullptr)
+			, m_eventMap({
+				{WM_EXITSIZEMOVE, {}},
 				{WM_LBUTTONDOWN, {}},
 				{WM_RBUTTONDOWN, {}},
 				{WM_LBUTTONUP, {}},
@@ -180,12 +88,14 @@ namespace Protostar
 				{WM_KEYDOWN, {}},
 				{WM_KEYUP, {}},
 				{WM_CHAR,{}}
-			};
+				})
+		{
 		}
 
-		PWindowInfo m_windowInfo;
+		bool Create(std::string& _errorMsg);
+
+		WindowInfo m_windowInfo;
 		HWND m_wndHandle;
-		static PMainWindow* s_mainWindow;
-		std::unordered_map<u32, std::vector<std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>>> m_wmEventMap;
+		std::unordered_map<u32, std::vector<std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>>> m_eventMap;
 	};
 }

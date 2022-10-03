@@ -1,22 +1,21 @@
 #pragma once
 
 #include "GlobalDefinitions.h"
+#include "MainCore.h"
+#include <string>
 
-#include <system_error>
-#include <sstream>
-
-namespace Protostar
+namespace Protostar::Core
 {
-	enum class EGuidFormats
+	enum class GuidFormats
 	{
 		Digits,
-		DigitsWithHyphens, 
+		DigitsWithHyphens,
 		DigitsWithHyphensInBraces,
 		DigitsWithHyphensInParentheses
 	};
 
 	//this is just unreal engine like implementation of a GUID which uses windows provided Guid function to create it but uses own functions for make it usable as keys for maps etc. 
-	struct PGuid
+	struct MAINCORE_API Guid
 	{
 	public:
 		u32 A;
@@ -24,7 +23,7 @@ namespace Protostar
 		u32 C;
 		u32 D;
 
-		PGuid()
+		Guid()
 			: A(0)
 			, B(0)
 			, C(0)
@@ -32,82 +31,9 @@ namespace Protostar
 		{
 		}
 
-		PGuid(const std::string& _guidStr, const EGuidFormats _format = EGuidFormats::Digits)
-			: A(0)
-			, B(0)
-			, C(0)
-			, D(0)
-		{
-			if (_guidStr.empty())
-			{
-				return;
-			}
+		Guid(const std::string& _guidStr, const GuidFormats _format = GuidFormats::Digits);
 
-			std::stringstream stream;
-			u16 bFirst = 0;
-			u16 bSecond = 0;
-			u16 cFirst = 0;
-			u16 cSecond = 0;
-			std::string aSubStr = {};
-			std::string bFirstStr = {};
-			std::string bSecondStr = {};
-			std::string cFirstStr = {};
-			std::string cSecondStr = {};
-			std::string dSubStr = {};
-
-			switch (_format)
-			{
-			case EGuidFormats::Digits:
-				aSubStr = _guidStr.substr(0, 8);
-				bFirstStr = _guidStr.substr(8, 4);
-				bSecondStr = _guidStr.substr(12, 4);
-				cFirstStr = _guidStr.substr(16, 4);
-				cSecondStr = _guidStr.substr(20, 4);
-				dSubStr = _guidStr.substr(24, 8);
-				break;
-			case EGuidFormats::DigitsWithHyphens:
-				aSubStr = _guidStr.substr(0,8);
-				bFirstStr = _guidStr.substr(9, 4);
-				bSecondStr = _guidStr.substr(14, 4);
-				cFirstStr = _guidStr.substr(19, 4);
-				cSecondStr = _guidStr.substr(24, 4);
-				dSubStr = _guidStr.substr(28, 8);
-				break;
-			case EGuidFormats::DigitsWithHyphensInParentheses:
-			case EGuidFormats::DigitsWithHyphensInBraces:
-				aSubStr = _guidStr.substr(1, 8);
-				bFirstStr = _guidStr.substr(10, 4);
-				bSecondStr = _guidStr.substr(15, 4);
-				cFirstStr = _guidStr.substr(20, 4);
-				cSecondStr = _guidStr.substr(25, 4);
-				dSubStr = _guidStr.substr(29, 8);
-				break;
-			}
-
-			stream << std::hex << aSubStr.c_str();
-			stream >> A;
-			stream = {};
-			stream << std::hex << bFirstStr.c_str();
-			stream >> bFirst;
-			stream = {};
-			stream << std::hex << bSecondStr.c_str();
-			stream >> bSecond;
-			stream = {};
-			stream << std::hex << cFirstStr.c_str();
-			stream >> cFirst;
-			stream = {};
-			stream << std::hex << cSecondStr.c_str();
-			stream >> cSecond;
-			stream = {};
-			stream << std::hex << dSubStr.c_str();
-			stream >> D;
-			B = bSecond;
-			B |= bFirst << 16;
-			C = cSecond;
-			C |= cFirst << 16;
-		}
-
-		PGuid(const PGuid& _other)
+		Guid(const Guid& _other)
 			: A(_other.A)
 			, B(_other.B)
 			, C(_other.C)
@@ -115,7 +41,7 @@ namespace Protostar
 		{
 		}
 
-		PGuid(PGuid&& _other) noexcept
+		Guid(Guid&& _other) noexcept
 			: A(std::move(_other.A))
 			, B(std::move(_other.B))
 			, C(std::move(_other.C))
@@ -133,80 +59,11 @@ namespace Protostar
 			return (A | B | C | D) != 0;
 		}
 
-		std::string ToString(const EGuidFormats _format = EGuidFormats::Digits) const 
-		{
-			if (!IsValid())
-			{
-				return std::string();
-			}
+		std::string ToString(const GuidFormats _format = GuidFormats::Digits) const;
 
-			u16 bFirst = B >> 16;
-			u16 bSecond = 0;
-			bSecond |= B;
-			u16 cFirst = C >> 16;
-			u16 cSecond = 0;
-			cSecond |= C;
-			u64 dTemp = ((u64)cSecond) << 32;
-			dTemp |= D;
-			std::stringstream aStream;
-			std::stringstream bFirstStream;
-			std::stringstream bSecondStream;
-			std::stringstream cStream;
-			std::stringstream dStream;
+		static Guid NewGuid();
 
-			if (A <= 0xFFFFFFF)
-			{
-				aStream << '0';
-			}
-
-			if (bFirst <= 0xFFF)
-			{
-				bFirstStream << '0';
-			}
-
-			if (bSecond <= 0xFFF)
-			{
-				bSecondStream << '0';
-			}
-
-			if (cFirst < 0xFFF)
-			{
-				cStream << '0';
-			}
-
-			if (dTemp < 0xFFFFFFFFFFF)
-			{
-				dStream << '0';
-			}
-
-			aStream << std::hex << A;
-			bFirstStream << std::hex << bFirst;
-			bSecondStream << std::hex << bSecond;
-			cStream << std::hex << cFirst;
-			dStream << std::hex << dTemp;
-			std::stringstream resultStream;
-
-			switch (_format)
-			{
-			case EGuidFormats::Digits:
-				resultStream << aStream.str() << bFirstStream.str() << bSecondStream.str() << cStream.str() << dStream.str();
-				break;
-			case EGuidFormats::DigitsWithHyphens:
-				resultStream << aStream.str() << "-" << bFirstStream.str() << "-" << bSecondStream.str() << "-" << cStream.str() << "-" << dStream.str();
-				break;
-			case EGuidFormats::DigitsWithHyphensInBraces:
-				resultStream << "{" << aStream.str() << "-" << bFirstStream.str() << "-" << bSecondStream.str() << "-" << cStream.str() << "-" << dStream.str() << "}";
-				break;
-			case EGuidFormats::DigitsWithHyphensInParentheses:
-				resultStream << "(" << aStream.str() << "-" << bFirstStream.str() << "-" << bSecondStream.str() << "-" << cStream.str() << "-" << dStream.str() << ")";
-				break;
-			}
-			return resultStream.str();
-		}
-
-		static PGuid NewGuid();
-
-		void operator=(const PGuid& _other)
+		void operator=(const Guid& _other)
 		{
 			A = _other.A;
 			B = _other.B;
@@ -214,7 +71,7 @@ namespace Protostar
 			D = _other.D;
 		}
 
-		void operator=(PGuid&& _other) noexcept
+		void operator=(Guid&& _other) noexcept
 		{
 			A = std::move(_other.A);
 			B = std::move(_other.B);
@@ -222,22 +79,22 @@ namespace Protostar
 			D = std::move(_other.D);
 		}
 
-		friend bool operator==(const PGuid& _first, const PGuid& _second)
+		friend bool operator==(const Guid& _first, const Guid& _second)
 		{
 			return ((_first.A ^ _second.A) | (_first.B ^ _second.B) | (_first.C ^ _second.C) | (_first.D ^ _second.D)) == 0;
 		}
 
-		friend bool operator!=(const PGuid& _first, const PGuid& _second)
+		friend bool operator!=(const Guid& _first, const Guid& _second)
 		{
-			return ((_first.A ^ _second.A) | (_first.B ^ _second.B) | (_first.C ^ _second.C)| (_first.D ^ _second.D)) != 0;
+			return ((_first.A ^ _second.A) | (_first.B ^ _second.B) | (_first.C ^ _second.C) | (_first.D ^ _second.D)) != 0;
 		}
 
-		friend bool operator <(const PGuid& _first, const PGuid& _second)
+		friend bool operator <(const Guid& _first, const Guid& _second)
 		{
-			return	((_first.A < _second.A) ? true : ((_first.A > _second.A)? false :
-					((_first.B < _second.B) ? true : ((_first.B > _second.B)? false : 
-					((_first.C < _second.C) ? true : ((_first.C > _second.C)? false : 
-					((_first.D < _second.D) ? true : ((_first.D > _second.D)? false : false))))))));
+			return	((_first.A < _second.A) ? true : ((_first.A > _second.A) ? false :
+				((_first.B < _second.B) ? true : ((_first.B > _second.B) ? false :
+					((_first.C < _second.C) ? true : ((_first.C > _second.C) ? false :
+						((_first.D < _second.D) ? true : ((_first.D > _second.D) ? false : false))))))));
 		}
 	protected:
 
@@ -248,9 +105,9 @@ namespace Protostar
 
 namespace std
 {
-	template<> struct hash<Protostar::PGuid>
+	template<> struct hash<Protostar::Core::Guid>
 	{
-		size_t operator()(Protostar::PGuid _guid) const
+		size_t operator()(Protostar::Core::Guid _guid) const
 		{
 			const u64* guidPtr = reinterpret_cast<const u64*>(&_guid);
 			hash<u64> hash;

@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include <fstream>
-#include "Log.h"
+#include "Logger.h"
 
 Protostar::PScene::PScene(const std::filesystem::path& _scenePath)
 	:PBaseObject("")

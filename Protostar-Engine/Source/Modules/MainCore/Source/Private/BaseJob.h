@@ -6,17 +6,17 @@ namespace Protostar
 		* Don't use this class directly, please use derived classes to create jobs. This is just the base class for the queue.
 		* You can override this class with the execute function to make more implementations possible.
 		*/
-	class PBaseJob
+	class BaseJob
 	{
 	public:
 		/**
 			* Protected default constructor just for inheritance reasons
 			*/
-		PBaseJob() = default;
+		BaseJob() = default;
 		/**
 			* virtual destructor for inheritance purposes
 			*/
-		virtual ~PBaseJob() = default;
+		virtual ~BaseJob() = default;
 		/**
 			* pure virtual function which will get called of the thread 
 			*/

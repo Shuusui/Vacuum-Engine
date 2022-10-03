@@ -1,0 +1,76 @@
+﻿<Project>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <PlatformTarget Condition=" '$(Platform)' == '' ">AnyCPU</PlatformTarget>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>sharpmake_debug</RootNamespace>
+    <AssemblyName>sharpmake_debug</AssemblyName>
+    <TargetFramework>net5.0</TargetFramework>
+    <FileAlignment>512</FileAlignment>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>false</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>output\anycpu\debug</OutputPath>
+    <IntermediateOutputPath>obj\anycpu\debug</IntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE;_SHARPMAKE;_SHARPMAKE_0_18_3;_SHARPMAKE_0_18_X</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>CS1701,CS1702</NoWarn>
+    <LangVersion>7</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>output\anycpu\release</OutputPath>
+    <IntermediateOutputPath>obj\anycpu\release</IntermediateOutputPath>
+    <DefineConstants>TRACE;_SHARPMAKE;_SHARPMAKE_0_18_3;_SHARPMAKE_0_18_X</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>CS1701,CS1702</NoWarn>
+    <LangVersion>7</LangVersion>
+  </PropertyGroup>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+  <ItemGroup>
+    <Reference Include="Sharpmake">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Extern\Sharpmake\Build\Sharpmake.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sharpmake.Generators">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Extern\Sharpmake\Build\Sharpmake.Generators.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Protostar-Editor\Source\Modules\Management\Protostar.Management.Sharpmake.cs" />
+    <Compile Include="Protostar-Editor\Source\Modules\Protostar.Editor.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine-Test\Source\Modules\CoreMath_Test\Protostar.CoreMath_Test.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\CoreMath\Protostar.CoreMath.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\DX12\Protostar.DX12.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\ECSCore\Protostar.ECSCore.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\Engine\Protostar.Engine.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\FileSystem\Protostar.FileSystem.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\MainCore\Protostar.MainCore.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\RHI\Protostar.RHI.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\Renderer\Protostar.Renderer.Sharpmake.cs" />
+    <Compile Include="Protostar.Main.Sharpmake.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\launchSettings.json" />
+  </ItemGroup>
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+</Project>
