@@ -10,7 +10,7 @@
 *.userosscache
 *.sln.docstates
 **/*.sln
-**/*.vcxproj
+**/*.vcxproj*
 *.sln
 
 # User-specific files (MonoDevelop/Xamarin Studio)
