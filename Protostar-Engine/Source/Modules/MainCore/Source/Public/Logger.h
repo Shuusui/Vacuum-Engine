@@ -11,16 +11,16 @@
 
 #define LOGFORMAT(LOG) Protostar::Core::Printf("%s[%i] | %s", __FUNCTION__, __LINE__, LOG)
 
-#define PE_LOG(LOG) Logger::Log(LOGFORMAT(LOG))
-#define PE_LOG_F(LOG, ...) Logger::Log(Protostar::Core::Printf(LOGFORMAT(LOG), __VA_ARGS__))
+#define PE_LOG(LOG) Protostar::Core::Logger::Log(LOGFORMAT(LOG))
+#define PE_LOG_F(LOG, ...) Protostar::Core::Logger::Log(Protostar::Core::Printf(LOGFORMAT(LOG), __VA_ARGS__))
 #if _DEBUG
-#define PE_DEBUG_LOG(LOG) Logger::LogDebugString(LOGFORMAT(LOG))
+#define PE_DEBUG_LOG(LOG) Protostar::Core::Logger::LogDebugString(LOGFORMAT(LOG))
 #else
 #define PE_DEBUG_LOG(LOG) 
 #endif
 
 #if _DEBUG
-#define PE_DEBUG_LOG_F(LOG, ...) Logger::LogDebugString(Protostar::Core::Printf(LOGFORMAT(LOG), __VA_ARGS__))
+#define PE_DEBUG_LOG_F(LOG, ...) Protostar::Core::Logger::LogDebugString(Protostar::Core::Printf(LOGFORMAT(LOG), __VA_ARGS__))
 #else
 #define PE_DEBUG_LOG_F(LOG, ...) 
 #endif

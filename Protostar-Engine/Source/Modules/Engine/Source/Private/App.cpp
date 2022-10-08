@@ -1,5 +1,7 @@
 #include "App.h"
 #include "WindowManager.h"
+#include "RHI.h"
+#include "DX12.h"
 
 bool Protostar::Core::App::Init(HINSTANCE _hInstance, s32 _nCmdShow, std::string& _errorMsg)
 {
@@ -18,10 +20,8 @@ bool Protostar::Core::App::Init(HINSTANCE _hInstance, s32 _nCmdShow, std::string
 				CS_HREDRAW | CS_VREDRAW
 			},
 			{
-				1920,
-				1080,
-				0,
-				0
+				{1920,1080},
+				{0,0}
 			},
 			{
 				TEXT("Protostar-Engine"),
@@ -40,11 +40,14 @@ bool Protostar::Core::App::Init(HINSTANCE _hInstance, s32 _nCmdShow, std::string
 	Window* mainWindow = WindowManager::Get().GetMainWindow();
 	mainWindow->ShowWindow(_nCmdShow);
 	mainWindow->UpdateWindow();
+
+	Rendering::RHI::Create(new Rendering::DX12(mainWindow));
 	return true;
 }
 
 void Protostar::Core::App::Destroy()
 {
+	Rendering::RHI::Destroy();
 	if (s_app)
 	{
 		delete s_app;

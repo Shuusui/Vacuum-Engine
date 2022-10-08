@@ -15,6 +15,11 @@ namespace Protostar::Rendering
 
 	void RHI::Destroy()
 	{
+		delete s_rhi;
+	}
+
+	RHI::~RHI()
+	{
 
 	}
 

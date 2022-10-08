@@ -109,6 +109,9 @@
     <ClCompile Include="Source\Private\DX12.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\DX12HelperLibrary.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Private\ScreenGrab\ScreenGrab12.cpp">
       <Filter>Private\ScreenGrab</Filter>
     </ClCompile>
@@ -164,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="Source\Private\DirectXTex\scoped.h">
       <Filter>Private\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DX12HelperLibrary.h">
+      <Filter>Private</Filter>
     </ClInclude>
     <ClInclude Include="Source\Private\DXHelper.h">
       <Filter>Private</Filter>
@@ -232,7 +238,7 @@
       <Filter>Private\Stereo3D</Filter>
     </ClInclude>
     <ClInclude Include="Source\Private\Utilities\WaveFrontReader.h">
-      <Filter>Private\Utilities</Filter>
+      <Filter>Private\WICTextureLoader\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Source\Private\WICTextureLoader\WICTextureLoader12.h">
       <Filter>Private\WICTextureLoader</Filter>
@@ -272,9 +278,6 @@
     <Filter Include="Private\Stereo3D">
       <UniqueIdentifier>{42bb23a9-08ba-d470-29ce-b2770af07818}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private\Utilities">
-      <UniqueIdentifier>{89b6f71b-a7a5-7fbf-a7d0-41c854697fe3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Private\WICTextureLoader">
       <UniqueIdentifier>{5b1f3908-0b6a-5bc2-295d-592fd11107d7}</UniqueIdentifier>
     </Filter>
@@ -283,6 +286,9 @@
     </Filter>
     <Filter Include="Public">
       <UniqueIdentifier>{ed7b063d-2ffe-7746-470d-d6ccf64d05ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\WICTextureLoader\Utilities">
+      <UniqueIdentifier>{89b6f71b-a7a5-7fbf-a7d0-41c854697fe3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

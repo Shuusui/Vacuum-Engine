@@ -72,7 +72,7 @@ namespace Protostar::Core
 					returnValue = tempReturn;
 				}
 			}
-			break;
+			return returnValue;
 		}
 		case WM_LBUTTONDOWN:
 		{
@@ -336,8 +336,8 @@ namespace Protostar::Core
 		wndClass.lpfnWndProc = WindowProc;
 
 		RECT rect = {};
-		rect.right = (LONG)m_windowInfo.DimParams.Width;
-		rect.bottom = (LONG)m_windowInfo.DimParams.Height;
+		rect.right = (LONG)m_windowInfo.DimParams.Size.GetX();
+		rect.bottom = (LONG)m_windowInfo.DimParams.Size.GetY();
 		if (!AdjustWindowRectEx(&rect, m_windowInfo.ClassParams.Style, false, NULL))
 		{
 			_errorMsg = PRINTF("Couldn't adjust window rect of window with classname %w", m_windowInfo.ClassParams.ClassName);
@@ -353,8 +353,8 @@ namespace Protostar::Core
 			m_windowInfo.ClassParams.ClassName,
 			m_windowInfo.CreationParams.WindowName,
 			static_cast<DWORD>(m_windowInfo.CreationParams.DwStyle),
-			m_windowInfo.DimParams.LeftTopCornerX,
-			m_windowInfo.DimParams.LeftTopCornerY,
+			m_windowInfo.DimParams.Position.GetX(),
+			m_windowInfo.DimParams.Position.GetY(),
 			rect.right - rect.left,
 			rect.bottom - rect.top,
 			m_windowInfo.CreationParams.ParentWindow,
@@ -395,14 +395,14 @@ namespace Protostar::Core
 
 	void Window::UpdateWindowPos(const s32 _x, const s32 _y)
 	{
-		m_windowInfo.DimParams.LeftTopCornerX = _x;
-		m_windowInfo.DimParams.LeftTopCornerY = _y;
+		m_windowInfo.DimParams.Position.SetX(_x);
+		m_windowInfo.DimParams.Position.SetY(_y);
 	}
 
 	void Window::UpdateWindowSize(const s32 _width, const s32 _height)
 	{
-		m_windowInfo.DimParams.Width = _width;
-		m_windowInfo.DimParams.Height = _height;
+		m_windowInfo.DimParams.Size.SetX(_width);
+		m_windowInfo.DimParams.Size.SetY(_height);
 	}
 
 	void Window::RegisterEventCallback(const u32 _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func)
@@ -415,7 +415,7 @@ namespace Protostar::Core
 		return m_wndHandle;
 	}
 
-	WindowDimParams Window::GetCurrentDim() const
+	const WindowDimensions& Window::GetCurrentDimensions() const
 	{
 		return m_windowInfo.DimParams;
 	}

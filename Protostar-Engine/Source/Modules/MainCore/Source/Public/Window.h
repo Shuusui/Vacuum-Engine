@@ -2,6 +2,7 @@
 
 #include "GlobalDefinitions.h"
 #include "MainCore.h"
+#include "Vector.h"
 
 #include <Windows.h>
 #include <utility>
@@ -12,12 +13,10 @@
 
 namespace Protostar::Core
 {
-	struct MAINCORE_API WindowDimParams
+	struct MAINCORE_API WindowDimensions
 	{
-		s64 Width;
-		s64 Height;
-		s32 LeftTopCornerX;
-		s32 LeftTopCornerY;
+		Vector2D<s32> Size;
+		Vector2D<s32> Position;
 	};
 
 	struct MAINCORE_API WindowClassParams
@@ -41,7 +40,7 @@ namespace Protostar::Core
 	struct MAINCORE_API WindowInfo
 	{
 		WindowClassParams ClassParams;
-		WindowDimParams DimParams;
+		WindowDimensions DimParams;
 		WindowCreationParams CreationParams;
 	};
 
@@ -62,7 +61,7 @@ namespace Protostar::Core
 
 		HWND GetWindowHandle() const;
 
-		WindowDimParams GetCurrentDim() const;
+		const WindowDimensions& GetCurrentDimensions() const;
 
 		const std::vector<std::function<s32(HWND, u32, WPARAM, LPARAM)>>& GetEventFunctions(u32 _eventKey) const
 		{
@@ -75,19 +74,31 @@ namespace Protostar::Core
 			: m_windowInfo(_windowInfo)
 			, m_wndHandle(nullptr)
 			, m_eventMap({
-				{WM_EXITSIZEMOVE, {}},
-				{WM_LBUTTONDOWN, {}},
-				{WM_RBUTTONDOWN, {}},
-				{WM_LBUTTONUP, {}},
-				{WM_RBUTTONUP, {}},
-				{WM_SETCURSOR, {}},
-				{WM_DESTROY, {}},
-				{WM_WINDOWPOSCHANGED, {}},
-				{WM_PAINT, {}},
-				{WM_SIZE, {}},
-				{WM_KEYDOWN, {}},
-				{WM_KEYUP, {}},
-				{WM_CHAR,{}}
+				{WM_SIZE,{}},
+				{WM_EXITSIZEMOVE,{}},
+				{WM_SETCURSOR,{}},
+				{WM_PAINT,{}},
+				{WM_LBUTTONDOWN,{}},
+				{WM_LBUTTONDBLCLK,{}},
+				{WM_RBUTTONDOWN,{}},
+				{WM_RBUTTONDBLCLK,{}},
+				{WM_MBUTTONDOWN,{}},
+				{WM_MBUTTONDBLCLK, {}},
+				{WM_XBUTTONDOWN,{}},
+				{WM_XBUTTONDBLCLK,{}},
+				{WM_LBUTTONUP,{}},
+				{WM_RBUTTONUP,{}},
+				{WM_MBUTTONUP,{}},
+				{WM_XBUTTONUP,{}},
+				{WM_MOUSEWHEEL,{}},
+				{WM_SYSKEYDOWN,{}},
+				{WM_KEYDOWN,{}},
+				{WM_SYSKEYUP, {}},
+				{WM_KEYUP,{}},
+				{WM_CHAR,{}},
+				{WM_DEVICECHANGE,{}},
+				{WM_DESTROY,{}},
+				{WM_WINDOWPOSCHANGED,{}}
 				})
 		{
 		}

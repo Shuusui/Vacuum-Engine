@@ -66,6 +66,9 @@
     <ClInclude Include="Source\Public\Util.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Public\Vector.h">
+      <Filter>Public</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Public\Window.h">
       <Filter>Public</Filter>
     </ClInclude>

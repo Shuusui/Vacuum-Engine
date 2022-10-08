@@ -2,12 +2,8 @@
 
 #include "GlobalDefinitions.h"
 
-namespace Protostar
+namespace Protostar::Core
 {
-
-	namespace Core
-	{
-		constexpr s32 PRINTF_SMALL_BUFFER_SIZE = 50;
-	}
+	constexpr s32 PRINTF_SMALL_BUFFER_SIZE = 50;
 }
 

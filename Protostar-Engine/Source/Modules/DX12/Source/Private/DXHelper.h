@@ -58,15 +58,6 @@ private:
         throw HrException(hr);\
     }\
 
-//inline void ThrowIfFailed(HRESULT hr)
-//{
-//    if (FAILED(hr))
-//    {
-//        Protostar::CLog::Log(Protostar::ToWString(HrToString(hr).c_str()));
-//        throw HrException(hr);
-//    }
-//}
-
 inline void GetAssetsPath(_Out_writes_(pathSize) WCHAR* path, UINT pathSize)
 {
     if (path == nullptr)
