@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "sharpmake_debug": {
+      "commandName": "Executable",
+      "commandLineArgs": "/sources(@\u0027E:\\Repositories\\Protostar-Engine\\Protostar.Main.Sharpmake.cs\u0027) ",
+      "executablePath": "E:\\Repositories\\Protostar-Engine\\Extern\\Sharpmake\\Build\\Sharpmake.Application.exe",
+      "workingDirectory": "E:\\Repositories\\Protostar-Engine"
+    }
+  }
+}

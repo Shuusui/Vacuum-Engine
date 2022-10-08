@@ -1,3 +1,3 @@
-[submodule "Programs/Sharpmake"]
-	path = Programs/Sharpmake
+[submodule "Extern/Sharpmake/Source"]
+	path = Extern/Sharpmake/Source
 	url = https://github.com/Shuusui/Sharpmake.git

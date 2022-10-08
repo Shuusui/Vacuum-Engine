@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Source\Private\DDSTextureLoader\DDSTextureLoader12.cpp">
+      <Filter>Private\DDSTextureLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshAdjacency.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshClean.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshGSAdjacency.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshletGenerator.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshNormals.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshOptimize.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshOptimizeLRU.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshOptimizeTVC.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshRemap.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshTangentFrame.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshUtil.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshValidate.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshVBReader.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshVBWriter.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXMesh\DirectXMeshWeldVertices.cpp">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\BC.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\BC4BC5.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\BC6HBC7.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexCompress.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexConvert.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexD3D11.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexD3D12.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexDDS.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexFlipRotate.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexHDR.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexImage.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexMipmaps.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexMisc.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexNormalMaps.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexPMAlpha.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexResize.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexTGA.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexUtil.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DirectXTex\DirectXTexWIC.cpp">
+      <Filter>Private\DirectXTex</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DX12.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\DX12HelperLibrary.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\ScreenGrab\ScreenGrab12.cpp">
+      <Filter>Private\ScreenGrab</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\SHMath\DirectXSH.cpp">
+      <Filter>Private\SHMath</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\SHMath\DirectXSHD3D12.cpp">
+      <Filter>Private\SHMath</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\Stereo3D\Stereo3DMatrixHelper.cpp">
+      <Filter>Private\Stereo3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\WICTextureLoader\WICTextureLoader12.cpp">
+      <Filter>Private\WICTextureLoader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Private\d3dx12.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DDSTextureLoader\DDSTextureLoader12.h">
+      <Filter>Private\DDSTextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXMesh\DirectXMesh.h">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXMesh\DirectXMesh.inl">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXMesh\DirectXMeshP.h">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXMesh\scoped.h">
+      <Filter>Private\DirectXMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXTex\BC.h">
+      <Filter>Private\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXTex\DDS.h">
+      <Filter>Private\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXTex\DirectXTex.h">
+      <Filter>Private\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXTex\DirectXTex.inl">
+      <Filter>Private\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXTex\DirectXTexP.h">
+      <Filter>Private\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXTex\filters.h">
+      <Filter>Private\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DirectXTex\scoped.h">
+      <Filter>Private\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DX12HelperLibrary.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\DXHelper.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Extensions\DirectXMathAVX.h">
+      <Filter>Private\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Extensions\DirectXMathAVX2.h">
+      <Filter>Private\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Extensions\DirectXMathBE.h">
+      <Filter>Private\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Extensions\DirectXMathF16C.h">
+      <Filter>Private\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Extensions\DirectXMathFMA3.h">
+      <Filter>Private\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Extensions\DirectXMathFMA4.h">
+      <Filter>Private\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Extensions\DirectXMathSSE3.h">
+      <Filter>Private\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Extensions\DirectXMathSSE4.h">
+      <Filter>Private\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXCollision.h">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXCollision.inl">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXColors.h">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXMath.h">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXMathConvert.inl">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXMathMatrix.inl">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXMathMisc.inl">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXMathVector.inl">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXPackedVector.h">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Inc\DirectXPackedVector.inl">
+      <Filter>Private\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\ScreenGrab\ScreenGrab12.h">
+      <Filter>Private\ScreenGrab</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\SHMath\DirectXSH.h">
+      <Filter>Private\SHMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Stereo3D\Stereo3DMatrixHelper.h">
+      <Filter>Private\Stereo3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\Utilities\WaveFrontReader.h">
+      <Filter>Private\WICTextureLoader\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\WICTextureLoader\WICTextureLoader12.h">
+      <Filter>Private\WICTextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Private\XDSP\XDSP.h">
+      <Filter>Private\XDSP</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\DX12.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Private">
+      <UniqueIdentifier>{2f08f947-80c3-62ca-d531-096aa1d110f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\DDSTextureLoader">
+      <UniqueIdentifier>{2dbaa904-2fe4-47ca-8f83-69ad3bb2fc60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\DirectXMesh">
+      <UniqueIdentifier>{75340392-ddac-50f7-d7d1-e7b961fd5c96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\DirectXTex">
+      <UniqueIdentifier>{4c36171f-eeaf-7aa4-06fd-d0e74618180f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Extensions">
+      <UniqueIdentifier>{4dcfba36-83dc-56b4-173c-439c1a8c6427}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Inc">
+      <UniqueIdentifier>{7138b42a-d351-71b8-d882-ef4e1a494b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\SHMath">
+      <UniqueIdentifier>{7ba62b03-8239-c6c8-cb23-fcc6a25d0d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\ScreenGrab">
+      <UniqueIdentifier>{e91c36fa-a61e-ab2e-9a83-06128b2cd26c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Stereo3D">
+      <UniqueIdentifier>{42bb23a9-08ba-d470-29ce-b2770af07818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\WICTextureLoader">
+      <UniqueIdentifier>{5b1f3908-0b6a-5bc2-295d-592fd11107d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\XDSP">
+      <UniqueIdentifier>{3c8a8f57-e748-f97d-a40d-4e1f16a51bb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public">
+      <UniqueIdentifier>{ed7b063d-2ffe-7746-470d-d6ccf64d05ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\WICTextureLoader\Utilities">
+      <UniqueIdentifier>{89b6f71b-a7a5-7fbf-a7d0-41c854697fe3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
