@@ -9,5 +9,9 @@ namespace Protostar
         public MainCore()
         {
         }
+        public override void ConfigureAll(Configuration configuration, Target target)
+        {
+            base.ConfigureAll(configuration, target);
+        }
     }
 }

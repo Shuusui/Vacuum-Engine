@@ -30,6 +30,14 @@ namespace Protostar
         [Configure]
         public virtual void ConfigureAll(Configuration configuration, Target target)
         {
+            if (string.IsNullOrEmpty(Main.CustomArguments.SelectedLibrary))
+            {
+                configuration.Defines.Add("STL");
+            }
+            else
+            {
+                configuration.Defines.Add(Main.CustomArguments.SelectedLibrary);
+            }
             configuration.Options.Add(Sharpmake.Options.Vc.General.CharacterSet.Unicode);
 
             AddSolutionFolders(configuration, "Protostar-Engine");
@@ -178,7 +186,26 @@ namespace Protostar
                     DevEnvArgument = DevEnv.vs2022;
                     break;
                 default:
-                    throw new Exception($"Protostar is not supporting Visual Studio {value}");
+                    Console.WriteLine("Protostar currently only supports VS2022");
+                    DevEnvArgument = DevEnv.vs2022;
+                    break;
+            }
+        }
+        public string SelectedLibrary = string.Empty;
+        private readonly static Dictionary<string, string> m_libraries = new Dictionary<string, string>
+        {
+            { "STL", "STL" }
+        };
+        [CommandLine.Option("libraryselection", @"Library Selection: ex: /libselection(STL)")]
+        public void CommandLineSetLibrary(string value)
+        {
+            if(m_libraries.TryGetValue(value, out string _library))
+            {
+                SelectedLibrary = _library;
+            }
+            else
+            {
+                throw new Exception($"Protostar does not support library {value}");
             }
         }
     }

@@ -17,5 +17,6 @@ s32 WinMain(_In_ HINSTANCE _hInstance, _In_opt_  HINSTANCE _hPrevInstance, _In_ 
 	{
 		app.Update(msg);
 	}
+	app.Destroy();
 	return 0;
 }

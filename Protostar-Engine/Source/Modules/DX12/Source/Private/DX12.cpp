@@ -17,6 +17,8 @@ Protostar::Rendering::DX12::DX12(PSC::Window* _window)
 	, m_tearingSupport(false)
 {
 	_window->RegisterEventCallback(WM_PAINT, std::bind(&DX12::OnWindowPaint, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+	_window->RegisterEventCallback(WM_SIZE, std::bind(&DX12::OnWindowResize, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+
 	HelperLibrary::EnableDebugLayer();
 
 	MWRL::ComPtr<IDXGIAdapter4> dxgiAdapter4 = HelperLibrary::GetAdapter();
@@ -136,9 +138,8 @@ void Protostar::Rendering::DX12::Resize(u32 _width, u32 _height)
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 	THROW_IF_FAILED(m_swapChain->GetDesc(&swapChainDesc));
-	THROW_IF_FAILED(m_swapChain->ResizeBuffers1(NUM_FRAMES, _width, _height,
-		swapChainDesc.BufferDesc.Format, swapChainDesc.Flags,
-		nullptr, nullptr));
+	THROW_IF_FAILED(m_swapChain->ResizeBuffers(NUM_FRAMES, _width, _height,
+		swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
 
 	m_currentBackbufferIndex = m_swapChain->GetCurrentBackBufferIndex();
 
@@ -155,6 +156,15 @@ s32 Protostar::Rendering::DX12::OnWindowPaint(HWND, u32, WPARAM, LPARAM)
 {
 	Update();
 	Render();
+	return 0;
+}
+
+s32 Protostar::Rendering::DX12::OnWindowResize(HWND, u32, WPARAM, LPARAM _lParam)
+{
+	s32 width = LOWORD(_lParam);
+	s32 height = HIWORD(_lParam);
+
+	Resize(width, height);
 	return 0;
 }
 
