@@ -3,16 +3,18 @@
 #include "GlobalDefinitions.h"
 #include "MainCore.h"
 #include "Vector.h"
+#include "Array.h"
 
 #include <Windows.h>
 #include <utility>
 #include <string>
 #include <functional>
 #include <unordered_map>
-#include <vector>
 
 namespace Protostar::Core
 {
+	class InputProcessor;
+
 	struct MAINCORE_API WindowDimensions
 	{
 		Vector2D<s32> Size;
@@ -63,50 +65,21 @@ namespace Protostar::Core
 
 		const WindowDimensions& GetCurrentDimensions() const;
 
-		const std::vector<std::function<s32(HWND, u32, WPARAM, LPARAM)>>& GetEventFunctions(u32 _eventKey) const
+		const Array<std::function<s32(HWND, u32, WPARAM, LPARAM)>>& GetEventFunctions(u32 _eventKey) const
 		{
 			return m_eventMap.at(_eventKey);
 		}
 	private:
 		friend class WindowManager;
 
-		Window(const WindowInfo& _windowInfo)
-			: m_windowInfo(_windowInfo)
-			, m_wndHandle(nullptr)
-			, m_eventMap({
-				{WM_SIZE,{}},
-				{WM_EXITSIZEMOVE,{}},
-				{WM_SETCURSOR,{}},
-				{WM_PAINT,{}},
-				{WM_LBUTTONDOWN,{}},
-				{WM_LBUTTONDBLCLK,{}},
-				{WM_RBUTTONDOWN,{}},
-				{WM_RBUTTONDBLCLK,{}},
-				{WM_MBUTTONDOWN,{}},
-				{WM_MBUTTONDBLCLK, {}},
-				{WM_XBUTTONDOWN,{}},
-				{WM_XBUTTONDBLCLK,{}},
-				{WM_LBUTTONUP,{}},
-				{WM_RBUTTONUP,{}},
-				{WM_MBUTTONUP,{}},
-				{WM_XBUTTONUP,{}},
-				{WM_MOUSEWHEEL,{}},
-				{WM_SYSKEYDOWN,{}},
-				{WM_KEYDOWN,{}},
-				{WM_SYSKEYUP, {}},
-				{WM_KEYUP,{}},
-				{WM_CHAR,{}},
-				{WM_DEVICECHANGE,{}},
-				{WM_DESTROY,{}},
-				{WM_WINDOWPOSCHANGED,{}}
-				})
-		{
-		}
+		Window(const WindowInfo& _windowInfo, InputProcessor* _inputProcessor = nullptr);
+
 
 		bool Create(std::string& _errorMsg);
 
 		WindowInfo m_windowInfo;
+		std::unordered_map<u32, Array<std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>>> m_eventMap;
+		std::unique_ptr<InputProcessor> m_inputProcessor;
 		HWND m_wndHandle;
-		std::unordered_map<u32, std::vector<std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>>> m_eventMap;
 	};
 }

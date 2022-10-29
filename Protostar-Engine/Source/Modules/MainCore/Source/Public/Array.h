@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <initializer_list>
 #include "GlobalDefinitions.h"
 #include "Allocator.h"
 #include "Iterator.h"
@@ -9,6 +10,7 @@ namespace Protostar::Core
 	template<typename T, typename ALLOCATOR = Allocator<T>, typename IMPL = void>
 	class Array
 	{
+	public:
 		constexpr Array() noexcept(noexcept(ALLOCATOR()))
 		{
 			static_assert(true);
@@ -147,29 +149,29 @@ namespace Protostar::Core
 		{
 			static_assert(true);
 		}
-		constexpr Iterator Insert(ConstIterator _pos, const T& _value)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, const T& _value)
 		{
 			static_assert(true);
 		}
-		constexpr Iterator Insert(ConstIterator _pos, T&& _value)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, T&& _value)
 		{
 			static_assert(true);
 		}
-		constexpr Iterator Insert(ConstIterator _pos, std::size_t _count, const T& _value)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, std::size_t _count, const T& _value)
 		{
 			static_assert(true);
 		}
 		template<typename INPUTIT>
-		constexpr Iterator Insert(ConstIterator _pos, INPUTIT _first, INPUTIT _last)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, INPUTIT _first, INPUTIT _last)
 		{
 			static_assert(true);
 		}
-		constexpr Iterator Insert(ConstIterator _pos, std::initializer_list<T> _list)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, std::initializer_list<T> _list)
 		{
 			static_assert(true);
 		}
 		template<typename... ARGS>
-		constexpr Iterator EmplaceAt(ConstIterator _pos, ARGS&&... _args)
+		constexpr Iterator<T> EmplaceAt(ConstIterator<T> _pos, ARGS&&... _args)
 		{
 			static_assert(true);
 		}
@@ -178,11 +180,11 @@ namespace Protostar::Core
 		{
 			static_assert(true);
 		}
-		constexpr Iterator Remove(ConstIterator _pos)
+		constexpr Iterator<T> Remove(ConstIterator<T> _pos)
 		{
 			static_assert(true);
 		}
-		constexpr Iterator Remove(ConstIterator _first, ConstIterator _last)
+		constexpr Iterator<T> Remove(ConstIterator<T> _first, ConstIterator<T> _last)
 		{
 			static_assert(true);
 		}
@@ -207,6 +209,54 @@ namespace Protostar::Core
 			static_assert(true);
 		}
 		constexpr void Swap(Array& _other) noexcept
+		{
+			static_assert(true);
+		}
+		constexpr Iterator<T> begin() noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ConstIterator<T> begin() const noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ConstIterator<T> cbegin() const noexcept
+		{
+			static_assert(true);
+		}
+		constexpr Iterator<T> end() noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ConstIterator<T> end() const noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ConstIterator<T> cend() const noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ReverseIterator<T> rbegin() noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ConstReverseIterator<T> rbegin() const noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ConstReverseIterator<T> crbegin() const noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ReverseIterator<T> rend() noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ConstReverseIterator<T> rend() const noexcept
+		{
+			static_assert(true);
+		}
+		constexpr ConstReverseIterator<T> crend() const noexcept
 		{
 			static_assert(true);
 		}

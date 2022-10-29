@@ -1,4 +1,5 @@
 #include "WindowManager.h"
+#include "InputProcessor.h"
 
 namespace Protostar::Core
 {

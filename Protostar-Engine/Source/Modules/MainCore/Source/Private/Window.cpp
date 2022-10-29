@@ -2,6 +2,7 @@
 
 #include "Logger.h"
 #include "Util.h"
+#include "InputProcessor.h"
 
 namespace Protostar::Core
 {
@@ -325,6 +326,44 @@ namespace Protostar::Core
 		return DefWindowProc(_hwnd, _msg, _wParam, _lParam);
 	}
 
+	Window::Window(const WindowInfo& _windowInfo, InputProcessor* _inputProcessor)
+		: m_windowInfo(_windowInfo)
+		, m_eventMap({
+			{WM_SIZE,{}},
+			{WM_EXITSIZEMOVE,{}},
+			{WM_SETCURSOR,{}},
+			{WM_PAINT,{}},
+			{WM_LBUTTONDOWN,{}},
+			{WM_LBUTTONDBLCLK,{}},
+			{WM_RBUTTONDOWN,{}},
+			{WM_RBUTTONDBLCLK,{}},
+			{WM_MBUTTONDOWN,{}},
+			{WM_MBUTTONDBLCLK, {}},
+			{WM_XBUTTONDOWN,{}},
+			{WM_XBUTTONDBLCLK,{}},
+			{WM_LBUTTONUP,{}},
+			{WM_RBUTTONUP,{}},
+			{WM_MBUTTONUP,{}},
+			{WM_XBUTTONUP,{}},
+			{WM_MOUSEWHEEL,{}},
+			{WM_SYSKEYDOWN,{}},
+			{WM_KEYDOWN,{}},
+			{WM_SYSKEYUP, {}},
+			{WM_KEYUP,{}},
+			{WM_CHAR,{}},
+			{WM_DEVICECHANGE,{}},
+			{WM_DESTROY,{}},
+			{WM_WINDOWPOSCHANGED,{}}
+			})
+		, m_wndHandle(nullptr)
+		, m_inputProcessor(_inputProcessor)
+	{
+		if (!m_inputProcessor)
+		{
+			m_inputProcessor = std::make_unique<InputProcessor>();
+		}
+	}
+
 	bool Window::Create(std::string& _errorMsg)
 	{
 		WNDCLASSEX wndClass = {};
@@ -407,7 +446,7 @@ namespace Protostar::Core
 
 	void Window::RegisterEventCallback(const u32 _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func)
 	{
-		m_eventMap[_wmEvent].push_back(_func);
+		m_eventMap[_wmEvent].Add(_func);
 	}
 
 	HWND Window::GetWindowHandle() const
