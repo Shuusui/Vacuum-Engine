@@ -16,6 +16,7 @@ namespace Protostar
             configuration.AddPublicDependency<MainCore>(target);
             configuration.AddPrivateDependency<DX12>(target);
             configuration.AddPrivateDependency<RHI>(target);
+            configuration.AddPrivateDependency<CoreSystems>(target);
         }
     }
 }

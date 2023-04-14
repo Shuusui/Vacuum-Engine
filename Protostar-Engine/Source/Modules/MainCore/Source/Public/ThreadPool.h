@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BaseJob.h"
-#include "Logger.h"
 #include "GlobalDefinitions.h"
 #include <thread>
 #include <vector>

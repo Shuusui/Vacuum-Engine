@@ -59,6 +59,7 @@
     <Compile Include="Protostar-Editor\Source\Modules\Protostar.Editor.Sharpmake.cs" />
     <Compile Include="Protostar-Engine-Test\Source\Modules\CoreMath_Test\Protostar.CoreMath_Test.Sharpmake.cs" />
     <Compile Include="Protostar-Engine\Source\Modules\CoreMath\Protostar.CoreMath.Sharpmake.cs" />
+    <Compile Include="Protostar-Engine\Source\Modules\CoreSystems\Protostar.CoreSystems.Sharpmake.cs" />
     <Compile Include="Protostar-Engine\Source\Modules\DX12\Protostar.DX12.Sharpmake.cs" />
     <Compile Include="Protostar-Engine\Source\Modules\Engine\Protostar.Engine.Sharpmake.cs" />
     <Compile Include="Protostar-Engine\Source\Modules\FileSystem\Protostar.FileSystem.Sharpmake.cs" />

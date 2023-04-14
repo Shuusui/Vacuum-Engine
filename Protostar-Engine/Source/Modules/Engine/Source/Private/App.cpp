@@ -2,9 +2,18 @@
 #include "WindowManager.h"
 #include "RHI.h"
 #include "DX12.h"
+#include "Logger.h"
+#include "Timer.h"
+#include <iostream>
 
 bool Protostar::Core::App::Init(HINSTANCE _hInstance, s32 _nCmdShow, std::string& _errorMsg)
 {
+	std::string errorMsg;
+	if (!Logger::Init(errorMsg))
+	{
+		std::cout << errorMsg << std::endl;
+		return false;
+	}
 	if (s_app)
 	{
 		return false;
@@ -67,4 +76,5 @@ bool Protostar::Core::App::Update(MSG& msg) const
 Protostar::Core::App::App()
 	:m_timer(std::make_unique<Timer>())
 {
+
 }

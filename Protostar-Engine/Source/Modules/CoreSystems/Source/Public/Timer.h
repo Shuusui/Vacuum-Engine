@@ -1,12 +1,12 @@
 #pragma once
 
 #include "GlobalDefinitions.h"
-#include "MainCore.h"
 #include <ctime>
+#include "CoreSystems.h"
 
 namespace Protostar::Core
 {
-	class MAINCORE_API Timer
+	class CORESYSTEMS_API Timer
 	{
 	public:
 		Timer();

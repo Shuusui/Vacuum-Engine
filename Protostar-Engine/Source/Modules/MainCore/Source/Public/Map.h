@@ -19,5 +19,4 @@ namespace Protostar::Core
 			const HASH& _hash = HASH(), const KEYEQUAL& _equal = KEYEQUAL(),
 			const ALLOCATOR& _allocator = ALLOCATOR());
 	};
-
 }

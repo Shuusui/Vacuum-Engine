@@ -1,264 +1,263 @@
 #pragma once
 #include <cstddef>
-#include <initializer_list>
 #include "GlobalDefinitions.h"
+#include "GlobalMacros.h"
 #include "Allocator.h"
 #include "Iterator.h"
 
 namespace Protostar::Core
 {
 	template<typename T, typename ALLOCATOR = Allocator<T>, typename IMPL = void>
-	class Array
+	class Array 
 	{
 	public:
-		constexpr Array() noexcept(noexcept(ALLOCATOR()))
+		constexpr Array() noexcept(noexcept(ALLOCATOR())) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr explicit Array(const ALLOCATOR& _allocator) noexcept
+		constexpr explicit Array(const ALLOCATOR& _allocator) noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array(std::size_t _count, const T& _value, const ALLOCATOR _allocator = ALLOCATOR())
+		constexpr Array(std::size_t _count, const T& _value, const ALLOCATOR _allocator = ALLOCATOR()) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array(std::size_t _count, const ALLOCATOR& _allocator = ALLOCATOR())
+		constexpr Array(std::size_t _count, const ALLOCATOR& _allocator = ALLOCATOR()) requires false
 		{
-			static_assert(true);
+			
 		}
-		template<typename INPUTIT>
-		constexpr Array(INPUTIT _first, INPUTIT _last, const ALLOCATOR& _allocator = ALLOCATOR())
+		template<typename INPUT_IT>
+		constexpr Array(INPUT_IT _first, INPUT_IT _last, const ALLOCATOR& _allocator = ALLOCATOR()) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array(const Array& _other)
+		constexpr Array(const Array& _other) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array(const Array& _other, const ALLOCATOR& _allocator)
+		constexpr Array(const Array& _other, const ALLOCATOR& _allocator) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array(Array&& _other) noexcept
+		constexpr Array(Array&& _other) noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array(Array&& _other, const ALLOCATOR& _allocator)
+		constexpr Array(Array&& _other, const ALLOCATOR& _allocator) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array(std::initializer_list<T> _init, const ALLOCATOR& _allocator = ALLOCATOR())
+		constexpr Array(std::initializer_list<T> _init, const ALLOCATOR& _allocator = ALLOCATOR()) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array& operator=(const Array& _other)
+		constexpr Array& operator=(const Array& _other) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array& operator=(Array&& _other) noexcept
+		constexpr Array& operator=(Array&& _other) noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Array& operator=(std::initializer_list<T> _list)
+		constexpr Array& operator=(std::initializer_list<T> _list) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Replace(std::size_t _amount, const T& _value)
+		constexpr void Replace(std::size_t _amount, const T& _value) requires false
 		{
-			static_assert(true);
+			
 		}
-		template<typename INPUTIT>
-		constexpr void Replace(INPUTIT _first, INPUTIT _last)
+		template<typename INPUT_IT>
+		constexpr void Replace(INPUT_IT _first, INPUT_IT _last) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Replace(std::initializer_list<T> _list)
+		constexpr void Replace(std::initializer_list<T> _list) requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr ALLOCATOR GetAllocator() const noexcept
+		PE_NODISCARD constexpr ALLOCATOR GetAllocator() const noexcept requires false
 		{
-			static_assert(true);
 		}
-		[[nodiscard]] constexpr T& At(std::size_t _pos)
+		PE_NODISCARD constexpr T& At(std::size_t _pos) requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr const T& At(std::size_t _pos) const
+		PE_NODISCARD constexpr const T& At(std::size_t _pos) const requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr T& operator[](std::size_t _pos)
+		PE_NODISCARD constexpr T& operator[](std::size_t _pos) requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr const T& operator[](std::size_t _pos) const
+		PE_NODISCARD constexpr const T& operator[](std::size_t _pos) const requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr T& GetFirst()
+		PE_NODISCARD constexpr T& GetFirst() requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr const T& GetFirst() const
+		PE_NODISCARD constexpr const T& GetFirst() const requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr T& GetLast()
+		PE_NODISCARD constexpr T& GetLast() requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr const T& GetLast() const
+		PE_NODISCARD constexpr const T& GetLast() const requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr T* GetData() noexcept
+		PE_NODISCARD constexpr T* GetData() noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr const T* GetData() const noexcept
+		PE_NODISCARD constexpr const T* GetData() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr bool IsEmpty() const noexcept
+		PE_NODISCARD constexpr bool IsEmpty() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr std::size_t GetSize() const noexcept
+		PE_NODISCARD constexpr std::size_t GetSize() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr std::size_t GetMaxSize() const noexcept
+		PE_NODISCARD constexpr std::size_t GetMaxSize() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr void Reserve(std::size_t _newCapacity)
+		PE_NODISCARD constexpr void Reserve(std::size_t _newCapacity) requires false
 		{
-			static_assert(true);
+			
 		}
-		[[nodiscard]] constexpr std::size_t GetCapacity() const noexcept
+		PE_NODISCARD constexpr std::size_t GetCapacity() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Shrink()
+		constexpr void Shrink() requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Clear() noexcept
+		constexpr void Clear() noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Iterator<T> Insert(ConstIterator<T> _pos, const T& _value)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, const T& _value) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Iterator<T> Insert(ConstIterator<T> _pos, T&& _value)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, T&& _value) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Iterator<T> Insert(ConstIterator<T> _pos, std::size_t _count, const T& _value)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, std::size_t _count, const T& _value) requires false
 		{
-			static_assert(true);
+			
 		}
-		template<typename INPUTIT>
-		constexpr Iterator<T> Insert(ConstIterator<T> _pos, INPUTIT _first, INPUTIT _last)
+		template<typename INPUT_IT>
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, INPUT_IT _first, INPUT_IT _last) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Iterator<T> Insert(ConstIterator<T> _pos, std::initializer_list<T> _list)
+		constexpr Iterator<T> Insert(ConstIterator<T> _pos, std::initializer_list<T> _list) requires false
 		{
-			static_assert(true);
-		}
-		template<typename... ARGS>
-		constexpr Iterator<T> EmplaceAt(ConstIterator<T> _pos, ARGS&&... _args)
-		{
-			static_assert(true);
+			
 		}
 		template<typename... ARGS>
-		constexpr T& Emplace(ARGS&&... _args)
+		constexpr Iterator<T> EmplaceAt(ConstIterator<T> _pos, ARGS&&... _args) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Iterator<T> Remove(ConstIterator<T> _pos)
+		template<typename... ARGS>
+		constexpr T& Emplace(ARGS&&... _args) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Iterator<T> Remove(ConstIterator<T> _first, ConstIterator<T> _last)
+		constexpr Iterator<T> Remove(ConstIterator<T> _pos) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Add(const T& _value)
+		constexpr Iterator<T> Remove(ConstIterator<T> _first, ConstIterator<T> _last) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Add(T&& _value)
+		constexpr void Add(const T& _value) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void RemoveLast()
+		constexpr void Add(T&& _value) requires false 
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Resize(std::size_t _count)
+		constexpr void RemoveLast() requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Resize(std::size_t _count, const T& _value)
+		constexpr void Resize(std::size_t _count) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr void Swap(Array& _other) noexcept
+		constexpr void Resize(std::size_t _count, const T& _value) requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Iterator<T> begin() noexcept
+		constexpr void Swap(Array& _other) noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ConstIterator<T> begin() const noexcept
+		constexpr Iterator<T> begin() noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ConstIterator<T> cbegin() const noexcept
+		constexpr ConstIterator<T> begin() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr Iterator<T> end() noexcept
+		constexpr ConstIterator<T> cbegin() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ConstIterator<T> end() const noexcept
+		constexpr Iterator<T> end() noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ConstIterator<T> cend() const noexcept
+		constexpr ConstIterator<T> end() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ReverseIterator<T> rbegin() noexcept
+		constexpr ConstIterator<T> cend() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ConstReverseIterator<T> rbegin() const noexcept
+		constexpr ReverseIterator<T> rbegin() noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ConstReverseIterator<T> crbegin() const noexcept
+		constexpr ConstReverseIterator<T> rbegin() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ReverseIterator<T> rend() noexcept
+		constexpr ConstReverseIterator<T> crbegin() const noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ConstReverseIterator<T> rend() const noexcept
+		constexpr ReverseIterator<T> rend() noexcept requires false
 		{
-			static_assert(true);
+			
 		}
-		constexpr ConstReverseIterator<T> crend() const noexcept
+		constexpr ConstReverseIterator<T> rend() const noexcept requires false
 		{
-			static_assert(true);
+			
+		}
+		constexpr ConstReverseIterator<T> crend() const noexcept requires false
+		{
+			
 		}
 	};
 
@@ -266,55 +265,55 @@ namespace Protostar::Core
 	class FixedSizeArray
 	{
 	public:
-		[[nodiscard]] constexpr T& At(std::size_t)
+		PE_NODISCARD constexpr T& At(std::size_t)
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr const T& At(std::size_t) const 
+		PE_NODISCARD constexpr const T& At(std::size_t) const 
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr T& operator[](std::size_t)
+		PE_NODISCARD constexpr T& operator[](std::size_t)
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr const T& operator[](std::size_t) const
+		PE_NODISCARD constexpr const T& operator[](std::size_t) const
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr T& GetFirst()
+		PE_NODISCARD constexpr T& GetFirst()
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr const T& GetFirst() const
+		PE_NODISCARD constexpr const T& GetFirst() const
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr T& GetLast()
+		PE_NODISCARD constexpr T& GetLast()
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr const T& GetLast() const
+		PE_NODISCARD constexpr const T& GetLast() const
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr T* GetData() noexcept
+		PE_NODISCARD constexpr T* GetData() noexcept
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr const T* GetData() const noexcept
+		PE_NODISCARD constexpr const T* GetData() const noexcept
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr bool IsEmpty() const noexcept
+		PE_NODISCARD constexpr bool IsEmpty() const noexcept
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr std::size_t GetSize() const noexcept
+		PE_NODISCARD constexpr std::size_t GetSize() const noexcept
 		{
 			static_assert(true);
 		}
-		[[nodiscard]] constexpr std::size_t GetMaxSize() const noexcept
+		PE_NODISCARD constexpr std::size_t GetMaxSize() const noexcept
 		{
 			static_assert(true);
 		}

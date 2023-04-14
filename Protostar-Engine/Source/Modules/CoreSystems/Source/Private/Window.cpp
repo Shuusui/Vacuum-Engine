@@ -4,6 +4,7 @@
 #include "Util.h"
 #include "InputProcessor.h"
 
+
 namespace Protostar::Core
 {
 	constexpr LPCWSTR WINDOW_CLASS_NAME = L"WINDOW_CLASS";
@@ -244,7 +245,6 @@ namespace Protostar::Core
 			return returnValue;
 		}
 		case WM_KEYDOWN:
-		case WM_SYSKEYDOWN:
 		{
 			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : window->GetEventFunctions(WM_KEYDOWN))
 			{
@@ -254,6 +254,10 @@ namespace Protostar::Core
 					returnValue = tempReturn;
 				}
 			}
+		}
+		return returnValue;
+		case WM_SYSKEYDOWN:
+		{
 			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : window->GetEventFunctions(WM_SYSKEYDOWN))
 			{
 				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
@@ -265,7 +269,6 @@ namespace Protostar::Core
 			return returnValue;
 		}
 		case WM_KEYUP:
-		case WM_SYSKEYUP:
 		{
 			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : window->GetEventFunctions(WM_KEYUP))
 			{
@@ -275,6 +278,10 @@ namespace Protostar::Core
 					returnValue = tempReturn;
 				}
 			}
+			return returnValue;
+		}
+		case WM_SYSKEYUP:
+		{
 			for (const std::function<s32(HWND, u32, WPARAM, LPARAM)>& func : window->GetEventFunctions(WM_SYSKEYUP))
 			{
 				s32 tempReturn = func(_hwnd, _msg, _wParam, _lParam);
@@ -360,7 +367,7 @@ namespace Protostar::Core
 	{
 		if (!m_inputProcessor)
 		{
-			m_inputProcessor = std::make_unique<InputProcessor>();
+			m_inputProcessor = std::make_unique<InputProcessor>(*this);
 		}
 	}
 

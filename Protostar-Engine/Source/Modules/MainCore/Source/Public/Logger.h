@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Guid.h"
-#include "GlobalMacros.h"
 #include "Util.h"
 #include "MainCore.h"
 

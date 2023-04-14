@@ -18,8 +18,8 @@ Protostar::Rendering::DX12::DX12(PSC::Window* _window)
 {
 	m_frameFenceValues.Fill(0);
 
-	_window->RegisterEventCallback(WM_PAINT, std::bind(&DX12::OnWindowPaint, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-	_window->RegisterEventCallback(WM_SIZE, std::bind(&DX12::OnWindowResize, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+	_window->REGISTER_EVENT_CALLBACK(WM_PAINT, this, &DX12::OnWindowPaint);
+	_window->REGISTER_EVENT_CALLBACK(WM_SIZE, this, &DX12::OnWindowResize);
 
 	HelperLibrary::EnableDebugLayer();
 

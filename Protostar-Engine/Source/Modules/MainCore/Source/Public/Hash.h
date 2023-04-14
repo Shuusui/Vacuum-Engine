@@ -1,8 +1,10 @@
 #pragma once
 
+
 namespace Protostar::Core
 {
-	class InputProcessor
+	template<typename T>
+	struct Hash
 	{
 
 	};

@@ -4,10 +4,11 @@
 #include <memory>
 #include <cstring>
 #include <vector>
+#include "CoreSystems.h"
 
 namespace Protostar::Core
 {
-	class MAINCORE_API WindowManager
+	class CORESYSTEMS_API WindowManager
 	{
 	public:
 		static bool Init(const WindowInfo& _windowInfo, std::string& _errorMsg);

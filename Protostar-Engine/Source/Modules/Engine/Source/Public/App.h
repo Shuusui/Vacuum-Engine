@@ -1,13 +1,15 @@
 #pragma once
 #include "Engine.h"
-#include "Timer.h"
 #include <string>
 #define WIN32_LEAN_AND_MEAN
 #include "Windows.h"
 #include <memory>
+#include "GlobalDefinitions.h"
 
 namespace Protostar::Core
 {
+	class Timer;
+
 	class ENGINE_API App
 	{
 	public:

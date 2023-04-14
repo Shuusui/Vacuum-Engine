@@ -2,6 +2,7 @@
 
 #include <string>
 #include <Windows.h>
+#define NOMINMAX
 
 #include "GlobalDefinitions.h"
 #include "GlobalConstants.h"
@@ -36,8 +37,8 @@ namespace Protostar::Core
 	static std::string Printf(const std::string& _format, Args... args)
 	{
 		char tempStr[PRINTF_SMALL_BUFFER_SIZE] = {};
-		const s32 writtenSize = std::snprintf(tempStr, 50, _format.c_str(), args...);
-		if (writtenSize > 0)
+		const s32 writtenSize = std::snprintf(tempStr, PRINTF_SMALL_BUFFER_SIZE, _format.c_str(), args...);
+		if (writtenSize > 0 && writtenSize < PRINTF_SMALL_BUFFER_SIZE)
 		{
 			return std::string(tempStr);
 		}
