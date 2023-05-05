@@ -371,7 +371,7 @@ namespace Protostar::Core
 		}
 	}
 
-	bool Window::Create(std::string& _errorMsg)
+	bool Window::TryCreate(std::string& _errorMsg)
 	{
 		WNDCLASSEX wndClass = {};
 		wndClass.cbSize = sizeof(WNDCLASSEX);

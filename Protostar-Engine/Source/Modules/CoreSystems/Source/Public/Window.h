@@ -1,9 +1,11 @@
 #pragma once
 
+#include "Array.h"
+#include "CoreSystems.h"
 #include "GlobalDefinitions.h"
 #include "MainCore.h"
+#include "UniquePtr.h"
 #include "Vector.h"
-#include "Array.h"
 
 #include <Windows.h>
 #define NOMINMAX
@@ -11,7 +13,6 @@
 #include <string>
 #include <functional>
 #include <unordered_map>
-#include "CoreSystems.h"
 
 namespace Protostar::Core
 {
@@ -80,8 +81,7 @@ namespace Protostar::Core
 
 		Window(const WindowInfo& _windowInfo, InputProcessor* _inputProcessor = nullptr);
 
-
-		bool Create(std::string& _errorMsg);
+		bool TryCreate(std::string& _errorMsg);
 
 		WindowInfo m_windowInfo;
 		std::unordered_map<
@@ -90,7 +90,7 @@ namespace Protostar::Core
 				std::function<s32(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam)>
 				>
 			> m_eventMap;
-		std::unique_ptr<InputProcessor> m_inputProcessor;
+		UniquePtr<InputProcessor> m_inputProcessor;
 		HWND m_wndHandle;
 	};
 }

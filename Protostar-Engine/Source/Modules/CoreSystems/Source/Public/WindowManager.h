@@ -19,13 +19,13 @@ namespace Protostar::Core
 		static void Destroy();
 		Window* GetMainWindow() const
 		{
-			return m_mainWindow.ThisWindow.get();
+			return m_mainWindow.ThisWindow.Get();
 		}
 	private:
 		struct WindowNode
 		{
 			std::vector<Window*> ChildWindows;
-			std::unique_ptr<Window> ThisWindow = nullptr;
+			UniquePtr<Window> ThisWindow = nullptr;
 			Window* Parent = nullptr;
 		};
 		bool Create(const WindowInfo& _windowInfo, std::string& _errorMsg);

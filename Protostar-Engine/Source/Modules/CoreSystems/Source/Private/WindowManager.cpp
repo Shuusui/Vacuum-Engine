@@ -1,5 +1,6 @@
 #include "WindowManager.h"
 #include "InputProcessor.h"
+#include "UniquePtr.h"
 
 namespace Protostar::Core
 {
@@ -19,8 +20,8 @@ namespace Protostar::Core
 	}
 	bool WindowManager::Create(const WindowInfo& _windowInfo, std::string& _errorMsg)
 	{
-		m_mainWindow = WindowNode{ {}, std::unique_ptr<Window>(new Window(_windowInfo)), nullptr };
-		if (!m_mainWindow.ThisWindow->Create(_errorMsg))
+		m_mainWindow = WindowNode{ {}, UniquePtr<Window>(new Window(_windowInfo)), nullptr };
+		if (!m_mainWindow.ThisWindow->TryCreate(_errorMsg))
 		{
 			return false;
 		}

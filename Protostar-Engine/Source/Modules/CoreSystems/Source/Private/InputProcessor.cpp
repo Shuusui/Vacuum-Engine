@@ -26,7 +26,6 @@ Protostar::Core::InputProcessor::InputProcessor(Window& _owningWindow)
 #pragma warning(disable : 4100)
 s32 Protostar::Core::InputProcessor::OnKeyDown(void*, u32, s64 _wParam, s64)
 {
-
 	return 0;
 }
 
