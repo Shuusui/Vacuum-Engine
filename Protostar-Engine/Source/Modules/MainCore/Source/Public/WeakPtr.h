@@ -40,7 +40,6 @@ namespace Protostar::Core
 			,m_ptr(nullptr)
 			,m_owner(_owner)
 		{
-
 		}
 
 		WeakPtr(std::size_t _index, T* _ptr, UniquePtr<T>& _owner)

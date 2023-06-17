@@ -465,4 +465,9 @@ namespace Protostar::Core
 	{
 		return m_windowInfo.DimParams;
 	}
+
+	Protostar::Core::InputProcessor* Window::GetInputProcessor() const
+	{
+		return m_inputProcessor.Get();
+	}
 }

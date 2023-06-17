@@ -1,7 +1,6 @@
 #pragma once
 #include "GlobalDefinitions.h"
 #include "Array.h"
-#include "MathExt.h"
 #include <functional>
 #include "CoreSystems.h"
 
@@ -14,6 +13,8 @@ constexpr u8 KEYMAP_MAX = 254;
 	{
 	public:
 		InputProcessor(Window& _owningWindow);
+		void RegisterInputDownCallback(u8 _key, const std::function<void()>& _func);
+		void RegisterInputUpCallback(u8 _key, const std::function<void()>& _func);
 	private:
 		Window& m_owningWindow;
 		s32 OnKeyDown(void* _hwnd, u32 _msg, s64 _wParam, s64 _lParam);
@@ -26,8 +27,10 @@ constexpr u8 KEYMAP_MAX = 254;
 		s32 OnRButtonUp(void* _hwnd, u32 _msg, s64 _wParam, s64 _lParam);
 		s32 OnMButtonUp(void* _hwnd, u32 _msg, s64 _wParam, s64 _lParam);
 		s32 OnXButtonUp(void* _hwnd, u32 _msg, s64 _wParam, s64 _lParam);
-		s32 OnMouseWheel(void* _hwnd, u32 _msg, s64 _wParam, s64 _lParam);
 
-		FixedSizeArray<Array<std::function<void()>>, KEYMAP_MAX> m_keyMap;
+		FixedSizeArray<Array<std::function<void()>>, KEYMAP_MAX> m_keyDownMap;
+		FixedSizeArray<Array<std::function<void()>>, KEYMAP_MAX> m_keyUpMap;
+		FixedSizeArray<u64, 4> m_keysBitMap;
+		u32 m_mouseKeysBitMap;
 	};
 }

@@ -52,6 +52,12 @@ namespace Protostar::Core
 #define REGISTER_EVENT_CALLBACK(EVENT, CLASS, FUNC)\
 	RegisterEventCallback(EVENT, std::bind(FUNC, CLASS, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
+#define REGISTER_INPUT_DOWN_CALLBACK(KEY, CLASS, FUNC)\
+	GetInputProcessor()->RegisterInputDownCallback(KEY, std::bind(FUNC, CLASS));
+
+#define REGISTER_INPUT_UP_CALLBACK(KEY, CLASS, FUNC)\
+	GetInputProcessor()->RegisterInputUpCallback(KEY, std::bind(FUNC, CLASS));
+
 	class CORESYSTEMS_API Window
 	{
 	public:
@@ -67,6 +73,8 @@ namespace Protostar::Core
 		void UpdateWindowSize(const s32 _width, const s32 _height);
 
 		void RegisterEventCallback(const u32 _wmEvent, const std::function<s32(HWND, u32, WPARAM, LPARAM)>& _func);
+
+		InputProcessor* GetInputProcessor() const;
 
 		HWND GetWindowHandle() const;
 

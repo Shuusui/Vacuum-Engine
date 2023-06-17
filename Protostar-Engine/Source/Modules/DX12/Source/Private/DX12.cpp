@@ -3,6 +3,7 @@
 #include "Guid.h"
 #include "d3dx12.h"
 #include "Window.h"
+#include "InputProcessor.h"
 #include <cassert>
 #include <functional>
 
@@ -20,6 +21,7 @@ Protostar::Rendering::DX12::DX12(PSC::Window* _window)
 
 	_window->REGISTER_EVENT_CALLBACK(WM_PAINT, this, &DX12::OnWindowPaint);
 	_window->REGISTER_EVENT_CALLBACK(WM_SIZE, this, &DX12::OnWindowResize);
+	_window->REGISTER_INPUT_DOWN_CALLBACK(VK_F11, this, &DX12::OnToggleFullscreen);
 
 	HelperLibrary::EnableDebugLayer();
 
@@ -43,12 +45,10 @@ Protostar::Rendering::DX12::DX12(PSC::Window* _window)
 	m_fence = HelperLibrary::CreateFence(m_device);
 	m_fenceEvent = HelperLibrary::CreateEventHandle();
 
-
 }
 
 void Protostar::Rendering::DX12::Update()
 {
-
 }
 
 void Protostar::Rendering::DX12::Render()
@@ -168,5 +168,10 @@ s32 Protostar::Rendering::DX12::OnWindowResize(HWND, u32, WPARAM, LPARAM _lParam
 
 	Resize(width, height);
 	return 0;
+}
+
+void Protostar::Rendering::DX12::OnToggleFullscreen()
+{
+	PE_LOG("DOES WORK!!!!");
 }
 

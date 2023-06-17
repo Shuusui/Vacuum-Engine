@@ -34,6 +34,7 @@ namespace Protostar::Rendering
 		bool AreDimensionsSame(u32 _width, u32 _height);
 		s32 OnWindowPaint(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
 		s32 OnWindowResize(HWND _hwnd, u32 _msg, WPARAM _wParam, LPARAM _lParam);
+		void OnToggleFullscreen();
 
 		static constexpr u8 NUM_FRAMES = 3;
 		MWRL::ComPtr<ID3D12Device9> m_device;
