@@ -1,7 +1,7 @@
 #pragma once
 
 
-//TODO: ThePJson.hpp file has still some warnings and I might address them later on. 
+//TODO: json.hpp file has still some warnings and I might address them later on. 
 #pragma warning(disable : 6011)
 #pragma warning(disable : 28020)
 #pragma warning(disable : 26495)
