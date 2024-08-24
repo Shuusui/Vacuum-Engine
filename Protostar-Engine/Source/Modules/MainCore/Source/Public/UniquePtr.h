@@ -74,6 +74,7 @@ namespace Protostar::Core
 		UniquePtr<T>& operator=(UniquePtr<T>&& _right) noexcept
 		{
 			m_uniquePtr = std::move(_right.m_uniquePtr);
+			return *this;
 		}
 
 	private:

@@ -53,5 +53,6 @@ namespace Protostar::Rendering
 		u32 m_currentBackbufferIndex;
 		bool m_vSync;
 		bool m_tearingSupport;
+		bool m_fullScreen;
 	};
 }

@@ -40,7 +40,7 @@ void Protostar::Core::InputProcessor::RegisterInputUpCallback(u8 _key, const std
 
 s32 Protostar::Core::InputProcessor::OnKeyDown(void*, u32, s64 _wParam, s64)
 {
-	m_keysBitMap[_wParam / 64] |= 1ULL << static_cast<u64>(_wParam % (64 * (_wParam / 64)));
+	m_keysBitMap[_wParam / 64] |= 1ULL << static_cast<u64>(_wParam - (64 * (_wParam / 64)));
 	for (const std::function<void()>& func : m_keyDownMap[_wParam])
 	{
 		func();
@@ -74,7 +74,7 @@ s32 Protostar::Core::InputProcessor::OnXButtonDown(void*, u32, s64 _wParam, s64)
 
 s32 Protostar::Core::InputProcessor::OnKeyUp(void*, u32, s64 _wParam, s64)
 {
-	m_keysBitMap[_wParam / 64] &= ~(1ULL << static_cast<u64>(_wParam % (64 * (_wParam / 64))));
+	m_keysBitMap[_wParam / 64] &= ~(1ULL << static_cast<u64>(_wParam - (64 * (_wParam / 64))));
 	for (const std::function<void()>& func : m_keyUpMap[_wParam])
 	{
 		func();

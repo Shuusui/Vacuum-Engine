@@ -16,6 +16,7 @@ Protostar::Rendering::DX12::DX12(PSC::Window* _window)
 	, m_currentBackbufferIndex(0)
 	, m_vSync(false)
 	, m_tearingSupport(false)
+	, m_fullScreen(false)
 {
 	m_frameFenceValues.Fill(0);
 
@@ -172,6 +173,40 @@ s32 Protostar::Rendering::DX12::OnWindowResize(HWND, u32, WPARAM, LPARAM _lParam
 
 void Protostar::Rendering::DX12::OnToggleFullscreen()
 {
-	PE_LOG("DOES WORK!!!!");
+	if (m_fullScreen)
+	{
+		SetWindowLong(m_window->GetWindowHandle(), GWL_STYLE, WS_OVERLAPPEDWINDOW);
+
+		SetWindowPos(m_window->GetWindowHandle(), HWND_NOTOPMOST,
+			m_window->GetCurrentDimensions().Position.GetX(),
+			m_window->GetCurrentDimensions().Position.GetY(),
+			m_window->GetCurrentDimensions().Size.GetX(),
+			m_window->GetCurrentDimensions().Size.GetY(),
+			SWP_FRAMECHANGED | SWP_NOACTIVATE);
+
+		ShowWindow(m_window->GetWindowHandle(), SW_NORMAL);
+	}
+	else
+	{
+		RECT currentWindowRect;
+		GetWindowRect(m_window->GetWindowHandle(), &currentWindowRect);
+		s32 windowStyle = WS_OVERLAPPEDWINDOW & ~(WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
+		SetWindowLongW(m_window->GetWindowHandle(), GWL_STYLE, windowStyle);
+
+		HMONITOR hMonitor = MonitorFromWindow(m_window->GetWindowHandle(), MONITOR_DEFAULTTONEAREST);
+		MONITORINFOEX monitorInfo = {};
+		monitorInfo.cbSize = sizeof(MONITORINFOEX);
+		GetMonitorInfo(hMonitor, &monitorInfo);
+
+		SetWindowPos(m_window->GetWindowHandle(), HWND_TOP,
+		monitorInfo.rcMonitor.left,
+		monitorInfo.rcMonitor.top,
+		monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
+		monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
+		SWP_FRAMECHANGED | SWP_NOACTIVATE);
+
+		ShowWindow(m_window->GetWindowHandle(), SW_MAXIMIZE);
+	}
+	m_fullScreen = !m_fullScreen;
 }
 

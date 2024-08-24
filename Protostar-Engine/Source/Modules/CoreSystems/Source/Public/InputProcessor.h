@@ -6,7 +6,7 @@
 
 namespace Protostar::Core
 {
-constexpr u8 KEYMAP_MAX = 254;
+constexpr u8 KEYMAP_MAX = 0xFE; // = VK_OEM_CLEAR, the last virtual key 
 
 	class Window;
 	class CORESYSTEMS_API InputProcessor
